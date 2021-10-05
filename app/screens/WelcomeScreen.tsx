@@ -33,8 +33,8 @@ const WelcomeScreen = () => {
 const styles = StyleSheet.create({
   LinkWalletStyle: {
     color: colors.BrandYellow,
-    backgroundColor: colors.transparent,
-    borderColor:  colors.transparent
+    backgroundColor: 'transparent',
+    borderColor:  'transparent'
   }
 });
 
