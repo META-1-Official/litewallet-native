@@ -1,12 +1,15 @@
-import React, {useRef} from 'react';
-import {Animated, StyleSheet, View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import ContentSlider, {Backdrop} from '../components/ContentSlider';
+import React, { useRef } from 'react';
+import { Animated, StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import ContentSlider, { Backdrop } from '../components/ContentSlider';
 import RoundedButton from '../components/RoundedButton';
-import {colors} from '../styles/colors';
+import { colors } from '../styles/colors';
+import { RootNavigationProp } from '../App';
+import { useNavigation } from '@react-navigation/core';
 
 const WelcomeScreen = () => {
-  const CreateWalletPress = () => {};
+  const nav = useNavigation<RootNavigationProp>();
+  const CreateWalletPress = () => nav.navigate('Legal');
   const LinkWalletPress = () => {};
   const scrollX = useRef(new Animated.Value(0)).current;
 
@@ -22,7 +25,7 @@ const WelcomeScreen = () => {
       <Backdrop scrollX={scrollX} />
 
       <ContentSlider scrollX={scrollX} />
-      <View style={{alignSelf: 'stretch'}}>
+      <View style={{ alignSelf: 'stretch' }}>
         <RoundedButton title="Create META Wallet" onPress={CreateWalletPress} />
 
         <RoundedButton
