@@ -13,12 +13,8 @@ import {
 import MockCard from './MockCard';
 import { colors } from '../styles/colors';
 import { getRandomAddress } from '../utils';
-import {
-  coinAsset,
-  logoAsset,
-  marketingBsAssetOne,
-  marketingBsAssetTwo,
-} from '../../assets';
+import { coinAsset, logoAsset, marketingBsAssetOne, marketingBsAssetTwo } from '../../assets';
+import { Heading } from './typography';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -84,7 +80,7 @@ const DATA: Content[] = [
         resizeMode: 'contain',
       };
       return (
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row', marginBottom: 48}}>
           <Image style={_style} source={marketingBsAssetOne} />
           <Image style={_style} source={marketingBsAssetTwo} />
         </View>
@@ -99,7 +95,7 @@ function renderItem({ item }: ListRenderItemInfo<Content>) {
   return (
     <View style={[styles.card, { width }]}>
       {item.visual}
-      <Text style={styles.heading}>{item.heading}</Text>
+      <Heading style={styles.heading}>{item.heading}</Heading>
       <Text style={styles.body}>{item.body}</Text>
     </View>
   );
@@ -115,12 +111,7 @@ function Indicator({ scrollX }: ScrollXProp) {
       inputRange: DATA.map((_, ii) => ii * width),
       outputRange: DATA.map((_, ii) => (i === ii ? colors.BrandYellow : colors.dotGray)),
     });
-    return (
-      <Animated.View
-        key={`indicator_${i}`}
-        style={[styles.indicator, { backgroundColor }]}
-      />
-    );
+    return <Animated.View key={`indicator_${i}`} style={[styles.indicator, { backgroundColor }]} />;
   });
 
   return <View style={styles.indicatorContrainer}>{indicators}</View>;

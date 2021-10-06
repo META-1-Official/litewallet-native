@@ -8,5 +8,6 @@ module.exports = {
       'error',
       { vars: 'all', args: 'after-used', ignoreRestSiblings: false },
     ],
+    "prettier/prettier": "warning"
   },
 };
