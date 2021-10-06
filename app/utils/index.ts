@@ -3,10 +3,7 @@ export function getRadomByteArray(len: number) {
 }
 
 export function getRadomBytes(len: number) {
-  return getRadomByteArray(len).reduce(
-    (acc, cv) => (acc += cv.toString(16)),
-    '',
-  );
+  return getRadomByteArray(len).reduce((acc, cv) => (acc += cv.toString(16)), '');
 }
 
 export function getRandomAddress() {

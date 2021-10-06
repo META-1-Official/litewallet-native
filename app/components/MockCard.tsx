@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  ImageStyle,
-  StyleSheet,
-  Text,
-  TextStyle,
-  View,
-  ViewStyle,
-} from 'react-native';
+import { ImageStyle, StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native';
 import { colors } from '../styles/colors';
 import { shadow } from '../utils';
 
