@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   ViewStyle,
 } from 'react-native';
-import {colors} from '../styles/colors';
+import { colors } from '../styles/colors';
 
 interface Props {
   title: string;
@@ -16,7 +16,7 @@ interface Props {
   styles?: StyleProp<ViewStyle & TextStyle>;
 }
 
-const RoundedButton = ({title, onPress, styles: propStyles}: Props) => {
+const RoundedButton = ({ title, onPress, styles: propStyles }: Props) => {
   return (
     <TouchableOpacity
       style={[styles.SubmitButtonStyle, propStyles]}

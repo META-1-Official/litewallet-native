@@ -7,8 +7,8 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {colors} from '../styles/colors';
-import {shadow} from '../utils';
+import { colors } from '../styles/colors';
+import { shadow } from '../utils';
 
 interface MockProps {
   text: string;
@@ -16,7 +16,7 @@ interface MockProps {
   address: string;
 }
 
-const MockCard = ({text, username, address}: MockProps) => {
+const MockCard = ({ text, username, address }: MockProps) => {
   const addressRedacted = [address.slice(2, 6), address.slice(-4)].join('...');
   return (
     <View style={styles.container}>
@@ -32,7 +32,7 @@ const MockCard = ({text, username, address}: MockProps) => {
   );
 };
 
-const CommonStyles: {[key: string]: ViewStyle | TextStyle | ImageStyle} = {
+const CommonStyles: { [key: string]: ViewStyle | TextStyle | ImageStyle } = {
   text: {
     fontWeight: '500',
     fontSize: 18,

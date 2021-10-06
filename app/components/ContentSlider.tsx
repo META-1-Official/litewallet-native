@@ -11,8 +11,8 @@ import {
   View,
 } from 'react-native';
 import MockCard from './MockCard';
-import {colors} from '../styles/colors';
-import {getRandomAddress} from '../utils';
+import { colors } from '../styles/colors';
+import { getRandomAddress } from '../utils';
 import {
   coinAsset,
   logoAsset,
@@ -20,7 +20,7 @@ import {
   marketingBsAssetTwo,
 } from '../../assets';
 
-const {width, height} = Dimensions.get('screen');
+const { width, height } = Dimensions.get('screen');
 
 interface Content {
   visual: JSX.Element;
@@ -49,7 +49,7 @@ const DATA: Content[] = [
         style={{
           //width: womd,
           height: height / 3,
-          transform: [{scale: 0.8}],
+          transform: [{ scale: 0.8 }],
           resizeMode: 'contain',
           overflow: 'hidden',
         }}
@@ -68,16 +68,8 @@ const DATA: Content[] = [
           marginBottom: 24,
         }}
       >
-        <MockCard
-          text="Sent from"
-          username="Abobous"
-          address={getRandomAddress()}
-        />
-        <MockCard
-          text="Recived by"
-          username="Amogus"
-          address={getRandomAddress()}
-        />
+        <MockCard text="Sent from" username="Abobous" address={getRandomAddress()} />
+        <MockCard text="Recived by" username="Amogus" address={getRandomAddress()} />
       </View>
     ),
     heading: 'Easily send and receive\ncryptocurrency',
@@ -92,7 +84,7 @@ const DATA: Content[] = [
         resizeMode: 'contain',
       };
       return (
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <Image style={_style} source={marketingBsAssetOne} />
           <Image style={_style} source={marketingBsAssetTwo} />
         </View>
@@ -103,9 +95,9 @@ const DATA: Content[] = [
   },
 ];
 
-function renderItem({item}: ListRenderItemInfo<Content>) {
+function renderItem({ item }: ListRenderItemInfo<Content>) {
   return (
-    <View style={[styles.card, {width}]}>
+    <View style={[styles.card, { width }]}>
       {item.visual}
       <Text style={styles.heading}>{item.heading}</Text>
       <Text style={styles.body}>{item.body}</Text>
@@ -117,18 +109,16 @@ interface ScrollXProp {
   scrollX: Animated.Value;
 }
 
-function Indicator({scrollX}: ScrollXProp) {
+function Indicator({ scrollX }: ScrollXProp) {
   const indicators = DATA.map((_, i) => {
     const backgroundColor = scrollX.interpolate({
       inputRange: DATA.map((_, ii) => ii * width),
-      outputRange: DATA.map((_, ii) =>
-        i === ii ? colors.BrandYellow : colors.dotGray,
-      ),
+      outputRange: DATA.map((_, ii) => (i === ii ? colors.BrandYellow : colors.dotGray)),
     });
     return (
       <Animated.View
         key={`indicator_${i}`}
-        style={[styles.indicator, {backgroundColor}]}
+        style={[styles.indicator, { backgroundColor }]}
       />
     );
   });
@@ -136,7 +126,7 @@ function Indicator({scrollX}: ScrollXProp) {
   return <View style={styles.indicatorContrainer}>{indicators}</View>;
 }
 
-export const Backdrop = ({scrollX}: ScrollXProp) => {
+export const Backdrop = ({ scrollX }: ScrollXProp) => {
   const scale = scrollX.interpolate({
     inputRange: DATA.map((_, i) => i * width),
     outputRange: [0, 0, 1, 0],
@@ -150,13 +140,13 @@ export const Backdrop = ({scrollX}: ScrollXProp) => {
         height: width * 2,
         borderRadius: width * 2,
         width: width * 2,
-        transform: [{scale}],
+        transform: [{ scale }],
       }}
     />
   );
 };
 
-export default function ContentSlider({scrollX}: ScrollXProp) {
+export default function ContentSlider({ scrollX }: ScrollXProp) {
   return (
     <View style={styles.container}>
       <Animated.FlatList
@@ -164,10 +154,9 @@ export default function ContentSlider({scrollX}: ScrollXProp) {
         renderItem={renderItem}
         horizontal
         scrollEventThrottle={32}
-        onScroll={Animated.event(
-          [{nativeEvent: {contentOffset: {x: scrollX}}}],
-          {useNativeDriver: false},
-        )}
+        onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
+          useNativeDriver: false,
+        })}
         pagingEnabled={true}
         showsHorizontalScrollIndicator={false}
       />

@@ -5,7 +5,11 @@ module.exports = {
     'react-native/no-inline-styles': 'off',
     'no-shadow': [
       'error',
-      {builtinGlobals: false, hoist: 'functions', allow: ['_']},
+      { builtinGlobals: false, hoist: 'functions', allow: ['_'] },
+    ],
+    'no-unused-vars': [
+      'error',
+      { vars: 'all', args: 'after-used', ignoreRestSiblings: false },
     ],
   },
 };
