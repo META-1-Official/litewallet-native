@@ -1,5 +1,6 @@
 import React from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
+import { ppIconAsset, tosIconAsset } from '../../assets';
 import { List, ListItem } from '../components/List';
 import RoundedButton from '../components/RoundedButton';
 import { Heading, TextSecondary } from '../components/typography';
@@ -20,6 +21,16 @@ export default function Legal() {
         </TextSecondary>
       </View>
       <View>
+        <List
+          style={{
+            backgroundColor: '#fff',
+            borderRadius: 8,
+            margin: 18,
+          }}
+        >
+          <ListItem title="Terms of Service" icon={tosIconAsset} separator arrow />
+          <ListItem title="Privacy Policy" icon={ppIconAsset} arrow />
+        </List>
         <RoundedButton title="Accept" onPress={() => {}} />
       </View>
     </SafeAreaView>
