@@ -1,16 +1,13 @@
 // TODO
-import React, {useRef} from 'react';
+import React from 'react';
 import {
   Animated,
   Dimensions,
   Image,
   ImageStyle,
   ListRenderItemInfo,
-  SafeAreaView,
-  StatusBar,
   StyleSheet,
   Text,
-  useWindowDimensions,
   View,
 } from 'react-native';
 import MockCard from './MockCard';
@@ -31,7 +28,6 @@ interface Content {
   body: string;
 }
 
-const emj = (s: string) => <Text style={{fontSize: 144}}>{s}</Text>;
 const DATA: Content[] = [
   {
     visual: (
@@ -70,7 +66,8 @@ const DATA: Content[] = [
           alignSelf: 'stretch',
           marginTop: 12,
           marginBottom: 24,
-        }}>
+        }}
+      >
         <MockCard
           text="Sent from"
           username="Abobous"
@@ -93,7 +90,6 @@ const DATA: Content[] = [
         width: width / 2 - 10,
         height: height / 4,
         resizeMode: 'contain',
-        
       };
       return (
         <View style={{flexDirection: 'row'}}>
@@ -124,9 +120,9 @@ interface ScrollXProp {
 function Indicator({scrollX}: ScrollXProp) {
   const indicators = DATA.map((_, i) => {
     const backgroundColor = scrollX.interpolate({
-      inputRange: DATA.map((_, i) => i * width),
+      inputRange: DATA.map((_, ii) => ii * width),
       outputRange: DATA.map((_, ii) =>
-        i == ii ? colors.BrandYellow : colors.dotGray,
+        i === ii ? colors.BrandYellow : colors.dotGray,
       ),
     });
     return (

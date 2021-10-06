@@ -7,8 +7,8 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import { colors } from '../styles/colors';
-import { shadow } from '../utils';
+import {colors} from '../styles/colors';
+import {shadow} from '../utils';
 
 interface MockProps {
   text: string;
@@ -16,11 +16,11 @@ interface MockProps {
   address: string;
 }
 
-const MockCard = ({ text, username, address }: MockProps) => {
+const MockCard = ({text, username, address}: MockProps) => {
   const addressRedacted = [address.slice(2, 6), address.slice(-4)].join('...');
   return (
     <View style={styles.container}>
-      <View style={styles.img}></View>
+      <View style={styles.img} />
       <View>
         <View style={styles.line}>
           <Text style={styles.text}>{text}</Text>
@@ -32,13 +32,13 @@ const MockCard = ({ text, username, address }: MockProps) => {
   );
 };
 
-const CommonStyles: { [key: string]: ViewStyle | TextStyle | ImageStyle } = {
+const CommonStyles: {[key: string]: ViewStyle | TextStyle | ImageStyle} = {
   text: {
     fontWeight: '500',
     fontSize: 18,
   },
-  
 };
+
 const styles = StyleSheet.create({
   container: {
     ...shadow.D3,
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     margin: 8,
     padding: 16,
     borderRadius: 8,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   line: {
     flexDirection: 'row',
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     color: colors.BrandYellow,
   },
   address: {
-    color: '#607383'
+    color: '#607383',
   },
   text: {
     ...CommonStyles.text,
@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderRadius: 50,
     marginHorizontal: 12,
-  }
+  },
 });
+
 export default MockCard;

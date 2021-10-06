@@ -17,7 +17,8 @@ const WelcomeScreen = () => {
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: '#fff',
-      }}>
+      }}
+    >
       <Backdrop scrollX={scrollX} />
 
       <ContentSlider scrollX={scrollX} />
