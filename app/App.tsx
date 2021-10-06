@@ -6,6 +6,7 @@ import SplashScreen from 'react-native-splash-screen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Legal from './screens/LegalScreen';
+import AppHeader from './components/AppHeaer';
 const { useEffect } = React;
 
 export type RootStackParamList = {
@@ -24,7 +25,12 @@ function App() {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator
+          screenOptions={{
+            headerMode: 'screen',
+            header: AppHeader,
+          }}
+        >
           <Stack.Screen
             name="Home"
             options={{
