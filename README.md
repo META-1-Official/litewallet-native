@@ -4,7 +4,7 @@
 
 The code is built using React-Native and running code locally requires a Mac or Linux OS.
 
--   Install [Node.js](https://nodejs.org) **version 10 (latest stable) and yarn@1 (latest)**
+-   Install [Node.js](https://nodejs.org) 
 -   Install the shared React Native dependencies (`React Native CLI`, _not_ `Expo CLI`)
     -   [Docs](https://reactnative.dev/docs/environment-setup)
 
@@ -25,4 +25,30 @@ cd ios && pod install && cd .. # install pods for iOS
 
 ```bash
 yarn start 
+```
+
+#### Android
+
+-   Install the Android SDK, via [Android Studio](https://developer.android.com/studio).
+-   Install the Android NDK, via [Android Studio](https://developer.android.com/studio)'s SDK Manager.
+-   Install the correct emulator
+        -   More details can be found [on the Android Developer site](https://developer.android.com/studio/run/emulator)
+    -   You should use the following:
+        -   **Android OS Version:** Latest, unless told otherwise
+        -   **Device:** Google Pixel 3
+-   Finally, start the emulator from Android Studio, and run:
+
+```bash
+yarn android
+```
+
+#### iOS
+
+-   Install the iOS dependencies
+-   Install the correct simulator
+    -   **iOS OS Version:** Latest, unless told otherwise
+    -   **Device:** iPhone 13 
+
+```bash
+yarn ios
 ```
