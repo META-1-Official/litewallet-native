@@ -1,11 +1,14 @@
+import { useNavigation } from '@react-navigation/core';
 import React from 'react';
 import { SafeAreaView, View } from 'react-native';
 import { ppIconAsset, tosIconAsset } from '../../assets';
+import { RootNavigationProp } from '../App';
 import { List, ListItem } from '../components/List';
 import RoundedButton from '../components/RoundedButton';
 import { Heading, TextSecondary } from '../components/typography';
 
 export default function Legal() {
+  const nav = useNavigation<RootNavigationProp>();
   return (
     <SafeAreaView
       style={{
@@ -31,7 +34,7 @@ export default function Legal() {
           <ListItem title="Terms of Service" icon={tosIconAsset} separator arrow />
           <ListItem title="Privacy Policy" icon={ppIconAsset} arrow />
         </List>
-        <RoundedButton title="Accept" onPress={() => {}} />
+        <RoundedButton title="Accept" onPress={() => nav.navigate('CreateWallet')} />
       </View>
     </SafeAreaView>
   );

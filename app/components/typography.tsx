@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, TextStyle } from "react-native";
+import { colors } from "../styles/colors";
 interface StyleProp {
   style?: TextStyle,
 }
@@ -21,6 +22,6 @@ const textStyles = StyleSheet.create({
   },
   secondary: {
     fontSize: 18,
-    color: '#607383',
+    color: colors.mutedGray,
   },
 });

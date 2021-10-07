@@ -7,11 +7,13 @@ import WelcomeScreen from './screens/WelcomeScreen';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Legal from './screens/LegalScreen';
 import AppHeader from './components/AppHeaer';
+import CreateWalletScreen from './screens/CreateWalletScreen';
 const { useEffect } = React;
 
 export type RootStackParamList = {
   Home: undefined;
   Legal: undefined;
+  CreateWallet: undefined;
 };
 
 export type RootNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
@@ -39,6 +41,7 @@ function App() {
             component={WelcomeScreen}
           />
           <Stack.Screen name="Legal" component={Legal} />
+          <Stack.Screen name="CreateWallet" component={CreateWalletScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
