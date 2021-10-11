@@ -8,6 +8,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Legal from './screens/LegalScreen';
 import AppHeader from './components/AppHeaer';
 import CreateWalletScreen from './screens/CreateWalletScreen';
+import { Provider as PaperProvider } from 'react-native-paper';
 const { useEffect } = React;
 
 export type RootStackParamList = {
@@ -25,26 +26,28 @@ function App() {
     SplashScreen.hide();
   });
   return (
-    <SafeAreaProvider>
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerMode: 'screen',
-            header: AppHeader,
-          }}
-        >
-          <Stack.Screen
-            name="Home"
-            options={{
-              headerShown: false,
+    <PaperProvider>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerMode: 'screen',
+              header: AppHeader,
             }}
-            component={WelcomeScreen}
-          />
-          <Stack.Screen name="Legal" component={Legal} />
-          <Stack.Screen name="CreateWallet" component={CreateWalletScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </SafeAreaProvider>
+          >
+            <Stack.Screen
+              name="Home"
+              options={{
+                headerShown: false,
+              }}
+              component={WelcomeScreen}
+            />
+            <Stack.Screen name="Legal" component={Legal} />
+            <Stack.Screen name="CreateWallet" component={CreateWalletScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </PaperProvider>
   );
 }
 
