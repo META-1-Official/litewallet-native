@@ -3,16 +3,19 @@ import { SafeAreaView,  View } from 'react-native';
 import RoundedButton from '../components/RoundedButton';
 import { Heading, TextSecondary } from '../components/typography';
 import useForm from '../utils/useForm';
+import { required } from '../utils/useForm/rules';
 
 const CreateWalletScreen: React.FC = () => {
   const { Input, formState } = useForm([
-    { name: 'first_name', placeholder: 'First name' },
-    { name: 'last_name', placeholder: 'Last name' },
-    { name: 'email', placeholder: 'Email' },
-    { name: 'mobile', placeholder: 'Mobile number' },
-    { name: 'account_name', placeholder: 'Account name' },
-    { name: 'password', placeholder: 'Password' },
-    { name: 'password_repeat', placeholder: 'Password Confirmation' },
+    { name: 'first_name', lable: 'First name' },
+    { name: 'last_name', lable: 'Last name' },
+    { name: 'email', lable: 'Email', rules: [
+      required
+    ]},
+    { name: 'mobile', lable: 'Mobile number' },
+    { name: 'account_name', lable: 'Account name' },
+    { name: 'password', lable: 'Password' },
+    { name: 'password_repeat', lable: 'Password Confirmation' },
   ]);
   return (
     <SafeAreaView
@@ -26,9 +29,9 @@ const CreateWalletScreen: React.FC = () => {
         <Heading style={{ marginBottom: 18 }}>Create META Wallet</Heading>
         <TextSecondary>Provide acess to your META Lite Wallet</TextSecondary>
         <View style={{ flexDirection: 'row' }}>
-          <Input style={{ width: '45%' }} name="first_name" />
-          <View style={{ width: '10%' }} />
-          <Input style={{ width: '45%' }} name="last_name" />
+          <Input style={{ width: '48%' }} name="first_name" onError={() => {}}/>
+          <View style={{ width: '4%' }} />
+          <Input style={{ width: '48%' }} name="last_name" onError={() => {}}/>
         </View>
         <Input name="email" />
         <Input name="mobile" />
