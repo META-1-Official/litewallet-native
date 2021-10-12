@@ -9,6 +9,13 @@ export function getRadomBytes(len: number) {
 export function getRandomAddress() {
   return `0x${getRadomBytes(20)}`;
 }
+export type ValueOf<T> = T[keyof T];
+
+export function getObjectSetter<T>(obj: any) {
+  return function <K extends keyof T>(k: K, v: ValueOf<T>) {
+    obj[k] = v;
+  };
+}
 
 export const shadow = {
   D3: {
