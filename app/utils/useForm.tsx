@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
-import { StyleSheet, TextStyle,  } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { DefaultTheme } from 'react-native-paper';
-import TextInput, { TextInputProps} from 'react-native-paper/src/components/TextInput/TextInput';
+import TextInput, { TextInputProps } from 'react-native-paper/src/components/TextInput/TextInput';
 import { colors } from '../styles/colors';
 
 type DefautlStateItem = {
@@ -10,7 +10,7 @@ type DefautlStateItem = {
   value?: string;
 };
 
-interface InputProps extends Omit<TextInputProps, "theme"> {
+interface InputProps extends Omit<TextInputProps, 'theme'> {
   name: string;
 }
 
@@ -23,7 +23,6 @@ export default function useForm(defautState: DefautlStateItem[]) {
   ).current;
 
   const Input: React.FC<InputProps> = props => {
-
     const theme: typeof DefaultTheme = {
       ...DefaultTheme,
       //@ts-ignore
@@ -31,8 +30,9 @@ export default function useForm(defautState: DefautlStateItem[]) {
         primary: colors.BrandYellow,
         accent: colors.BrandYellow,
         text: colors.mutedGray,
-      }
-    }
+      },
+    };
+
     return (
       <TextInput
         {...props}
