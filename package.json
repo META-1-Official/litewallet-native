@@ -8,6 +8,8 @@
     "start": "react-native start",
     "xcode": "xed -b ios",
     "test": "jest",
+    "clean:ios": "xcodebuild clean -workspace ./ios/nativeapp.xcworkspace -scheme nativeapp",
+    "clean": "yarn clean:ios",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
