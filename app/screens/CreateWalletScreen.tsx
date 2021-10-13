@@ -43,7 +43,7 @@ const CreateWalletScreen: React.FC = () => {
               name="mobile"
               render={props => (
                 //@ts-ignore
-                <TextInputMask {...props} keyboardType='number-pad' mask="+[0] ([000]) [000] [00] [00]" />
+                <TextInputMask {...props}  mask="+[099] ([000]) [000] [00] [00]" />
               )}
             />
             <Input name="account_name" />
