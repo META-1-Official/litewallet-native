@@ -47,7 +47,7 @@ yarn android
 -   Install the iOS dependencies
 -   Install the correct simulator
     -   **iOS OS Version:** Latest, unless told otherwise
-    -   **Device:** iPhone 13 
+    -   **Device:** iPhone 11 Pro
 
 ```bash
 yarn ios
