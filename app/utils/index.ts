@@ -17,6 +17,9 @@ export function getObjectSetter<T>(obj: any) {
   };
 }
 
+export function unsafe_cast<T>(x: any) {
+  return (x as any) as T;
+}
 export const shadow = {
   D3: {
     shadowColor: '#000',

@@ -1,9 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import { SafeAreaView, View } from 'react-native';
-import { HelperText } from 'react-native-paper';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import RoundedButton from '../components/RoundedButton';
 import { Heading, TextSecondary } from '../components/typography';
-import { getObjectSetter } from '../utils';
 import useForm from '../utils/useForm';
 import { required } from '../utils/useForm/rules';
 
@@ -31,16 +30,20 @@ const CreateWalletScreen: React.FC = () => {
         <TextSecondary style={{ marginBottom: 18 }}>
           Provide acess to your META Lite Wallet
         </TextSecondary>
-        <View style={{ flexDirection: 'row' }}>
-          <Input style={{ width: '48%' }} name="first_name" />
-          <View style={{ width: '4%' }} />
-          <Input style={{ width: '48%' }} name="last_name" />
-        </View>
-        <Input name="email" />
-        <Input name="mobile" />
-        <Input name="account_name" />
-        <Input name="password" />
-        <Input name="password_repeat" />
+        <KeyboardAwareScrollView extraHeight={1}>
+          <View>
+            <View style={{ flexDirection: 'row' }}>
+              <Input style={{ width: '48%' }} name="first_name" />
+              <View style={{ width: '4%' }} />
+              <Input style={{ width: '48%' }} name="last_name" />
+            </View>
+            <Input name="email" />
+            <Input name="mobile" />
+            <Input name="account_name"/>
+            <Input name="password" />
+            <Input name="password_repeat" />
+          </View>
+        </KeyboardAwareScrollView>
       </View>
       <View>
         <RoundedButton
