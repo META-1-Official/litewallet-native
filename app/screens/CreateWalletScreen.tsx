@@ -1,6 +1,7 @@
 import React from 'react';
 import { SafeAreaView, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import TextInputMask from 'react-native-text-input-mask';
 import RoundedButton from '../components/RoundedButton';
 import { Heading, TextSecondary } from '../components/typography';
 import useForm from '../utils/useForm';
@@ -38,8 +39,14 @@ const CreateWalletScreen: React.FC = () => {
               <Input style={{ width: '48%' }} name="last_name" />
             </View>
             <Input name="email" />
-            <Input name="mobile" />
-            <Input name="account_name"/>
+            <Input
+              name="mobile"
+              render={props => (
+                //@ts-ignore
+                <TextInputMask {...props} keyboardType='number-pad' mask="+[0] ([000]) [000] [00] [00]" />
+              )}
+            />
+            <Input name="account_name" />
             <Input name="password" />
             <Input name="password_repeat" />
           </View>
