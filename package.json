@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "ios": "react-native run-ios --simulator=\"iPhone 11 Pro\"",
     "start": "react-native start",
     "xcode": "xed -b ios",
     "test": "jest",
     "clean:ios": "xcodebuild clean -workspace ./ios/nativeapp.xcworkspace -scheme nativeapp",
-    "clean": "yarn clean:ios",
+    "repod": "cd ios; pod deintegrate; pod install",
+    "clean": "yarn clean:ios; yarn repod",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
