@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View } from 'react-native';
+import { Platform, SafeAreaView, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import TextInputMask from 'react-native-text-input-mask';
 import RoundedButton from '../components/RoundedButton';
@@ -31,7 +31,10 @@ const CreateWalletScreen: React.FC = () => {
         <TextSecondary style={{ marginBottom: 18 }}>
           Provide acess to your META Lite Wallet
         </TextSecondary>
-        <KeyboardAwareScrollView extraHeight={1}>
+        <KeyboardAwareScrollView
+          extraHeight={Platform.OS === 'ios' ? 1 : 120}
+          enableOnAndroid={true}
+        >
           <View>
             <View style={{ flexDirection: 'row' }}>
               <Input style={{ width: '48%' }} name="first_name" />

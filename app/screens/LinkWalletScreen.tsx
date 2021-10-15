@@ -12,14 +12,14 @@ const LinkWalletScreen: React.FC = () => {
   const offsetY = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    const showSubscription = Keyboard.addListener('keyboardWillShow', () => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
       Animated.timing(offsetY, {
         toValue: -300,
         duration: 300,
         useNativeDriver: false,
       }).start();
     });
-    const hideSubscription = Keyboard.addListener('keyboardWillHide', () => {
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
       Animated.timing(offsetY, {
         toValue: 0,
         duration: 300,
