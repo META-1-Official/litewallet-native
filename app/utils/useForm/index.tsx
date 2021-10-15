@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { DefaultTheme, HelperText } from 'react-native-paper';
 import TextInput, { TextInputProps } from 'react-native-paper/src/components/TextInput/TextInput';

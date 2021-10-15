@@ -80,7 +80,7 @@ const DATA: Content[] = [
         resizeMode: 'contain',
       };
       return (
-        <View style={{ flexDirection: 'row', marginBottom: 48}}>
+        <View style={{ flexDirection: 'row', marginBottom: 48 }}>
           <Image style={_style} source={marketingBsAssetOne} />
           <Image style={_style} source={marketingBsAssetTwo} />
         </View>
