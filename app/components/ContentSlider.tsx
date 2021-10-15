@@ -6,6 +6,8 @@ import {
   Image,
   ImageStyle,
   ListRenderItemInfo,
+  Platform,
+  StatusBar,
   StyleSheet,
   Text,
   View,
@@ -15,6 +17,7 @@ import { colors } from '../styles/colors';
 import { getRandomAddress } from '../utils';
 import { coinAsset, logoAsset, marketingBsAssetOne, marketingBsAssetTwo } from '../../assets';
 import { Heading } from './typography';
+import _ from 'lodash';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -122,15 +125,21 @@ export const Backdrop = ({ scrollX }: ScrollXProp) => {
     inputRange: DATA.map((_, i) => i * width),
     outputRange: [0, 0, 1, 0],
   });
+
+  // Assume all ios devices have notches
+  const hasNotch = Platform.OS === 'android' ? _.get(StatusBar, 'currentHeight', 25) > 24 : true;
+
+  const r = (height / 4) * 1.7;
+  const d = r * 2;
   return (
     <Animated.View
       style={{
         backgroundColor: colors.BrandYellow,
         position: 'absolute',
-        top: width * -1.3,
-        height: width * 2,
-        borderRadius: width * 2,
-        width: width * 2,
+        top: r * (hasNotch ? -1.3 : -1.4),
+        height: d,
+        borderRadius: d,
+        width: d,
         transform: [{ scale }],
       }}
     />
