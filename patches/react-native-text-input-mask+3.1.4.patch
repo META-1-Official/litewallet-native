@@ -1,0 +1,12 @@
+diff --git a/node_modules/react-native-text-input-mask/android/build.gradle b/node_modules/react-native-text-input-mask/android/build.gradle
+index c94f33f..b344283 100644
+--- a/node_modules/react-native-text-input-mask/android/build.gradle
++++ b/node_modules/react-native-text-input-mask/android/build.gradle
+@@ -52,6 +52,6 @@ repositories {
+ 
+ dependencies {
+     implementation 'com.facebook.react:react-native:+'
+-    implementation 'com.redmadrobot:input-mask-android:6.0.0'
++    implementation 'com.github.RedMadRobot:input-mask-android:6.0.0'
+     implementation "org.jetbrains.kotlin:kotlin-stdlib:${project.ext.kotlinVersion}"
+ }
