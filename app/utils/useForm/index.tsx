@@ -64,7 +64,7 @@ export default function useForm(defautState: DefautlStateItem[]) {
           {...props}
           placeholderTextColor={colors.mutedGray}
           label={lables[name]}
-          style={[styles.input]}
+          style={[styles.input, props.style, { width: 'auto' }]}
           defaultValue={formState[name]}
           underlineColor={theme.colors.text}
           theme={theme}

@@ -10,7 +10,7 @@ import { useNavigation } from '@react-navigation/core';
 const WelcomeScreen = () => {
   const nav = useNavigation<RootNavigationProp>();
   const CreateWalletPress = () => nav.navigate('Legal');
-  const LinkWalletPress = () => {};
+  const LinkWalletPress = () => nav.navigate('LinkWallet');
   const scrollX = useRef(new Animated.Value(0)).current;
 
   return (

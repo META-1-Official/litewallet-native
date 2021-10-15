@@ -9,12 +9,14 @@ import Legal from './screens/LegalScreen';
 import AppHeader from './components/AppHeaer';
 import CreateWalletScreen from './screens/CreateWalletScreen';
 import { Provider as PaperProvider } from 'react-native-paper';
+import LinkWalletScreen from './screens/LinkWalletScreen';
 const { useEffect } = React;
 
 export type RootStackParamList = {
   Home: undefined;
   Legal: undefined;
   CreateWallet: undefined;
+  LinkWallet: undefined;
 };
 
 export type RootNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
@@ -44,6 +46,7 @@ function App() {
             />
             <Stack.Screen name="Legal" component={Legal} />
             <Stack.Screen name="CreateWallet" component={CreateWalletScreen} />
+            <Stack.Screen name="LinkWallet" component={LinkWalletScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
