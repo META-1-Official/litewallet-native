@@ -48,6 +48,8 @@ export const shadow = {
     shadowRadius: 2.22,
 
     elevation: 3,
+    // background color must be set
+    backgroundColor: '#0000', // invisible color
   },
   D1: {
     shadowColor: '#000',
@@ -59,5 +61,7 @@ export const shadow = {
     shadowRadius: 1.0,
 
     elevation: 1,
+    // background color must be set
+    backgroundColor: '#0000', // invisible color
   },
 };

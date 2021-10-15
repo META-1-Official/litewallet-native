@@ -61,7 +61,7 @@ export const ListItem: ListItemT = ({ title, icon, arrow, separator, onPress }) 
 export const List: React.FC<{ style?: ViewStyle }> = ({ style, children }) => {
   return (
     <View style={styles.shadow}>
-      <View style={style}>{children}</View>
+      <View style={[styles.shadow, style]}>{children}</View>
     </View>
   );
 };
@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   itemTouchable: {
+    backgroundColor: '#0000',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
