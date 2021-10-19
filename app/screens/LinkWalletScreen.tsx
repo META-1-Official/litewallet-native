@@ -3,6 +3,7 @@ import { SafeAreaView, View, Image, Dimensions, TextInput, Animated, Keyboard } 
 import { personAsset, personIconAsset } from '../../assets';
 import RoundedButton from '../components/RoundedButton';
 import { Heading, TextSecondary } from '../components/typography';
+import { useStore } from '../store';
 import useForm from '../utils/useForm';
 
 const { width, height } = Dimensions.get('screen');
@@ -33,6 +34,7 @@ const LinkWalletScreen: React.FC = () => {
     };
   }, []);
 
+  const authorzie = useStore(state => state.authorize);
   return (
     <SafeAreaView
       style={{
@@ -80,6 +82,9 @@ const LinkWalletScreen: React.FC = () => {
           title="Submit"
           onPress={() => {
             console.log({ formState, valid: valid() });
+            if (valid()) {
+              authorzie(formState.account_name);
+            }
           }}
         />
       </View>
