@@ -30,6 +30,82 @@ export const getCircularReplacer = () => {
   };
 };
 
+export const dumpObjInterface = (_obj: any) => {
+  const _dumpObjIface = (obj: any): string => {
+    const keys = Object.keys(obj);
+    console.log('keys', keys, obj);
+    let lines = [];
+
+    const arrayDump = (k: string, v: any[]): any => {
+      const target = v;
+
+      if (!target.length) {
+        return;
+      }
+
+      const baseT = typeof target[0];
+      const isTypeUniform = target
+        .map(e => typeof e)
+        .map((e, _, arr) => arr.reduce((acc, cv) => e === cv && acc, true))
+        .reduce((acc, cv) => acc && cv);
+
+      if (!isTypeUniform) {
+        // Will fuck up on non uniform objects, but who cares
+        lines.push(`  ${k}: any[]; // Nonuniformly typed array`);
+        return;
+      }
+
+      switch (baseT) {
+        case 'object':
+          lines.push(`  ${k}: ${_dumpObjIface(v)}[];`);
+          return;
+        case 'string':
+          lines.push(`  ${k}: ${baseT}[];`);
+          return;
+
+        case 'number':
+          lines.push(`  ${k}: ${baseT}[];`);
+          return;
+
+        case 'boolean':
+          lines.push(`  ${k}: ${baseT}[];`);
+          return;
+
+        default:
+          lines.push(`  ${k}: any[];`);
+          return;
+      }
+    };
+
+    
+    for (const k of keys) {
+      console.log('kkkkkk', k);
+      switch (typeof obj[k]) {
+        case 'object':
+          if (Array.isArray(obj[k])) {
+            arrayDump(k, obj[k] as any[]);
+          } else {
+            lines.push(`  ${k}: ${_dumpObjIface(obj[k])};`);
+          }
+          break;
+        case 'symbol':
+          lines.push(`  ${k}: any; // typeof returned Symbol`);
+          break;
+        case 'function':
+          lines.push(`  ${k}: (...args: any[]) => any; // Generic Fn`);
+          break;
+        default:
+          lines.push(`  ${k}: ${typeof obj[k]};`);
+          break;
+      }
+    }
+
+    return `{\n${lines.join('\n')}\n}`;
+  };
+
+  return `interface XXXX ${_dumpObjIface(_obj)}`;
+};
+
 export const lazy = (x: any) => {
   return (() => x)();
 };
