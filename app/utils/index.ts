@@ -77,7 +77,6 @@ export const dumpObjInterface = (_obj: any) => {
       }
     };
 
-    
     for (const k of keys) {
       console.log('kkkkkk', k);
       switch (typeof obj[k]) {
@@ -113,6 +112,9 @@ export const lazy = (x: any) => {
 export function unsafe_cast<T>(x: any) {
   return x as any as T;
 }
+
+export type ArrayMap<K, V> = [K, V][];
+
 export const shadow = {
   D3: {
     shadowColor: '#000',

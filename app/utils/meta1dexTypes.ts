@@ -1,3 +1,5 @@
+import { ArrayMap } from '.';
+
 export interface iAccount {
   id: string;
   membership_expiration_date: string;
@@ -95,3 +97,46 @@ export interface fullAccount {
   withdraws_from: iWithdrawsFrom[];
   more_data_available: iOptionalData;
 }
+
+interface iAsset {
+  id: string;
+  symbol: string;
+  precision: number;
+  issuer: string;
+  options: {
+    max_supply: string;
+    market_fee_percent: number;
+    max_market_fee: number;
+    issuer_permissions: number;
+    flags: number;
+    core_exchange_rate: {
+      base: {
+        amount: number;
+        asset_id: string;
+      };
+      quote: {
+        amount: number;
+        asset_id: string;
+      };
+    };
+    description: string;
+    extensions: {
+      reward_percent: number;
+    };
+  };
+  dynamic_asset_data_id: string;
+  total_in_collateral: number;
+}
+
+export interface Meta1Module {
+  connect: (connection?: string) => Promise<any>;
+  db: {
+    get_objects: (ids: string[]) => Promise<any>;
+    list_assets: (symbol: string, limit: number) => Promise<iAsset[]>;
+    get_full_accounts: (names: string[], sub: boolean) => Promise<ArrayMap<string, fullAccount>>;
+  };
+}
+
+const meta1dex = require('meta1dex');
+
+export default meta1dex as Meta1Module;
