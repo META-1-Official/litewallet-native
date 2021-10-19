@@ -114,6 +114,7 @@ export function unsafe_cast<T>(x: any) {
 }
 
 export type ArrayMap<K, V> = [K, V][];
+export type With<A, B> = A & B;
 
 export const shadow = {
   D3: {

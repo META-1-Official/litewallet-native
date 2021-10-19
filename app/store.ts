@@ -6,6 +6,7 @@ interface AppState {
   accountName: string;
   authorized: boolean;
   authorize: (accountName: string) => void;
+  logout: () => void;
 }
 
 export const useStore = create<AppState>(
@@ -13,7 +14,9 @@ export const useStore = create<AppState>(
     set => ({
       accountName: '',
       authorized: false,
-      authorize: (accountName: string) => set({ accountName, authorized: true }),
+      authorize: (accountName: string) =>
+        set({ accountName: accountName.toLowerCase(), authorized: true }),
+      logout: () => set({ accountName: '', authorized: false }),
     }),
     {
       name: 'app-storage',

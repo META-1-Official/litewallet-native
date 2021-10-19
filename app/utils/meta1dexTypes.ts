@@ -98,7 +98,7 @@ export interface fullAccount {
   more_data_available: iOptionalData;
 }
 
-interface iAsset {
+export interface iAsset {
   id: string;
   symbol: string;
   precision: number;

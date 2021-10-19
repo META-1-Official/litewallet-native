@@ -1,26 +1,48 @@
-import React, { useEffect } from 'react';
-import { Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Image, Text } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { personIconAsset } from '../../assets';
 import config from '../config';
 import { useStore } from '../store';
-import Meta1 from '../utils/meta1dexTypes';
+import { With } from '../utils';
+import Meta1, { iAsset } from '../utils/meta1dexTypes';
 
+const icon = (symbol: string) => `https://cryptoicons.org/api/icon/${symbol.toLowerCase()}/128`;
 const WalletScreen = () => {
   const accountName = useStore(state => state.accountName);
+  const logout = useStore(state => state.logout);
+  const [allAssets, setAllAssets] = useState<With<iAsset, { icon: any }>[]>([]);
+
   useEffect(() => {
     async function fn() {
       await Meta1.connect(config.META1_CONNECTION_URL);
       console.log('Connected!');
 
-      const fetchedAccounts = await Meta1.db.get_full_accounts([accountName.toLowerCase()], false);
-      const accounts = new Map(fetchedAccounts);
-      const account = accounts.get('kj-test2');
+      const accounts = await Meta1.db
+        .get_full_accounts([accountName], false)
+        .then(res => new Map(res));
+      const account = accounts.get(accountName);
 
       if (!account) {
-        console.error('Api did not return requestd account');
+        console.warn('Api did not return requestd account', accountName);
+        logout();
       }
-      const assets = await Meta1.db.list_assets('', 1);
-      console.log(assets[0].symbol);
+      // TODO: Use real fallback
+      const fallback = personIconAsset;
+      const _ = await Meta1.db.list_assets('', 101);
+      const icons = await Promise.all(
+        _.map(e =>
+          fetch(icon(e.symbol), { method: 'HEAD' }).then(res =>
+            res.status === 200 ? { uri: icon(e.symbol) } : fallback,
+          ),
+        ),
+      );
+      const assets = _.map((e, i) => ({ ...e, icon: icons[i] }));
+
+      if (JSON.stringify(assets) !== JSON.stringify(allAssets)) {
+        setAllAssets(assets);
+      }
     }
     fn();
   });
@@ -33,7 +55,24 @@ const WalletScreen = () => {
         backgroundColor: '#fff',
       }}
     >
-      <Text> XUI </Text>
+      <ScrollView>
+        {allAssets &&
+          allAssets.map(e => {
+            return (
+              <>
+                <Image
+                  style={{
+                    width: 128,
+                    height: 128,
+                    resizeMode: 'contain',
+                  }}
+                  source={e.icon}
+                />
+                <Text> {e.symbol}</Text>
+              </>
+            );
+          })}
+      </ScrollView>
     </SafeAreaView>
   );
 };
