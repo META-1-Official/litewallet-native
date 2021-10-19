@@ -2,13 +2,28 @@ import React, { useEffect, useState } from 'react';
 import { Image, Text } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { personIconAsset } from '../../assets';
 import config from '../config';
 import { useStore } from '../store';
-import { With } from '../utils';
+import { jsonEquals, With } from '../utils';
 import Meta1, { iAsset } from '../utils/meta1dexTypes';
 
+// Uising imgur as a fallback image host is sub optimal
+// Or maybe its ok https://webapps.stackexchange.com/a/75994
+const fallback = new Map(
+  Object.entries({
+    bnb: 'https://i.imgur.com/6qrOJVB.png',
+    btc: 'https://i.imgur.com/ufHHYqn.png',
+    eos: 'https://i.imgur.com/0icY7DW.png',
+    eth: 'https://i.imgur.com/ycvEO0V.png',
+    ltc: 'https://i.imgur.com/SWpmXNL.png',
+    meta1: 'https://i.imgur.com/1Qliy5v.png',
+    usdt: 'https://i.imgur.com/d1wY468.png',
+    xlm: 'https://i.imgur.com/1ukgaqb.png',
+  }),
+);
+
 const icon = (symbol: string) => `https://cryptoicons.org/api/icon/${symbol.toLowerCase()}/128`;
+
 const WalletScreen = () => {
   const accountName = useStore(state => state.accountName);
   const logout = useStore(state => state.logout);
@@ -29,18 +44,19 @@ const WalletScreen = () => {
         logout();
       }
       // TODO: Use real fallback
-      const fallback = personIconAsset;
       const _ = await Meta1.db.list_assets('', 101);
       const icons = await Promise.all(
         _.map(e =>
           fetch(icon(e.symbol), { method: 'HEAD' }).then(res =>
-            res.status === 200 ? { uri: icon(e.symbol) } : fallback,
+            res.status === 200
+              ? { uri: icon(e.symbol) }
+              : { uri: fallback.get(e.symbol.toLowerCase()) },
           ),
         ),
       );
       const assets = _.map((e, i) => ({ ...e, icon: icons[i] }));
 
-      if (JSON.stringify(assets) !== JSON.stringify(allAssets)) {
+      if (!jsonEquals(assets, allAssets)) {
         setAllAssets(assets);
       }
     }

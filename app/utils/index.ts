@@ -9,7 +9,6 @@ export function getRadomBytes(len: number) {
 export function getRandomAddress() {
   return `0x${getRadomBytes(20)}`;
 }
-export type ValueOf<T> = T[keyof T];
 
 export function getObjectSetter<T>(obj: any) {
   return function <K extends keyof T>(k: K, v: ValueOf<T>) {
@@ -113,8 +112,12 @@ export function unsafe_cast<T>(x: any) {
   return x as any as T;
 }
 
+export type ValueOf<T> = T[keyof T];
 export type ArrayMap<K, V> = [K, V][];
 export type With<A, B> = A & B;
+
+/** Not exactly deepEquals but good enought */
+export const jsonEquals = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
 
 export const shadow = {
   D3: {
