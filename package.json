@@ -16,11 +16,16 @@
   },
   "dependencies": {
     "@react-native-masked-view/masked-view": "^0.2.6",
+    "@react-navigation/bottom-tabs": "^6.0.9",
     "@react-navigation/native": "^6.0.4",
     "@react-navigation/native-stack": "^6.2.2",
     "@react-navigation/stack": "^6.0.9",
     "@types/lodash.get": "^4.4.6",
+    "assert": "^2.0.0",
+    "buffer": "^6.0.3",
+    "events": "^3.3.0",
     "lodash.get": "^4.4.2",
+    "meta1dex": "^0.6.13",
     "patch-package": "^6.4.7",
     "postinstall-postinstall": "^2.1.0",
     "react": "17.0.2",
@@ -34,7 +39,9 @@
     "react-native-splash-screen": "^3.2.0",
     "react-native-svg": "^12.1.1",
     "react-native-text-input-mask": "^3.1.4",
-    "react-native-vector-icons": "^8.1.0"
+    "react-native-vector-icons": "^8.1.0",
+    "stream-browserify": "^3.0.0",
+    "zustand": "^3.5.13"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
