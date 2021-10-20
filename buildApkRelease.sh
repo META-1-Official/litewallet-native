@@ -1,8 +1,7 @@
 #!/bin/bash
 
 cd android
-#./gradlew bundleRelease
-#./gradlew buildRelease
+./gradlew build -x lint
 cd ..
 
 cp ./android/app/build/outputs/apk/release/app-release.apk ./dist/

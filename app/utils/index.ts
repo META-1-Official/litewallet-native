@@ -1,4 +1,4 @@
-import assert from "assert";
+import assert from 'assert';
 
 export function getRadomByteArray(len: number) {
   return Array.from(new Uint8Array(len), () => Math.floor(Math.random() * 256));
@@ -116,12 +116,18 @@ export function unsafe_cast<T>(x: any) {
 
 export function ensure<T>(argument: T | undefined | null): T {
   assert(argument !== undefined, 'Expected value, got undefined');
-  assert(argument !== null, 'Expected value, got null')
+  assert(argument !== null, 'Expected value, got null');
   return argument;
 }
 
 export type ValueOf<T> = T[keyof T];
 export type ArrayMap<K, V> = [K, V][];
+
+export function join<A, B>(a: A[], b: B[]): (A & B)[] {
+  assert(a.length === b.length);
+
+  return a.map((_, i) => ({ ...a[i], ...b[i] }));
+}
 
 /** Not exactly deepEquals but good enought */
 export const jsonEquals = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);

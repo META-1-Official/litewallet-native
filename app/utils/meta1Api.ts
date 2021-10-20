@@ -52,18 +52,34 @@ export const fetchAllAssets = () => fetchAssetWithIcon('');
 
 export type AssetBalanceT = {
   symbol: string;
-  amoutnt: number;
-  price: number;
+  amount: number;
+  total_value: string;
   usdt_value: number;
 } & PartialAssetBalanceT;
 
 export type PartialAssetBalanceT = {
   _balance: iBalance;
-  _asset: iAsset;
+  _asset: AllAssetsT[0];
 };
 
 export const getReadableBalance = (awb: PartialAssetBalanceT) =>
   awb._balance.balance / 10 ** awb._asset.precision;
+
+export const getAssetUSDTValue = (assetSymbol: string) =>
+  Meta1.db.get_ticker('USDT', assetSymbol).then(e => Number(e.latest));
+
+function* AssetBalanceGenerator(base: PartialAssetBalanceT[]) {
+  for (const el of base) {
+    yield (async () => {
+      const symbol = el._asset.symbol;
+      const amount = getReadableBalance(el);
+      const usdt_value = await getAssetUSDTValue(symbol);
+      const total_value = (amount * usdt_value).toFixed(2);
+
+      return { symbol, amount, usdt_value, total_value, ...el } as AssetBalanceT;
+    })();
+  }
+}
 
 export async function fetchAccountBalances(accountName: string) {
   const accounts = await Meta1.db
@@ -83,14 +99,8 @@ export async function fetchAccountBalances(accountName: string) {
     _asset: ensure(assets.find(e => e.id === bal.asset_type)),
   }));
 
-  const assetsWithBalance: AssetBalanceT[] = assetsWithBalanceRaw.map(e => ({
-    symbol: e._asset.symbol,
-    amoutnt: getReadableBalance(e),
-    // TODO: Get price and calculate usdt value based on it
-    price: -1,
-    usdt_value: -1,
-    ...e,
-  }));
-
+  const assetsWithBalance: AssetBalanceT[] = await Promise.all([
+    ...AssetBalanceGenerator(assetsWithBalanceRaw),
+  ]);
   return assetsWithBalance;
 }

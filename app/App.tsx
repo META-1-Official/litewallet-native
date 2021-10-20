@@ -68,7 +68,7 @@ const WalletNav = () => {
   }
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Home" component={WalletScreen} />
+      <Tab.Screen name="Wallet" component={WalletScreen} />
     </Tab.Navigator>
   );
 };

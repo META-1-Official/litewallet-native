@@ -135,6 +135,20 @@ type EventT = 'connected' | 'block' | 'account';
 type SubT_A = (eventType: EventT, callbackFn: () => void) => void;
 type SubT_B = (eventType: EventT, callbackFn: (x: object) => void) => void;
 type SubT_C = (eventType: EventT, callbackFn: (x: any[]) => void) => void;
+
+
+interface Ticker {
+  time: string;
+  base: string;
+  quote: string;
+  latest: string;
+  lowest_ask: string;
+  highest_bid: string;
+  percent_change: string;
+  base_volume: string;
+  quote_volume: string;
+}
+
 export interface Meta1Module {
   connect: (connection?: string) => Promise<any>;
   disconnect: () => void;
@@ -142,6 +156,7 @@ export interface Meta1Module {
     get_objects: (ids: string[]) => Promise<any>;
     list_assets: (symbol: string, limit: number) => Promise<iAsset[]>;
     get_full_accounts: (names: string[], sub: boolean) => Promise<ArrayMap<string, fullAccount>>;
+    get_ticker: (assetSymbolA: string, assetSymbolB: string) => Promise<Ticker>;
   };
   subscribe: SubT_A | SubT_B | SubT_C;
 }

@@ -1,7 +1,7 @@
 import config from '../app/config';
 import { useStore } from '../app/store';
-import { fetchAllAssets } from '../app/utils/meta1Api';
-import meta1dex from '../app/utils/meta1dexTypes';
+import { fetchAccountBalances, fetchAllAssets } from '../app/utils/meta1Api';
+import Meta1 from '../app/utils/meta1dexTypes';
 
 jest.mock('react-native-encrypted-storage');
 //@ts-ignore
@@ -11,9 +11,9 @@ global.fetch = jest.fn(() =>
   }),
 );
 
-describe('Meta1dex api tests', () => {
+describe('Meta1 api tests', () => {
   beforeAll(async () => {
-    await meta1dex.connect(config.META1_CONNECTION_URL);
+    await Meta1.connect(config.META1_CONNECTION_URL);
     useStore.subscribe(
       loading => {
         expect(loading).toBeFalsy();
@@ -23,7 +23,7 @@ describe('Meta1dex api tests', () => {
   });
 
   afterAll(async () => {
-    await meta1dex.disconnect();
+    await Meta1.disconnect();
   });
 
   it('Fetches all assets', async () => {
@@ -32,7 +32,17 @@ describe('Meta1dex api tests', () => {
   });
 
   it('Fetches all assets and respective balances', async () => {
-    const assets = await fetchAllAssets();
-    assets.forEach(asset => expect(asset.id.startsWith('1.3')));
+    const assets = await fetchAccountBalances('kj-test2');
+    expect(assets).toBeTruthy();
+    assets!.forEach(balance => expect(balance._asset.id.startsWith('1.3')));
+  });
+
+  it('Converts asset balance to usdt value', async () => {
+    const assets = await fetchAccountBalances('kj-test2');
+    expect(assets).toBeTruthy();
+
+    assets!.forEach(balance => expect(balance._asset.id.startsWith('1.3')));
+
+    console.log(assets);
   });
 });
