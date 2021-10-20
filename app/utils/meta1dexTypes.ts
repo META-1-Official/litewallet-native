@@ -33,6 +33,9 @@ export interface iAccount {
 export interface iBalance {
   id: string;
   owner: string;
+  /** Aka asset_id
+   * @see {@link iAsset.id}
+   */
   asset_type: string;
   balance: number;
   maintenance_flag: boolean;
@@ -101,6 +104,7 @@ export interface fullAccount {
 export interface iAsset {
   id: string;
   symbol: string;
+  /** Aka decimals; <= 12 */
   precision: number;
   issuer: string;
   options: {
@@ -127,7 +131,10 @@ export interface iAsset {
   dynamic_asset_data_id: string;
   total_in_collateral: number;
 }
-
+type EventT = 'connected' | 'block' | 'account';
+type SubT_A = (eventType: EventT, callbackFn: () => void) => void;
+type SubT_B = (eventType: EventT, callbackFn: (x: object) => void) => void;
+type SubT_C = (eventType: EventT, callbackFn: (x: any[]) => void) => void;
 export interface Meta1Module {
   connect: (connection?: string) => Promise<any>;
   db: {
@@ -135,6 +142,7 @@ export interface Meta1Module {
     list_assets: (symbol: string, limit: number) => Promise<iAsset[]>;
     get_full_accounts: (names: string[], sub: boolean) => Promise<ArrayMap<string, fullAccount>>;
   };
+  subscribe: SubT_A | SubT_B | SubT_C;
 }
 
 const meta1dex = require('meta1dex');
