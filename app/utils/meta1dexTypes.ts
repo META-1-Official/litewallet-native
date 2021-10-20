@@ -137,6 +137,7 @@ type SubT_B = (eventType: EventT, callbackFn: (x: object) => void) => void;
 type SubT_C = (eventType: EventT, callbackFn: (x: any[]) => void) => void;
 export interface Meta1Module {
   connect: (connection?: string) => Promise<any>;
+  disconnect: () => void;
   db: {
     get_objects: (ids: string[]) => Promise<any>;
     list_assets: (symbol: string, limit: number) => Promise<iAsset[]>;

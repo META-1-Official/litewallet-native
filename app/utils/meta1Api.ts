@@ -9,7 +9,6 @@ const logout = useStore.getState().logout;
 export const Connect = () => Meta1.connect(config.META1_CONNECTION_URL);
 
 Meta1.subscribe('connected', () => {
-  console.log('Connected!');
   setLoading(false);
 });
 
