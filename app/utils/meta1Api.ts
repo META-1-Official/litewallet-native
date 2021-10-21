@@ -53,7 +53,7 @@ export const fetchAllAssets = () => fetchAssetWithIcon('');
 export type AssetBalanceT = {
   symbol: string;
   amount: number;
-  total_value: string;
+  total_value: number;
   usdt_value: number;
 } & PartialAssetBalanceT;
 
@@ -66,7 +66,9 @@ export const getReadableBalance = (awb: PartialAssetBalanceT) =>
   awb._balance.balance / 10 ** awb._asset.precision;
 
 export const getAssetUSDTValue = (assetSymbol: string) =>
-  Meta1.db.get_ticker('USDT', assetSymbol).then(e => Number(e.latest));
+  assetSymbol === 'USDT'
+    ? 1 // USDT/USDT pair does not extists
+    : Meta1.db.get_ticker('USDT', assetSymbol).then(e => Number(e.latest));
 
 function* AssetBalanceGenerator(base: PartialAssetBalanceT[]) {
   for (const el of base) {
@@ -74,7 +76,7 @@ function* AssetBalanceGenerator(base: PartialAssetBalanceT[]) {
       const symbol = el._asset.symbol;
       const amount = getReadableBalance(el);
       const usdt_value = await getAssetUSDTValue(symbol);
-      const total_value = (amount * usdt_value).toFixed(2);
+      const total_value = amount * usdt_value;
 
       return { symbol, amount, usdt_value, total_value, ...el } as AssetBalanceT;
     })();
