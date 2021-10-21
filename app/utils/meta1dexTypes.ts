@@ -136,7 +136,6 @@ type SubT_A = (eventType: EventT, callbackFn: () => void) => void;
 type SubT_B = (eventType: EventT, callbackFn: (x: object) => void) => void;
 type SubT_C = (eventType: EventT, callbackFn: (x: any[]) => void) => void;
 
-
 interface Ticker {
   time: string;
   base: string;
