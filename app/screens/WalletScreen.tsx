@@ -1,13 +1,16 @@
+import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { Button, Dimensions, Image, Text, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import { grey200 } from 'react-native-paper/src/styles/colors';
+import { Button, Dimensions, Platform, StatusBar, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import PortfolioHeader from '../components/PortfolioHeader';
+import PortfolioLising from '../components/PortfolioListing';
 import { useStore } from '../store';
+import { colors } from '../styles/colors';
 import { jsonEquals } from '../utils';
 import { AssetBalanceT, fetchAccountBalances } from './../utils/meta1Api';
 
 const { width } = Dimensions.get('screen');
+
 const WalletScreen = () => {
   const accountName = useStore(state => state.accountName);
   const [allAssets, setAllAssets] = useState<AssetBalanceT[]>([]);
@@ -24,7 +27,28 @@ const WalletScreen = () => {
       }
     }
     fn();
-  });
+  }, []);
+
+  const hasNotch = Platform.OS === 'android' ? _.get(StatusBar, 'currentHeight', 25) > 24 : true;
+
+  const Backdrop = () => {
+    if (!hasNotch) {
+      return null;
+    }
+
+    return (
+      <View
+        style={{
+          position: 'absolute',
+          width,
+          top: 0,
+          backgroundColor: colors.BrandYellow,
+          height: 44,
+          zIndex: 99,
+        }}
+      />
+    );
+  };
   return (
     <SafeAreaView
       style={{
@@ -34,41 +58,10 @@ const WalletScreen = () => {
         backgroundColor: '#fff',
       }}
     >
+      <Backdrop />
+      <PortfolioHeader protfolioAssets={allAssets} />
       <Button title="Logout" onPress={() => logout()} />
-      <ScrollView>
-        {allAssets &&
-          allAssets.map((e, i) => {
-            return (
-              <View
-                key={`CoinBalance_${i}`}
-                style={{
-                  flexDirection: 'row',
-                  width,
-                  backgroundColor: i % 2 !== 0 ? grey200 : '#fff',
-                  justifyContent: 'space-between',
-                  paddingHorizontal: 24,
-                  paddingVertical: 12,
-                  alignItems: 'center',
-                }}
-              >
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Image
-                    style={{
-                      width: 48,
-                      height: 48,
-                      resizeMode: 'contain',
-                      marginRight: 8,
-                    }}
-                    source={e._asset.icon}
-                  />
-                  <Text> {e.symbol}</Text>
-                </View>
-
-                <Text> {e.amount} </Text>
-              </View>
-            );
-          })}
-      </ScrollView>
+      <PortfolioLising protfolioAssets={allAssets} showZeroBallance={true} />
     </SafeAreaView>
   );
 };
