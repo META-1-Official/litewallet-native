@@ -67,8 +67,15 @@ const WalletNav = () => {
     return <Loader />;
   }
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <Tab.Screen name="Wallet" component={WalletScreen} />
+      <Tab.Screen name="Fund Account" component={WalletScreen} />
+      <Tab.Screen name="DEX" component={WalletScreen} />
+      <Tab.Screen name="Settings" component={WalletScreen} />
     </Tab.Navigator>
   );
 };
