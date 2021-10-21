@@ -1,7 +1,6 @@
 import React from 'react';
-import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, ScrollView, Image, StyleSheet, Text, View } from 'react-native';
 import { grey200, grey600 } from 'react-native-paper/src/styles/colors';
-import { ScrollView } from 'react-native-gesture-handler';
 import { AssetBalanceT } from '../utils/meta1Api';
 
 const { width } = Dimensions.get('screen');
@@ -37,7 +36,13 @@ const PortfolioLising: React.FC<Props> = ({ showZeroBallance, protfolioAssets })
     );
   };
 
-  return <ScrollView>{storted && storted.map(renderRow)}</ScrollView>;
+  return (
+    <View style={{ flex: 1, flexGrow: 1, backgroundColor: '#fff' }}>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
+        {storted && storted.map(renderRow)}
+      </ScrollView>
+    </View>
+  );
 };
 const ICON_SIZE = 42;
 const styles = StyleSheet.create({
