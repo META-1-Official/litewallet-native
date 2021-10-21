@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, View, Text } from 'react-native';
+import MaterialToggle from '../components/MaterialToggle';
 import PortfolioHeader from '../components/PortfolioHeader';
 import PortfolioLising from '../components/PortfolioListing';
 import { useStore } from '../store';
@@ -10,6 +11,7 @@ import { AssetBalanceT, fetchAccountBalances } from './../utils/meta1Api';
 const WalletScreen = () => {
   const accountName = useStore(state => state.accountName);
   const [allAssets, setAllAssets] = useState<AssetBalanceT[]>([]);
+  const [showZeroBalance, setShowZeroBalacnce] = useState(false);
   useEffect(() => {
     async function fn() {
       console.log('Connected!');
@@ -32,7 +34,43 @@ const WalletScreen = () => {
       }}
     >
       <PortfolioHeader protfolioAssets={allAssets} />
-      <PortfolioLising protfolioAssets={allAssets} showZeroBallance={true} />
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          backgroundColor: '#330000',
+          alignSelf: 'stretch',
+          paddingHorizontal: 32,
+          paddingTop: 16,
+          paddingBottom: 12,
+          alignItems: 'flex-start',
+        }}
+      >
+        <Text
+          style={{
+            color: colors.BrandYellow,
+            fontSize: 16,
+            fontWeight: '800',
+          }}
+        >
+          WALLET
+        </Text>
+        <View style={{ flexDirection: 'row' }}>
+          <Text
+            style={{
+              color: '#fff',
+              fontSize: 13,
+              fontWeight: '600',
+              paddingVertical: 2,
+              paddingRight: 8,
+            }}
+          >
+            HIDE 0 BALANCE WALLET
+          </Text>
+          <MaterialToggle onChange={v => setShowZeroBalacnce(v)} />
+        </View>
+      </View>
+      <PortfolioLising protfolioAssets={allAssets} showZeroBallance={showZeroBalance} />
     </SafeAreaView>
   );
 };
