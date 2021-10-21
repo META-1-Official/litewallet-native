@@ -16,6 +16,7 @@ import LinkWalletScreen from './screens/LinkWalletScreen';
 import { useStore } from './store';
 import WalletScreen from './screens/WalletScreen';
 import { Connect } from './utils/meta1Api';
+import { colors } from './styles/colors';
 
 const { useEffect } = React;
 
@@ -70,6 +71,7 @@ const WalletNav = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
+        tabBarActiveTintColor: colors.BrandYellow,
       }}
     >
       <Tab.Screen name="Wallet" component={WalletScreen} />
