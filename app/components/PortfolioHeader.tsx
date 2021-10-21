@@ -4,6 +4,7 @@ import { AssetBalanceT } from '../utils/meta1Api';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { ArrowUp } from 'react-native-feather';
+import { shadow } from '../utils';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -15,6 +16,7 @@ const ProfitIndicator = () => {
   return (
     <View
       style={{
+        ...shadow.D3,
         flexDirection: 'row',
         alignItems: 'center',
         borderRadius: 3,
