@@ -55,6 +55,7 @@ export type AssetBalanceT = {
   amount: number;
   total_value: number;
   usdt_value: number;
+  delta: number;
 } & PartialAssetBalanceT;
 
 export type PartialAssetBalanceT = {
@@ -65,23 +66,35 @@ export type PartialAssetBalanceT = {
 export const getReadableBalance = (awb: PartialAssetBalanceT) =>
   awb._balance.balance / 10 ** awb._asset.precision;
 
-export const getAssetUSDTValue = (assetSymbol: string) =>
+export const getAssetToUSDTTicket = (assetSymbol: string) =>
   assetSymbol === 'USDT'
-    ? 1 // USDT/USDT pair does not extists
-    : Meta1.db.get_ticker('USDT', assetSymbol).then(e => Number(e.latest));
+    ? { latest: 1, percent_change: 0 } // USDT/USDT pair does not extists
+    : Meta1.db.get_ticker('USDT', assetSymbol).then(e => ({
+        latest: Number(e.latest),
+        percent_change: Number(e.percent_change),
+      }));
 
 function* AssetBalanceGenerator(base: PartialAssetBalanceT[]) {
   for (const el of base) {
     yield (async () => {
       const symbol = el._asset.symbol;
+      const ticker = await getAssetToUSDTTicket(symbol);
       const amount = getReadableBalance(el);
-      const usdt_value = await getAssetUSDTValue(symbol);
+      const usdt_value = ticker.latest;
       const total_value = amount * usdt_value;
+      const delta = ticker.percent_change;
 
-      return { symbol, amount, usdt_value, total_value, ...el } as AssetBalanceT;
+      return { symbol, amount, usdt_value, total_value, delta, ...el } as AssetBalanceT;
     })();
   }
 }
+
+export type AccountBalanceT = {
+  assetsWithBalance: AssetBalanceT[];
+  accountTotal: number;
+  toatalChnage: number;
+  changePercent: number;
+};
 
 export async function fetchAccountBalances(accountName: string) {
   const accounts = await Meta1.db
@@ -104,5 +117,12 @@ export async function fetchAccountBalances(accountName: string) {
   const assetsWithBalance: AssetBalanceT[] = await Promise.all([
     ...AssetBalanceGenerator(assetsWithBalanceRaw),
   ]);
-  return assetsWithBalance;
+
+  const accountTotal = assetsWithBalance.reduce((acc, cv) => acc + cv.total_value, 0);
+  const toatalChnage = assetsWithBalance
+    .map(e => e.delta * e.total_value * 0.01)
+    .reduce((acc, cv) => acc + cv, 0);
+  const changePercent = toatalChnage / (accountTotal * 0.01);
+
+  return { assetsWithBalance, changePercent, toatalChnage, accountTotal };
 }

@@ -2,11 +2,10 @@ import * as React from 'react';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Provider as PaperProvider } from 'react-native-paper';
 import SplashScreen from 'react-native-splash-screen';
-import { ActivityIndicator } from 'react-native';
 
 import Legal from './screens/LegalScreen';
 import AppHeader from './components/AppHeaer';
@@ -17,6 +16,7 @@ import { useStore } from './store';
 import WalletScreen from './screens/WalletScreen';
 import { Connect } from './utils/meta1Api';
 import { colors } from './styles/colors';
+import { Loader } from 'react-native-feather';
 
 const { useEffect } = React;
 
@@ -53,14 +53,6 @@ const AuthNav = () => {
 };
 
 const Tab = createBottomTabNavigator();
-
-const Loader = () => {
-  return (
-    <SafeAreaView style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
-      <ActivityIndicator />
-    </SafeAreaView>
-  );
-};
 
 const WalletNav = () => {
   const loading = useStore(state => state.loading);

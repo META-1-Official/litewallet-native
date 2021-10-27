@@ -1,30 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, View, Text } from 'react-native';
+import { Loader } from 'react-native-feather';
 import MaterialToggle from '../components/MaterialToggle';
 import PortfolioHeader from '../components/PortfolioHeader';
 import PortfolioLising from '../components/PortfolioListing';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { jsonEquals } from '../utils';
-import { AssetBalanceT, fetchAccountBalances } from './../utils/meta1Api';
+import { AccountBalanceT, fetchAccountBalances } from './../utils/meta1Api';
 
 const WalletScreen = () => {
   const accountName = useStore(state => state.accountName);
-  const [allAssets, setAllAssets] = useState<AssetBalanceT[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [allAssets, setAllAssets] = useState<AccountBalanceT | null>(null);
   const [showZeroBalance, setShowZeroBalacnce] = useState(false);
   useEffect(() => {
     async function fn() {
       console.log('Connected!');
-
       const balances = await fetchAccountBalances(accountName);
 
       console.log(balances);
       if (!jsonEquals(balances, allAssets)) {
         setAllAssets(balances!);
+        setLoading(false);
       }
     }
     fn();
   }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <SafeAreaView
@@ -70,7 +76,7 @@ const WalletScreen = () => {
           <MaterialToggle onChange={v => setShowZeroBalacnce(v)} />
         </View>
       </View>
-      <PortfolioLising protfolioAssets={allAssets} showZeroBallance={showZeroBalance} />
+      <PortfolioLising accountBallance={allAssets} showZeroBallance={showZeroBalance} />
     </SafeAreaView>
   );
 };

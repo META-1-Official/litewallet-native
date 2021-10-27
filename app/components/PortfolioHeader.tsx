@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { AssetBalanceT } from '../utils/meta1Api';
+import { AccountBalanceT } from '../utils/meta1Api';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { ArrowUp } from 'react-native-feather';
@@ -9,10 +9,14 @@ import { shadow } from '../utils';
 const { width, height } = Dimensions.get('screen');
 
 interface Props {
-  protfolioAssets: AssetBalanceT[];
+  protfolioAssets: AccountBalanceT | null;
 }
 
-const ProfitIndicator = () => {
+interface ProfitIndicatorProps {
+  change: number;
+}
+
+const ProfitIndicator: React.FC<ProfitIndicatorProps> = ({ change }) => {
   return (
     <View
       style={{
@@ -25,7 +29,7 @@ const ProfitIndicator = () => {
       }}
     >
       <ArrowUp stroke="#fff" width="12" />
-      <Text style={{ color: '#fff' }}>4.52%</Text>
+      <Text style={{ color: '#fff' }}>{change.toFixed(2)}%</Text>
     </View>
   );
 };
@@ -68,12 +72,11 @@ const ButtonGroup = () => {
 };
 const PortfolioHeader: React.FC<Props> = ({ protfolioAssets }) => {
   const accountName = useStore(state => state.accountName);
-  const accountTotal = protfolioAssets.reduce((acc, cv) => acc + cv.total_value, 0);
   return (
     <View style={styles.container}>
       <Text style={styles.accountName}>@{accountName}</Text>
-      <Text style={styles.accountTotal}>${accountTotal.toFixed(2)}</Text>
-      <ProfitIndicator />
+      <Text style={styles.accountTotal}>${protfolioAssets!.accountTotal.toFixed(2)}</Text>
+      <ProfitIndicator change={protfolioAssets!.toatalChnage} />
       <ButtonGroup />
     </View>
   );

@@ -1,15 +1,16 @@
 import React from 'react';
 import { Dimensions, ScrollView, Image, StyleSheet, Text, View } from 'react-native';
 import { grey200, grey600 } from 'react-native-paper/src/styles/colors';
-import { AssetBalanceT } from '../utils/meta1Api';
+import { AccountBalanceT, AssetBalanceT } from '../utils/meta1Api';
 
 const { width } = Dimensions.get('screen');
 
 interface Props {
   showZeroBallance: boolean;
-  protfolioAssets: AssetBalanceT[];
+  accountBallance: AccountBalanceT | null;
 }
-const PortfolioLising: React.FC<Props> = ({ showZeroBallance, protfolioAssets }) => {
+const PortfolioLising: React.FC<Props> = ({ showZeroBallance, accountBallance }) => {
+  const protfolioAssets = accountBallance!.assetsWithBalance;
   const assets = showZeroBallance ? protfolioAssets : protfolioAssets.filter(e => e.amount > 0);
   const storted = assets.sort((a, b) => b.total_value - a.total_value);
 

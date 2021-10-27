@@ -34,14 +34,15 @@ describe('Meta1 api tests', () => {
   it('Fetches all assets and respective balances', async () => {
     const assets = await fetchAccountBalances('kj-test2');
     expect(assets).toBeTruthy();
-    assets!.forEach(balance => expect(balance._asset.id.startsWith('1.3')));
+    assets!.assetsWithBalance.forEach(balance => expect(balance._asset.id.startsWith('1.3')));
   });
-
+  
+  // TODO: Make proper tests
   it('Converts asset balance to usdt value', async () => {
     const assets = await fetchAccountBalances('kj-test2');
     expect(assets).toBeTruthy();
 
-    assets!.forEach(balance => expect(balance._asset.id.startsWith('1.3')));
+    assets!.assetsWithBalance.forEach(balance => expect(balance._asset.id.startsWith('1.3')));
 
     console.log(assets);
   });
