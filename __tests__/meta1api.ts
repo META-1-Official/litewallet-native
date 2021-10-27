@@ -11,9 +11,17 @@ global.fetch = jest.fn(() =>
   }),
 );
 
+// Temporarely override console.log
+const consoleLogHook = async (fn: () => any) => {
+  const oConsoleLog = console.log;
+  console.log = () => {};
+  await fn();
+  console.log = oConsoleLog;
+};
+
 describe('Meta1 api tests', () => {
   beforeAll(async () => {
-    await Meta1.connect(config.META1_CONNECTION_URL);
+    await consoleLogHook(async () => await Meta1.connect(config.META1_CONNECTION_URL));
     useStore.subscribe(
       loading => {
         expect(loading).toBeFalsy();
@@ -23,27 +31,25 @@ describe('Meta1 api tests', () => {
   });
 
   afterAll(async () => {
-    await Meta1.disconnect();
+    await consoleLogHook(async () => await Meta1.disconnect());
   });
 
-  it('Fetches all assets', async () => {
+  it('Fetches all assets, and assets are valid', async () => {
     const assets = await fetchAllAssets();
     assets.forEach(asset => expect(asset.id.startsWith('1.3')));
   });
 
-  it('Fetches all assets and respective balances', async () => {
+  it('Fetches all assets and respective balances, and assets are valid', async () => {
     const assets = await fetchAccountBalances('kj-test2');
     expect(assets).toBeTruthy();
     assets!.assetsWithBalance.forEach(balance => expect(balance._asset.id.startsWith('1.3')));
   });
-  
-  // TODO: Make proper tests
-  it('Converts asset balance to usdt value', async () => {
+
+  it('Account total, Toatal chnage and Change percent are valid', async () => {
     const assets = await fetchAccountBalances('kj-test2');
     expect(assets).toBeTruthy();
-
-    assets!.assetsWithBalance.forEach(balance => expect(balance._asset.id.startsWith('1.3')));
-
-    console.log(assets);
+    expect(assets!.accountTotal).toEqual(expect.any(Number));
+    expect(assets!.toatalChnage).toEqual(expect.any(Number));
+    expect(assets!.changePercent).toEqual(expect.any(Number));
   });
 });
