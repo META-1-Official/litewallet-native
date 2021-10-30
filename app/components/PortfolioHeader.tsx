@@ -3,7 +3,7 @@ import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-nati
 import { AccountBalanceT } from '../utils/meta1Api';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
-import { ArrowUp } from 'react-native-feather';
+import { ArrowDown, ArrowUp } from 'react-native-feather';
 import { shadow } from '../utils';
 
 const { width, height } = Dimensions.get('screen');
@@ -24,12 +24,12 @@ const ProfitIndicator: React.FC<ProfitIndicatorProps> = ({ change }) => {
         flexDirection: 'row',
         alignItems: 'center',
         borderRadius: 3,
-        backgroundColor: '#00aa09',
+        backgroundColor: change > 0 ? '#00aa09' : '#c00f00',
         paddingHorizontal: 6,
       }}
     >
-      <ArrowUp stroke="#fff" width="12" />
-      <Text style={{ color: '#fff' }}>{change.toFixed(2)}%</Text>
+      {change > 0 ? <ArrowUp stroke="#fff" width="12" /> : <ArrowDown stroke="#fff" width="12" />}
+      <Text style={{ color: '#fff' }}>{Math.abs(change).toFixed(2)}%</Text>
     </View>
   );
 };
