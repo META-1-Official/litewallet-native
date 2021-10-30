@@ -16,7 +16,8 @@ import { useStore } from './store';
 import WalletScreen from './screens/WalletScreen';
 import { Connect } from './utils/meta1Api';
 import { colors } from './styles/colors';
-import { Loader } from 'react-native-feather';
+import * as Icon from 'react-native-feather';
+import Loader from './components/Loader';
 
 const { useEffect } = React;
 
@@ -61,10 +62,26 @@ const WalletNav = () => {
   }
   return (
     <Tab.Navigator
-      screenOptions={{
+      screenOptions={({ route }) => ({
         headerShown: false,
         tabBarActiveTintColor: colors.BrandYellow,
-      }}
+        tabBarIcon: ({ color, size }) => {
+          const Name2Icon = {
+            Wallet: Icon.CreditCard,
+            DEX: Icon.BarChart2,
+            Settings: Icon.Settings,
+            'Fund Account': Icon.User,
+          };
+
+          if (!(route.name in Name2Icon)) {
+            return null;
+          }
+          const key = route.name as keyof typeof Name2Icon;
+          const TheIcon: typeof Name2Icon['Wallet'] = Name2Icon[key];
+
+          return <TheIcon width={size} height={size} color={color} />;
+        },
+      })}
     >
       <Tab.Screen name="Wallet" component={WalletScreen} />
       <Tab.Screen name="Fund Account" component={WalletScreen} />
@@ -78,6 +95,23 @@ function App() {
   useEffect(() => {
     SplashScreen.hide();
     Connect();
+    // try {
+    //   console.log('Going to create a ws connection to wss://api.meta1.io/ws');
+    //   const ws = new WebSocket('wss://api.meta1.io/ws');
+    //   ws.onmessage = console.log;
+    //   ws.send(`{"jsonrpc": "2.0"}`);
+    // } catch (e) {
+    //   console.error(e);
+    // }
+
+    // try {
+    //   // TODO: connect to a real test server
+    //   // const ws = new WebSocket('wss://api.meta1.io/ws');
+    //   // ws.onmessage = console.log;
+    //   // ws.send(`{"jsonrpc": "2.0"}`);
+    // } catch (e) {
+    //   console.error(e);
+    // }
   });
 
   const authorized = useStore(state => state.authorized);
