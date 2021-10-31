@@ -16,8 +16,8 @@ import { useStore } from './store';
 import WalletScreen from './screens/WalletScreen';
 import { Connect } from './utils/meta1Api';
 import { colors } from './styles/colors';
-import * as Icon from 'react-native-feather';
 import Loader from './components/Loader';
+import { SvgIcons } from '../assets';
 
 const { useEffect } = React;
 
@@ -67,10 +67,10 @@ const WalletNav = () => {
         tabBarActiveTintColor: colors.BrandYellow,
         tabBarIcon: ({ color, size }) => {
           const Name2Icon = {
-            Wallet: Icon.CreditCard,
-            DEX: Icon.BarChart2,
-            Settings: Icon.Settings,
-            'Fund Account': Icon.User,
+            Wallet: SvgIcons.wallet,
+            DEX: SvgIcons.trading,
+            Settings: SvgIcons.settings,
+            'Fund Account': SvgIcons.fundAccount,
           };
 
           if (!(route.name in Name2Icon)) {
@@ -79,14 +79,14 @@ const WalletNav = () => {
           const key = route.name as keyof typeof Name2Icon;
           const TheIcon: typeof Name2Icon['Wallet'] = Name2Icon[key];
 
-          return <TheIcon width={size} height={size} color={color} />;
+          return <TheIcon width={size} height={size} fill={color} color={color} />;
         },
       })}
     >
       <Tab.Screen name="Wallet" component={WalletScreen} />
-      <Tab.Screen name="Fund Account" component={WalletScreen} />
-      <Tab.Screen name="DEX" component={WalletScreen} />
-      <Tab.Screen name="Settings" component={WalletScreen} />
+      <Tab.Screen name="Fund Account" component={Loader} />
+      <Tab.Screen name="DEX" component={Loader} />
+      <Tab.Screen name="Settings" component={Loader} />
     </Tab.Navigator>
   );
 };
