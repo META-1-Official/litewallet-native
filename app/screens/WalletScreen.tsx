@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, View, Text } from 'react-native';
-import { Loader } from 'react-native-feather';
+import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import MaterialToggle from '../components/MaterialToggle';
 import PortfolioHeader from '../components/PortfolioHeader';
 import PortfolioLising from '../components/PortfolioListing';
@@ -8,6 +8,8 @@ import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { jsonEquals } from '../utils';
 import { AccountBalanceT, fetchAccountBalances } from './../utils/meta1Api';
+import Loader from '../components/Loader';
+import AppHeader from '../components/AppHeaer';
 
 const WalletScreen = () => {
   const accountName = useStore(state => state.accountName);
@@ -81,4 +83,34 @@ const WalletScreen = () => {
   );
 };
 
-export default WalletScreen;
+const Stack = createStackNavigator();
+
+export type WalletStackParamList = {
+  Wallet__Main: undefined;
+  Wallet__Trade: undefined;
+  Wallet__Send: undefined;
+  Wallet__Recive: undefined;
+};
+
+export type WalletNavigationProp = StackNavigationProp<WalletStackParamList, 'Wallet__Main'>;
+
+function WalletScreenStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerMode: 'screen',
+        header: AppHeader,
+      }}
+    >
+      <Stack.Screen
+        name="Wallet__Main"
+        component={WalletScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name="Wallet__Trade" component={Loader} />
+      <Stack.Screen name="Wallet__Send" component={Loader} />
+      <Stack.Screen name="Wallet__Recive" component={Loader} />
+    </Stack.Navigator>
+  );
+}
+export default WalletScreenStack;
