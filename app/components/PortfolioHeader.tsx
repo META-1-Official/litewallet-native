@@ -5,6 +5,8 @@ import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { ArrowDown, ArrowUp } from 'react-native-feather';
 import { shadow } from '../utils';
+import { useNavigation } from '@react-navigation/core';
+import { WalletNavigationProp } from '../screens/WalletScreen';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -35,8 +37,8 @@ const ProfitIndicator: React.FC<ProfitIndicatorProps> = ({ change }) => {
 };
 
 const ButtonGroup = () => {
-  const Button = ({ title }: { title: string }) => (
-    <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
+  const Button = ({ title, onPress }: { title: string; onPress: () => void }) => (
+    <TouchableOpacity activeOpacity={0.5} onPress={onPress}>
       <Text style={{ color: '#fff', fontWeight: '600', fontSize: 15 }}> {title} </Text>
     </TouchableOpacity>
   );
@@ -48,6 +50,9 @@ const ButtonGroup = () => {
       }}
     />
   );
+
+  const navigation = useNavigation<WalletNavigationProp>();
+
   return (
     <View
       style={{
@@ -61,12 +66,12 @@ const ButtonGroup = () => {
         borderRadius: 1000,
       }}
     >
-      <Button title="Send" />
+      <Button onPress={() => navigation.navigate('Wallet__Send')} title="Send" />
       <SeparatorHorizontal />
-      <Button title="Receive" />
+      <Button onPress={() => navigation.navigate('Wallet__Recive')} title="Receive" />
 
       <SeparatorHorizontal />
-      <Button title="Trade" />
+      <Button onPress={() => navigation.navigate('Wallet__Trade')} title="Trade" />
     </View>
   );
 };
