@@ -129,6 +129,23 @@ export function join<A, B>(a: A[], b: B[]): (A & B)[] {
   return a.map((_, i) => ({ ...a[i], ...b[i] }));
 }
 
+// Ghetto polyfiling array at
+// eslint-disable-next-line no-extend-native
+Array.prototype.at = function (index: number) {
+  if (this.length < index || this.length === 0) {
+    return undefined;
+  }
+
+  if (index < 0) {
+    const i = this.length - index;
+    if (i < 0 || i < this.length) {
+      return undefined;
+    }
+  }
+
+  return this[index];
+};
+
 /** Not exactly deepEquals but good enought */
 export const jsonEquals = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
 
