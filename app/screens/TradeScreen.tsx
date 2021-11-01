@@ -55,6 +55,7 @@ const TradeScreen: React.FC = () => {
             left: -48,
             top: 32,
             zIndex: 1000,
+            elevation: 3,
             backgroundColor: '#330000',
             borderRadius: 4,
             padding: 8,
@@ -114,6 +115,7 @@ const TradeScreen: React.FC = () => {
                     fontWeight: '500',
                     textAlign: 'right',
                     width: 100,
+                    color: '#000',
                   }}
                   keyboardType="numeric"
                   onChangeText={t => {
@@ -170,7 +172,8 @@ const TradeScreen: React.FC = () => {
                     fontSize: 18,
                     fontWeight: '500',
                     textAlign: 'right',
-                    width: 100,
+                    minWidth: 100,
+                    color: '#000',
                   }}
                   keyboardType="numeric"
                   onChangeText={t => {
