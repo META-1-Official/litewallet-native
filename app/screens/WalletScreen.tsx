@@ -1,36 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, View, Text } from 'react-native';
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import MaterialToggle from '../components/MaterialToggle';
 import PortfolioHeader from '../components/PortfolioHeader';
 import PortfolioLising from '../components/PortfolioListing';
-import { useStore } from '../store';
 import { colors } from '../styles/colors';
-import { jsonEquals } from '../utils';
-import { AccountBalanceT, fetchAccountBalances } from './../utils/meta1Api';
+import { useAssets } from './../utils/meta1Api';
 import Loader from '../components/Loader';
 import AppHeader from '../components/AppHeaer';
+import TradeScreen from './TradeScreen';
 
 const WalletScreen = () => {
-  const accountName = useStore(state => state.accountName);
-  const [loading, setLoading] = useState(true);
-  const [allAssets, setAllAssets] = useState<AccountBalanceT | null>(null);
   const [showZeroBalance, setShowZeroBalacnce] = useState(false);
-  useEffect(() => {
-    async function fn() {
-      console.log('Connected!');
-      const balances = await fetchAccountBalances(accountName);
+  const allAssets = useAssets();
 
-      console.log(balances);
-      if (!jsonEquals(balances, allAssets)) {
-        setAllAssets(balances!);
-        setLoading(false);
-      }
-    }
-    fn();
-  }, []);
-
-  if (loading) {
+  if (allAssets === null) {
     return <Loader />;
   }
 
@@ -107,7 +91,7 @@ function WalletScreenStack() {
         component={WalletScreen}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="Wallet__Trade" component={Loader} />
+      <Stack.Screen name="Wallet__Trade" component={TradeScreen} />
       <Stack.Screen name="Wallet__Send" component={Loader} />
       <Stack.Screen name="Wallet__Recive" component={Loader} />
     </Stack.Navigator>
