@@ -2,6 +2,7 @@ import { ensure } from '.';
 import config from '../config';
 import { useStore } from '../store';
 import Meta1, { iAsset, iBalance } from './meta1dexTypes';
+import create from 'zustand';
 
 const setLoading = useStore.getState().setLoading;
 const logout = useStore.getState().logout;
@@ -126,3 +127,27 @@ export async function fetchAccountBalances(accountName: string) {
 
   return { assetsWithBalance, changePercent, toatalChnage, accountTotal };
 }
+
+export const useAssets = () => {
+  const accountName = useStore(state => state.accountName);
+  const userAssets = useAssetsStore(state => state.userAssets);
+  const fetch = useAssetsStore(state => state.fetchUserAssets);
+  if (userAssets === null) {
+    fetch(accountName);
+  }
+
+  return userAssets;
+};
+
+interface AssetsStore {
+  userAssets: AccountBalanceT | null;
+  fetchUserAssets: (accountName: string) => Promise<void>;
+}
+
+export const useAssetsStore = create<AssetsStore>(set => ({
+  userAssets: null,
+  fetchUserAssets: async (accountName: string) => {
+    const res = await fetchAccountBalances(accountName);
+    set({ userAssets: res! });
+  },
+}));
