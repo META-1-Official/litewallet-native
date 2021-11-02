@@ -8,6 +8,7 @@ import { List } from '../components/List';
 import Loader from '../components/Loader';
 import { Heading, TextSecondary } from '../components/typography';
 import { colors } from '../styles/colors';
+import { shadow } from '../utils';
 import { useAssets } from '../utils/meta1Api';
 
 const { width, height } = Dimensions.get('screen');
@@ -46,7 +47,7 @@ const TradeScreen: React.FC = () => {
   const calcFromA = () => {
     const askPrice = selectedAssetA!.usdt_value * Number(aAmt);
     const amtB = askPrice / selectedAssetB!.usdt_value;
-    setBAmt(amtB.toFixed(8));
+    setBAmt(amtB === 0 ? amtB.toFixed(2) : amtB.toFixed(8));
   };
   useEffect(() => {
     calcFromA();
@@ -61,8 +62,8 @@ const TradeScreen: React.FC = () => {
   return (
     <SafeAreaView>
       <Backdrop />
-      <ModalA />
-      <ModalB />
+      <ModalA key="AssetPicker_A" />
+      <ModalB key="AssetPicker_B" />
       <View>
         <View
           style={{
@@ -212,6 +213,36 @@ const TradeScreen: React.FC = () => {
             </View>
           </View>
         </List>
+      </View>
+      <View
+        style={{
+          margin: 32,
+          marginTop: 128,
+          alignItems: 'center',
+        }}
+      >
+        <TouchableOpacity>
+          <View
+            style={{
+              ...shadow.D3,
+              padding: 12,
+              paddingHorizontal: 32,
+              borderRadius: 5,
+              marginBottom: 24,
+              backgroundColor: colors.BrandYellow,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: '600',
+              }}
+            >
+              Exchange
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <Text>The spread for this transaction is 0.423%</Text>
       </View>
     </SafeAreaView>
   );
