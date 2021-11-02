@@ -1,6 +1,9 @@
-import React, { useMemo, useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/rules-of-hooks */
+import React, { useEffect, useMemo, useState } from 'react';
 import { Dimensions, Image, SafeAreaView, Text, TextInput, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useAssetPicker } from '../components/AssetSelectModal';
 import { List } from '../components/List';
 import Loader from '../components/Loader';
 import { Heading, TextSecondary } from '../components/typography';
@@ -22,7 +25,6 @@ const Backdrop = () => (
 );
 
 const TradeScreen: React.FC = () => {
-  const [selelctedAseetIdx, setSelelctedAseetIdx] = useState(0);
   const [aAmt, setAAmt] = useState('0.00');
   const [bAmt, setBAmt] = useState('0.00');
 
@@ -38,15 +40,29 @@ const TradeScreen: React.FC = () => {
   if (allAssets === null || !avaliableAssets) {
     return <Loader />;
   }
-  console.log(avaliableAssets);
-  const selectedAssetA = avaliableAssets.at(selelctedAseetIdx);
-  const selectedAssetB = avaliableAssets.at(selelctedAseetIdx + 1);
+  const [selectedAssetA, openA, _closeA, ModalA] = useAssetPicker(avaliableAssets.at(0));
+  const [selectedAssetB, openB, _closeB, ModalB] = useAssetPicker(avaliableAssets.at(1));
+
+  const calcFromA = () => {
+    const askPrice = selectedAssetA!.usdt_value * Number(aAmt);
+    const amtB = askPrice / selectedAssetB!.usdt_value;
+    setBAmt(amtB.toFixed(8));
+  };
+  useEffect(() => {
+    calcFromA();
+  }, [selectedAssetA, selectedAssetB]);
+
   if (!selectedAssetA || !selectedAssetB) {
     return <Text> Nothing to swap</Text>;
   }
+
+  console.log(avaliableAssets);
+
   return (
     <SafeAreaView>
       <Backdrop />
+      <ModalA />
+      <ModalB />
       <View>
         <View
           style={{
@@ -62,11 +78,13 @@ const TradeScreen: React.FC = () => {
             paddingHorizontal: 12,
           }}
         >
-          <TouchableOpacity onPress={() => {
+          <TouchableOpacity
+            onPress={() => {
               setAAmt(selectedAssetA.amount.toString());
               const amtB = selectedAssetA.total_value / selectedAssetB.usdt_value;
               setBAmt(amtB.toFixed(8));
-            }}>
+            }}
+          >
             <Text style={{ textAlign: 'center', color: colors.BrandYellow, fontWeight: '700' }}>
               MAX
             </Text>
@@ -90,23 +108,25 @@ const TradeScreen: React.FC = () => {
                 justifyContent: 'space-between',
               }}
             >
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                }}
-              >
-                <Image
-                  style={{ width: 42, height: 42, resizeMode: 'contain', marginRight: 8 }}
-                  source={selectedAssetA._asset.icon}
-                />
-                <View>
-                  <Heading style={{ fontSize: 18, fontWeight: '500' }}>
-                    {selectedAssetA.symbol}
-                  </Heading>
-                  <TextSecondary style={{ fontSize: 14 }}>BNB</TextSecondary>
+              <TouchableOpacity onPress={() => openA()}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Image
+                    style={{ width: 42, height: 42, resizeMode: 'contain', marginRight: 8 }}
+                    source={selectedAssetA._asset.icon}
+                  />
+                  <View>
+                    <Heading style={{ fontSize: 18, fontWeight: '500' }}>
+                      {selectedAssetA.symbol}
+                    </Heading>
+                    <TextSecondary style={{ fontSize: 14 }}>BNB</TextSecondary>
+                  </View>
                 </View>
-              </View>
+              </TouchableOpacity>
 
               <View>
                 <TextInput
@@ -148,24 +168,25 @@ const TradeScreen: React.FC = () => {
                 justifyContent: 'space-between',
               }}
             >
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                }}
-              >
-                <Image
-                  style={{ width: 42, height: 42, resizeMode: 'contain', marginRight: 8 }}
-                  source={selectedAssetB._asset.icon}
-                />
-                <View>
-                  <Heading style={{ fontSize: 18, fontWeight: '500' }}>
-                    {selectedAssetB.symbol}
-                  </Heading>
-                  <TextSecondary style={{ fontSize: 14 }}>BNB</TextSecondary>
+              <TouchableOpacity onPress={() => openB()}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Image
+                    style={{ width: 42, height: 42, resizeMode: 'contain', marginRight: 8 }}
+                    source={selectedAssetB._asset.icon}
+                  />
+                  <View>
+                    <Heading style={{ fontSize: 18, fontWeight: '500' }}>
+                      {selectedAssetB.symbol}
+                    </Heading>
+                    <TextSecondary style={{ fontSize: 14 }}>BNB</TextSecondary>
+                  </View>
                 </View>
-              </View>
-
+              </TouchableOpacity>
               <View>
                 <TextInput
                   style={{
