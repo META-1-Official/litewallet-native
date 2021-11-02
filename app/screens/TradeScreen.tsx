@@ -1,15 +1,27 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
+import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Dimensions, Image, SafeAreaView, Text, TextInput, View } from 'react-native';
+import {
+  Alert,
+  AlertType,
+  Dimensions,
+  Image,
+  SafeAreaView,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useAssetPicker } from '../components/AssetSelectModal';
 import { List } from '../components/List';
 import Loader from '../components/Loader';
 import { Heading, TextSecondary } from '../components/typography';
+import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { shadow } from '../utils';
-import { useAssets } from '../utils/meta1Api';
+import { swapWithPassword, useAssets, useAssetsStore } from '../utils/meta1Api';
+import { WalletNavigationProp } from './WalletScreen';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -24,12 +36,28 @@ const Backdrop = () => (
     }}
   />
 );
+const catchError = async (fn: () => void) => {
+  try {
+    await fn();
+  } catch (e) {
+    console.error(e);
+    Alert.alert('Error', (e as Error).message);
+  }
+};
+
+const promptPromise = (title: string, msg: string, type?: AlertType): Promise<string> =>
+  new Promise(resolve => {
+    Alert.prompt(title, msg, t => resolve(t), type);
+  });
 
 const TradeScreen: React.FC = () => {
   const [aAmt, setAAmt] = useState('0.00');
   const [bAmt, setBAmt] = useState('0.00');
 
+  const accountName = useStore(state => state.accountName);
+  const password = useStore(state => state.password);
   const allAssets = useAssets();
+  const fetchAssets = useAssetsStore(state => state.fetchUserAssets);
   const avaliableAssets = useMemo(
     () =>
       allAssets?.assetsWithBalance
@@ -38,6 +66,7 @@ const TradeScreen: React.FC = () => {
     [allAssets],
   );
 
+  const nav = useNavigation<WalletNavigationProp>();
   if (allAssets === null || !avaliableAssets) {
     return <Loader />;
   }
@@ -49,6 +78,7 @@ const TradeScreen: React.FC = () => {
     const amtB = askPrice / selectedAssetB!.usdt_value;
     setBAmt(amtB === 0 ? amtB.toFixed(2) : amtB.toFixed(8));
   };
+
   useEffect(() => {
     calcFromA();
   }, [selectedAssetA, selectedAssetB]);
@@ -221,7 +251,44 @@ const TradeScreen: React.FC = () => {
           alignItems: 'center',
         }}
       >
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+            catchError(async () => {
+              console.log(aAmt, bAmt);
+              console.log(password);
+              if (password === '') {
+                const pass = await promptPromise(
+                  'Enter password',
+                  'Password is required for this operation',
+                  'secure-text',
+                );
+                await swapWithPassword(
+                  {
+                    accountName,
+                    password: pass,
+                  },
+                  selectedAssetA!.symbol,
+                  selectedAssetB.symbol,
+                  Number(aAmt),
+                );
+                await fetchAssets(accountName);
+                return nav.goBack();
+              } else {
+                await swapWithPassword(
+                  {
+                    accountName,
+                    password,
+                  },
+                  selectedAssetA!.symbol,
+                  selectedAssetB.symbol,
+                  Number(aAmt),
+                );
+                await fetchAssets(accountName);
+                return nav.goBack();
+              }
+            })
+          }
+        >
           <View
             style={{
               ...shadow.D3,

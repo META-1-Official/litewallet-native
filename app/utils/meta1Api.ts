@@ -128,6 +128,37 @@ export async function fetchAccountBalances(accountName: string) {
   return { assetsWithBalance, changePercent, toatalChnage, accountTotal };
 }
 
+export interface AccountWithPassword {
+  accountName: string;
+  password: string;
+}
+
+export const swapWithPassword = async (
+  accountInfo: AccountWithPassword,
+  from: string,
+  to: string,
+  amount: number,
+) => {
+  const pair = await Meta1.db.get_ticker(from, to);
+
+  if (!pair) {
+    throw new Error(`Pair ${from}:${to} dosen't exist`);
+  }
+
+  const account = await Meta1.login(accountInfo.accountName, accountInfo.password);
+
+  const buyResult = await account.buy(
+    to,
+    from,
+    amount,
+    pair.lowest_ask,
+    false, // whatever
+    new Date('12/12/2021'), // idk
+  );
+  console.log(buyResult);
+  return buyResult;
+};
+
 export const useAssets = () => {
   const accountName = useStore(state => state.accountName);
   const userAssets = useAssetsStore(state => state.userAssets);
