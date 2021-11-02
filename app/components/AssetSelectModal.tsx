@@ -17,14 +17,13 @@ import { AssetBalanceT, useAssets } from '../utils/meta1Api';
 import { TextSecondary } from './typography';
 
 interface AssetPickerProps {
-  key: string;
   visible: boolean;
   onClose: (...args: any[]) => void;
   onSelect: (asset: AssetBalanceT) => void;
 }
 const { width, height } = Dimensions.get('screen');
 
-const AssetPicker: React.FC<AssetPickerProps> = ({ key, visible, onClose, onSelect }) => {
+const AssetPicker: React.FC<AssetPickerProps> = ({ visible, onClose, onSelect }) => {
   const nav = useNavigation<WalletNavigationProp>();
   const routeName = nav.getState().routeNames[nav.getState().index];
   const Header = () => (
@@ -59,7 +58,6 @@ const AssetPicker: React.FC<AssetPickerProps> = ({ key, visible, onClose, onSele
 
   return (
     <Modal
-      key={key}
       animationType="slide"
       transparent={true}
       visible={visible}
@@ -129,7 +127,6 @@ export const useAssetPicker = (
   const close = () => setIsOpen(false);
   const modal = () => (
     <AssetPicker
-      key={`AssetPicker_${Math.floor(Math.random() * 10)}`}
       visible={isOpen}
       onClose={() => close()}
       onSelect={e => {
