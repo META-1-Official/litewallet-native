@@ -92,8 +92,8 @@ const TradeScreen: React.FC = () => {
   return (
     <SafeAreaView>
       <Backdrop />
-      <ModalA key="AssetPicker_A" />
-      <ModalB key="AssetPicker_B" />
+      <ModalA key="AssetPicker_A" title="Trade" />
+      <ModalB key="AssetPicker_B" title="Trade" />
       <View>
         <View
           style={{

@@ -159,6 +159,29 @@ export const swapWithPassword = async (
   return buyResult;
 };
 
+export const depositAddress = async (accountName: string, asset: string) => {
+  const res = await fetch(`https://gateway.api.meta1.io/api/wallet/init/${asset}`, {
+    credentials: 'omit',
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:84.0) Gecko/20100101 Firefox/84.0',
+      Accept: 'application/json, text/plain, */*',
+      'Accept-Language': 'en-US,en;q=0.5',
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+    },
+    body: JSON.stringify({ metaId: accountName }),
+    method: 'POST',
+    mode: 'cors',
+  });
+
+  try {
+    const json: { address: string } = await res.json();
+    return json.address;
+  } catch (e) {
+    return '';
+  }
+};
+
 export const useAssets = () => {
   const accountName = useStore(state => state.accountName);
   const userAssets = useAssetsStore(state => state.userAssets);

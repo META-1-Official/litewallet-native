@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/core';
 import React, { useState } from 'react';
 import {
   Dimensions,
@@ -12,20 +11,19 @@ import {
   View,
 } from 'react-native';
 import { X } from 'react-native-feather';
-import { WalletNavigationProp } from '../screens/WalletScreen';
 import { AssetBalanceT, useAssets } from '../utils/meta1Api';
 import { TextSecondary } from './typography';
 
 interface AssetPickerProps {
+  key: string;
+  title: string;
   visible: boolean;
   onClose: (...args: any[]) => void;
   onSelect: (asset: AssetBalanceT) => void;
 }
 const { width, height } = Dimensions.get('screen');
 
-const AssetPicker: React.FC<AssetPickerProps> = ({ visible, onClose, onSelect }) => {
-  const nav = useNavigation<WalletNavigationProp>();
-  const routeName = nav.getState().routeNames[nav.getState().index];
+const AssetPicker: React.FC<AssetPickerProps> = ({ title, visible, onClose, onSelect }) => {
   const Header = () => (
     <View
       style={{
@@ -37,9 +35,7 @@ const AssetPicker: React.FC<AssetPickerProps> = ({ visible, onClose, onSelect })
         <X width={24} height={24} stroke="#000" />
       </TouchableOpacity>
       <View style={{ alignItems: 'center' }}>
-        <Text style={{ fontSize: 22, fontWeight: '600' }}>
-          {routeName.replace('Wallet__', '')}
-        </Text>
+        <Text style={{ fontSize: 22, fontWeight: '600' }}>{title}</Text>
         <TextSecondary> Select a coin </TextSecondary>
       </View>
       <View style={{ width: 24, height: 24 }} />
@@ -58,6 +54,7 @@ const AssetPicker: React.FC<AssetPickerProps> = ({ visible, onClose, onSelect })
 
   return (
     <Modal
+      key={`AssetPickerModal_${Math.floor(Math.random() * 10)}`}
       animationType="slide"
       transparent={true}
       visible={visible}
@@ -91,8 +88,8 @@ const AssetPicker: React.FC<AssetPickerProps> = ({ visible, onClose, onSelect })
           <TextSecondary style={{ fontSize: 14 }}> Suggested </TextSecondary>
           {suggested &&
             suggested.map(e => (
-              <TouchableOpacity onPress={() => onSelect(e)}>
-                <View key={`CoinBalance_${e.symbol}`} style={styles.portfolioRow}>
+              <TouchableOpacity key={`CoinBalance_${e.symbol}`} onPress={() => onSelect(e)}>
+                <View  style={styles.portfolioRow}>
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image style={styles.coinIcon} source={e._asset.icon} />
                     <Text style={styles.textPrimaty}> {e.symbol}</Text>
@@ -103,8 +100,8 @@ const AssetPicker: React.FC<AssetPickerProps> = ({ visible, onClose, onSelect })
           <TextSecondary style={{ fontSize: 14, marginTop: 32 }}> All Coins </TextSecondary>
           {rest &&
             rest.map(e => (
-              <TouchableOpacity onPress={() => onSelect(e)}>
-                <View key={`CoinBalance_${e.symbol}`} style={styles.portfolioRow}>
+              <TouchableOpacity key={`CoinBalance_${e.symbol}`} onPress={() => onSelect(e)}>
+                <View  style={styles.portfolioRow}>
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image style={styles.coinIcon} source={e._asset.icon} />
                     <Text style={styles.textPrimaty}> {e.symbol}</Text>
@@ -120,13 +117,20 @@ const AssetPicker: React.FC<AssetPickerProps> = ({ visible, onClose, onSelect })
 
 export const useAssetPicker = (
   defaultValue?: AssetBalanceT,
-): [AssetBalanceT | null, () => void, () => void, () => JSX.Element] => {
+): [
+  AssetBalanceT | null,
+  () => void,
+  () => void,
+  ({ title }: { title: string }) => JSX.Element,
+] => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<AssetBalanceT | null>(defaultValue || null);
-  const open = () => setIsOpen(true);
+  const open = () => (!isOpen ? setIsOpen(true) : null);
   const close = () => setIsOpen(false);
-  const modal = () => (
+  const modal = ({ title }: { title: string }) => (
     <AssetPicker
+      key={`AssetPicker_${Math.floor(Math.random() * 10)}`}
+      title={title}
       visible={isOpen}
       onClose={() => close()}
       onSelect={e => {

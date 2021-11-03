@@ -9,6 +9,7 @@ import { useAssets } from './../utils/meta1Api';
 import Loader from '../components/Loader';
 import AppHeader from '../components/AppHeaer';
 import TradeScreen from './TradeScreen';
+import ReciveScreen from './ReciveScreen';
 
 const WalletScreen = () => {
   const [showZeroBalance, setShowZeroBalacnce] = useState(false);
@@ -93,7 +94,7 @@ function WalletScreenStack() {
       />
       <Stack.Screen name="Wallet__Trade" component={TradeScreen} />
       <Stack.Screen name="Wallet__Send" component={Loader} />
-      <Stack.Screen name="Wallet__Recive" component={Loader} />
+      <Stack.Screen name="Wallet__Recive" component={ReciveScreen} />
     </Stack.Navigator>
   );
 }
