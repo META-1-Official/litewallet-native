@@ -1,9 +1,11 @@
 import React from 'react';
-import { Platform, SafeAreaView, View } from 'react-native';
+import { Platform, SafeAreaView, TextInput, View, TouchableOpacity } from 'react-native';
+import { Copy } from 'react-native-feather';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import TextInputMask from 'react-native-text-input-mask';
 import RoundedButton from '../components/RoundedButton';
 import { Heading, TextSecondary } from '../components/typography';
+import { colors } from '../styles/colors';
 import useForm from '../utils/useForm';
 import { required } from '../utils/useForm/rules';
 
@@ -50,7 +52,30 @@ const CreateWalletScreen: React.FC = () => {
               )}
             />
             <Input name="account_name" />
-            <Input name="password" />
+            <Input
+              name="password"
+              render={props => (
+                <View key={123} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <TextInput
+                    {...props}
+                    autoCapitalize={'none'}
+                    autoCorrect={false}
+                    style={[props.style, { paddingLeft: 8 }]}
+                  />
+                  <TouchableOpacity onPress={() => console.log(formState.password)}>
+                    <View
+                      style={{
+                        backgroundColor: colors.BrandYellow,
+                        padding: 6,
+                        borderRadius: 5,
+                      }}
+                    >
+                      <Copy width={24} height={24} color="#000" />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              )}
+            />
             <Input name="password_repeat" />
           </View>
         </KeyboardAwareScrollView>
