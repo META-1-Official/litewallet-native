@@ -11,6 +11,7 @@ type DefautlStateItem = {
   name: string;
   lable: string;
   value?: string;
+  valid?: boolean;
   rules?: RuleFn[];
 };
 
@@ -18,7 +19,7 @@ interface InputProps extends Omit<TextInputProps, 'theme'> {
   name: string;
 }
 
-export default function useForm(defautState: DefautlStateItem[]) {
+export default function useForm<T extends DefautlStateItem[]>(defautState: T) {
   const lables = Object.fromEntries(defautState.map(e => [e.name, e.lable]));
   const ruleSets = Object.fromEntries(defautState.map(e => [e.name, e.rules]));
   // Gotta go fast
@@ -27,7 +28,9 @@ export default function useForm(defautState: DefautlStateItem[]) {
     Object.fromEntries(defautState.map(e => [e.name, e.value || ''])),
   ).current;
 
-  const valid = useRef(Object.fromEntries(defautState.map(e => [e.name, true]))).current;
+  const valid = useRef(
+    Object.fromEntries(defautState.map(e => [e.name, e.valid || false])),
+  ).current;
   const setValid = getObjectSetter<typeof valid>(valid);
 
   const Input: React.FC<InputProps> = ({ name, ...props }) => {
@@ -49,7 +52,7 @@ export default function useForm(defautState: DefautlStateItem[]) {
       }
 
       const errors: string[] = rules
-        .map(rule => rule(formState[name], lables[name]))
+        .map(rule => rule(formState[name], lables[name], formState))
         .map(e => (e !== null ? (e as string) : ''))
         .filter(e => e);
 

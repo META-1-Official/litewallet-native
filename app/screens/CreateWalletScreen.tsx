@@ -5,19 +5,32 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import TextInputMask from 'react-native-text-input-mask';
 import RoundedButton from '../components/RoundedButton';
 import { Heading, TextSecondary } from '../components/typography';
+import { useStore } from '../store';
 import { colors } from '../styles/colors';
+import { catchError } from '../utils';
+import createAccountWithPassword from '../utils/accountCreate';
 import useForm from '../utils/useForm';
-import { required } from '../utils/useForm/rules';
+import { required, same } from '../utils/useForm/rules';
 
 const CreateWalletScreen: React.FC = () => {
+  const authorize = useStore(state => state.authorize);
   const { Input, formState, valid } = useForm([
     { name: 'first_name', lable: 'First name', rules: [required] },
     { name: 'last_name', lable: 'Last name', rules: [required] },
     { name: 'email', lable: 'Email', rules: [required] },
-    { name: 'mobile', lable: 'Mobile number' },
-    { name: 'account_name', lable: 'Account name' },
-    { name: 'password', lable: 'Password' },
-    { name: 'password_repeat', lable: 'Password Confirmation' },
+    { name: 'mobile', lable: 'Mobile number', rules: [required] },
+    { name: 'account_name', lable: 'Account name', rules: [required] },
+    {
+      name: 'password',
+      lable: 'Password',
+      value: 'P5KMuEeXky2vKWQNt4w1RyNR73DMS1dqEdkwVULnX7jmJ7G7JZRA',
+      valid: true,
+    },
+    {
+      name: 'password_repeat',
+      lable: 'Password Confirmation',
+      rules: [required, same('password')],
+    },
   ]);
 
   return (
@@ -43,7 +56,12 @@ const CreateWalletScreen: React.FC = () => {
               <View style={{ width: '4%' }} />
               <Input style={{ width: '48%' }} name="last_name" />
             </View>
-            <Input name="email" />
+            <Input
+              name="email"
+              autoCapitalize="none"
+              autoCorrect={false}
+              autoCompleteType="email"
+            />
             <Input
               name="mobile"
               render={props => (
@@ -51,7 +69,7 @@ const CreateWalletScreen: React.FC = () => {
                 <TextInputMask {...props} mask="+[099] ([000]) [000] [00] [00]" />
               )}
             />
-            <Input name="account_name" />
+            <Input name="account_name" autoCapitalize="none" autoCorrect={false} />
             <Input
               name="password"
               render={props => (
@@ -60,7 +78,8 @@ const CreateWalletScreen: React.FC = () => {
                     {...props}
                     autoCapitalize={'none'}
                     autoCorrect={false}
-                    style={[props.style, { paddingLeft: 8 }]}
+                    onChangeText={() => {}}
+                    style={[props.style, { maxWidth: '88%', paddingRight: 8 }]}
                   />
                   <TouchableOpacity onPress={() => console.log(formState.password)}>
                     <View
@@ -76,7 +95,7 @@ const CreateWalletScreen: React.FC = () => {
                 </View>
               )}
             />
-            <Input name="password_repeat" />
+            <Input name="password_repeat" secureTextEntry={true} />
           </View>
         </KeyboardAwareScrollView>
       </View>
@@ -85,6 +104,25 @@ const CreateWalletScreen: React.FC = () => {
           title="Submit"
           onPress={() => {
             console.log({ formState, valid: valid() });
+            if (valid()) {
+              catchError(async () => {
+                const _apiRes = await createAccountWithPassword(
+                  formState.account_name,
+                  formState.password,
+                  // --Who cares
+                  false,
+                  '',
+                  1,
+                  '',
+                  // --
+                  formState.phone,
+                  formState.email,
+                  formState.last_name,
+                  formState.first_name,
+                );
+                authorize(formState.account_name, formState.password);
+              });
+            }
           }}
         />
       </View>

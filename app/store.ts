@@ -7,7 +7,7 @@ interface AppState {
   accountName: string;
   password: string;
   authorized: boolean;
-  authorize: (accountName: string) => void;
+  authorize: (accountName: string, password?: string) => void;
   logout: () => void;
 
   loading: boolean;
@@ -20,11 +20,11 @@ export const useStore = create<AppState>(
       accountName: '',
       password: 'P5KFSVTSJDmjPFWy51gfpskdxUJfUVXtVVAhz1q7TBqW2imhH4C1',
       authorized: false,
-      authorize: (accountName: string) =>
+      authorize: (accountName, password) =>
         set({
           accountName: accountName.toLowerCase(),
           authorized: true,
-          password: 'P5KFSVTSJDmjPFWy51gfpskdxUJfUVXtVVAhz1q7TBqW2imhH4C1',
+          password: password ? password : '',
         }),
       logout: () => set({ accountName: '', authorized: false }),
 
