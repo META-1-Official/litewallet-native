@@ -46,9 +46,18 @@ const ReciveScreen: React.FC<{}> = () => {
   useEffect(() => {
     const fn = async () => {
       if (selected) {
+        const start = new Date();
+        console.log({ start });
         const addr = await depositAddress(accountName, selected.symbol);
-        console.log(addr);
+
+        const addrTime = new Date();
+
+        console.log(addr, `addr Time: ${addrTime.getTime() - start.getTime()}ms`);
+
         const qr = await QRCode.toString(addr);
+
+        const end = new Date();
+        console.log(`overall Time: ${end.getTime() - start.getTime()}ms`);
         setRealAddress({ qr, addr });
       }
     };
