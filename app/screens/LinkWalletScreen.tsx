@@ -1,5 +1,13 @@
 import React, { useEffect, useRef } from 'react';
-import { SafeAreaView, View, Image, Dimensions, TextInput, Animated, Keyboard } from 'react-native';
+import {
+  SafeAreaView,
+  View,
+  Image,
+  Dimensions,
+  TextInput,
+  Animated,
+  Keyboard,
+} from 'react-native';
 import { personAsset, personIconAsset } from '../../assets';
 import RoundedButton from '../components/RoundedButton';
 import { Heading, TextSecondary } from '../components/typography';
@@ -72,7 +80,12 @@ const LinkWalletScreen: React.FC = () => {
                   resizeMode: 'contain',
                 }}
               />
-              <TextInput {...props} style={[props.style, { paddingLeft: 8 }]} />
+              <TextInput
+                {...props}
+                autoCapitalize={'none'}
+                autoCorrect={false}
+                style={[props.style, { paddingLeft: 8 }]}
+              />
             </View>
           )}
         />
