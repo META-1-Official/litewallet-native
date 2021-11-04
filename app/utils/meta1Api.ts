@@ -133,12 +133,14 @@ export interface AccountWithPassword {
   password: string;
 }
 
-export const swapWithPassword = async (
+type swapWPassSig = (
   accountInfo: AccountWithPassword,
   from: string,
   to: string,
   amount: number,
-) => {
+) => Promise<any>;
+
+export const swapWithPassword: swapWPassSig = async (accountInfo, from, to, amount) => {
   const pair = await Meta1.db.get_ticker(from, to);
 
   if (!pair) {
@@ -157,6 +159,29 @@ export const swapWithPassword = async (
   );
   console.log(buyResult);
   return buyResult;
+};
+
+type sendWithPasswordSig = (
+  accountInfo: AccountWithPassword,
+  sendInfo: {
+    toAccount: string;
+    asset: string;
+    message?: '';
+    amount: number;
+  },
+) => Promise<any>;
+
+export const sendWithPassword: sendWithPasswordSig = async (accountInfo, sendInfo) => {
+  const account = await Meta1.login(accountInfo.accountName, accountInfo.password);
+
+  const sendResult = await account.transfer(
+    sendInfo.toAccount,
+    sendInfo.asset,
+    sendInfo.amount,
+    '', //sendInfo.message
+  );
+
+  return sendResult;
 };
 
 export const depositAddress = async (accountName: string, asset: string) => {

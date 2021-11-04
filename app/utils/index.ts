@@ -1,4 +1,5 @@
 import assert from 'assert';
+import { Alert, AlertType } from 'react-native';
 
 export function getRadomByteArray(len: number) {
   return Array.from(new Uint8Array(len), () => Math.floor(Math.random() * 256));
@@ -152,6 +153,20 @@ Array.prototype.at = function (index: number) {
 
 /** Not exactly deepEquals but good enought */
 export const jsonEquals = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
+
+export const catchError = async (fn: () => void) => {
+  try {
+    await fn();
+  } catch (e) {
+    console.error(e);
+    Alert.alert('Error', (e as Error).message);
+  }
+};
+
+export const promptPromise = (title: string, msg: string, type?: AlertType): Promise<string> =>
+  new Promise(resolve => {
+    Alert.prompt(title, msg, t => resolve(t), type);
+  });
 
 export const shadow = {
   D3: {

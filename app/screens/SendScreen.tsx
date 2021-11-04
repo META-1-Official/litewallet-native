@@ -2,13 +2,33 @@ import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Backdrop from '../components/Backdrop';
 import { List } from '../components/List';
+import Loader from '../components/Loader';
 import RoundedButton from '../components/RoundedButton';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
+import { catchError } from '../utils';
+import { sendWithPassword, useAssets } from '../utils/meta1Api';
 
 const SendScreen: React.FC<{}> = () => {
-  const accountName = useStore(state => state.accountName);
   const [amount, setAmount] = useState('0.00');
+  const [toAccount, setToAccount] = useState('');
+  const savedPassword = useStore(state => state.password);
+  const [password, setPassword] = useState(savedPassword || '');
+  const accountName = useStore(state => state.accountName);
+  const assets = useAssets();
+  if (!assets) {
+    return <Loader />;
+  }
+
+  const meta1 = assets.assetsWithBalance.find(e => e.symbol === 'META1');
+  if (!meta1) {
+    return (
+      <SafeAreaView>
+        <Text> Cannot find META1 asset. </Text>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView>
       <Backdrop />
@@ -29,7 +49,7 @@ const SendScreen: React.FC<{}> = () => {
                     fontWeight: '500',
                     color: '#000',
                   }}
-                  onFocus={() => {}}
+                  editable={false}
                   value={accountName}
                 />
               </View>
@@ -46,6 +66,10 @@ const SendScreen: React.FC<{}> = () => {
                 }}
                 placeholder="Enter Account Name"
                 placeholderTextColor="#888"
+                value={toAccount}
+                autoCapitalize={'none'}
+                autoCorrect={false}
+                onChangeText={t => setToAccount(t)}
               />
             </View>
           </View>
@@ -90,7 +114,7 @@ const SendScreen: React.FC<{}> = () => {
                     fontWeight: '600',
                   }}
                 >
-                  {Number(amount) * 121.12}
+                  {(Number(amount) * meta1.usdt_value).toFixed(2)}
                 </Text>
 
                 <Text style={{ paddingRight: 2, color: colors.BrandYellow, fontWeight: '600' }}>
@@ -115,7 +139,11 @@ const SendScreen: React.FC<{}> = () => {
                   paddingHorizontal: 12,
                 }}
               >
-                <TouchableOpacity onPress={() => {}}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setAmount(meta1.amount.toString());
+                  }}
+                >
                   <Text
                     style={{ textAlign: 'center', color: colors.BrandYellow, fontWeight: '700' }}
                   >
@@ -128,7 +156,12 @@ const SendScreen: React.FC<{}> = () => {
         </List>
         <List style={{ backgroundColor: '#fff', borderRadius: 8, margin: 18 }}>
           <View style={{ padding: 16 }}>
-            <Text style={{ fontSize: 18, fontWeight: '500' }}>Password</Text>
+            <TextInput
+              style={{ fontSize: 18, fontWeight: '500' }}
+              value={password}
+              placeholder="Password"
+              onChangeText={t => setPassword(t)}
+            />
           </View>
         </List>
         <View
@@ -137,7 +170,24 @@ const SendScreen: React.FC<{}> = () => {
             marginHorizontal: 64,
           }}
         >
-          <RoundedButton onPress={() => {}} title="Confirm" />
+          <RoundedButton
+            onPress={() => {
+              catchError(async () => {
+                await sendWithPassword(
+                  {
+                    accountName,
+                    password,
+                  },
+                  {
+                    toAccount,
+                    asset: meta1.symbol,
+                    amount: Number(amount),
+                  },
+                );
+              });
+            }}
+            title="Confirm"
+          />
         </View>
       </View>
     </SafeAreaView>

@@ -2,16 +2,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useMemo, useState } from 'react';
-import {
-  Alert,
-  AlertType,
-  Dimensions,
-  Image,
-  SafeAreaView,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { Dimensions, Image, SafeAreaView, Text, TextInput, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useAssetPicker } from '../components/AssetSelectModal';
 import { List } from '../components/List';
@@ -19,7 +10,7 @@ import Loader from '../components/Loader';
 import { Heading, TextSecondary } from '../components/typography';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
-import { shadow } from '../utils';
+import { catchError, promptPromise, shadow } from '../utils';
 import { swapWithPassword, useAssets, useAssetsStore } from '../utils/meta1Api';
 import { WalletNavigationProp } from './WalletScreen';
 
@@ -36,19 +27,6 @@ const Backdrop = () => (
     }}
   />
 );
-const catchError = async (fn: () => void) => {
-  try {
-    await fn();
-  } catch (e) {
-    console.error(e);
-    Alert.alert('Error', (e as Error).message);
-  }
-};
-
-const promptPromise = (title: string, msg: string, type?: AlertType): Promise<string> =>
-  new Promise(resolve => {
-    Alert.prompt(title, msg, t => resolve(t), type);
-  });
 
 const TradeScreen: React.FC = () => {
   const [aAmt, setAAmt] = useState('0.00');
