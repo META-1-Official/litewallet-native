@@ -22,11 +22,11 @@ export const useStore = create<AppState>(
       authorized: false,
       authorize: (accountName, password) =>
         set({
-          accountName: accountName.toLowerCase(),
+          accountName: accountName,
           authorized: true,
           password: password ? password : '',
         }),
-      logout: () => set({ accountName: '', authorized: false }),
+      logout: () => set({ accountName: '', authorized: false, password: '' }),
 
       loading: true,
       setLoading: (loading: boolean) => set({ loading }),
