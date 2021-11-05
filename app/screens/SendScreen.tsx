@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import Backdrop from '../components/Backdrop';
 import { List } from '../components/List';
 import Loader from '../components/Loader';
@@ -32,7 +33,7 @@ const SendScreen: React.FC<{}> = () => {
   return (
     <SafeAreaView>
       <Backdrop />
-      <View>
+      <ScrollView scrollEnabled={Platform.OS !== 'ios'}>
         <List style={{ backgroundColor: '#fff', borderRadius: 8, margin: 18 }}>
           <View style={{ padding: 16, borderBottomWidth: 2, borderBottomColor: '#eceef0' }}>
             <Text style={styles.SectionTitle}>From</Text>
@@ -189,7 +190,7 @@ const SendScreen: React.FC<{}> = () => {
             title="Confirm"
           />
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
   SectionTitle: {
     fontSize: 16,
     fontWeight: '500',
-    marginBottom: 8,
+    marginBottom: Platform.OS === 'ios' ? 8 : 2,
     color: '#ada3a2',
   },
 });
