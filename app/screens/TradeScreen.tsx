@@ -37,10 +37,7 @@ const TradeScreen: React.FC = () => {
   const allAssets = useAssets();
   const fetchAssets = useAssetsStore(state => state.fetchUserAssets);
   const avaliableAssets = useMemo(
-    () =>
-      allAssets?.assetsWithBalance
-        .filter(e => e.amount > 0)
-        .sort((a, b) => a.symbol.localeCompare(b.symbol)),
+    () => allAssets?.assetsWithBalance.sort((a, b) => a.symbol.localeCompare(b.symbol)),
     [allAssets],
   );
 
@@ -49,7 +46,7 @@ const TradeScreen: React.FC = () => {
     return <Loader />;
   }
   const [selectedAssetA, openA, _closeA, ModalA] = useAssetPicker(avaliableAssets.at(0));
-  const [selectedAssetB, openB, _closeB, ModalB] = useAssetPicker(avaliableAssets.at(1));
+  const [selectedAssetB, openB, _closeB, ModalB] = useAssetPicker(avaliableAssets.at(3));
 
   const calcFromA = () => {
     const askPrice = selectedAssetA!.usdt_value * Number(aAmt);
