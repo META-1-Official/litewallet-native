@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useNavigation } from '@react-navigation/core';
+import throttle from 'lodash.throttle';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Dimensions, Image, SafeAreaView, Text, TextInput, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -32,6 +33,9 @@ const TradeScreen: React.FC = () => {
   const [aAmt, setAAmt] = useState('0.00');
   const [bAmt, setBAmt] = useState('0.00');
 
+  const [aUsd, setAUsd] = useState('0.00');
+  const [bUsd, setBUsd] = useState('0.00');
+
   const accountName = useStore(state => state.accountName);
   const password = useStore(state => state.password);
   const allAssets = useAssets();
@@ -58,11 +62,21 @@ const TradeScreen: React.FC = () => {
     calcFromA();
   }, [selectedAssetA, selectedAssetB]);
 
+  useEffect(() => setAUsd((selectedAssetA!.usdt_value * Number(aAmt)).toFixed(2)), [aAmt]);
+  useEffect(() => setBUsd((selectedAssetB!.usdt_value * Number(bAmt)).toFixed(2)), [bAmt]);
   if (!selectedAssetA || !selectedAssetB) {
     return <Text> Nothing to swap</Text>;
   }
 
   console.log(avaliableAssets);
+
+  const updateFromUSD = (usdVal: string) => {
+    const targetUsd = Number(usdVal);
+    const amtA = targetUsd / selectedAssetA.usdt_value;
+    const amtB = targetUsd / selectedAssetB.usdt_value;
+    setAAmt(amtA.toFixed(8));
+    setBAmt(amtB.toFixed(8));
+  };
 
   return (
     <SafeAreaView>
@@ -152,9 +166,19 @@ const TradeScreen: React.FC = () => {
                   }}
                   value={aAmt}
                 />
-                <TextSecondary style={{ fontSize: 14, textAlign: 'right' }}>
-                  US$ {(selectedAssetA.usdt_value * Number(aAmt)).toFixed(2)}
-                </TextSecondary>
+                <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                  <TextSecondary style={{ fontSize: 14, textAlign: 'right' }}>US$</TextSecondary>
+                  <TextInput
+                    onChangeText={t => throttle(updateFromUSD, 700)(t)}
+                    defaultValue={aUsd}
+                    style={{
+                      marginLeft: 8,
+                      fontSize: 14,
+                      color: colors.mutedGray,
+                      textAlign: 'right',
+                    }}
+                  />
+                </View>
               </View>
             </View>
           </View>
@@ -211,9 +235,18 @@ const TradeScreen: React.FC = () => {
                   }}
                   value={bAmt}
                 />
-                <TextSecondary style={{ fontSize: 14, textAlign: 'right' }}>
-                  US$ {(selectedAssetB.usdt_value * Number(bAmt)).toFixed(2)}
-                </TextSecondary>
+                <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                  <TextSecondary style={{ fontSize: 14, textAlign: 'right' }}>US$</TextSecondary>
+                  <TextInput
+                    value={bUsd}
+                    style={{
+                      marginLeft: 8,
+                      fontSize: 14,
+                      color: colors.mutedGray,
+                      textAlign: 'right',
+                    }}
+                  />
+                </View>
               </View>
             </View>
           </View>
