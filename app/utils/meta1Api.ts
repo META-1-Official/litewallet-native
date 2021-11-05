@@ -1,4 +1,3 @@
-import { ensure } from '.';
 import config from '../config';
 import { useStore } from '../store';
 import Meta1, { iAsset, iBalance } from './meta1dexTypes';
@@ -97,6 +96,14 @@ export type AccountBalanceT = {
   changePercent: number;
 };
 
+const emptyBalance = (assetId: string): iBalance => ({
+  id: '0.0.0', // mock
+  owner: '0.0.0.0', // mock
+  asset_type: assetId,
+  balance: 0,
+  maintenance_flag: false, // whatever
+});
+
 export async function fetchAccountBalances(accountName: string) {
   const accounts = await Meta1.db
     .get_full_accounts([accountName], false)
@@ -110,9 +117,9 @@ export async function fetchAccountBalances(accountName: string) {
 
   const assets = await fetchAllAssets();
 
-  const assetsWithBalanceRaw: PartialAssetBalanceT[] = account.balances.map(bal => ({
-    _balance: bal,
-    _asset: ensure(assets.find(e => e.id === bal.asset_type)),
+  const assetsWithBalanceRaw: PartialAssetBalanceT[] = assets.map(asset => ({
+    _asset: asset,
+    _balance: account.balances.find(b => b.asset_type === asset.id) || emptyBalance(asset.id),
   }));
 
   const assetsWithBalance: AssetBalanceT[] = await Promise.all([
@@ -124,7 +131,6 @@ export async function fetchAccountBalances(accountName: string) {
     .map(e => e.delta * e.total_value * 0.01)
     .reduce((acc, cv) => acc + cv, 0);
   const changePercent = toatalChnage / (accountTotal * 0.01);
-
   return { assetsWithBalance, changePercent, toatalChnage, accountTotal };
 }
 
@@ -230,3 +236,10 @@ export const useAssetsStore = create<AssetsStore>(set => ({
     set({ userAssets: res! });
   },
 }));
+
+useStore.subscribe(
+  () => {
+    useAssetsStore.setState({ userAssets: null });
+  },
+  state => state.authorized,
+);
