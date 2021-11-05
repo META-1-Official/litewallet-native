@@ -10,16 +10,16 @@ import { colors } from '../styles/colors';
 import { catchError } from '../utils';
 import createAccountWithPassword from '../utils/accountCreate';
 import useForm from '../utils/useForm';
-import { required, same } from '../utils/useForm/rules';
+import { email, includeOr, required, same } from '../utils/useForm/rules';
 
 const CreateWalletScreen: React.FC = () => {
   const authorize = useStore(state => state.authorize);
   const { Input, formState, valid } = useForm([
     { name: 'first_name', lable: 'First name', rules: [required] },
     { name: 'last_name', lable: 'Last name', rules: [required] },
-    { name: 'email', lable: 'Email', rules: [required] },
+    { name: 'email', lable: 'Email', rules: [required, email] },
     { name: 'mobile', lable: 'Mobile number', rules: [required] },
-    { name: 'account_name', lable: 'Account name', rules: [required] },
+    { name: 'account_name', lable: 'Account name', rules: [required, includeOr('.', '-')] },
     {
       name: 'password',
       lable: 'Password',

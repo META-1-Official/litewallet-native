@@ -1,3 +1,6 @@
+//@ts-ignore
+import is from 'is_js';
+
 export type RuleFn = (
   text: string,
   lable: string,
@@ -12,3 +15,10 @@ export const same: (cmp: string) => RuleFn = cmp => (text, name, state) =>
   text === state[cmp]
     ? null
     : `${name} is Should match ${cmp.charAt(0).toUpperCase() + cmp.slice(1)}`;
+
+export const includeOr =
+  (a: string, b: string): RuleFn =>
+  (text, name) =>
+    rule(text.includes(a) || text.includes(b), `${name} should include '${a}' or '${b}'`);
+
+export const email: RuleFn = (text, name) => rule(is.email(text), `${name} is not a valid email`);

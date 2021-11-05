@@ -63,7 +63,7 @@ const ReciveScreen: React.FC<{}> = () => {
       }
     };
     fn();
-  }, [selected]);
+  }, [accountName, selected]);
 
   const scrollX = useRef(new Animated.Value(0)).current;
   const left = scrollX.interpolate({

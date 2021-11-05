@@ -25,6 +25,7 @@
     "assert": "^2.0.0",
     "buffer": "^6.0.3",
     "events": "^3.3.0",
+    "is_js": "^0.9.0",
     "lodash.get": "^4.4.2",
     "lodash.omit": "^4.5.0",
     "meta1dex": "^0.6.13",
