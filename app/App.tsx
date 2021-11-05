@@ -19,6 +19,7 @@ import { colors } from './styles/colors';
 import Loader from './components/Loader';
 import { SvgIcons } from '../assets';
 import SettingsScreen from './screens/SettingsScreen';
+import FundAccount from './screens/FundAccountScreen';
 
 const { useEffect } = React;
 
@@ -85,7 +86,7 @@ const WalletNav = () => {
       })}
     >
       <Tab.Screen name="Wallet" component={WalletScreen} />
-      <Tab.Screen name="Fund Account" component={Loader} />
+      <Tab.Screen name="Fund Account" component={FundAccount} />
       <Tab.Screen name="DEX" component={Loader} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>
