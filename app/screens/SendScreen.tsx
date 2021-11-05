@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Backdrop from '../components/Backdrop';
 import { List } from '../components/List';
@@ -33,8 +41,15 @@ const SendScreen: React.FC<{}> = () => {
   return (
     <SafeAreaView>
       <Backdrop />
-      <ScrollView scrollEnabled={Platform.OS !== 'ios'}>
-        <List style={{ backgroundColor: '#fff', borderRadius: 8, margin: 18 }}>
+      <ScrollView scrollEnabled={false}>
+        <List
+          style={{
+            backgroundColor: '#fff',
+            borderRadius: 8,
+            margin: 18,
+            marginVertical: Platform.OS === 'ios' ? undefined : 8,
+          }}
+        >
           <View style={{ padding: 16, borderBottomWidth: 2, borderBottomColor: '#eceef0' }}>
             <Text style={styles.SectionTitle}>From</Text>
             <View
@@ -75,7 +90,14 @@ const SendScreen: React.FC<{}> = () => {
             </View>
           </View>
         </List>
-        <List style={{ backgroundColor: '#fff', borderRadius: 8, margin: 18 }}>
+        <List
+          style={{
+            backgroundColor: '#fff',
+            borderRadius: 8,
+            margin: 18,
+            marginVertical: Platform.OS === 'ios' ? undefined : 8,
+          }}
+        >
           <View style={{ padding: 16 }}>
             <Text style={styles.SectionTitle}>Amount META1</Text>
             <View>
@@ -155,7 +177,14 @@ const SendScreen: React.FC<{}> = () => {
             </View>
           </View>
         </List>
-        <List style={{ backgroundColor: '#fff', borderRadius: 8, margin: 18 }}>
+        <List
+          style={{
+            backgroundColor: '#fff',
+            borderRadius: 8,
+            margin: 18,
+            marginVertical: Platform.OS === 'ios' ? undefined : 8,
+          }}
+        >
           <View style={{ padding: 16 }}>
             <TextInput
               style={{ fontSize: 18, fontWeight: '500' }}
@@ -167,7 +196,7 @@ const SendScreen: React.FC<{}> = () => {
         </List>
         <View
           style={{
-            margin: 48,
+            margin: Platform.OS === 'ios' ? 48 : 24,
             marginHorizontal: 64,
           }}
         >
