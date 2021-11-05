@@ -16,15 +16,18 @@ import RoundedButton from '../components/RoundedButton';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { catchError } from '../utils';
-import { sendWithPassword, useAssets } from '../utils/meta1Api';
+import { sendWithPassword, useAssets, useAssetsStore } from '../utils/meta1Api';
+import { useWalletNav } from './WalletScreen';
 
 const SendScreen: React.FC<{}> = () => {
+  const nav = useWalletNav();
   const [amount, setAmount] = useState('0.00');
   const [toAccount, setToAccount] = useState('');
   const savedPassword = useStore(state => state.password);
   const [password, setPassword] = useState(savedPassword || '');
   const accountName = useStore(state => state.accountName);
   const assets = useAssets();
+  const fetchAssets = useAssetsStore(state => state.fetchUserAssets);
   if (!assets) {
     return <Loader />;
   }
@@ -211,9 +214,11 @@ const SendScreen: React.FC<{}> = () => {
                   {
                     toAccount,
                     asset: meta1.symbol,
-                    amount: Number(amount),
+                    amount: Number(amount) - 35e-5, // 0.00035 fixed fee
                   },
                 );
+                await fetchAssets(accountName);
+                nav.goBack();
               });
             }}
             title="Confirm"
