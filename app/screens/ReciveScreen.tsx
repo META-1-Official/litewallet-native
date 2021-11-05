@@ -10,6 +10,7 @@ import {
   View,
   ViewStyle,
   Share,
+  Platform,
 } from 'react-native';
 import QRCode from 'qrcode';
 import { useAssetPicker } from '../components/AssetSelectModal';
@@ -62,12 +63,12 @@ const ReciveScreen: React.FC<{}> = () => {
       }
     };
     fn();
-  }, []);
+  }, [selected]);
 
   const scrollX = useRef(new Animated.Value(0)).current;
   const left = scrollX.interpolate({
     inputRange: [0, width * 0.8 + 1],
-    outputRange: [0, (INDICATOR_WIDTH / 2) * 0.9 + 1],
+    outputRange: [0, (INDICATOR_WIDTH / 2) * 0.9 + 1 + (Platform.OS === 'android' ? 2 : 0)],
   });
 
   const flatListRef = useRef<FlatList<any> | null>(null);
@@ -229,7 +230,7 @@ const ReciveScreen: React.FC<{}> = () => {
           position: 'relative',
           top: -1 * INDICATOR_HEIGHT,
           flexDirection: 'row',
-          justifyContent: 'space-between',
+          justifyContent: 'space-evenly',
           width: width * 0.8,
           marginHorizontal: width * 0.1,
           zIndex: 10,
@@ -248,6 +249,9 @@ const ReciveScreen: React.FC<{}> = () => {
             style={{
               padding: 12,
               paddingHorizontal: 36,
+              paddingLeft: 45,
+              // width: INDICATOR_WIDTH / 2,
+              // alignItems: 'center',
             }}
           >
             <Text
@@ -268,7 +272,16 @@ const ReciveScreen: React.FC<{}> = () => {
             });
           }}
         >
-          <View style={{ padding: 12, paddingHorizontal: 36, zIndex: 10, elevation: 10 }}>
+          <View
+            style={{
+              padding: 12,
+              paddingHorizontal: 36,
+              paddingLeft: 24,
+              zIndex: 10,
+              elevation: 10,
+              // width: Platform.OS === 'android' ? INDICATOR_WIDTH / 2 : undefined,
+            }}
+          >
             <Text style={{ fontSize: 18, fontWeight: '600' }}>Username</Text>
           </View>
         </TouchableOpacity>
