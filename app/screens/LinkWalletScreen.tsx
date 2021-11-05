@@ -13,11 +13,14 @@ import RoundedButton from '../components/RoundedButton';
 import { Heading, TextSecondary } from '../components/typography';
 import { useStore } from '../store';
 import useForm from '../utils/useForm';
+import { required } from '../utils/useForm/rules';
 
 const { width, height } = Dimensions.get('screen');
 
 const LinkWalletScreen: React.FC = () => {
-  const { Input, formState, valid } = useForm([{ name: 'account_name', lable: 'Account Name' }]);
+  const { Input, formState, valid } = useForm([
+    { name: 'account_name', lable: 'Account Name', rules: [required] },
+  ]);
   const offsetY = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
