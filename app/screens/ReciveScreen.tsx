@@ -232,6 +232,8 @@ const ReciveScreen: React.FC<{}> = () => {
           justifyContent: 'space-between',
           width: width * 0.8,
           marginHorizontal: width * 0.1,
+          zIndex: 10,
+          elevation: 10,
         }}
       >
         <TouchableOpacity
@@ -242,8 +244,20 @@ const ReciveScreen: React.FC<{}> = () => {
             });
           }}
         >
-          <View style={{ padding: 12, paddingHorizontal: 36 }}>
-            <Text style={{ fontSize: 18, fontWeight: '600' }}>Address</Text>
+          <View
+            style={{
+              padding: 12,
+              paddingHorizontal: 36,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: '600',
+              }}
+            >
+              Address
+            </Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity
@@ -254,7 +268,7 @@ const ReciveScreen: React.FC<{}> = () => {
             });
           }}
         >
-          <View style={{ padding: 12, paddingHorizontal: 36 }}>
+          <View style={{ padding: 12, paddingHorizontal: 36, zIndex: 10, elevation: 10 }}>
             <Text style={{ fontSize: 18, fontWeight: '600' }}>Username</Text>
           </View>
         </TouchableOpacity>
