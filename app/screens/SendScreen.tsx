@@ -22,6 +22,8 @@ import { useWalletNav } from './WalletScreen';
 const SendScreen: React.FC<{}> = () => {
   const nav = useWalletNav();
   const [amount, setAmount] = useState('0.00');
+  const [usdAmount, setUsdAmount] = useState('0.00');
+
   const [toAccount, setToAccount] = useState('');
   const savedPassword = useStore(state => state.password);
   const [password, setPassword] = useState(savedPassword || '');
@@ -119,7 +121,10 @@ const SendScreen: React.FC<{}> = () => {
                     fontWeight: '500',
                     color: '#000',
                   }}
-                  onChangeText={t => setAmount(t)}
+                  onChangeText={t => {
+                    setAmount(t);
+                    setUsdAmount((Number(t) * meta1.usdt_value).toFixed(2));
+                  }}
                   keyboardType="numeric"
                   value={amount}
                 />
@@ -132,16 +137,20 @@ const SendScreen: React.FC<{}> = () => {
                   justifyContent: 'space-between',
                 }}
               >
-                <Text
+                <TextInput
                   style={{
-                    textAlign: 'left',
-                    color: colors.BrandYellow,
+                    width: '85%',
                     fontSize: 18,
-                    fontWeight: '600',
+                    fontWeight: '500',
+                    color: colors.BrandYellow,
                   }}
-                >
-                  {(Number(amount) * meta1.usdt_value).toFixed(2)}
-                </Text>
+                  onChangeText={t => {
+                    setUsdAmount(t);
+                    setAmount((Number(t) / meta1.usdt_value).toFixed(8));
+                  }}
+                  keyboardType="numeric"
+                  value={usdAmount}
+                />
 
                 <Text style={{ paddingRight: 2, color: colors.BrandYellow, fontWeight: '600' }}>
                   USD
