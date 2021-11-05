@@ -11,6 +11,7 @@ import { catchError } from '../utils';
 import createAccountWithPassword from '../utils/accountCreate';
 import useForm from '../utils/useForm';
 import { email, includeOr, required, same } from '../utils/useForm/rules';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 const CreateWalletScreen: React.FC = () => {
   const authorize = useStore(state => state.authorize);
@@ -81,7 +82,7 @@ const CreateWalletScreen: React.FC = () => {
                     onChangeText={() => {}}
                     style={[props.style, { maxWidth: '88%', paddingRight: 8 }]}
                   />
-                  <TouchableOpacity onPress={() => console.log(formState.password)}>
+                  <TouchableOpacity onPress={() => Clipboard.setString(formState.password)}>
                     <View
                       style={{
                         backgroundColor: colors.BrandYellow,
