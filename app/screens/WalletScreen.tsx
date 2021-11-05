@@ -11,7 +11,6 @@ import AppHeader from '../components/AppHeaer';
 import TradeScreen from './TradeScreen';
 import ReciveScreen from './ReciveScreen';
 import SendScreen from './SendScreen';
-import { useNavigation } from '@react-navigation/core';
 
 const WalletScreen = () => {
   const [showZeroBalance, setShowZeroBalacnce] = useState(false);
@@ -80,11 +79,6 @@ export type WalletStackParamList = {
 };
 
 export type WalletNavigationProp = StackNavigationProp<WalletStackParamList, 'Wallet__Main'>;
-
-export function useWalletNav() {
-  const nav = useNavigation<WalletNavigationProp>();
-  return nav;
-}
 
 function WalletScreenStack() {
   return (

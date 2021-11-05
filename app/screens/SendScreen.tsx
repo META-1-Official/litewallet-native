@@ -17,10 +17,11 @@ import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { catchError } from '../utils';
 import { sendWithPassword, useAssets, useAssetsStore } from '../utils/meta1Api';
-import { useWalletNav } from './WalletScreen';
+import { WalletNavigationProp } from './WalletScreen';
+import { useNavigation } from '@react-navigation/core';
 
 const SendScreen: React.FC<{}> = () => {
-  const nav = useWalletNav();
+  const nav = useNavigation<WalletNavigationProp>();
   const [amount, setAmount] = useState('0.00');
   const [usdAmount, setUsdAmount] = useState('0.00');
 

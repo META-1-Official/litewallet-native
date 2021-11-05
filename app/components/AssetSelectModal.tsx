@@ -3,6 +3,7 @@ import {
   Dimensions,
   Image,
   Modal,
+  Platform,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -31,7 +32,10 @@ const AssetPicker: React.FC<AssetPickerProps> = ({ title, visible, onClose, onSe
         justifyContent: 'space-between',
       }}
     >
-      <TouchableOpacity onPress={() => onClose(!visible)}>
+      <TouchableOpacity
+        onPress={() => onClose(!visible)}
+        style={{ paddingVertical: Platform.OS === 'android' ? 16 : 4 }}
+      >
         <X width={24} height={24} stroke="#000" />
       </TouchableOpacity>
       <View style={{ alignItems: 'center' }}>
@@ -89,7 +93,7 @@ const AssetPicker: React.FC<AssetPickerProps> = ({ title, visible, onClose, onSe
           {suggested &&
             suggested.map(e => (
               <TouchableOpacity key={`CoinBalance_${e.symbol}`} onPress={() => onSelect(e)}>
-                <View  style={styles.portfolioRow}>
+                <View style={styles.portfolioRow}>
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image style={styles.coinIcon} source={e._asset.icon} />
                     <Text style={styles.textPrimaty}> {e.symbol}</Text>
@@ -101,7 +105,7 @@ const AssetPicker: React.FC<AssetPickerProps> = ({ title, visible, onClose, onSe
           {rest &&
             rest.map(e => (
               <TouchableOpacity key={`CoinBalance_${e.symbol}`} onPress={() => onSelect(e)}>
-                <View  style={styles.portfolioRow}>
+                <View style={styles.portfolioRow}>
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image style={styles.coinIcon} source={e._asset.icon} />
                     <Text style={styles.textPrimaty}> {e.symbol}</Text>
@@ -115,24 +119,23 @@ const AssetPicker: React.FC<AssetPickerProps> = ({ title, visible, onClose, onSe
   );
 };
 
+type modalT = ({ title, onClose }: { title: string; onClose?: () => void }) => JSX.Element;
 export const useAssetPicker = (
   defaultValue?: AssetBalanceT,
-): [
-  AssetBalanceT | null,
-  () => void,
-  () => void,
-  ({ title }: { title: string }) => JSX.Element,
-] => {
+): [AssetBalanceT | null, () => void, () => void, modalT] => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<AssetBalanceT | null>(defaultValue || null);
   const open = () => (!isOpen ? setIsOpen(true) : null);
   const close = () => setIsOpen(false);
-  const modal = ({ title }: { title: string }) => (
+  const modal: modalT = ({ title, onClose }) => (
     <AssetPicker
       key={`AssetPicker_${Math.floor(Math.random() * 10)}`}
       title={title}
       visible={isOpen}
-      onClose={() => close()}
+      onClose={() => {
+        close();
+        onClose?.();
+      }}
       onSelect={e => {
         setSelected(e);
         close();

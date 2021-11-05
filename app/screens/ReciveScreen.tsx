@@ -19,6 +19,8 @@ import { colors } from '../styles/colors';
 import { shadow } from '../utils';
 import { depositAddress } from '../utils/meta1Api';
 import { SvgXml } from 'react-native-svg';
+import { useNavigation } from '@react-navigation/core';
+import { WalletNavigationProp } from './WalletScreen';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -41,6 +43,7 @@ interface AddrT {
   addr: string;
 }
 const ReciveScreen: React.FC<{}> = () => {
+  const nav = useNavigation<WalletNavigationProp>();
   const accountName = useStore(state => state.accountName);
   const [selected, open, _, Modal] = useAssetPicker();
   const [realAddress, setRealAddress] = useState<AddrT | null>(null);
@@ -76,7 +79,7 @@ const ReciveScreen: React.FC<{}> = () => {
     open();
     return (
       <SafeAreaView>
-        <Modal title="Recive" key="zxcv" />
+        <Modal title="Recive" key="zxcv" onClose={() => nav.goBack()} />
       </SafeAreaView>
     );
   }
