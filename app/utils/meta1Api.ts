@@ -146,6 +146,14 @@ type swapWPassSig = (
   amount: number,
 ) => Promise<any>;
 
+/**
+ * Swaps assetA to specified amount of assetB
+ * @param accountInfo Account name and password
+ * @param from        Symbol for asset you want to get rid of
+ * @param to          Symbol for asset you want to get in the end
+ * @param amount      Amount of the  asset you want to get in the end
+ * @returns Idk i think tx?
+ */
 export const swapWithPassword: swapWPassSig = async (accountInfo, from, to, amount) => {
   const pair = await Meta1.db.get_ticker(from, to);
 
@@ -154,6 +162,13 @@ export const swapWithPassword: swapWPassSig = async (accountInfo, from, to, amou
   }
 
   const account = await Meta1.login(accountInfo.accountName, accountInfo.password);
+  console.log('Buy params');
+  console.log({
+    to,
+    from,
+    amount,
+    loweset_ask: pair.lowest_ask,
+  });
 
   const buyResult = await account.buy(
     to,
