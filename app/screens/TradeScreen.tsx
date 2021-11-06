@@ -264,36 +264,29 @@ const TradeScreen: React.FC = () => {
             catchError(async () => {
               console.log(aAmt, bAmt);
               console.log(password);
-              if (password === '') {
-                const pass = await promptPromise(
-                  'Enter password',
-                  'Password is required for this operation',
-                  'secure-text',
-                );
-                await swapWithPassword(
-                  {
-                    accountName,
-                    password: pass,
-                  },
-                  selectedAssetA!.symbol,
-                  selectedAssetB.symbol,
-                  Number(aAmt),
-                );
-                await fetchAssets(accountName);
-                return nav.goBack();
-              } else {
-                await swapWithPassword(
-                  {
-                    accountName,
-                    password,
-                  },
-                  selectedAssetA!.symbol,
-                  selectedAssetB.symbol,
-                  Number(aAmt),
-                );
-                await fetchAssets(accountName);
-                return nav.goBack();
-              }
+              const pass = await (async () => {
+                if (password) {
+                  return password;
+                } else {
+                  return await promptPromise(
+                    'Enter password',
+                    'Password is required for this operation',
+                    'secure-text',
+                  );
+                }
+              })();
+              await swapWithPassword(
+                {
+                  accountName,
+                  password: pass,
+                },
+                selectedAssetA!.symbol,
+                selectedAssetB!.symbol,
+                Number(bAmt),
+              );
+              setTimeout(() => fetchAssets(accountName), 3000);
+              await fetchAssets(accountName);
+              return nav.goBack();
             })
           }
         >
