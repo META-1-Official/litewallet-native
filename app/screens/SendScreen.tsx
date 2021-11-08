@@ -178,6 +178,7 @@ const SendScreen: React.FC<{}> = () => {
                 <TouchableOpacity
                   onPress={() => {
                     setAmount(meta1.amount.toString());
+                    setUsdAmount((meta1.amount * meta1.usdt_value).toFixed(2));
                   }}
                 >
                   <Text
