@@ -8,6 +8,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useAssetPicker } from '../components/AssetSelectModal';
 import { List } from '../components/List';
 import Loader from '../components/Loader';
+import { useLoaderModal } from '../components/LoaderModal';
 import { Heading, TextSecondary } from '../components/typography';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
@@ -52,6 +53,8 @@ const TradeScreen: React.FC = () => {
   const [selectedAssetA, openA, _closeA, ModalA] = useAssetPicker(avaliableAssets.at(0));
   const [selectedAssetB, openB, _closeB, ModalB] = useAssetPicker(avaliableAssets.at(3));
 
+  const { LoaderModal, showLoader, hideLoader } = useLoaderModal();
+
   useEffect(() => {
     setAAmt('0.00');
     setBAmt('0.00');
@@ -80,6 +83,7 @@ const TradeScreen: React.FC = () => {
       <Backdrop />
       <ModalA key="AssetPicker_A" title="Trade" />
       <ModalB key="AssetPicker_B" title="Trade" />
+      <LoaderModal />
       <View>
         <View
           style={{
@@ -258,33 +262,42 @@ const TradeScreen: React.FC = () => {
       >
         <TouchableOpacity
           onPress={() =>
-            catchError(async () => {
-              console.log(aAmt, bAmt);
-              console.log(password);
-              const pass = await (async () => {
-                if (password) {
-                  return password;
-                } else {
-                  return await promptPromise(
-                    'Enter password',
-                    'Password is required for this operation',
-                    'secure-text',
-                  );
+            catchError(
+              async () => {
+                console.log(aAmt, bAmt);
+                console.log(password);
+                showLoader();
+                const pass = await (async () => {
+                  if (password) {
+                    return password;
+                  } else {
+                    return await promptPromise(
+                      'Enter password',
+                      'Password is required for this operation',
+                      'secure-text',
+                    );
+                  }
+                })();
+
+                if (pass === null) {
+                  return;
                 }
-              })();
-              await swapWithPassword(
-                {
-                  accountName,
-                  password: pass,
-                },
-                selectedAssetA!.symbol,
-                selectedAssetB!.symbol,
-                Number(bAmt),
-              );
-              setTimeout(() => fetchAssets(accountName), 3000);
-              await fetchAssets(accountName);
-              return nav.goBack();
-            })
+
+                await swapWithPassword(
+                  {
+                    accountName,
+                    password: pass,
+                  },
+                  selectedAssetA!.symbol,
+                  selectedAssetB!.symbol,
+                  Number(bAmt),
+                );
+                setTimeout(() => fetchAssets(accountName), 3000);
+                await fetchAssets(accountName);
+                nav.goBack();
+              },
+              () => hideLoader(),
+            )
           }
         >
           <View

@@ -164,9 +164,21 @@ export const catchError = async (fn: () => void, anyway?: () => void) => {
   anyway?.();
 };
 
-export const promptPromise = (title: string, msg: string, type?: AlertType): Promise<string> =>
+export const promptPromise = (
+  title: string,
+  msg: string,
+  type?: AlertType,
+): Promise<string | null> =>
   new Promise(resolve => {
-    Alert.prompt(title, msg, t => resolve(t), type);
+    Alert.prompt(
+      title,
+      msg,
+      [
+        { text: 'Cancel', onPress: () => resolve(null) },
+        { text: 'Ok', onPress: t => resolve(t || null) },
+      ],
+      type,
+    );
   });
 
 export const shadow = {
