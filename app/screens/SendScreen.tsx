@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Dimensions,
   Platform,
   SafeAreaView,
   StyleSheet,
@@ -25,6 +26,8 @@ const SendScreen: React.FC<{}> = () => {
   const nav = useNavigation<WalletNavigationProp>();
   const [amount, setAmount] = useState('0.00');
   const [usdAmount, setUsdAmount] = useState('0.00');
+
+  const [scrollEnabled, setScrollEnabled] = useState(false);
 
   const [toAccount, setToAccount] = useState('');
   const savedPassword = useStore(state => state.password);
@@ -55,7 +58,15 @@ const SendScreen: React.FC<{}> = () => {
     <SafeAreaView>
       <Backdrop />
       <SelectAssetModal title="Send" />
-      <ScrollView scrollEnabled={false}>
+      <ScrollView
+        scrollEnabled={scrollEnabled}
+        onLayout={layout => {
+          const heightDiff = layout.nativeEvent.layout.height - Dimensions.get('screen').height;
+          if (heightDiff < 200) {
+            setScrollEnabled(true);
+          }
+        }}
+      >
         <List
           style={{
             backgroundColor: '#fff',
@@ -219,7 +230,7 @@ const SendScreen: React.FC<{}> = () => {
           <View style={{ padding: 16 }}>
             <Text style={styles.SectionTitle}>Password</Text>
             <TextInput
-              style={{ fontSize: 18, fontWeight: '500' }}
+              style={{ fontSize: 18, fontWeight: '500', color: '#000' }}
               value={password}
               placeholder="Password"
               onChangeText={t => setPassword(t)}
@@ -228,7 +239,7 @@ const SendScreen: React.FC<{}> = () => {
         </List>
         <View
           style={{
-            margin: Platform.OS === 'ios' ? 48 : 24,
+            margin: Platform.OS === 'ios' ? 48 : 0,
             marginHorizontal: 64,
           }}
         >
