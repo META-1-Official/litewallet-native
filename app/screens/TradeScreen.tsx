@@ -52,14 +52,11 @@ const TradeScreen: React.FC = () => {
   const [selectedAssetA, openA, _closeA, ModalA] = useAssetPicker(avaliableAssets.at(0));
   const [selectedAssetB, openB, _closeB, ModalB] = useAssetPicker(avaliableAssets.at(3));
 
-  const calcFromA = () => {
-    const askPrice = selectedAssetA!.usdt_value * Number(aAmt);
-    const amtB = askPrice / selectedAssetB!.usdt_value;
-    setBAmt(amtB === 0 ? amtB.toFixed(2) : amtB.toFixed(8));
-  };
-
   useEffect(() => {
-    calcFromA();
+    setAAmt('0.00');
+    setBAmt('0.00');
+    setAUsd('0.00');
+    setBUsd('0.00');
   }, [selectedAssetA, selectedAssetB]);
 
   useEffect(() => setAUsd((selectedAssetA!.usdt_value * Number(aAmt)).toFixed(2)), [aAmt]);
