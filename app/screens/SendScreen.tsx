@@ -42,7 +42,7 @@ const SendScreen: React.FC<{}> = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     setUsdAmount((Number(amount) * selectedAsset?.usdt_value!).toFixed(2));
-  }, [selectedAsset]);
+  }, [selectedAsset, amount]);
   if (!meta1 || !selectedAsset) {
     return (
       <SafeAreaView>
@@ -133,7 +133,6 @@ const SendScreen: React.FC<{}> = () => {
                   }}
                   onChangeText={t => {
                     setAmount(t);
-                    setUsdAmount((Number(t) * selectedAsset.usdt_value).toFixed(2));
                   }}
                   keyboardType="numeric"
                   value={amount}
@@ -218,6 +217,7 @@ const SendScreen: React.FC<{}> = () => {
           }}
         >
           <View style={{ padding: 16 }}>
+            <Text style={styles.SectionTitle}>Password</Text>
             <TextInput
               style={{ fontSize: 18, fontWeight: '500' }}
               value={password}
