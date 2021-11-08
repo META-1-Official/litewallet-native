@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Platform,
   SafeAreaView,
@@ -19,6 +19,7 @@ import { catchError } from '../utils';
 import { sendWithPassword, useAssets, useAssetsStore } from '../utils/meta1Api';
 import { WalletNavigationProp } from './WalletScreen';
 import { useNavigation } from '@react-navigation/core';
+import { useAssetPicker } from '../components/AssetSelectModal';
 
 const SendScreen: React.FC<{}> = () => {
   const nav = useNavigation<WalletNavigationProp>();
@@ -36,7 +37,13 @@ const SendScreen: React.FC<{}> = () => {
   }
 
   const meta1 = assets.assetsWithBalance.find(e => e.symbol === 'META1');
-  if (!meta1) {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [selectedAsset, open, _, SelectAssetModal] = useAssetPicker(meta1);
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    setUsdAmount((Number(amount) * selectedAsset?.usdt_value!).toFixed(2));
+  }, [selectedAsset]);
+  if (!meta1 || !selectedAsset) {
     return (
       <SafeAreaView>
         <Text> Cannot find META1 asset. </Text>
@@ -47,6 +54,7 @@ const SendScreen: React.FC<{}> = () => {
   return (
     <SafeAreaView>
       <Backdrop />
+      <SelectAssetModal title="Send" />
       <ScrollView scrollEnabled={false}>
         <List
           style={{
@@ -105,7 +113,7 @@ const SendScreen: React.FC<{}> = () => {
           }}
         >
           <View style={{ padding: 16 }}>
-            <Text style={styles.SectionTitle}>Amount META1</Text>
+            <Text style={styles.SectionTitle}>Amount {selectedAsset.symbol}</Text>
             <View>
               <View
                 style={{
@@ -113,6 +121,7 @@ const SendScreen: React.FC<{}> = () => {
                   paddingBottom: 6,
                   borderBottomColor: '#ccc',
                   borderBottomWidth: 2,
+                  justifyContent: 'space-between',
                 }}
               >
                 <TextInput
@@ -124,12 +133,21 @@ const SendScreen: React.FC<{}> = () => {
                   }}
                   onChangeText={t => {
                     setAmount(t);
-                    setUsdAmount((Number(t) * meta1.usdt_value).toFixed(2));
+                    setUsdAmount((Number(t) * selectedAsset.usdt_value).toFixed(2));
                   }}
                   keyboardType="numeric"
                   value={amount}
                 />
-                <Text style={{ paddingTop: 8, textAlign: 'right', fontWeight: '600' }}>META1</Text>
+                <TouchableOpacity onPress={() => open()}>
+                  <Text
+                    style={{
+                      paddingTop: 8,
+                      fontWeight: '600',
+                    }}
+                  >
+                    {selectedAsset.symbol}
+                  </Text>
+                </TouchableOpacity>
               </View>
               <View
                 style={{
@@ -147,7 +165,7 @@ const SendScreen: React.FC<{}> = () => {
                   }}
                   onChangeText={t => {
                     setUsdAmount(t);
-                    setAmount((Number(t) / meta1.usdt_value).toFixed(8));
+                    setAmount((Number(t) / selectedAsset.usdt_value).toFixed(8));
                   }}
                   keyboardType="numeric"
                   value={usdAmount}
@@ -177,8 +195,8 @@ const SendScreen: React.FC<{}> = () => {
               >
                 <TouchableOpacity
                   onPress={() => {
-                    setAmount(meta1.amount.toString());
-                    setUsdAmount((meta1.amount * meta1.usdt_value).toFixed(2));
+                    setAmount(selectedAsset.amount.toString());
+                    setUsdAmount((selectedAsset.amount * selectedAsset.usdt_value).toFixed(2));
                   }}
                 >
                   <Text
@@ -224,7 +242,7 @@ const SendScreen: React.FC<{}> = () => {
                   },
                   {
                     toAccount,
-                    asset: meta1.symbol,
+                    asset: selectedAsset.symbol,
                     amount: Number(amount) - 35e-5, // 0.00035 fixed fee
                   },
                 );
