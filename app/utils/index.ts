@@ -1,5 +1,6 @@
 import assert from 'assert';
 import { Alert, AlertType, ImageStyle, Platform, TextStyle, ViewStyle } from 'react-native';
+import prompt from 'react-native-prompt-android';
 
 export function getRadomByteArray(len: number) {
   return Array.from(new Uint8Array(len), () => Math.floor(Math.random() * 256));
@@ -172,14 +173,14 @@ export const promptPromise = (
   type?: AlertType,
 ): Promise<string | null> =>
   new Promise(resolve => {
-    Alert.prompt(
+    prompt(
       title,
       msg,
       [
         { text: 'Cancel', onPress: () => resolve(null) },
         { text: 'Ok', onPress: t => resolve(t || null) },
       ],
-      type,
+      { type },
     );
   });
 

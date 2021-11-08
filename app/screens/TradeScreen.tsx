@@ -264,7 +264,6 @@ const TradeScreen: React.FC = () => {
               async () => {
                 console.log(aAmt, bAmt);
                 console.log(password);
-                showLoader();
                 const pass = await (async () => {
                   if (password) {
                     return password;
@@ -277,6 +276,8 @@ const TradeScreen: React.FC = () => {
                     );
                   }
                 })();
+
+                showLoader();
 
                 if (pass === null) {
                   return;
