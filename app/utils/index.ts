@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { Alert, AlertType } from 'react-native';
+import { Alert, AlertType, ImageStyle, Platform, TextStyle, ViewStyle } from 'react-native';
 
 export function getRadomByteArray(len: number) {
   return Array.from(new Uint8Array(len), () => Math.floor(Math.random() * 256));
@@ -154,10 +154,12 @@ Array.prototype.at = function (index: number) {
 /** Not exactly deepEquals but good enought */
 export const jsonEquals = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
 
-export const catchError = async (fn: () => void, anyway?: () => void) => {
+// Jank
+export const catchError = async (fn: () => void, anyway?: () => void, onErr?: () => void) => {
   try {
     await fn();
   } catch (e) {
+    onErr?.();
     console.error(e);
     Alert.alert('Error', (e as Error).message);
   }
@@ -180,6 +182,20 @@ export const promptPromise = (
       type,
     );
   });
+
+type AllStyles = ViewStyle | TextStyle | ImageStyle;
+interface PlatformSpecific {
+  ios?: AllStyles;
+  android?: AllStyles;
+}
+export const style = (common: AllStyles, specific: PlatformSpecific) => {
+  if (Platform.OS === 'ios') {
+    return { ...common, ...(specific.ios || {}) };
+  } else if (Platform.OS === 'android') {
+    return { ...common, ...(specific.android || {}) };
+  }
+  return {};
+};
 
 export const shadow = {
   D3: {

@@ -3,16 +3,17 @@
 import { useNavigation } from '@react-navigation/core';
 import throttle from 'lodash.throttle';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Dimensions, Image, SafeAreaView, Text, TextInput, View } from 'react-native';
+import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useAssetPicker } from '../components/AssetSelectModal';
 import { List } from '../components/List';
 import Loader from '../components/Loader';
 import { useLoaderModal } from '../components/LoaderModal';
+import { useSuccessModal } from '../components/SuccessModal';
 import { Heading, TextSecondary } from '../components/typography';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
-import { catchError, promptPromise, shadow } from '../utils';
+import { catchError, promptPromise, shadow, style } from '../utils';
 import { swapWithPassword, useAssets, useAssetsStore } from '../utils/meta1Api';
 import { WalletNavigationProp } from './WalletScreen';
 
@@ -54,7 +55,7 @@ const TradeScreen: React.FC = () => {
   const [selectedAssetB, openB, _closeB, ModalB] = useAssetPicker(avaliableAssets.at(3));
 
   const { LoaderModal, showLoader, hideLoader } = useLoaderModal();
-
+  const { SuccessModal, show } = useSuccessModal(false);
   useEffect(() => {
     setAAmt('0.00');
     setBAmt('0.00');
@@ -84,6 +85,7 @@ const TradeScreen: React.FC = () => {
       <ModalA key="AssetPicker_A" title="Trade" />
       <ModalB key="AssetPicker_B" title="Trade" />
       <LoaderModal />
+      <SuccessModal onClose={() => nav.goBack()} />
       <View>
         <View
           style={{
@@ -167,17 +169,19 @@ const TradeScreen: React.FC = () => {
                   }}
                   value={aAmt}
                 />
-                <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-                  <TextSecondary style={{ fontSize: 14, textAlign: 'right' }}>US$</TextSecondary>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-end',
+                  }}
+                >
+                  <TextSecondary style={{ fontSize: 14, textAlign: 'right', padding: 0 }}>
+                    US$
+                  </TextSecondary>
                   <TextInput
                     onChangeText={t => throttle(updateFromUSD, 700)(t)}
                     defaultValue={aUsd}
-                    style={{
-                      marginLeft: 8,
-                      fontSize: 14,
-                      color: colors.mutedGray,
-                      textAlign: 'right',
-                    }}
+                    style={styles.usdInput}
                   />
                 </View>
               </View>
@@ -237,16 +241,10 @@ const TradeScreen: React.FC = () => {
                   value={bAmt}
                 />
                 <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-                  <TextSecondary style={{ fontSize: 14, textAlign: 'right' }}>US$</TextSecondary>
-                  <TextInput
-                    value={bUsd}
-                    style={{
-                      marginLeft: 8,
-                      fontSize: 14,
-                      color: colors.mutedGray,
-                      textAlign: 'right',
-                    }}
-                  />
+                  <TextSecondary style={{ fontSize: 14, textAlign: 'right', padding: 0 }}>
+                    US$
+                  </TextSecondary>
+                  <TextInput value={bUsd} style={styles.usdInput} />
                 </View>
               </View>
             </View>
@@ -271,6 +269,7 @@ const TradeScreen: React.FC = () => {
                   if (password) {
                     return password;
                   } else {
+                    console.log('Propmting for password');
                     return await promptPromise(
                       'Enter password',
                       'Password is required for this operation',
@@ -294,8 +293,14 @@ const TradeScreen: React.FC = () => {
                 );
                 setTimeout(() => fetchAssets(accountName), 3000);
                 await fetchAssets(accountName);
-                nav.goBack();
+                hideLoader();
+                show(
+                  `Succesfully traded ${aAmt} ${selectedAssetA!.symbol}` +
+                    ' to ' +
+                    `${bAmt} ${selectedAssetB!.symbol}`,
+                );
               },
+              () => {},
               () => hideLoader(),
             )
           }
@@ -326,3 +331,21 @@ const TradeScreen: React.FC = () => {
   );
 };
 export default TradeScreen;
+
+const styles = StyleSheet.create({
+  usdInput: style(
+    {
+      marginLeft: 8,
+      fontSize: 14,
+      color: colors.mutedGray,
+      textAlign: 'right',
+    },
+    {
+      android: {
+        height: 18,
+        padding: 0,
+        marginTop: 1,
+      },
+    },
+  ),
+});
