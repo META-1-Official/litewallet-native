@@ -21,17 +21,20 @@ import { sendWithPassword, useAssets, useAssetsStore } from '../utils/meta1Api';
 import { WalletNavigationProp } from './WalletScreen';
 import { useNavigation } from '@react-navigation/core';
 import { useAssetPicker } from '../components/AssetSelectModal';
+import { useLoaderModal } from '../components/LoaderModal';
 
 const SendScreen: React.FC<{}> = () => {
   const nav = useNavigation<WalletNavigationProp>();
   const [amount, setAmount] = useState('0.00');
   const [usdAmount, setUsdAmount] = useState('0.00');
+  const [toAccount, setToAccount] = useState('');
 
   const [scrollEnabled, setScrollEnabled] = useState(false);
 
-  const [toAccount, setToAccount] = useState('');
   const savedPassword = useStore(state => state.password);
   const [password, setPassword] = useState(savedPassword || '');
+
+  const { LoaderModal, showLoader, hideLoader } = useLoaderModal();
   const accountName = useStore(state => state.accountName);
   const assets = useAssets();
   const fetchAssets = useAssetsStore(state => state.fetchUserAssets);
@@ -58,11 +61,12 @@ const SendScreen: React.FC<{}> = () => {
     <SafeAreaView>
       <Backdrop />
       <SelectAssetModal title="Send" />
+      <LoaderModal />
       <ScrollView
         scrollEnabled={scrollEnabled}
         onLayout={layout => {
-          const heightDiff = layout.nativeEvent.layout.height - Dimensions.get('screen').height;
-          if (heightDiff < 200) {
+          const heightDiff = Dimensions.get('screen').height - layout.nativeEvent.layout.height;
+          if (heightDiff < 155) {
             setScrollEnabled(true);
           }
         }}
@@ -245,21 +249,25 @@ const SendScreen: React.FC<{}> = () => {
         >
           <RoundedButton
             onPress={() => {
-              catchError(async () => {
-                await sendWithPassword(
-                  {
-                    accountName,
-                    password,
-                  },
-                  {
-                    toAccount,
-                    asset: selectedAsset.symbol,
-                    amount: Number(amount) - 35e-5, // 0.00035 fixed fee
-                  },
-                );
-                await fetchAssets(accountName);
-                nav.goBack();
-              });
+              showLoader();
+              catchError(
+                async () => {
+                  await sendWithPassword(
+                    {
+                      accountName,
+                      password,
+                    },
+                    {
+                      toAccount,
+                      asset: selectedAsset.symbol,
+                      amount: Number(amount) - (selectedAsset.symbol === 'META1' ? 35e-5 : 0), // 0.00035 fixed fee
+                    },
+                  );
+                  await fetchAssets(accountName);
+                  nav.goBack();
+                },
+                () => hideLoader(),
+              );
             }}
             title="Confirm"
           />

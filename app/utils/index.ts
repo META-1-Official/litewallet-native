@@ -154,13 +154,14 @@ Array.prototype.at = function (index: number) {
 /** Not exactly deepEquals but good enought */
 export const jsonEquals = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
 
-export const catchError = async (fn: () => void) => {
+export const catchError = async (fn: () => void, anyway?: () => void) => {
   try {
     await fn();
   } catch (e) {
     console.error(e);
     Alert.alert('Error', (e as Error).message);
   }
+  anyway?.();
 };
 
 export const promptPromise = (title: string, msg: string, type?: AlertType): Promise<string> =>
