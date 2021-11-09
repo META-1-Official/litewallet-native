@@ -4,13 +4,14 @@ import { loaderGif } from '../../assets';
 
 const { width, height } = Dimensions.get('screen');
 
-const Loader: React.FC<{}> = () => {
+const Loader: React.FC<{ bgc?: string }> = ({ bgc }) => {
   return (
     <SafeAreaView
       style={{
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-around',
+        backgroundColor: bgc,
       }}
     >
       {/* <ActivityIndicator /> */}

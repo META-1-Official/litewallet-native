@@ -20,6 +20,7 @@ import Loader from './components/Loader';
 import { SvgIcons } from '../assets';
 import SettingsScreen from './screens/SettingsScreen';
 import FundAccount from './screens/FundAccountScreen';
+import { DexNav } from './screens/dex';
 
 const { useEffect } = React;
 
@@ -65,6 +66,7 @@ const WalletNav = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
+        tabBarStyle: { display: route.name === 'DEX' ? 'none' : undefined },
         headerShown: false,
         tabBarActiveTintColor: colors.BrandYellow,
         tabBarIcon: ({ color, size }) => {
@@ -87,7 +89,7 @@ const WalletNav = () => {
     >
       <Tab.Screen name="Wallet" component={WalletScreen} />
       <Tab.Screen name="Fund Account" component={FundAccount} />
-      <Tab.Screen name="DEX" component={Loader} />
+      <Tab.Screen name="DEX" component={DexNav} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>
   );
