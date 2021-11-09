@@ -50,6 +50,9 @@ const DexTabs = () => {
         },
         tabBarInactiveTintColor: '#500404',
         tabBarActiveTintColor: '#b77409',
+        tabBarItemStyle: {
+          marginTop: route.name === 'DEX__Modal' ? 24 : undefined,
+        },
         tabBarIcon: ({ color, size }) => {
           const Icon = Name2Icon[route.name];
           const newSize = route.name === 'DEX__Modal' ? size + 24 : size;
@@ -59,10 +62,7 @@ const DexTabs = () => {
     >
       <Tab.Screen name="DEX__Home" component={Black} />
       <Tab.Screen name="DEX__Trade" component={Black} />
-      <Tab.Screen
-        name="DEX__Modal"
-        component={Black}
-      />
+      <Tab.Screen name="DEX__Modal" component={Black} />
       <Tab.Screen name="DEX__Orders" component={Black} />
       <Tab.Screen name="DEX__Fund" component={Black} />
     </Tab.Navigator>
