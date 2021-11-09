@@ -16,7 +16,6 @@ export const SvgIcons = {
   trading: require('./icons/trading.svg').default as any,
   wallet: require('./icons/wallet.svg').default as any,
   BackArrowWhite: require('./icons/back-arrow-white.svg').default as any,
-  BuySellMeta1: require('./icons/buy-sell-meta1.svg').default as any,
   Chart: require('./icons/chart.svg').default as any,
   Exchange: require('./icons/exchange.svg').default as any,
   FavoriteStar: require('./icons/favorite-star.svg').default as any,
