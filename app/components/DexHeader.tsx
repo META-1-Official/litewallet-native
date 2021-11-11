@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Platform, TouchableOpacity, Text, SafeAreaView, StatusBar, View } from 'react-native';
 import { StackHeaderProps } from '@react-navigation/stack';
 import { ArrowLeft, Bell, Menu } from 'react-native-feather';
@@ -7,14 +7,16 @@ import { colors } from '../styles/colors';
 import { useNavigation } from '@react-navigation/core';
 import { DexStackNavigationProp } from '../screens/dex';
 import { BottomTabHeaderProps } from '@react-navigation/bottom-tabs';
+import { overlayContext } from './SideMenuOverlay';
 
 export function DexHeader({ navigation: _nav, route, options }: BottomTabHeaderProps) {
+  const { overlayOpen } = useContext(overlayContext);
   const nav = useNavigation<DexStackNavigationProp>();
   const SideMenu = ({ color }: { color: string }) => (
     <TouchableOpacity
       style={{ marginHorizontal: 12 }}
       activeOpacity={0.5}
-      onPress={() => console.log('should show side menu modal')}
+      onPress={() => overlayOpen()}
     >
       <Menu width={32} height={32} stroke={color} />
     </TouchableOpacity>

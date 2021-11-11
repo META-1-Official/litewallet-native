@@ -114,7 +114,9 @@ function Indicator({ scrollX }: ScrollXProp) {
       inputRange: DATA.map((_, ii) => ii * width),
       outputRange: DATA.map((_, ii) => (i === ii ? colors.BrandYellow : colors.dotGray)),
     });
-    return <Animated.View key={`indicator_${i}`} style={[styles.indicator, { backgroundColor }]} />;
+    return (
+      <Animated.View key={`indicator_${i}`} style={[styles.indicator, { backgroundColor }]} />
+    );
   });
 
   return <View style={styles.indicatorContrainer}>{indicators}</View>;

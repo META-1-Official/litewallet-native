@@ -4,9 +4,9 @@ import React from 'react';
 import Loader from '../../components/Loader';
 import { colors } from '../../styles/colors';
 import { DexHeader, DexStackHeader } from '../../components/DexHeader';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import { SvgIcons } from '../../../assets';
-
+import { OverlayContextWrapper } from '../../components/SideMenuOverlay';
 const Black = () => <Loader bgc="#000" />;
 
 export type DexTabParamList = {
@@ -81,21 +81,25 @@ const Stack = createStackNavigator<DexStackParamList>();
 
 export const DexNav: React.FC = () => {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerMode: 'screen',
-        header: DexStackHeader,
-      }}
-    >
-      <Stack.Screen
-        name="DEX_HOME"
-        options={{
-          headerShown: false,
-        }}
-        component={DexTabs}
-      />
-      <Stack.Screen name="__Notifications" component={Black} />
-      <Stack.Screen name="__Settings" component={Black} />
-    </Stack.Navigator>
+    <View style={{ flex: 1 }}>
+      <OverlayContextWrapper>
+        <Stack.Navigator
+          screenOptions={{
+            headerMode: 'screen',
+            header: DexStackHeader,
+          }}
+        >
+          <Stack.Screen
+            name="DEX_HOME"
+            options={{
+              headerShown: false,
+            }}
+            component={DexTabs}
+          />
+          <Stack.Screen name="__Notifications" component={Black} />
+          <Stack.Screen name="__Settings" component={Black} />
+        </Stack.Navigator>
+      </OverlayContextWrapper>
+    </View>
   );
 };
