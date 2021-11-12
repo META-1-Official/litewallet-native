@@ -130,7 +130,7 @@ const Overlay: React.FC<OverlayProps> = ({ isOpen, requestClose }) => {
       toValue: 1,
       duration: 180,
       useNativeDriver: false,
-      easing: Easing.out(Easing.elastic(0.8))
+      easing: Easing.out(Easing.elastic(0.8)),
     }).start();
 
   const close = () =>
@@ -138,7 +138,7 @@ const Overlay: React.FC<OverlayProps> = ({ isOpen, requestClose }) => {
       toValue: 0,
       duration: 180,
       useNativeDriver: false,
-      easing: Easing.in(Easing.elastic(0.1))
+      easing: Easing.in(Easing.elastic(0.1)),
     }).start();
 
   useEffect(() => {
