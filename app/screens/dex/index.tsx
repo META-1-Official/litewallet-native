@@ -8,6 +8,7 @@ import { Pressable, Text, View } from 'react-native';
 import { SvgIcons } from '../../../assets';
 import { OverlayContextWrapper } from '../../components/SideMenuOverlay';
 import DexModal from '../../components/DexMainModal';
+import DexHome from './DexHome';
 const Black = () => <Loader bgc="#000" />;
 
 export type DexTabParamList = {
@@ -64,7 +65,7 @@ const DexTabs = () => {
           },
         })}
       >
-        <Tab.Screen name="DEX__Home" component={Black} />
+        <Tab.Screen name="DEX__Home" component={DexHome} />
         <Tab.Screen name="DEX__Trade" component={Black} />
         <Tab.Screen
           name="DEX__Modal"
