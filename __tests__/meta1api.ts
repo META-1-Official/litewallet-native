@@ -1,6 +1,6 @@
 import config from '../app/config';
 import { useStore } from '../app/store';
-import { fetchAccountBalances, fetchAllAssets } from '../app/utils/meta1Api';
+import { fetchAccountBalances, fetchAllAssets, getHistoryForAsset } from '../app/utils/meta1Api';
 import Meta1 from '../app/utils/meta1dexTypes';
 
 jest.mock('react-native-encrypted-storage');
@@ -51,5 +51,12 @@ describe('Meta1 api tests', () => {
     expect(assets!.accountTotal).toEqual(expect.any(Number));
     expect(assets!.toatalChnage).toEqual(expect.any(Number));
     expect(assets!.changePercent).toEqual(expect.any(Number));
+  });
+  it('Fetches historical data', async () => {
+    const history = await getHistoryForAsset('ETH');
+    expect(history).toBeTruthy();
+    expect(history.length).toBeGreaterThan(0);
+
+    console.log(history);
   });
 });

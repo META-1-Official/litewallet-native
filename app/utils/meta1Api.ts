@@ -241,6 +241,7 @@ export async function getHistoryForAsset(assetA: string) {
   // A hackish way to drop all the unnecasary floating point precision
   const prices = history.map(e => +Number(e.price).toFixed(2));
   console.log({ prices });
+  return prices;
 }
 
 export const useAssets = () => {
