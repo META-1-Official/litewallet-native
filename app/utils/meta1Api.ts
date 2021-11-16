@@ -1,7 +1,7 @@
+import create from 'zustand';
 import config from '../config';
 import { useStore } from '../store';
-import Meta1, { iAsset, iBalance } from './meta1dexTypes';
-import create from 'zustand';
+import { default as Meta1, default as meta1dex, iAsset, iBalance } from './meta1dexTypes';
 
 const setLoading = useStore.getState().setLoading;
 const logout = useStore.getState().logout;
@@ -227,6 +227,21 @@ export const depositAddress = async (accountName: string, asset: string) => {
     return '';
   }
 };
+
+const saitizeISOString = (x: string) => x.slice(0, -1);
+
+export async function getHistoryForAsset(assetA: string) {
+  const history = await meta1dex.db.get_trade_history(
+    'USDT',
+    assetA,
+    saitizeISOString(new Date().toISOString()),
+    '2021-01-01T00:00:00.000',
+    100,
+  );
+  // A hackish way to drop all the unnecasary floating point precision
+  const prices = history.map(e => +Number(e.price).toFixed(2));
+  console.log({ prices });
+}
 
 export const useAssets = () => {
   const accountName = useStore(state => state.accountName);

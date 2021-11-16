@@ -1,12 +1,17 @@
 import React from 'react';
 import { FlatList, Image, SafeAreaView, Text, View, Dimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { useAssets } from '../../utils/meta1Api';
+import Loader from '../../components/Loader';
+import { getHistoryForAsset, useAssets } from '../../utils/meta1Api';
 
-const { width, height } = Dimensions.get('screen');
+const { width } = Dimensions.get('screen');
 const DexHome: React.FC = () => {
   const accountAssets = useAssets();
+  if (!accountAssets) {
+    return <Loader bgc="#000" />;
+  }
   const assets = accountAssets!.assetsWithBalance;
+  getHistoryForAsset('ETH');
   console.log(JSON.stringify(assets[0]._asset, null, 4));
   return (
     <SafeAreaView
@@ -63,8 +68,8 @@ const DexHome: React.FC = () => {
                   }}
                 >
                   <Text style={{ color: '#fff', fontSize: 15 }}>${e.usdt_value.toFixed(2)}</Text>
-                  <Text style={{ color: e.delta > 0 ? '#419e7f' : '#b02a27' }}>
-                    {e.delta > 0 ? '+ ' : '- '}
+                  <Text style={{ color: e.delta >= 0 ? '#419e7f' : '#b02a27' }}>
+                    {e.delta >= 0 ? '+ ' : '- '}
                     {Math.abs(e.delta)}%
                   </Text>
                 </View>
@@ -72,7 +77,7 @@ const DexHome: React.FC = () => {
             );
           })}
         </View>
-        <View style={{}}>
+        <View style={{ paddingBottom: 24 }}>
           <Text style={{ color: '#fff', fontSize: 21, marginTop: 18, marginBottom: 24 }}>
             New Crypto on META1
           </Text>
@@ -107,12 +112,12 @@ const DexHome: React.FC = () => {
                   </Text>
                   <Text
                     style={{
-                      color: item.delta > 0 ? '#419e7f' : '#b02a27',
+                      color: item.delta >= 0 ? '#419e7f' : '#b02a27',
                       fontSize: 24,
                       fontWeight: 'bold',
                     }}
                   >
-                    {item.delta > 0 ? '+ ' : '- '}
+                    {item.delta >= 0 ? '+ ' : '- '}
                     {Math.abs(item.delta)}%
                   </Text>
                 </View>

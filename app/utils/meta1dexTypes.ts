@@ -272,6 +272,15 @@ interface LoginRetT {
     total_in_collateral: number;
   };
 }
+interface iTradeHistorical {
+  sequence: number;
+  date: string;
+  price: string;
+  amount: string;
+  value: string;
+  side1_account_id: string;
+  side2_account_id: string;
+}
 
 export interface Meta1Module {
   connect: (connection?: string) => Promise<any>;
@@ -281,6 +290,21 @@ export interface Meta1Module {
     list_assets: (symbol: string, limit: number) => Promise<iAsset[]>;
     get_full_accounts: (names: string[], sub: boolean) => Promise<ArrayMap<string, fullAccount>>;
     get_ticker: (assetSymbolA: string, assetSymbolB: string) => Promise<Ticker>;
+    /**
+     * @param assetA asset symbol
+     * @param assetB asset symbol
+     * @param endTime the most recent entry timestamp, ISO format NOTE: Trim the timezone component of date string
+     * @param startTime the oldest entry timestamp, ISO format NOTE: Trim the timezone component of date string
+     * @param limit limit, capped at 100
+     * @returs An array of {@link iTradeHistorical}
+     */
+    get_trade_history: (
+      assetA: string,
+      assetB: string,
+      endTime: string,
+      startTime: string,
+      limit: number,
+    ) => Promise<iTradeHistorical[]>;
   };
   subscribe: SubT_A | SubT_B | SubT_C;
   login: (accountName: string, password: string) => Promise<LoginRetT>;
