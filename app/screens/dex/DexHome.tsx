@@ -1,18 +1,39 @@
-import React from 'react';
-import { FlatList, Image, SafeAreaView, Text, View, Dimensions } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, FlatList, Image, SafeAreaView, Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Loader from '../../components/Loader';
 import { getHistoryForAsset, useAssets } from '../../utils/meta1Api';
+import { LineChart, Grid } from 'react-native-svg-charts';
 
 const { width } = Dimensions.get('screen');
+
+const Chart: React.FC<{ symbol: string; color: string }> = ({ symbol, color }) => {
+  const [data, setData] = useState<number[]>([]);
+  useEffect(() => {
+    async function fn() {
+      await getHistoryForAsset(symbol).then(d => setData(d));
+    }
+    fn();
+  });
+
+  return (
+    <LineChart
+      style={{ width: 80 }}
+      data={data}
+      svg={{ stroke: color }}
+      contentInset={{ top: 20, bottom: 20 }}
+    >
+      <Grid />
+    </LineChart>
+  );
+};
+
 const DexHome: React.FC = () => {
   const accountAssets = useAssets();
   if (!accountAssets) {
     return <Loader bgc="#000" />;
   }
   const assets = accountAssets!.assetsWithBalance;
-  getHistoryForAsset('ETH');
-  console.log(JSON.stringify(assets[0]._asset, null, 4));
   return (
     <SafeAreaView
       style={{
@@ -59,7 +80,7 @@ const DexHome: React.FC = () => {
                     <Text style={{ color: '#fff', fontSize: 12 }}>{e.symbol}</Text>
                   </View>
                 </View>
-                <View style={{ width: 64, borderBottomColor: '#fff', borderBottomWidth: 1 }} />
+                <Chart symbol={e.symbol} color={e.delta >= 0 ? '#419e7f' : '#b02a27'} />
                 <View
                   style={{
                     width: 80,

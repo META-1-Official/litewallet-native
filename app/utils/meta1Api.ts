@@ -231,6 +231,10 @@ export const depositAddress = async (accountName: string, asset: string) => {
 const saitizeISOString = (x: string) => x.slice(0, -1);
 
 export async function getHistoryForAsset(assetA: string) {
+  // USDT/USDT pair just dosent make any sense, returning two datapoints for a straight line
+  if (assetA === 'USDT') {
+    return [1, 1];
+  }
   const history = await meta1dex.db.get_trade_history(
     'USDT',
     assetA,
@@ -240,7 +244,6 @@ export async function getHistoryForAsset(assetA: string) {
   );
   // A hackish way to drop all the unnecasary floating point precision
   const prices = history.map(e => +Number(e.price).toFixed(2));
-  console.log({ prices });
   return prices;
 }
 
