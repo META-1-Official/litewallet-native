@@ -1,14 +1,15 @@
 import { BottomTabNavigationProp, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+
+import React from 'react';
 import Loader from '../../components/Loader';
 import { colors } from '../../styles/colors';
 import { DexHeader, DexStackHeader } from '../../components/DexHeader';
 import { Pressable, Text, View } from 'react-native';
 import { SvgIcons } from '../../../assets';
-import { OverlayContextWrapper } from '../../components/SideMenuOverlay';
-import DexModal from '../../components/DexMainModal';
 import DexHome from './DexHome';
+import DexTrade from './TradeScreen';
+import { OverlayContent } from '../../components/SideMenuOverlay';
 const Black = () => <Loader bgc="#000" />;
 
 export type DexTabParamList = {
@@ -32,10 +33,10 @@ const Name2Icon: Record<keyof DexTabParamList, any> = {
 };
 
 const DexTabs = () => {
-  const [modalOpen, setModalOpen] = useState(false);
+  // const [modalOpen, setModalOpen] = useState(false);
   return (
     <View style={{ flex: 1 }}>
-      <DexModal visible={modalOpen} onRequestClose={() => setModalOpen(false)} />
+      {/* <DexModal visible={modalOpen} onRequestClose={() => setModalOpen(false)} /> */}
       <Tab.Navigator
         screenOptions={({ route }) => ({
           header: DexHeader,
@@ -66,12 +67,12 @@ const DexTabs = () => {
         })}
       >
         <Tab.Screen name="DEX__Home" component={DexHome} />
-        <Tab.Screen name="DEX__Trade" component={Black} />
+        <Tab.Screen name="DEX__Trade" component={DexTrade} />
         <Tab.Screen
           name="DEX__Modal"
           options={{
             tabBarButton: props => {
-              return <Pressable {...props} onPress={() => setModalOpen(true)} />;
+              return <Pressable {...props} onPress={() => {}} />;
             },
           }}
           component={Black}
@@ -92,34 +93,37 @@ export type DexStackParamList = {
   DEX__Recive: undefined;
 };
 
-export type DexStackNavigationProp = StackNavigationProp<DexStackParamList, 'DEX_HOME'>;
-
-const Stack = createStackNavigator<DexStackParamList>();
+const Drawer = createDrawerNavigator<DexStackParamList>();
 
 export const DexNav: React.FC = () => {
   return (
     <View style={{ flex: 1 }}>
-      <OverlayContextWrapper>
-        <Stack.Navigator
-          screenOptions={{
-            headerMode: 'screen',
-            header: DexStackHeader,
+      <Drawer.Navigator
+        screenOptions={{
+          // headerMode: 'screen',
+          header: DexStackHeader,
+          drawerStyle: {
+            backgroundColor: '#000',
+          },
+        }}
+        drawerContent={props => {
+          return <OverlayContent {...props} />;
+        }}
+        initialRouteName="DEX_HOME"
+      >
+        <Drawer.Screen
+          name="DEX_HOME"
+          options={{
+            headerShown: false,
           }}
-        >
-          <Stack.Screen
-            name="DEX_HOME"
-            options={{
-              headerShown: false,
-            }}
-            component={DexTabs}
-          />
-          <Stack.Screen name="__Notifications" component={Black} />
-          <Stack.Screen name="__Settings" component={Black} />
-          <Stack.Screen name="DEX__Convert" component={Black} />
-          <Stack.Screen name="DEX__Send" component={Black} />
-          <Stack.Screen name="DEX__Recive" component={Black} />
-        </Stack.Navigator>
-      </OverlayContextWrapper>
+          component={DexTabs}
+        />
+        <Drawer.Screen name="__Notifications" component={Black} />
+        <Drawer.Screen name="__Settings" component={Black} />
+        <Drawer.Screen name="DEX__Convert" component={Black} />
+        <Drawer.Screen name="DEX__Send" component={Black} />
+        <Drawer.Screen name="DEX__Recive" component={Black} />
+      </Drawer.Navigator>
     </View>
   );
 };

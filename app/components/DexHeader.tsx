@@ -1,22 +1,16 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Platform, TouchableOpacity, Text, SafeAreaView, StatusBar, View } from 'react-native';
-import { StackHeaderProps } from '@react-navigation/stack';
 import { ArrowLeft, Bell, Menu } from 'react-native-feather';
 import { getHeaderTitle } from '@react-navigation/elements';
 import { colors } from '../styles/colors';
-import { useNavigation } from '@react-navigation/core';
-import { DexStackNavigationProp } from '../screens/dex';
 import { BottomTabHeaderProps } from '@react-navigation/bottom-tabs';
-import { overlayContext } from './SideMenuOverlay';
 
-export function DexHeader({ navigation: _nav, route, options }: BottomTabHeaderProps) {
-  const { overlayOpen } = useContext(overlayContext);
-  const nav = useNavigation<DexStackNavigationProp>();
+export function DexHeader({ navigation: nav, route, options }: BottomTabHeaderProps) {
   const SideMenu = ({ color }: { color: string }) => (
     <TouchableOpacity
       style={{ marginHorizontal: 12 }}
       activeOpacity={0.5}
-      onPress={() => overlayOpen()}
+      onPress={() => (nav.getParent() as any).openDrawer()}
     >
       <Menu width={32} height={32} stroke={color} />
     </TouchableOpacity>
@@ -25,7 +19,7 @@ export function DexHeader({ navigation: _nav, route, options }: BottomTabHeaderP
     <TouchableOpacity
       style={{ marginHorizontal: 12 }}
       activeOpacity={0.5}
-      onPress={() => nav.navigate('__Notifications')}
+      onPress={() => nav.getParent()!.navigate('__Notifications')}
     >
       <Bell width={32} height={32} stroke={color} />
     </TouchableOpacity>
@@ -63,7 +57,7 @@ export function DexHeader({ navigation: _nav, route, options }: BottomTabHeaderP
   );
 }
 
-export function DexStackHeader({ navigation, route, options, back }: StackHeaderProps) {
+export function DexStackHeader({ navigation, route, options }: any) {
   const BackButton = ({ color }: { color: string }) => (
     <TouchableOpacity
       style={{ marginHorizontal: 12 }}
@@ -98,8 +92,7 @@ export function DexStackHeader({ navigation, route, options, back }: StackHeader
       </Text>
 
       {/* Empty view for space between alignment, mimics back button sizing*/}
-
-      {back ? <View style={{ width: 32, height: 32, marginHorizontal: 12 }} /> : null}
+      <View style={{ width: 32, height: 32, marginHorizontal: 12 }} />
     </SafeAreaView>
   );
 }

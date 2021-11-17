@@ -38,17 +38,17 @@ const SendScreen: React.FC<{}> = () => {
   const accountName = useStore(state => state.accountName);
   const assets = useAssets();
   const fetchAssets = useAssetsStore(state => state.fetchUserAssets);
+
+  const meta1 = assets?.assetsWithBalance.find(e => e.symbol === 'META1');
+  const [selectedAsset, open, _, SelectAssetModal] = useAssetPicker(meta1);
+  useEffect(() => {
+    setUsdAmount((Number(amount) * selectedAsset?.usdt_value!).toFixed(2));
+  }, [selectedAsset, amount]);
+
   if (!assets) {
     return <Loader />;
   }
 
-  const meta1 = assets.assetsWithBalance.find(e => e.symbol === 'META1');
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [selectedAsset, open, _, SelectAssetModal] = useAssetPicker(meta1);
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() => {
-    setUsdAmount((Number(amount) * selectedAsset?.usdt_value!).toFixed(2));
-  }, [selectedAsset, amount]);
   if (!meta1 || !selectedAsset) {
     return (
       <SafeAreaView>

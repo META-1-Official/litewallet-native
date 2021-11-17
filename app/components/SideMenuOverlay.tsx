@@ -1,5 +1,6 @@
-import React, { createContext, useEffect, useRef, useState } from 'react';
-import { Animated, Dimensions, Easing, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { DrawerContentComponentProps } from '@react-navigation/drawer/src/types';
+import React from 'react';
+import { SafeAreaView, TouchableOpacity, View } from 'react-native';
 import {
   Archive,
   ArrowLeft,
@@ -11,9 +12,6 @@ import {
 import { Text } from 'react-native-paper';
 import { SvgIcons } from '../../assets';
 import { useStore } from '../store';
-
-const { width, height } = Dimensions.get('screen');
-const overlayWidth = width * 0.78;
 
 interface ListItemProps {
   title: string;
@@ -37,10 +35,15 @@ const ListItem: React.FC<ListItemProps> = ({ title, icon, onPress }) => {
   );
 };
 
-const OverlayContent: React.FC = () => {
+export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
   const accountName = useStore(state => state.accountName);
   return (
-    <View>
+    <SafeAreaView style={{ padding: 12 }}>
+      <View>
+        <TouchableOpacity onPress={() => navigation.closeDrawer()}>
+          <ArrowLeft width={32} height={32} color="#fff" />
+        </TouchableOpacity>
+      </View>
       <View
         style={{
           justifyContent: 'center',
@@ -109,85 +112,6 @@ const OverlayContent: React.FC = () => {
           <Text style={{ color: '#fff', fontSize: 18 }}>Sign Out</Text>
         </View>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
-
-interface OverlayProps {
-  isOpen: boolean;
-  requestClose: () => void;
-}
-const Overlay: React.FC<OverlayProps> = ({ isOpen, requestClose }) => {
-  const offsetX = useRef(new Animated.Value(0)).current;
-
-  const translatedX = offsetX.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-overlayWidth, 0],
-  });
-
-  const open = () =>
-    Animated.timing(offsetX, {
-      toValue: 1,
-      duration: 180,
-      useNativeDriver: false,
-      easing: Easing.out(Easing.elastic(0.8)),
-    }).start();
-
-  const close = () =>
-    Animated.timing(offsetX, {
-      toValue: 0,
-      duration: 180,
-      useNativeDriver: false,
-      easing: Easing.in(Easing.elastic(0.1)),
-    }).start();
-
-  useEffect(() => {
-    isOpen ? open() : close();
-  }, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  return (
-    <Animated.View
-      style={{
-        position: 'absolute',
-        left: translatedX,
-        height,
-        width: overlayWidth,
-        backgroundColor: '#120f0f',
-        zIndex: 100,
-        elevation: 100,
-      }}
-    >
-      <SafeAreaView>
-        <View style={{ padding: 8 }}>
-          <TouchableOpacity onPress={() => requestClose()}>
-            <ArrowLeft width={32} height={32} color="#fff" />
-          </TouchableOpacity>
-          <OverlayContent />
-        </View>
-      </SafeAreaView>
-    </Animated.View>
-  );
-};
-
-export const overlayContext = createContext({
-  isOpen: false,
-  overlayClose: () => {},
-  overlayOpen: () => {},
-});
-
-export const OverlayContextWrapper: React.FC = ({ children }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const overlayOpen = () => setIsOpen(true);
-  const overlayClose = () => setIsOpen(false);
-
-  return (
-    <>
-      <overlayContext.Provider value={{ isOpen, overlayClose, overlayOpen }}>
-        <Overlay isOpen={isOpen} requestClose={overlayClose} />
-        {children}
-      </overlayContext.Provider>
-    </>
-  );
-};
-
-export default Overlay;
