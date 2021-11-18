@@ -28,19 +28,9 @@ export async function fetchAssetWithIcon(asset_name: string) {
     }),
   );
 
-  const icon = (symbol: string) => `https://cryptoicons.org/api/icon/${symbol.toLowerCase()}/128`;
-
   const _ = await Meta1.db.list_assets(asset_name, 101);
-  const icons = await Promise.all(
-    _.map(e =>
-      // Try to get the icon form cryptoicons api
-      fetch(icon(e.symbol), { method: 'HEAD' }).then(res =>
-        res.status === 200
-          ? { uri: icon(e.symbol) }
-          : { uri: fallback.get(e.symbol.toLowerCase()) },
-      ),
-    ),
-  );
+  const icons = _.map(e => ({ uri: fallback.get(e.symbol.toLowerCase()) }));
+
   const assets = _.map((e, i) => ({ ...e, icon: icons[i] }));
 
   return assets;
