@@ -1,12 +1,11 @@
-import { StackScreenProps } from '@react-navigation/stack';
 import React from 'react';
 import { Text, View } from 'react-native';
 import { ArrowDownRight, ArrowUpLeft, Maximize2 } from 'react-native-feather';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { DexModalStackParamList } from '../screens/dex';
+import { DexSSP } from '../screens/dex';
 import { colors } from '../styles/colors';
 
-const DexModal: React.FC<StackScreenProps<DexModalStackParamList>> = ({ navigation }) => {
+const DexModal: React.FC<DexSSP> = ({ navigation }) => {
   return (
     <View style={{ height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.35)' }}>
       <TouchableOpacity
@@ -25,7 +24,7 @@ const DexModal: React.FC<StackScreenProps<DexModalStackParamList>> = ({ navigati
           justifyContent: 'space-evenly',
         }}
       >
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('DEX__Convert')}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Maximize2 width={32} height={32} color="#fff" />
             <View style={{ marginLeft: 24 }}>
@@ -50,7 +49,7 @@ const DexModal: React.FC<StackScreenProps<DexModalStackParamList>> = ({ navigati
             </View>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('DEX__Send')}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <ArrowUpLeft width={32} height={32} color="#fff" />
             <View style={{ marginLeft: 24 }}>
@@ -70,12 +69,12 @@ const DexModal: React.FC<StackScreenProps<DexModalStackParamList>> = ({ navigati
                   fontSize: 16,
                 }}
               >
-                Sebd crypto to another wallet
+                Send crypto to another wallet
               </Text>
             </View>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('DEX__Recive')}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <ArrowDownRight width={32} height={32} color="#fff" />
             <View style={{ marginLeft: 24 }}>

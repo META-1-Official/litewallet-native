@@ -1,3 +1,4 @@
+import QRCode from 'qrcode';
 import create from 'zustand';
 import config from '../config';
 import { useStore } from '../store';
@@ -237,6 +238,15 @@ export async function getHistoryForAsset(assetA: string) {
   return prices;
 }
 
+export interface AddrT {
+  qr: string;
+  addr: string;
+}
+export async function getAddressForAccountAsset(accountName: string, symbol: string) {
+  const addr = await depositAddress(accountName, symbol);
+  const qr = await QRCode.toString(addr);
+  return { qr, addr };
+}
 export const useAssets = () => {
   const accountName = useStore(state => state.accountName);
   const userAssets = useAssetsStore(state => state.userAssets);

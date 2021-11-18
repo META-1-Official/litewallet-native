@@ -17,6 +17,7 @@ import {
 } from '@react-navigation/stack';
 import DexModal from '../../components/DexMainModal';
 import DexFund from './DexFund';
+import DexRecive from './ReciveScreen';
 
 const Black = () => <Loader bgc="#000" />;
 
@@ -33,6 +34,9 @@ export type DexTabNavigationProp = BottomTabNavigationProp<DexDrawerParamList, '
 export type DexModalStackParamList = {
   __Tabs: undefined;
   __Modal: undefined;
+  DEX__Send: undefined;
+  DEX__Recive: undefined;
+  DEX__Convert: undefined;
 };
 export type DexModalStackNavigationProp = StackNavigationProp<DexModalStackParamList, '__Tabs'>;
 
@@ -59,10 +63,15 @@ const DexStack = () => {
         options={{ presentation: 'transparentModal' }}
         name="__Modal"
       />
+      <Stack.Screen component={Black} name="DEX__Send" />
+      <Stack.Screen component={DexRecive} name="DEX__Recive" />
+      <Stack.Screen component={Black} name="DEX__Convert" />
     </Stack.Navigator>
   );
 };
-const DexTabs = ({ navigation }: StackScreenProps<DexModalStackParamList>) => {
+
+export type DexSSP = StackScreenProps<DexModalStackParamList>;
+const DexTabs = ({ navigation }: DexSSP) => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({

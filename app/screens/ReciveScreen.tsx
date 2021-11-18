@@ -12,12 +12,11 @@ import {
   Share,
   Platform,
 } from 'react-native';
-import QRCode from 'qrcode';
 import { useAssetPicker } from '../components/AssetSelectModal';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { shadow } from '../utils';
-import { depositAddress } from '../utils/meta1Api';
+import { AddrT, getAddressForAccountAsset } from '../utils/meta1Api';
 import { SvgXml } from 'react-native-svg';
 import { useNavigation } from '@react-navigation/core';
 import { WalletNavigationProp } from './WalletScreen';
@@ -38,10 +37,7 @@ const Backdrop = () => (
 
 const INDICATOR_HEIGHT = 47;
 const INDICATOR_WIDTH = width * 0.8;
-interface AddrT {
-  qr: string;
-  addr: string;
-}
+
 const ReciveScreen: React.FC<{}> = () => {
   const nav = useNavigation<WalletNavigationProp>();
   const accountName = useStore(state => state.accountName);
@@ -50,19 +46,8 @@ const ReciveScreen: React.FC<{}> = () => {
   useEffect(() => {
     const fn = async () => {
       if (selected) {
-        const start = new Date();
-        console.log({ start });
-        const addr = await depositAddress(accountName, selected.symbol);
-
-        const addrTime = new Date();
-
-        console.log(addr, `addr Time: ${addrTime.getTime() - start.getTime()}ms`);
-
-        const qr = await QRCode.toString(addr);
-
-        const end = new Date();
-        console.log(`overall Time: ${end.getTime() - start.getTime()}ms`);
-        setRealAddress({ qr, addr });
+        const res = await getAddressForAccountAsset(accountName, selected.symbol);
+        setRealAddress(res);
       }
     };
     fn();
