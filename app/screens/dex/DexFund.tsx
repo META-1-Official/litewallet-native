@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dimensions, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import { Circle } from 'react-native-svg';
 import { Grid, LineChart } from 'react-native-svg-charts';
@@ -62,8 +62,13 @@ const Chart = ({ data }: { data: number[] }) => {
 const DexFund: React.FC = () => {
   const [curInterval, setCurInterval] = useState<GRAPH_INTERAVAL_KEYS>('1D');
   const [showZeroBalance, setShowZeroBalacnce] = useState(false);
+  const [chartData, setChartData] = useState<number[]>([0, 0]);
 
-  const chartData = createMockChartData(capArrayLen(GRAPH_INTERAVAL[curInterval] * 12));
+  useEffect(() => {
+    const dat = createMockChartData(capArrayLen(GRAPH_INTERAVAL[curInterval] * 12));
+    setChartData(dat);
+  }, [curInterval]);
+
   const accountAssets = useAssets();
   if (!accountAssets) {
     return <Loader bgc="#000" />;
