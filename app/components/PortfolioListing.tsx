@@ -8,37 +8,75 @@ const { width } = Dimensions.get('screen');
 interface Props {
   showZeroBallance: boolean;
   accountBallance: AccountBalanceT | null;
+  colors?: {
+    background?: string;
+    stripe?: string;
+    textPrimary?: string;
+    textSecondary?: string;
+  };
+  usdPrimary?: boolean;
 }
-const PortfolioLising: React.FC<Props> = ({ showZeroBallance, accountBallance }) => {
+const PortfolioLising: React.FC<Props> = ({
+  showZeroBallance,
+  accountBallance,
+  colors,
+  usdPrimary,
+}) => {
+  const defaultColors: typeof colors = {
+    background: '#fff',
+    stripe: grey200,
+    textPrimary: '#000',
+    textSecondary: grey600,
+  };
+  const curColor = colors || defaultColors;
   const protfolioAssets = accountBallance!.assetsWithBalance;
   const assets = showZeroBallance ? protfolioAssets : protfolioAssets.filter(e => e.amount > 0);
   const storted = assets.sort((a, b) => b.total_value - a.total_value);
 
   const renderRow = (e: AssetBalanceT, i: number) => {
-    const backgroundColor = { backgroundColor: i % 2 !== 0 ? grey200 : '#fff' };
-    const primaryString =
+    const backgroundColor = {
+      backgroundColor: i % 2 !== 0 ? curColor.stripe : curColor.background,
+    };
+    const _primaryString =
       e.amount === 0 || e.amount.toString().length > 8 ? e.amount : e.amount.toFixed(6);
+    const primaryString = (
+      <Text
+        style={[
+          usdPrimary ? styles.textSecondary : styles.textPrimaty,
+          { color: curColor.textPrimary },
+        ]}
+      >
+        {_primaryString}
+      </Text>
+    );
     const secondaryString =
       e.amount === 0 ? null : (
-        <Text style={styles.textSecondary}>US$ {e.total_value.toFixed(2)}</Text>
+        <Text
+          style={[
+            usdPrimary ? styles.textPrimaty : styles.textSecondary,
+            { color: curColor.textSecondary },
+          ]}
+        >
+          US$ {e.total_value.toFixed(2)}
+        </Text>
       );
 
     return (
       <View key={`CoinBalance_${i}`} style={[styles.portfolioRow, backgroundColor]}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Image style={styles.coinIcon} source={e._asset.icon} />
-          <Text style={styles.textPrimaty}> {e.symbol}</Text>
+          <Text style={[styles.textPrimaty, { color: curColor.textPrimary }]}> {e.symbol}</Text>
         </View>
         <View style={{ alignItems: 'flex-end' }}>
-          <Text style={styles.textPrimaty}>{primaryString}</Text>
-          {secondaryString}
+          {usdPrimary ? secondaryString : primaryString}
+          {usdPrimary ? primaryString : secondaryString}
         </View>
       </View>
     );
   };
 
   return (
-    <View style={{ flex: 1, flexGrow: 1, backgroundColor: '#fff' }}>
+    <View style={{ flex: 1, flexGrow: 1, backgroundColor: curColor.background }}>
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
         {storted && storted.map(renderRow)}
       </ScrollView>

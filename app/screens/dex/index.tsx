@@ -16,6 +16,7 @@ import {
   StackScreenProps,
 } from '@react-navigation/stack';
 import DexModal from '../../components/DexMainModal';
+import DexFund from './DexFund';
 
 const Black = () => <Loader bgc="#000" />;
 
@@ -104,7 +105,7 @@ const DexTabs = ({ navigation }: StackScreenProps<DexModalStackParamList>) => {
         component={Black}
       />
       <Tab.Screen name="DEX__Orders" component={Black} />
-      <Tab.Screen name="DEX__Fund" component={Black} />
+      <Tab.Screen name="DEX__Fund" component={DexFund} />
     </Tab.Navigator>
   );
 };

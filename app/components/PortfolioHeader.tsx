@@ -18,7 +18,7 @@ interface ProfitIndicatorProps {
   change: number;
 }
 
-const ProfitIndicator: React.FC<ProfitIndicatorProps> = ({ change }) => {
+export const ProfitIndicator: React.FC<ProfitIndicatorProps> = ({ change }) => {
   return (
     <View
       style={{
