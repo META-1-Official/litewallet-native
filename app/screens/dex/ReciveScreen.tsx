@@ -126,7 +126,7 @@ const AddressView: React.FC<AddressViewProps> = ({ asset }) => {
           </View>
         </View>
       </View>
-      <TouchableOpacity onPress={() => Share.share({ message: compoundAddress.addr  })}>
+      <TouchableOpacity onPress={() => Share.share({ message: compoundAddress.addr })}>
         <View
           style={{
             backgroundColor: colors.BrandYellow,

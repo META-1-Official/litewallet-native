@@ -18,6 +18,7 @@ import {
 import DexModal from '../../components/DexMainModal';
 import DexFund from './DexFund';
 import DexRecive from './ReciveScreen';
+import DexSwapScreen from './SwapScreen';
 
 const Black = () => <Loader bgc="#000" />;
 
@@ -65,7 +66,7 @@ const DexStack = () => {
       />
       <Stack.Screen component={Black} name="DEX__Send" />
       <Stack.Screen component={DexRecive} name="DEX__Recive" />
-      <Stack.Screen component={Black} name="DEX__Convert" />
+      <Stack.Screen component={DexSwapScreen} name="DEX__Convert" />
     </Stack.Navigator>
   );
 };
