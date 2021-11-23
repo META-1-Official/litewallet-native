@@ -128,11 +128,11 @@ const DexSwapScreen: React.FC<DexSSP> = props => {
           }
         })();
 
-        showLoader();
-
         if (pass === null) {
           return;
         }
+
+        showLoader();
 
         await swapWithPassword(
           {
@@ -143,7 +143,7 @@ const DexSwapScreen: React.FC<DexSSP> = props => {
           selectedAssetB!.symbol,
           Number(bAmt),
         );
-        setTimeout(() => fetchAssets(accountName), 3000);
+        setTimeout(() => fetchAssets(accountName), 15_000);
         await fetchAssets(accountName);
         hideLoader();
         show(

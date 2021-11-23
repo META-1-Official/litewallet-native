@@ -277,11 +277,11 @@ const TradeScreen: React.FC = () => {
                   }
                 })();
 
-                showLoader();
-
                 if (pass === null) {
                   return;
                 }
+
+                showLoader();
 
                 await swapWithPassword(
                   {
@@ -292,7 +292,7 @@ const TradeScreen: React.FC = () => {
                   selectedAssetB!.symbol,
                   Number(bAmt),
                 );
-                setTimeout(() => fetchAssets(accountName), 3000);
+                setTimeout(() => fetchAssets(accountName), 15_000);
                 await fetchAssets(accountName);
                 hideLoader();
                 show(
