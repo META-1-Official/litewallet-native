@@ -1,4 +1,8 @@
-import { BottomTabNavigationProp, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {
+  BottomTabNavigationProp,
+  BottomTabScreenProps,
+  createBottomTabNavigator,
+} from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import React from 'react';
@@ -20,6 +24,7 @@ import DexFund from './DexFund';
 import DexRecive from './ReciveScreen';
 import DexSwapScreen from './SwapScreen';
 import DexSend from './SendScreen';
+import AssetViewStack from './AssetView';
 
 const Black = () => <Loader bgc="#000" />;
 
@@ -39,6 +44,7 @@ export type DexModalStackParamList = {
   DEX__Send: undefined;
   DEX__Recive: undefined;
   DEX__Convert: undefined;
+  DEX__AssetViewStack: undefined;
 };
 export type DexModalStackNavigationProp = StackNavigationProp<DexModalStackParamList, '__Tabs'>;
 
@@ -68,11 +74,13 @@ const DexStack = () => {
       <Stack.Screen component={DexSend} name="DEX__Send" />
       <Stack.Screen component={DexRecive} name="DEX__Recive" />
       <Stack.Screen component={DexSwapScreen} name="DEX__Convert" />
+      <Stack.Screen component={AssetViewStack} name="DEX__AssetViewStack" />
     </Stack.Navigator>
   );
 };
 
 export type DexSSP = StackScreenProps<DexModalStackParamList>;
+export type DexTNP = BottomTabScreenProps<DexTabParamList>;
 const DexTabs = ({ navigation }: DexSSP) => {
   return (
     <Tab.Navigator
