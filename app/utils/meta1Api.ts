@@ -238,6 +238,19 @@ export async function getHistoryForAsset(assetA: string) {
   return prices;
 }
 
+export async function getTradesForAssetPair(assetA: string, assetB: string) {
+  const history = await meta1dex.db.get_trade_history(
+    assetB,
+    assetA,
+    saitizeISOString(new Date().toISOString()),
+    '2021-01-01T00:00:00.000',
+    100,
+  );
+  return history
+    .map(e => ({ ...e, date: new Date(e.date) }))
+    .sort((a, b) => b.date.getTime() - a.date.getTime());
+}
+
 export interface AddrT {
   qr: string;
   addr: string;

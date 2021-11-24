@@ -24,7 +24,7 @@ import DexFund from './DexFund';
 import DexRecive from './ReciveScreen';
 import DexSwapScreen from './SwapScreen';
 import DexSend from './SendScreen';
-import AssetViewStack from './AssetView';
+import AssetViewStack from './AssetView/AssetView';
 
 const Black = () => <Loader bgc="#000" />;
 

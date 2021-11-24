@@ -1,4 +1,7 @@
-import { BottomTabHeaderProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {
+  BottomTabScreenProps,
+  createBottomTabNavigator,
+} from '@react-navigation/bottom-tabs';
 import {
   createStackNavigator,
   StackNavigationProp,
@@ -9,12 +12,13 @@ import { Image, Platform, Pressable, SafeAreaView, Text, View } from 'react-nati
 import { ArrowLeft } from 'react-native-feather';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import create from 'zustand';
-import { DexSSP } from '.';
-import { logoAsset, SvgIcons } from '../../../assets';
-import Loader from '../../components/Loader';
-import { ProfitIndicator } from '../../components/PortfolioHeader';
-import { colors } from '../../styles/colors';
-import meta1dex from '../../utils/meta1dexTypes';
+import { DexSSP } from '..';
+import { logoAsset, SvgIcons } from '../../../../assets';
+import Loader from '../../../components/Loader';
+import { ProfitIndicator } from '../../../components/PortfolioHeader';
+import { colors } from '../../../styles/colors';
+import meta1dex from '../../../utils/meta1dexTypes';
+import Trades from './Trades';
 
 export type AssetViewTabParamList = {
   ASSET__Chart: undefined;
@@ -28,12 +32,14 @@ export type AssetViewModalStackParamList = {
   DEX__AssetView: undefined;
   DEX__AssetView__Modal: undefined;
 };
+
 export type DexModalStackNavigationProp = StackNavigationProp<
   AssetViewModalStackParamList,
   'DEX__AssetView'
 >;
 
 const Tab = createBottomTabNavigator<AssetViewTabParamList>();
+export type AssetViewTSP = BottomTabScreenProps<AssetViewTabParamList>;
 
 const Stack = createStackNavigator<AssetViewModalStackParamList>();
 
@@ -64,23 +70,28 @@ const AssetViewStack: React.FC<DexSSP> = () => {
     </Stack.Navigator>
   );
 };
-type Ticker = ReturnType<typeof meta1dex.db.get_ticker> extends Promise<infer U> ? U : never;
 
-const AssetViewHeader: React.FC<BottomTabHeaderProps> = ({ navigation }) => {
+type Ticker = ReturnType<typeof meta1dex.db.get_ticker> extends Promise<infer U> ? U : never;
+const screenWithHeader = (Child: any) => (props: AssetViewTSP) =>
+  (
+    <>
+      <AssetViewHeader {...props} />
+      <Child {...props} />
+    </>
+  );
+
+const AssetViewHeader: React.FC<AssetViewTSP> = ({ navigation }) => {
   const { assetA, assetB } = useAVStore(x => x);
   const [ticker, setTicker] = useState<Ticker | null>(null);
-  console.log(ticker);
+
   useEffect(() => {
     const fn = async () => {
       const _ = await meta1dex.db.get_ticker(assetB, assetA);
       setTicker(_);
-      // Forcing header re-render
-      navigation.setOptions({
-        [Math.floor(Math.random() * 1000)]: Math.floor(Math.random() * 1000),
-      });
     };
     fn();
   }, [assetA, assetB, navigation]);
+
   return (
     <SafeAreaView
       style={{
@@ -91,7 +102,7 @@ const AssetViewHeader: React.FC<BottomTabHeaderProps> = ({ navigation }) => {
         alignItems: 'center',
       }}
     >
-      <TouchableOpacity onPress={() => navigation.navigate('__Tabs')}>
+      <TouchableOpacity onPress={() => navigation.navigate<any>('__Tabs')}>
         <ArrowLeft width={32} height={32} stroke={colors.BrandYellow} />
       </TouchableOpacity>
       <Text
@@ -104,16 +115,19 @@ const AssetViewHeader: React.FC<BottomTabHeaderProps> = ({ navigation }) => {
         {assetA} / {assetB}
       </Text>
       <SvgIcons.FavoriteStar width={22} height={22} fill={colors.BrandYellow} />
-      <Text
-        style={{
-          fontSize: 20,
-          color: '#fff',
-          fontWeight: '500',
-        }}
-      >
-        {ticker?.latest.slice(0, 8)}
-      </Text>
-      <ProfitIndicator change={Number(ticker?.percent_change) || 0} />
+      <View style={{ flexDirection: 'row', marginLeft: 'auto' }}>
+        <Text
+          style={{
+            fontSize: 20,
+            color: (ticker?.percent_change || 0) > 0 ? '#00aa09' : '#c00f00',
+            fontWeight: '500',
+            marginHorizontal: 8,
+          }}
+        >
+          {ticker?.latest.slice(0, 8)}
+        </Text>
+        <ProfitIndicator change={Number(ticker?.percent_change) || 0} />
+      </View>
     </SafeAreaView>
   );
 };
@@ -125,7 +139,7 @@ const DexAssetView: React.FC<StackScreenProps<AssetViewModalStackParamList>> = (
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        header: AssetViewHeader,
+        headerShown: false,
         tabBarOptions: {
           showLable: false,
         },
@@ -168,8 +182,12 @@ const DexAssetView: React.FC<StackScreenProps<AssetViewModalStackParamList>> = (
         },
       })}
     >
-      <Tab.Screen initialParams={params} name="ASSET__Chart" component={Black} />
-      <Tab.Screen initialParams={params} name="ASSET__Trades" component={Black} />
+      <Tab.Screen initialParams={params} name="ASSET__Chart" component={screenWithHeader(Black)} />
+      <Tab.Screen
+        initialParams={params}
+        name="ASSET__Trades"
+        component={screenWithHeader(Trades)}
+      />
       <Tab.Screen
         initialParams={params}
         name="ASSET__BuySell"
@@ -183,12 +201,16 @@ const DexAssetView: React.FC<StackScreenProps<AssetViewModalStackParamList>> = (
         }}
         component={Black}
       />
-      <Tab.Screen initialParams={params} name="ASSET__Orders" component={Black} />
+      <Tab.Screen
+        initialParams={params}
+        name="ASSET__Orders"
+        component={screenWithHeader(Black)}
+      />
       <Tab.Screen
         initialParams={params}
         name="ASSET__MyOrders"
         options={{ title: 'My Orders' }}
-        component={Black}
+        component={screenWithHeader(Black)}
       />
     </Tab.Navigator>
   );
@@ -200,7 +222,7 @@ interface x {
   save: (a: string, b: string) => void;
 }
 
-const useAVStore = create<x>(set => ({
+export const useAVStore = create<x>(set => ({
   assetA: '',
   assetB: '',
   save: (a: string, b: string) => set({ assetA: a, assetB: b }),
