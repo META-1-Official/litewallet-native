@@ -281,7 +281,17 @@ interface iTradeHistorical {
   side1_account_id: string;
   side2_account_id: string;
 }
-
+export interface Order {
+  price: string;
+  quote: string;
+  base: string;
+}
+export interface OrderBook {
+  base: string;
+  quote: string;
+  bids: Order[];
+  asks: Order[];
+}
 export interface Meta1Module {
   connect: (connection?: string) => Promise<any>;
   disconnect: () => void;
@@ -305,6 +315,7 @@ export interface Meta1Module {
       startTime: string,
       limit: number,
     ) => Promise<iTradeHistorical[]>;
+    get_order_book: (assetA: string, assetB: string, limit: number) => Promise<OrderBook>;
   };
   subscribe: SubT_A | SubT_B | SubT_C;
   login: (accountName: string, password: string) => Promise<LoginRetT>;

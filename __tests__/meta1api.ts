@@ -4,6 +4,7 @@ import {
   fetchAccountBalances,
   fetchAllAssets,
   getHistoryForAsset,
+  getOrderBook,
   getTradesForAssetPair,
 } from '../app/utils/meta1Api';
 import Meta1 from '../app/utils/meta1dexTypes';
@@ -65,6 +66,12 @@ describe('Meta1 api tests', () => {
 
   it('Fetches trades history', async () => {
     const history = await getTradesForAssetPair('ETH', 'USDT');
-    console.log({ history });
+    expect(history).toBeTruthy();
+    expect(history.length).toBeLessThanOrEqual(100);
+  });
+
+  it('Fetches orders', async () => {
+    const asdf = await getOrderBook('ETH', 'USDT');
+    console.log(asdf);
   });
 });

@@ -271,6 +271,10 @@ export const useAssets = () => {
   return userAssets;
 };
 
+export async function getOrderBook(assetA: string, assetB: string) {
+  return await meta1dex.db.get_order_book(assetB, assetA, 50);
+}
+
 interface AssetsStore {
   userAssets: AccountBalanceT | null;
   fetchUserAssets: (accountName: string) => Promise<void>;
