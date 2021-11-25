@@ -27,7 +27,7 @@ export const Orders: React.FC<AssetViewTSP> = () => {
   }, [refreshing, assetA, assetB]);
 
   return (
-    <SafeAreaView style={{ height: '100%', backgroundColor: '#000' }}>
+    <SafeAreaView style={{ height: '100%', backgroundColor: '#000', padding: 12 }}>
       <ScrollView
         refreshControl={
           <RefreshControl
@@ -53,7 +53,6 @@ export const Orders: React.FC<AssetViewTSP> = () => {
                   fontVariant: ['tabular-nums'],
                 }}
               >
-                {' '}
                 VOLUME
               </Text>
               <Text
@@ -64,7 +63,6 @@ export const Orders: React.FC<AssetViewTSP> = () => {
                   fontVariant: ['tabular-nums'],
                 }}
               >
-                {' '}
                 PRICE
               </Text>
             </View>
@@ -82,7 +80,6 @@ export const Orders: React.FC<AssetViewTSP> = () => {
                 >
                   <Text
                     style={{
-                      marginLeft: 4,
                       fontSize: 15,
                       fontWeight: '500',
                       color: '#fff',
@@ -118,7 +115,6 @@ export const Orders: React.FC<AssetViewTSP> = () => {
                   fontVariant: ['tabular-nums'],
                 }}
               >
-                {' '}
                 PRICE
               </Text>
               <Text
@@ -129,12 +125,11 @@ export const Orders: React.FC<AssetViewTSP> = () => {
                   fontVariant: ['tabular-nums'],
                 }}
               >
-                {' '}
                 VOLUME
               </Text>
             </View>
             {orders &&
-              orders.asks.map((e, i) => (
+              orders.bids.map((e, i) => (
                 <View
                   style={{
                     flexDirection: 'row',
