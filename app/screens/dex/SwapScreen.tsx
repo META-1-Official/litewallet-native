@@ -143,7 +143,7 @@ const DexSwapScreen: React.FC<DexSSP> = props => {
           selectedAssetB!.symbol,
           Number(bAmt),
         );
-        setTimeout(() => fetchAssets(accountName), 15_000);
+        setTimeout(() => fetchAssets(accountName), 15000);
         await fetchAssets(accountName);
         hideLoader();
         show(
