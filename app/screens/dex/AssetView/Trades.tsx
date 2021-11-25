@@ -3,7 +3,8 @@ import { RefreshControl, SafeAreaView, ScrollView, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { colors } from '../../../styles/colors';
 import { getTradesForAssetPair } from '../../../utils/meta1Api';
-import { AssetViewTSP, useAVStore } from './AssetView';
+import { AssetViewTSP } from './AssetView';
+import { useAVStore } from './AssetViewStore';
 type TradesT = ReturnType<typeof getTradesForAssetPair> extends Promise<infer T> ? T : never;
 
 export const Trades: React.FC<AssetViewTSP> = () => {
@@ -34,6 +35,28 @@ export const Trades: React.FC<AssetViewTSP> = () => {
           />
         }
       >
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingVertical: 12,
+            backgroundColor: '#000',
+          }}
+        >
+          <Text
+            style={{
+              marginLeft: 24,
+              color: '#fff',
+              fontVariant: ['tabular-nums'],
+            }}
+          >
+            TIME
+          </Text>
+          <Text style={{ fontVariant: ['tabular-nums'], color: '#fff' }}>PRICE</Text>
+          <Text style={{ marginRight: 24, fontVariant: ['tabular-nums'], color: '#fff' }}>
+            VOLUME
+          </Text>
+        </View>
         {trades &&
           trades.map((e, i, arr) => {
             const clamp = Math.min(i + 1, arr.length - 1);
@@ -47,11 +70,11 @@ export const Trades: React.FC<AssetViewTSP> = () => {
                   paddingVertical: 12,
                   backgroundColor: lower ? '#061101' : '#1e0000',
                 }}
+                key={`Trade_${e.sequence}`}
               >
                 <Text
                   style={{
                     marginLeft: 24,
-                    width: 64,
                     color: '#fff',
                     fontVariant: ['tabular-nums'],
                   }}

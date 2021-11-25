@@ -13,7 +13,7 @@ import Loader from '../../components/Loader';
 import { getHistoryForAsset, useAssets } from '../../utils/meta1Api';
 import { LineChart, Grid } from 'react-native-svg-charts';
 import { DexTNP } from '.';
-import { dexAssetView } from './AssetView/AssetView';
+import { dexAssetView } from './AssetView/AssetViewStore';
 
 const { width } = Dimensions.get('screen');
 

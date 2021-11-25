@@ -1,7 +1,4 @@
-import {
-  BottomTabScreenProps,
-  createBottomTabNavigator,
-} from '@react-navigation/bottom-tabs';
+import { BottomTabScreenProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
   createStackNavigator,
   StackNavigationProp,
@@ -11,13 +8,14 @@ import React, { useEffect, useState } from 'react';
 import { Image, Platform, Pressable, SafeAreaView, Text, View } from 'react-native';
 import { ArrowLeft } from 'react-native-feather';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import create from 'zustand';
 import { DexSSP } from '..';
 import { logoAsset, SvgIcons } from '../../../../assets';
 import Loader from '../../../components/Loader';
 import { ProfitIndicator } from '../../../components/PortfolioHeader';
 import { colors } from '../../../styles/colors';
 import meta1dex from '../../../utils/meta1dexTypes';
+import { useAVStore } from './AssetViewStore';
+import Orders from './Orders';
 import Trades from './Trades';
 
 export type AssetViewTabParamList = {
@@ -204,7 +202,7 @@ const DexAssetView: React.FC<StackScreenProps<AssetViewModalStackParamList>> = (
       <Tab.Screen
         initialParams={params}
         name="ASSET__Orders"
-        component={screenWithHeader(Black)}
+        component={screenWithHeader(Orders)}
       />
       <Tab.Screen
         initialParams={params}
@@ -216,22 +214,4 @@ const DexAssetView: React.FC<StackScreenProps<AssetViewModalStackParamList>> = (
   );
 };
 
-interface x {
-  assetA: string;
-  assetB: string;
-  save: (a: string, b: string) => void;
-}
-
-export const useAVStore = create<x>(set => ({
-  assetA: '',
-  assetB: '',
-  save: (a: string, b: string) => set({ assetA: a, assetB: b }),
-}));
-
-// Xueta peredelivay
-export const dexAssetView = (nav: any, assetA: string, assetB = 'USDT') => {
-  const { save } = useAVStore.getState();
-  save(assetA, assetB);
-  nav.navigate('DEX__AssetViewStack');
-};
 export default AssetViewStack;
