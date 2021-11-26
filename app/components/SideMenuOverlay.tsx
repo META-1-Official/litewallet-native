@@ -37,6 +37,7 @@ const ListItem: React.FC<ListItemProps> = ({ title, icon, onPress }) => {
 
 export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
   const accountName = useStore(state => state.accountName);
+  const logout = useStore(state => state.logout);
   return (
     <SafeAreaView style={{ padding: 12 }}>
       <View>
@@ -85,8 +86,15 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
           marginVertical: 24,
         }}
       >
-        <ListItem title="Lite Wallet" icon={SvgIcons.Wallet} />
-        <ListItem title="DEX" icon={SvgIcons.Trade} />
+        <ListItem
+          onPress={() => {
+            navigation.closeDrawer();
+            navigation.getParent()?.navigate('Wallet');
+          }}
+          title="Lite Wallet"
+          icon={SvgIcons.Wallet}
+        />
+        <ListItem onPress={() => navigation.closeDrawer()} title="DEX" icon={SvgIcons.Trade} />
         <ListItem title="Buy / Sell" icon={CreditCard} />
         <ListItem title="Invite Friends" icon={UserPlus} />
         <ListItem title="Backing Assets" icon={PieChart} />
@@ -94,7 +102,7 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
         <ListItem title="Help" icon={HelpCircle} />
       </View>
       <TouchableOpacity
-        onPress={() => {}}
+        onPress={() => logout()}
         style={{
           margin: 4,
           marginTop: 18,
