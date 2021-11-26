@@ -170,31 +170,3 @@ export const Orders: React.FC<AssetViewTSP> = () => {
 };
 
 export default Orders;
-
-// <View
-//                 style={{
-//                   flexDirection: 'row',
-//                   justifyContent: 'space-between',
-//                   paddingVertical: 12,
-//                   backgroundColor: '#000',
-//                 }}
-//                 key={`OrderRow_${i}`}
-//               >
-//                 <Text
-//                   style={{
-//                     marginLeft: 24,
-//                     color: '#fff',
-//                     fontVariant: ['tabular-nums'],
-//                   }}
-//                 >
-//                   {e.date.toTimeString().split(' ')[0]}
-//                 </Text>
-//                 <Text
-//                   style={{ fontVariant: ['tabular-nums'], color: lower ? '#029d07' : '#fc0001' }}
-//                 >
-//                   {e.price.slice(0, 8)}
-//                 </Text>
-//                 <Text style={{ fontSize: 15, fontWeight: '500', marginRight: 24, fontVariant: ['tabular-nums'], color: '#fff' }}>
-//                   {e.amount.slice(0, 12)}
-//                 </Text>
-//               </View>

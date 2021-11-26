@@ -114,7 +114,7 @@ const AssetViewHeader: React.FC<AssetViewTSP> = ({ navigation }) => {
         {assetA} / {assetB}
       </Text>
       <SvgIcons.FavoriteStar width={22} height={22} fill={colors.BrandYellow} />
-      <View style={{ flexDirection: 'row', marginLeft: 'auto'}}>
+      <View style={{ flexDirection: 'row', marginLeft: 'auto' }}>
         <Text
           style={{
             fontSize: 20,
