@@ -136,7 +136,7 @@ type SubT_A = (eventType: EventT, callbackFn: () => void) => void;
 type SubT_B = (eventType: EventT, callbackFn: (x: object) => void) => void;
 type SubT_C = (eventType: EventT, callbackFn: (x: any[]) => void) => void;
 
-interface Ticker {
+export interface Ticker {
   time: string;
   base: string;
   quote: string;
@@ -148,7 +148,7 @@ interface Ticker {
   quote_volume: string;
 }
 
-interface LoginRetT {
+export interface LoginRetT {
   setFeeAsset: (...args: any[]) => any; // Generic Fn
   setMemoKey: (...args: any[]) => any; // Generic Fn
   broadcast: (...args: any[]) => any; // Generic Fn
@@ -272,7 +272,7 @@ interface LoginRetT {
     total_in_collateral: number;
   };
 }
-interface iTradeHistorical {
+export interface iTradeHistorical {
   sequence: number;
   date: string;
   price: string;

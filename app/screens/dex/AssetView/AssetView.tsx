@@ -13,8 +13,9 @@ import { logoAsset, SvgIcons } from '../../../../assets';
 import Loader from '../../../components/Loader';
 import { ProfitIndicator } from '../../../components/PortfolioHeader';
 import { colors } from '../../../styles/colors';
-import meta1dex from '../../../utils/meta1dexTypes';
+import meta1dex, { Ticker } from '../../../utils/meta1dexTypes';
 import { useAVStore } from './AssetViewStore';
+import AssetViewModal from './Modal';
 import Orders from './Orders';
 import Trades from './Trades';
 
@@ -40,6 +41,7 @@ const Tab = createBottomTabNavigator<AssetViewTabParamList>();
 export type AssetViewTSP = BottomTabScreenProps<AssetViewTabParamList>;
 
 const Stack = createStackNavigator<AssetViewModalStackParamList>();
+export type AssetViewSSP = StackScreenProps<AssetViewModalStackParamList>;
 
 const Name2Icon: Record<keyof AssetViewTabParamList, any> = {
   ASSET__Chart: SvgIcons.Chart,
@@ -50,7 +52,6 @@ const Name2Icon: Record<keyof AssetViewTabParamList, any> = {
 };
 
 const Black = () => <Loader bgc="#000" />;
-const AssetViewModal = Black;
 
 const AssetViewStack: React.FC<DexSSP> = () => {
   return (
@@ -69,7 +70,6 @@ const AssetViewStack: React.FC<DexSSP> = () => {
   );
 };
 
-type Ticker = ReturnType<typeof meta1dex.db.get_ticker> extends Promise<infer U> ? U : never;
 const screenWithHeader = (Child: any) => (props: AssetViewTSP) =>
   (
     <>
