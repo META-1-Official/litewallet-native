@@ -26,6 +26,7 @@ export const Trades: React.FC<AssetViewTSP> = () => {
   return (
     <SafeAreaView style={{ height: '100%', backgroundColor: '#000' }}>
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 200 }}
         refreshControl={
           <RefreshControl
             colors={[colors.BrandYellow]}
