@@ -86,7 +86,7 @@ export const Orders: React.FC<AssetViewTSP> = () => {
                       fontVariant: ['tabular-nums'],
                     }}
                   >
-                    {e.quote}
+                    {e.quote.slice(0, 8)}
                   </Text>
                   <Text
                     style={{
@@ -96,7 +96,7 @@ export const Orders: React.FC<AssetViewTSP> = () => {
                       fontVariant: ['tabular-nums'],
                     }}
                   >
-                    {e.price}
+                    {e.price.slice(0, 8)}
                   </Text>
                 </View>
               ))}
@@ -148,7 +148,7 @@ export const Orders: React.FC<AssetViewTSP> = () => {
                       fontVariant: ['tabular-nums'],
                     }}
                   >
-                    {e.price}
+                    {e.price.slice(0, 8)}
                   </Text>
                   <Text
                     style={{
@@ -158,7 +158,7 @@ export const Orders: React.FC<AssetViewTSP> = () => {
                       fontVariant: ['tabular-nums'],
                     }}
                   >
-                    {e.quote}
+                    {e.quote.slice(0, 8)}
                   </Text>
                 </View>
               ))}
