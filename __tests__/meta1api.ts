@@ -6,8 +6,11 @@ import {
   getHistoryForAsset,
   getOrderBook,
   getTradesForAssetPair,
+  parseHistoryEntry,
   placeLimitOrder,
+  resolveObjectId,
 } from '../app/utils/meta1Api';
+import meta1dex from '../app/utils/meta1dexTypes';
 import Meta1 from '../app/utils/meta1dexTypes';
 
 jest.mock('react-native-encrypted-storage');
@@ -73,7 +76,7 @@ describe('Meta1 api tests', () => {
 
   it('Fetches orders', async () => {
     const asdf = await getOrderBook('ETH', 'USDT');
-    console.log(asdf);
+    expect(asdf).toBeTruthy();
   });
 
   it('Places sell order, real slow', async () => {
@@ -103,4 +106,16 @@ describe('Meta1 api tests', () => {
 
     console.log(res);
   }, 30000);
+
+  it('Fetch account histroy', async () => {
+    const ops = await meta1dex.history.get_account_history('kj-test2', '1.11.0', 10, '1.11.0');
+    const last = ops.at(-1);
+
+    last.__ID = resolveObjectId(last.id);
+    console.log('result resolved', resolveObjectId(last.result[1]));
+    console.log(last);
+
+    const parsed = parseHistoryEntry(last.op, last.result);
+    console.log(parsed);
+  });
 });

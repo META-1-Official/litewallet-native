@@ -306,6 +306,7 @@ export interface OrderBook {
   bids: Order[];
   asks: Order[];
 }
+export type LenPrefixedArray<T> = [number, ...T[]];
 export interface Meta1Module {
   connect: (connection?: string) => Promise<any>;
   disconnect: () => void;
@@ -330,6 +331,9 @@ export interface Meta1Module {
       limit: number,
     ) => Promise<iTradeHistorical[]>;
     get_order_book: (assetA: string, assetB: string, limit: number) => Promise<OrderBook>;
+  };
+  history: {
+    get_account_history: (account: string, bleh: string, limit: number, blah: string) => any;
   };
   subscribe: SubT_A | SubT_B | SubT_C;
   login: (accountName: string, password: string) => Promise<LoginRetT>;

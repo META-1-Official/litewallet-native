@@ -1,8 +1,19 @@
+import assert from 'assert';
+import { zipObject } from 'lodash';
 import QRCode from 'qrcode';
 import create from 'zustand';
 import config from '../config';
 import { useStore } from '../store';
-import { default as Meta1, default as meta1dex, iAsset, iBalance } from './meta1dexTypes';
+import {
+  default as Meta1,
+  default as meta1dex,
+  iAsset,
+  iBalance,
+  LenPrefixedArray,
+} from './meta1dexTypes';
+
+// Number of miliseconds in one year
+const YY = 3.154e10;
 
 const setLoading = useStore.getState().setLoading;
 const logout = useStore.getState().logout;
@@ -167,7 +178,7 @@ export const swapWithPassword: swapWPassSig = async (accountInfo, from, to, amou
     amount,
     pair.lowest_ask,
     false, // whatever
-    new Date('12/12/2021'), // idk
+    new Date(new Date().getTime() + YY), // idk
   );
   console.log(buyResult);
   return buyResult;
@@ -212,7 +223,7 @@ export const placeLimitOrder = async (accountInfo: AccountWithPassword, orderInf
     orderInfo.amount,
     orderInfo.price,
     false, // whatever
-    new Date('12/12/2021'), // idk
+    new Date(new Date().getTime() + YY), // idk
   );
   return sellResult;
 };
@@ -317,3 +328,69 @@ useStore.subscribe(
   },
   state => state.authorized,
 );
+
+const ObjectIDs = {
+  account: '1.2.0',
+  asset: '1.3.0',
+  force_settlement: '1.4.0',
+  committee_member: '1.5.0',
+  witness: '1.6.0',
+  limit_order: '1.7.0',
+  call_order: '1.8.0',
+  proposal: '1.10.0',
+  operation_history: '1.11.0',
+  withdraw_permission: '1.12.0',
+  vesting_balance: '1.13.0',
+  worker: '1.14.0',
+  balance: '1.15.0',
+  htlc: '1.16.0',
+  ticket: '1.18.0',
+  liquidity_pool: '1.19.0',
+  global_property: '2.0.0',
+  dynamic_global_property: '2.1.0',
+  asset_dynamic_data: '2.3.0',
+  asset_bitasset_data: '2.4.0',
+  account_balance: '2.5.0',
+  account_statistics: '2.6.0',
+  transaction_history: '2.7.0',
+  block_summary: '2.8.0',
+  account_transaction_history: '2.9.0',
+  blinded_balance: '2.10.0',
+  chain_property: '2.11.0',
+  witness_schedule: '2.12.0',
+  budget_record: '2.13.0',
+  special_authority: '2.14.0',
+  buyback: '2.15.0',
+  fba_accumulator: '2.16.0',
+  collateral_bid: '2.17.0',
+};
+
+const insideOut = zipObject(Object.values(ObjectIDs), Object.keys(ObjectIDs));
+
+export function resolveObjectId(id: string) {
+  const tmp = id.match(/\d\.\d{1,2}\./);
+
+  if (!tmp) {
+    return;
+  }
+
+  const [slice] = tmp;
+  const search = slice + '0';
+
+  return insideOut[search];
+}
+
+export const parseHistoryEntry = (
+  op: LenPrefixedArray<any>,
+  resultArr: LenPrefixedArray<string>,
+) => {
+  const [opLen, ...restOp] = op;
+  const [resultsLen, ...restResults] = resultArr;
+
+  assert(opLen === resultsLen, 'Results type length does not mathch ops length');
+
+  return zipObject(
+    restResults.map(e => resolveObjectId(e)!),
+    restOp,
+  );
+};
