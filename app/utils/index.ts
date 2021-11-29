@@ -152,6 +152,14 @@ Array.prototype.at = function (index: number) {
   return this[index];
 };
 
+export const Timeout = (fn: Promise<any>, message: string) =>
+  Promise.race([
+    fn,
+    new Promise((resolve, reject) =>
+      setTimeout(() => reject('Promise timedout: ' + message), 10000),
+    ),
+  ]);
+
 /** Not exactly deepEquals but good enought */
 export const jsonEquals = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
 

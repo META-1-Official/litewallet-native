@@ -3,8 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { Keyboard, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Minus, Plus } from 'react-native-feather';
 import { SvgIcons } from '../../../../assets';
+import { useStore } from '../../../store';
 import { colors } from '../../../styles/colors';
-import { useAssets } from '../../../utils/meta1Api';
+import { catchError, Timeout } from '../../../utils';
+import { placeLimitOrder, useAssets } from '../../../utils/meta1Api';
 import meta1dex from '../../../utils/meta1dexTypes';
 import { AssetViewSSP } from './AssetView';
 import { useAVStore } from './AssetViewStore';
@@ -111,6 +113,9 @@ const TotalRow: React.FC<{ symbol: string; set: (n: number) => void }> = ({ symb
   );
 };
 const BuyTab: React.FC = () => {
+  const accountName = useStore(state => state.accountName);
+  const password = useStore(state => state.password);
+
   const { assetA, assetB } = useAVStore(s => s);
 
   const [price, setPrice] = useState(0);
@@ -141,7 +146,22 @@ const BuyTab: React.FC = () => {
           setAmount(n / price);
         }}
       />
-      <TouchableOpacity onPress={() => {}}>
+      <TouchableOpacity
+        onPress={() =>
+          Timeout(
+            placeLimitOrder(
+              { accountName, password },
+              {
+                toGet: assetA,
+                toGive: assetB,
+                price,
+                amount,
+              },
+            ),
+            'placeLimitOrder - Buy',
+          )
+        }
+      >
         <View
           style={{
             backgroundColor: colors.BrandYellow,
@@ -159,6 +179,9 @@ const BuyTab: React.FC = () => {
 };
 
 const SellTab: React.FC = () => {
+  const accountName = useStore(state => state.accountName);
+  const password = useStore(state => state.password);
+
   const { assetA, assetB } = useAVStore(s => s);
 
   const [price, setPrice] = useState(0);
@@ -189,7 +212,25 @@ const SellTab: React.FC = () => {
         }}
       />
       <InputRow title={`TOTAL | ${assetB}`} value={total} onChange={setTotal} />
-      <TouchableOpacity onPress={() => {}}>
+      <TouchableOpacity
+        onPress={() =>
+          catchError(
+            async () =>
+              await Timeout(
+                placeLimitOrder(
+                  { accountName, password },
+                  {
+                    toGet: assetB,
+                    toGive: assetA,
+                    price,
+                    amount,
+                  },
+                ),
+                'placeLimitOrder - Sell',
+              ),
+          )
+        }
+      >
         <View
           style={{
             backgroundColor: colors.BrandYellow,

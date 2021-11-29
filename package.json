@@ -5,6 +5,7 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios --simulator=\"iPhone 11 Pro\"",
+    "ios:clean": "yarn clean; yarn ios",
     "start": "react-native start",
     "xcode": "xed -b ios",
     "test": "jest",
