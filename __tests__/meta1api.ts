@@ -6,6 +6,7 @@ import {
   getHistoryForAsset,
   getOrderBook,
   getTradesForAssetPair,
+  placeLimitOrder,
 } from '../app/utils/meta1Api';
 import Meta1 from '../app/utils/meta1dexTypes';
 
@@ -74,4 +75,32 @@ describe('Meta1 api tests', () => {
     const asdf = await getOrderBook('ETH', 'USDT');
     console.log(asdf);
   });
+
+  it('Places sell order, real slow', async () => {
+    const accountInfo = {
+      accountName: 'kj-test2',
+      password: 'P5KFSVTSJDmjPFWy51gfpskdxUJfUVXtVVAhz1q7TBqW2imhH4C1',
+    };
+
+    const account = await Meta1.login(accountInfo.accountName, accountInfo.password);
+    const assets = await fetchAllAssets();
+
+    const orders = await account.orders();
+    for (const order of orders) {
+      console.log(order.id);
+      console.log(order.sell_price);
+      const base = assets.find(e => e.id === order.sell_price.base.asset_id)?.symbol;
+      const quote = assets.find(e => e.id === order.sell_price.quote.asset_id)?.symbol;
+      console.log({ base, quote });
+    }
+
+    const res = await placeLimitOrder(accountInfo, {
+      toGet: 'USDT',
+      toGive: 'META1',
+      amount: 0.01,
+      price: 1337,
+    });
+
+    console.log(res);
+  }, 30000);
 });

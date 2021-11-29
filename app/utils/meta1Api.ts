@@ -196,6 +196,27 @@ export const sendWithPassword: sendWithPasswordSig = async (accountInfo, sendInf
   return sendResult;
 };
 
+type OrderInfoT = {
+  toGive: string;
+  toGet: string;
+  amount: number;
+  price: number;
+};
+
+export const placeLimitOrder = async (accountInfo: AccountWithPassword, orderInfo: OrderInfoT) => {
+  const account = await Meta1.login(accountInfo.accountName, accountInfo.password);
+  console.log('login', account);
+  const sellResult = await account.sell(
+    orderInfo.toGive,
+    orderInfo.toGet,
+    orderInfo.amount,
+    orderInfo.price,
+    false, // whatever
+    new Date('12/12/2021'), // idk
+  );
+  return sellResult;
+};
+
 export const depositAddress = async (accountName: string, asset: string) => {
   const res = await fetch(`https://gateway.api.meta1.io/api/wallet/init/${asset}`, {
     credentials: 'omit',
@@ -255,11 +276,13 @@ export interface AddrT {
   qr: string;
   addr: string;
 }
+
 export async function getAddressForAccountAsset(accountName: string, symbol: string) {
   const addr = await depositAddress(accountName, symbol);
   const qr = await QRCode.toString(addr);
   return { qr, addr };
 }
+
 export const useAssets = () => {
   const accountName = useStore(state => state.accountName);
   const userAssets = useAssetsStore(state => state.userAssets);

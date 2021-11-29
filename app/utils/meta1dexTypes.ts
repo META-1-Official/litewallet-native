@@ -155,9 +155,23 @@ export interface LoginRetT {
   sendOperation: (...args: any[]) => any; // Generic Fn
   balances: (...args: any[]) => any; // Generic Fn
   buyOperation: (...args: any[]) => any; // Generic Fn
-  buy: (...args: any[]) => any; // Generic Fn
+  buy: (
+    buySymbol: string,
+    baseSymbol: string,
+    amount: number | string,
+    price: number | string,
+    fill_or_kill: boolean,
+    expire: string | Date,
+  ) => any; // Generic Fn
   sellOperation: (...args: any[]) => any; // Generic Fn
-  sell: (...args: any[]) => any; // Generic Fn
+  sell: (
+    sellSymbol: string,
+    baseSymbol: string,
+    amount: number | string,
+    price: number | string,
+    fill_or_kill: boolean,
+    expire: string | Date,
+  ) => any; // Generic Fn
   orders: (...args: any[]) => any; // Generic Fn
   getOrder: (...args: any[]) => any; // Generic Fn
   cancelOrderOperation: (...args: any[]) => any; // Generic Fn
