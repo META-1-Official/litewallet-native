@@ -1,0 +1,279 @@
+soyboy :: coding/meta/nativeapp ‹master› » yarn meta1dex
+yarn run v1.22.15
+$ /Users/soyboy/coding/meta/nativeapp/node_modules/.bin/meta1dex
+> WebSocket status: open
+Connected to API node: wss://api.meta1.io/ws
+
+> await Meta1.history.get_account_history('kj-test2', '1.11.0', 2, '1.11.0' )
+[
+  {
+    id: '1.11.26733557',
+    op: [ 1, [Object] ],
+    result: [ 1, '1.7.8556596' ],
+    block_num: 8505262,
+    trx_in_block: 0,
+    op_in_trx: 0,
+    virtual_op: 0
+  },
+  {
+    id: '1.11.26722332',
+    op: [ 2, [Object] ],
+    result: [ 2, [Object] ],
+    block_num: 8502441,
+    trx_in_block: 11,
+    op_in_trx: 0,
+    virtual_op: 0
+  }
+]
+> x = await Meta1.history.get_account_history('kj-test2', '1.11.0', 2, '1.11.0' )
+[
+  {
+    id: '1.11.26733557',
+    op: [ 1, [Object] ],
+    result: [ 1, '1.7.8556596' ],
+    block_num: 8505262,
+    trx_in_block: 0,
+    op_in_trx: 0,
+    virtual_op: 0
+  },
+  {
+    id: '1.11.26722332',
+    op: [ 2, [Object] ],
+    result: [ 2, [Object] ],
+    block_num: 8502441,
+    trx_in_block: 11,
+    op_in_trx: 0,
+    virtual_op: 0
+  }
+]
+> x = await Meta1.history.get_account_history('kj-test2', '1.11.0', 20, '1.11.0' )
+[
+  {
+    id: '1.11.26733557',
+    op: [ 1, [Object] ],
+    result: [ 1, '1.7.8556596' ],
+    block_num: 8505262,
+    trx_in_block: 0,
+    op_in_trx: 0,
+    virtual_op: 0
+  },
+  {
+    id: '1.11.26722332',
+    op: [ 2, [Object] ],
+    result: [ 2, [Object] ],
+    block_num: 8502441,
+    trx_in_block: 11,
+    op_in_trx: 0,
+    virtual_op: 0
+  },
+  {
+    id: '1.11.26722302',
+    op: [ 1, [Object] ],
+    result: [ 1, '1.7.8552668' ],
+    block_num: 8502439,
+    trx_in_block: 2,
+    op_in_trx: 0,
+    virtual_op: 0
+  },
+  {
+    id: '1.11.26714632',
+    op: [ 2, [Object] ],
+    result: [ 2, [Object] ],
+    block_num: 8500680,
+    trx_in_block: 0,
+    op_in_trx: 0,
+    virtual_op: 0
+  },
+  {
+    id: '1.11.26714602',
+    op: [ 1, [Object] ],
+    result: [ 1, '1.7.8549901' ],
+    block_num: 8500672,
+    trx_in_block: 0,
+    op_in_trx: 0,
+    virtual_op: 0
+  },
+  {
+    id: '1.11.26712072',
+    op: [ 2, [Object] ],
+    result: [ 2, [Object] ],
+    block_num: 8500002,
+    trx_in_block: 1,
+    op_in_trx: 1,
+    virtual_op: 0
+  },
+  {
+    id: '1.11.26712071',
+    op: [ 2, [Object] ],
+    result: [ 2, [Object] ],
+    block_num: 8500002,
+    trx_in_block: 1,
+    op_in_trx: 0,
+    virtual_op: 0
+  },
+  {
+    id: '1.11.26712047',
+    op: [ 1, [Object] ],
+    result: [ 1, '1.7.8549034' ],
+    block_num: 8499998,
+    trx_in_block: 0,
+    op_in_trx: 0,
+    virtual_op: 0
+  },
+  {
+    id: '1.11.26712015',
+    op: [ 1, [Object] ],
+    result: [ 1, '1.7.8549025' ],
+    block_num: 8499985,
+    trx_in_block: 3,
+    op_in_trx: 0,
+    virtual_op: 0
+  },
+  {
+    id: '1.11.26711997',
+    op: [ 2, [Object] ],
+    result: [ 2, [Object] ],
+    block_num: 8499982,
+    trx_in_block: 1,
+    op_in_trx: 1,
+    virtual_op: 0
+  },
+  {
+    id: '1.11.26711996',
+    op: [ 2, [Object] ],
+    result: [ 2, [Object] ],
+    block_num: 8499982,
+    trx_in_block: 1,
+    op_in_trx: 0,
+    virtual_op: 0
+  },
+  {
+    id: '1.11.26711920',
+    op: [ 1, [Object] ],
+    result: [ 1, '1.7.8548992' ],
+    block_num: 8499957,
+    trx_in_block: 7,
+    op_in_trx: 0,
+    virtual_op: 0
+  },
+  {
+    id: '1.11.26711553',
+    op: [ 1, [Object] ],
+    result: [ 1, '1.7.8548867' ],
+    block_num: 8499866,
+    trx_in_block: 0,
+    op_in_trx: 0,
+    virtual_op: 0
+  },
+  {
+    id: '1.11.26711129',
+    op: [ 2, [Object] ],
+    result: [ 2, [Object] ],
+    block_num: 8499742,
+    trx_in_block: 0,
+    op_in_trx: 2,
+    virtual_op: 0
+  },
+  {
+    id: '1.11.26711128',
+    op: [ 2, [Object] ],
+    result: [ 2, [Object] ],
+    block_num: 8499742,
+    trx_in_block: 0,
+    op_in_trx: 1,
+    virtual_op: 0
+  },
+  {
+    id: '1.11.26711127',
+    op: [ 2, [Object] ],
+    result: [ 2, [Object] ],
+    block_num: 8499742,
+    trx_in_block: 0,
+    op_in_trx: 0,
+    virtual_op: 0
+  },
+  {
+    id: '1.11.26710450',
+    op: [ 1, [Object] ],
+    result: [ 1, '1.7.8548488' ],
+    block_num: 8499577,
+    trx_in_block: 2,
+    op_in_trx: 0,
+    virtual_op: 0
+  },
+  {
+    id: '1.11.26710351',
+    op: [ 1, [Object] ],
+    result: [ 1, '1.7.8548455' ],
+    block_num: 8499553,
+    trx_in_block: 0,
+    op_in_trx: 0,
+    virtual_op: 0
+  },
+  {
+    id: '1.11.26710252',
+    op: [ 1, [Object] ],
+    result: [ 1, '1.7.8548419' ],
+    block_num: 8499529,
+    trx_in_block: 1,
+    op_in_trx: 0,
+    virtual_op: 0
+  },
+  {
+    id: '1.11.26407168',
+    op: [ 4, [Object] ],
+    result: [ 0, {} ],
+    block_num: 8409034,
+    trx_in_block: 1,
+    op_in_trx: 0,
+    virtual_op: 2
+  }
+]
+> x[1]
+{
+  id: '1.11.26722332',
+  op: [
+    2,
+    {
+      fee: [Object],
+      fee_paying_account: '1.2.42',
+      order: '1.7.8552668',
+      extensions: []
+    }
+  ],
+  result: [ 2, { amount: 1, asset_id: '1.3.0' } ],
+  block_num: 8502441,
+  trx_in_block: 11,
+  op_in_trx: 0,
+  virtual_op: 0
+}
+> x.at(-1)
+{
+  id: '1.11.26407168',
+  op: [
+    4,
+    {
+      fee: [Object],
+      order_id: '1.7.8447221',
+      account_id: '1.2.42',
+      pays: [Object],
+      receives: [Object],
+      fill_price: [Object],
+      is_maker: true
+    }
+  ],
+  result: [ 0, {} ],
+  block_num: 8409034,
+  trx_in_block: 1,
+  op_in_trx: 0,
+  virtual_op: 2
+}
+> await Meta1.db.get_block_header(8409034)
+{
+  previous: '00804fc94187a70d7c57b739445c3ce6e21ff14c',
+  timestamp: '2021-11-23T23:00:00',
+  witness: '1.6.34',
+  transaction_merkle_root: '1c8b692acf81c5b1c3d15f56a9aedce17d440b9b',
+  extensions: []
+}
+> 
