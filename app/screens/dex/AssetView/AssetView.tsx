@@ -16,6 +16,7 @@ import { colors } from '../../../styles/colors';
 import meta1dex, { Ticker } from '../../../utils/meta1dexTypes';
 import { useAVStore } from './AssetViewStore';
 import AssetViewModal from './Modal';
+import MyOrders from './MyOrders';
 import Orders from './Orders';
 import Trades from './Trades';
 
@@ -47,7 +48,7 @@ const Name2Icon: Record<keyof AssetViewTabParamList, any> = {
   ASSET__Chart: SvgIcons.Chart,
   ASSET__Trades: SvgIcons.TradesClock,
   ASSET__BuySell: SvgIcons.Exchange,
-  ASSET__Orders: SvgIcons.Orders,
+  ASSET__Orders: SvgIcons.OrdersTrade,
   ASSET__MyOrders: SvgIcons.MyOrders,
 };
 
@@ -209,7 +210,7 @@ const DexAssetView: React.FC<StackScreenProps<AssetViewModalStackParamList>> = (
         initialParams={params}
         name="ASSET__MyOrders"
         options={{ title: 'My Orders' }}
-        component={screenWithHeader(Black)}
+        component={screenWithHeader(MyOrders)}
       />
     </Tab.Navigator>
   );

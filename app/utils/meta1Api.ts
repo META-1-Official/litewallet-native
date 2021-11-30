@@ -380,17 +380,70 @@ export function resolveObjectId(id: string) {
   return insideOut[search];
 }
 
+export type AmountT = { amount: number; asset_id: string };
+
+export type limitOrderObjBase<amtT> = {
+  fee: amtT;
+  seller: string;
+  amount_to_sell: amtT;
+  min_to_receive: amtT;
+  expiration: string;
+  fill_or_kill: boolean;
+  extensions: [];
+};
+
+export type limitOrderObj = limitOrderObjBase<AmountT>;
+export type limitOrderObjExt = limitOrderObjBase<AmountT & { asset: AssetBalanceT }>;
+
 export const parseHistoryEntry = (
-  op: LenPrefixedArray<any>,
+  op: LenPrefixedArray<limitOrderObj>,
   resultArr: LenPrefixedArray<string>,
 ) => {
+  // First el is probably not length but...
   const [opLen, ...restOp] = op;
   const [resultsLen, ...restResults] = resultArr;
 
+  assert(opLen === 1, 'opLen != to One');
   assert(opLen === resultsLen, 'Results type length does not mathch ops length');
+
+  const assets = useAssetsStore.getState().userAssets;
+  assert(assets, 'parseHistoryEntry: Something went wrong, assets is null');
+
+  const processAmount = (e: AmountT) => ({
+    ...e,
+    asset: assets.assetsWithBalance.find(ee => e.asset_id === ee._asset.id),
+  });
+
+  const processOps = (e: limitOrderObj) => ({
+    ...e,
+    fee: processAmount(e.fee),
+    amount_to_sell: processAmount(e.amount_to_sell),
+    min_to_receive: processAmount(e.min_to_receive),
+  });
 
   return zipObject(
     restResults.map(e => resolveObjectId(e)!),
-    restOp,
+    restOp.map(e => processOps(e)),
   );
+};
+
+export type HistoryRetT = {
+  raw: any;
+  limit_order: limitOrderObjExt;
+};
+
+export const getAccountHistory = async (accountName: string) => {
+  const hist = await meta1dex.history.get_account_history(
+    accountName,
+    ObjectIDs.operation_history,
+    100,
+    ObjectIDs.operation_history,
+  );
+
+  return hist
+    .filter((e: any) => e.op.at(0) === 1)
+    .map((e: any) => ({
+      raw: e,
+      ...parseHistoryEntry(e.op, e.result),
+    })) as HistoryRetT[];
 };

@@ -3,14 +3,12 @@ import { useStore } from '../app/store';
 import {
   fetchAccountBalances,
   fetchAllAssets,
+  getAccountHistory,
   getHistoryForAsset,
   getOrderBook,
   getTradesForAssetPair,
-  parseHistoryEntry,
-  placeLimitOrder,
-  resolveObjectId,
+  useAssetsStore,
 } from '../app/utils/meta1Api';
-import meta1dex from '../app/utils/meta1dexTypes';
 import Meta1 from '../app/utils/meta1dexTypes';
 
 jest.mock('react-native-encrypted-storage');
@@ -79,6 +77,10 @@ describe('Meta1 api tests', () => {
     expect(asdf).toBeTruthy();
   });
 
+  // Comented out cause too slow and produces sideeffects on production
+  // ---------
+
+  /*
   it('Places sell order, real slow', async () => {
     const accountInfo = {
       accountName: 'kj-test2',
@@ -106,16 +108,10 @@ describe('Meta1 api tests', () => {
 
     console.log(res);
   }, 30000);
+  */
 
   it('Fetch account histroy', async () => {
-    const ops = await meta1dex.history.get_account_history('kj-test2', '1.11.0', 10, '1.11.0');
-    const last = ops.at(-1);
-
-    last.__ID = resolveObjectId(last.id);
-    console.log('result resolved', resolveObjectId(last.result[1]));
-    console.log(last);
-
-    const parsed = parseHistoryEntry(last.op, last.result);
-    console.log(parsed);
+    await useAssetsStore.getState().fetchUserAssets('kj-test2');
+    console.log(JSON.stringify(await getAccountHistory('kj-test2'), null, 4));
   });
 });
