@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { zipObject } from 'lodash';
+import { zip, zipObject } from 'lodash';
 import QRCode from 'qrcode';
 import create from 'zustand';
 import config from '../config';
@@ -9,7 +9,9 @@ import {
   default as meta1dex,
   iAsset,
   iBalance,
-  LenPrefixedArray,
+  OP_TYPE,
+  RESULT_TYPE,
+  TypeIdPrefixed,
 } from './meta1dexTypes';
 
 // Number of miliseconds in one year
@@ -129,6 +131,7 @@ export async function fetchAccountBalances(accountName: string) {
   ]);
 
   const accountTotal = assetsWithBalance.reduce((acc, cv) => acc + cv.total_value, 0);
+
   const toatalChnage = assetsWithBalance
     .map(e => e.delta * e.total_value * 0.01)
     .reduce((acc, cv) => acc + cv, 0);
@@ -381,7 +384,7 @@ export function resolveObjectId(id: string) {
 }
 
 export type AmountT = { amount: number; asset_id: string };
-
+interface IResultRecord extends Record<keyof typeof RESULT_TYPE, any> {}
 export type limitOrderObjBase<amtT> = {
   fee: amtT;
   seller: string;
@@ -390,21 +393,22 @@ export type limitOrderObjBase<amtT> = {
   expiration: string;
   fill_or_kill: boolean;
   extensions: [];
+  result: IResultRecord;
 };
 
 export type limitOrderObj = limitOrderObjBase<AmountT>;
 export type limitOrderObjExt = limitOrderObjBase<AmountT & { asset: AssetBalanceT }>;
 
 export const parseHistoryEntry = (
-  op: LenPrefixedArray<limitOrderObj>,
-  resultArr: LenPrefixedArray<string>,
+  rawOp: TypeIdPrefixed<limitOrderObj>,
+  rawResult: TypeIdPrefixed<string>,
 ) => {
   // First el is probably not length but...
-  const [opLen, ...restOp] = op;
-  const [resultsLen, ...restResults] = resultArr;
+  const [opType, op] = rawOp;
+  const [resultType, result] = rawResult;
 
-  assert(opLen === 1, 'opLen != to One');
-  assert(opLen === resultsLen, 'Results type length does not mathch ops length');
+  assert(Object.values(OP_TYPE).includes(opType), 'Unknown op type');
+  assert(Object.values(RESULT_TYPE).includes(resultType), 'Unknown result type');
 
   const assets = useAssetsStore.getState().userAssets;
   assert(assets, 'parseHistoryEntry: Something went wrong, assets is null');
@@ -414,111 +418,24 @@ export const parseHistoryEntry = (
     asset: assets.assetsWithBalance.find(ee => e.asset_id === ee._asset.id),
   });
 
-  const processOps = (e: limitOrderObj) => ({
+  const processOp = (e: limitOrderObj) => ({
     ...e,
     fee: processAmount(e.fee),
     amount_to_sell: processAmount(e.amount_to_sell),
     min_to_receive: processAmount(e.min_to_receive),
   });
 
-  return zipObject(
-    restResults.map(e => resolveObjectId(e)!),
-    restOp.map(e => processOps(e)),
-  );
-};
+  const op2ret = OP_TYPE[opType] === 'limit_order_create_operation' ? processOp(op) : op;
 
-export type HistoryRetT = {
+  return {
+    [OP_TYPE[opType]]: {
+      ...op2ret,
+      result: { [RESULT_TYPE[resultType]]: result },
+    },
+  };
+};
+export interface HistoryRetT extends Record<keyof typeof OP_TYPE, limitOrderObjExt> {
   raw: any;
-  limit_order: limitOrderObjExt;
-};
-
-// From here https://doxygen.bitshares.org/operations_8hpp_source.html#l00055
-export enum OP_TYPE {
-  transfer_operation = 0,
-  limit_order_create_operation,
-  limit_order_cancel_operation,
-  call_order_update_operation,
-  fill_order_operation, // VIRTUAL
-  account_create_operation,
-  account_update_operation,
-  account_whitelist_operation,
-  account_upgrade_operation,
-  account_transfer_operation,
-  asset_create_operation,
-  asset_update_operation,
-  asset_update_bitasset_operation,
-  asset_update_feed_producers_operation,
-  asset_issue_operation,
-  asset_reserve_operation,
-  asset_fund_fee_pool_operation,
-  asset_settle_operation,
-  asset_global_settle_operation,
-  asset_publish_feed_operation,
-  witness_create_operation,
-  witness_update_operation,
-  proposal_create_operation,
-  proposal_update_operation,
-  proposal_delete_operation,
-  withdraw_permission_create_operation,
-  withdraw_permission_update_operation,
-  withdraw_permission_claim_operation,
-  withdraw_permission_delete_operation,
-  committee_member_create_operation,
-  committee_member_update_operation,
-  committee_member_update_global_parameters_operation,
-  vesting_balance_create_operation,
-  vesting_balance_withdraw_operation,
-  worker_create_operation,
-  custom_operation,
-  assert_operation,
-  balance_claim_operation,
-  override_transfer_operation,
-  transfer_to_blind_operation,
-  blind_transfer_operation,
-  transfer_from_blind_operation,
-  asset_settle_cancel_operation, // VIRTUAL
-  asset_claim_fees_operation,
-  fba_distribute_operation, // VIRTUAL
-  bid_collateral_operation,
-  execute_bid_operation, // VIRTUAL
-  asset_claim_pool_operation,
-  asset_update_issuer_operation,
-  htlc_create_operation,
-  htlc_redeem_operation,
-  htlc_redeemed_operation, // VIRTUAL
-  htlc_extend_operation,
-  htlc_refund_operation, // VIRTUAL
-  custom_authority_create_operation,
-  custom_authority_update_operation,
-  custom_authority_delete_operation,
-  ticket_create_operation,
-  ticket_update_operation,
-  liquidity_pool_create_operation,
-  liquidity_pool_delete_operation,
-  liquidity_pool_deposit_operation,
-  liquidity_pool_withdraw_operation,
-  liquidity_pool_exchange_operation,
-  samet_fund_create_operation,
-  samet_fund_delete_operation,
-  samet_fund_update_operation,
-  samet_fund_borrow_operation,
-  samet_fund_repay_operation,
-  credit_offer_create_operation,
-  credit_offer_delete_operation,
-  credit_offer_update_operation,
-  credit_offer_accept_operation,
-  credit_deal_repay_operation,
-  /* 74 */ credit_deal_expired_operation, // VIRTUAL
-}
-
-// From here https://doxygen.bitshares.org/base_8hpp_source.html#l00122
-export enum OP_RESULT {
-  void_result = 0,
-  object_id_type,
-  asset,
-  generic_operation_result,
-  generic_exchange_operation_result,
-  extendable_operation_result /* 5 */,
 }
 
 export const getAccountHistory = async (accountName: string) => {
@@ -529,10 +446,31 @@ export const getAccountHistory = async (accountName: string) => {
     ObjectIDs.operation_history,
   );
 
-  return hist
-    .filter((e: any) => e.op.at(0) === 1)
-    .map((e: any) => ({
-      raw: e,
-      ...parseHistoryEntry(e.op, e.result),
-    })) as HistoryRetT[];
+  return hist.map((e: any) => ({
+    raw: e,
+    ...parseHistoryEntry(e.op, e.result),
+  })) as HistoryRetT[];
+};
+
+export const getHistoricalOrders = async (accountName: string) => {
+  const history = await getAccountHistory(accountName);
+
+  const createdOrders = history.filter(e =>
+    Object.keys(e).includes('limit_order_create_operation'),
+  );
+
+  const canceledOrders = history.filter(e =>
+    Object.keys(e).includes('limit_order_cancel_operation'),
+  );
+
+  const filledOrders = history.filter(e => Object.keys(e).includes('fill_order_operation'));
+
+  const orderIds = createdOrders.map(e => e.limit_order_create_operation.result.object_id_type);
+
+  const orderStatuses = orderIds.map(id => ({
+    canceled: canceledOrders.find(e => (e.limit_order_cancel_operation as any).order === id),
+    filled: filledOrders.filter(e => (e.fill_order_operation as any).order_id === id),
+  }));
+
+  return new Map(zip(orderIds, orderStatuses));
 };

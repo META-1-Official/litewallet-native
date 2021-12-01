@@ -3,7 +3,8 @@ import { useStore } from '../app/store';
 import {
   fetchAccountBalances,
   fetchAllAssets,
-  getAccountHistory,
+  // getAccountHistory,
+  getHistoricalOrders,
   getHistoryForAsset,
   getOrderBook,
   getTradesForAssetPair,
@@ -110,8 +111,15 @@ describe('Meta1 api tests', () => {
   }, 30000);
   */
 
-  it('Fetch account histroy', async () => {
+  // it('Fetch account histroy', async () => {
+  //   await useAssetsStore.getState().fetchUserAssets('kj-test2');
+  //   console.log(await getAccountHistory('kj-test2'));
+  // });
+
+  it('Cool order History', async () => {
     await useAssetsStore.getState().fetchUserAssets('kj-test2');
-    console.log(JSON.stringify(await getAccountHistory('kj-test2'), null, 4));
+    const res = await getHistoricalOrders('kj-test2');
+    res.forEach(e => (e!.filled.length > 1 ? console.log('!!!!!', { e }) : 0));
+    console.log('res', res);
   });
 });

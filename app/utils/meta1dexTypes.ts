@@ -306,7 +306,98 @@ export interface OrderBook {
   bids: Order[];
   asks: Order[];
 }
-export type LenPrefixedArray<T> = [number, ...T[]];
+
+// From here https://doxygen.bitshares.org/operations_8hpp_source.html#l00055
+export enum OP_TYPE {
+  transfer_operation = 0,
+  limit_order_create_operation,
+  limit_order_cancel_operation,
+  call_order_update_operation,
+  fill_order_operation, // VIRTUAL
+  account_create_operation,
+  account_update_operation,
+  account_whitelist_operation,
+  account_upgrade_operation,
+  account_transfer_operation,
+  asset_create_operation,
+  asset_update_operation,
+  asset_update_bitasset_operation,
+  asset_update_feed_producers_operation,
+  asset_issue_operation,
+  asset_reserve_operation,
+  asset_fund_fee_pool_operation,
+  asset_settle_operation,
+  asset_global_settle_operation,
+  asset_publish_feed_operation,
+  witness_create_operation,
+  witness_update_operation,
+  proposal_create_operation,
+  proposal_update_operation,
+  proposal_delete_operation,
+  withdraw_permission_create_operation,
+  withdraw_permission_update_operation,
+  withdraw_permission_claim_operation,
+  withdraw_permission_delete_operation,
+  committee_member_create_operation,
+  committee_member_update_operation,
+  committee_member_update_global_parameters_operation,
+  vesting_balance_create_operation,
+  vesting_balance_withdraw_operation,
+  worker_create_operation,
+  custom_operation,
+  assert_operation,
+  balance_claim_operation,
+  override_transfer_operation,
+  transfer_to_blind_operation,
+  blind_transfer_operation,
+  transfer_from_blind_operation,
+  asset_settle_cancel_operation, // VIRTUAL
+  asset_claim_fees_operation,
+  fba_distribute_operation, // VIRTUAL
+  bid_collateral_operation,
+  execute_bid_operation, // VIRTUAL
+  asset_claim_pool_operation,
+  asset_update_issuer_operation,
+  htlc_create_operation,
+  htlc_redeem_operation,
+  htlc_redeemed_operation, // VIRTUAL
+  htlc_extend_operation,
+  htlc_refund_operation, // VIRTUAL
+  custom_authority_create_operation,
+  custom_authority_update_operation,
+  custom_authority_delete_operation,
+  ticket_create_operation,
+  ticket_update_operation,
+  liquidity_pool_create_operation,
+  liquidity_pool_delete_operation,
+  liquidity_pool_deposit_operation,
+  liquidity_pool_withdraw_operation,
+  liquidity_pool_exchange_operation,
+  samet_fund_create_operation,
+  samet_fund_delete_operation,
+  samet_fund_update_operation,
+  samet_fund_borrow_operation,
+  samet_fund_repay_operation,
+  credit_offer_create_operation,
+  credit_offer_delete_operation,
+  credit_offer_update_operation,
+  credit_offer_accept_operation,
+  credit_deal_repay_operation,
+  /* 74 */ credit_deal_expired_operation, // VIRTUAL
+}
+
+// From here https://doxygen.bitshares.org/base_8hpp_source.html#l00122
+export enum RESULT_TYPE {
+  void_result = 0,
+  object_id_type,
+  asset,
+  generic_operation_result,
+  generic_exchange_operation_result,
+  extendable_operation_result /* 5 */,
+}
+
+export type TypeIdPrefixed<T> = [number, ...T[]];
+
 export interface Meta1Module {
   connect: (connection?: string) => Promise<any>;
   disconnect: () => void;
