@@ -119,7 +119,7 @@ describe('Meta1 api tests', () => {
   it('Cool order History', async () => {
     await useAssetsStore.getState().fetchUserAssets('kj-test2');
     const res = await getHistoricalOrders('kj-test2');
-    res.forEach(e => (e!.filled.length > 1 ? console.log('!!!!!', { e }) : 0));
+    res.forEach(e => console.log(e.filled[0]?.fill_order_operation));
     console.log('res', res);
   });
 });

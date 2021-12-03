@@ -451,6 +451,14 @@ export const getAccountHistory = async (accountName: string) => {
     ...parseHistoryEntry(e.op, e.result),
   })) as HistoryRetT[];
 };
+export type FullHistoryOrder = Map<
+  string,
+  {
+    order: HistoryRetT;
+    canceled: any;
+    filled: any[];
+  }
+>;
 
 export const getHistoricalOrders = async (accountName: string) => {
   const history = await getAccountHistory(accountName);
@@ -465,12 +473,15 @@ export const getHistoricalOrders = async (accountName: string) => {
 
   const filledOrders = history.filter(e => Object.keys(e).includes('fill_order_operation'));
 
-  const orderIds = createdOrders.map(e => e.limit_order_create_operation.result.object_id_type);
+  const orderIds: string[] = createdOrders.map(
+    e => e.limit_order_create_operation.result.object_id_type,
+  );
 
-  const orderStatuses = orderIds.map(id => ({
+  const orderStatuses = orderIds.map((id, i) => ({
+    order: createdOrders[i],
     canceled: canceledOrders.find(e => (e.limit_order_cancel_operation as any).order === id),
     filled: filledOrders.filter(e => (e.fill_order_operation as any).order_id === id),
   }));
 
-  return new Map(zip(orderIds, orderStatuses));
+  return new Map(zip(orderIds, orderStatuses)) as FullHistoryOrder;
 };

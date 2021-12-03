@@ -151,6 +151,12 @@ Array.prototype.at = function (index: number) {
 
   return this[index];
 };
+export const inFuture = (d: Date | string) => {
+  if (typeof d === 'string') {
+    d = new Date(d);
+  }
+  return d.getTime() > new Date().getTime();
+};
 
 export const Timeout = (fn: Promise<any>, message: string) =>
   Promise.race([
