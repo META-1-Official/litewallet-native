@@ -20,12 +20,12 @@ import {
   FullHistoryOrder,
   getHistoricalOrders,
   HistoryRetT,
+  limitOrderObjExt,
   useAssetsStore,
 } from '../../../utils/meta1Api';
 import { AssetViewTSP } from './AssetView';
 import { useAVStore } from './AssetViewStore';
 import meta1dex, { LoginRetT } from '../../../utils/meta1dexTypes';
-
 const { width } = Dimensions.get('screen');
 
 const Circle = ({ progress, isBuy }: { progress: number; isBuy: boolean }) => {
@@ -68,6 +68,32 @@ const useAccount = (accountName: string, password: string) => {
   return acc;
 };
 
+const useTabs = () => {
+  const [tab, setTab] = useState(0);
+  const offsetX = useRef(new Animated.Value(0)).current;
+  const easing = Easing.in(Easing.bounce);
+  const rt = () => {
+    setTimeout(() => setTab(1), 120);
+    Animated.timing(offsetX, {
+      toValue: width / 2,
+      duration: 120,
+      useNativeDriver: false,
+      easing,
+    }).start();
+  };
+
+  const lt = () => {
+    setTimeout(() => setTab(0), 120);
+    Animated.timing(offsetX, {
+      toValue: 0,
+      duration: 120,
+      useNativeDriver: false,
+      easing,
+    }).start();
+  };
+  return { tab, lt, rt, offsetX };
+};
+
 const preprocessOrder = (order: any, userAssets: AccountBalanceT | null): HistoryRetT => {
   return {
     raw: order,
@@ -106,8 +132,9 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
   const { accountName, password } = useStore();
   const { userAssets } = useAssetsStore();
   const account = useAccount(accountName, password);
-  // const [refreshing, setRefreshing] = React.useState(false);
+  const { tab, lt, rt, offsetX } = useTabs();
 
+  const [refreshing, setRefreshing] = React.useState(false);
   const [history, setHistory] = useState<FullHistoryOrder | null>(null);
 
   useEffect(() => {
@@ -128,32 +155,12 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
       }
       console.log(account);
       setHistory(hist);
+      if (refreshing) {
+        setRefreshing(false);
+      }
     };
     fn();
-  }, [accountName, account]);
-
-  const [tab, setTab] = useState(0);
-  const offsetX = useRef(new Animated.Value(0)).current;
-  const easing = Easing.in(Easing.bounce);
-  const rt = () => {
-    setTimeout(() => setTab(1), 120);
-    Animated.timing(offsetX, {
-      toValue: width / 2,
-      duration: 120,
-      useNativeDriver: false,
-      easing,
-    }).start();
-  };
-
-  const lt = () => {
-    setTimeout(() => setTab(0), 120);
-    Animated.timing(offsetX, {
-      toValue: 0,
-      duration: 120,
-      useNativeDriver: false,
-      easing,
-    }).start();
-  };
+  }, [accountName, account, refreshing, userAssets]);
 
   const amtToReadable = (amt: AmountT) => _amtToReadable(amt, userAssets);
 
@@ -193,86 +200,31 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
       {tab === 0 ? (
         <ScrollView contentContainerStyle={{ paddingBottom: 200 }}>
           {history &&
-            [...history.entries()].map(([k, v]) => {
-              if (!k || !v) {
-                return null;
-              }
-              const { canceled, filled } = v;
-              const order = v.order.limit_order_create_operation;
-
-              const sellingAsset = order.amount_to_sell.asset;
-              const buyingAsset = order.min_to_receive.asset;
-
-              if (
-                ![assetA, assetB].includes(sellingAsset.symbol) ||
-                ![assetA, assetB].includes(buyingAsset.symbol)
-              ) {
-                return null;
-              }
-
-              // Open order
-              if (canceled || filled.length || !inFuture(order.expiration)) {
-                return null;
-              }
-
-              const buyAmt = amtToReadable(order.min_to_receive);
-
-              const sellAmt = amtToReadable(order.amount_to_sell);
-
-              const isBuy = buyingAsset.symbol === assetA;
-              let progress = 0;
-
-              return (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                  }}
-                  key={`OrderHistorical_${k}`}
-                >
-                  <View style={{ margin: 8, width: 72 }}>
+            [...history.entries()].map(
+              RenderRow(
+                [assetA, assetB],
+                amtToReadable,
+                (canceled, filled, order) =>
+                  canceled || filled.length || !inFuture(order.expiration),
+                (_, k) => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setRefreshing(true);
+                      account?.cancelOrder(k);
+                    }}
+                  >
                     <Text
                       style={{
-                        color: isBuy ? '#0f0' : '#f00',
+                        color: account ? colors.BrandYellow : '#999',
                         fontSize: 18,
-                        textAlign: 'center',
-                        marginBottom: 8,
                       }}
                     >
-                      {isBuy ? 'Buy' : 'Sell'}
+                      CANCEL
                     </Text>
-                    <Circle progress={progress} isBuy={isBuy} />
-                  </View>
-                  <View style={{ margin: 8, width: 175 }}>
-                    <Text style={{ color: '#fff', fontSize: 18 }}>
-                      {assetA} / {assetB}
-                    </Text>
-                    <Text style={{ color: '#fff', fontSize: 18 }}>
-                      Amount: {isBuy ? buyAmt : sellAmt}
-                    </Text>
-                    <Text style={{ color: '#fff', fontSize: 18 }}>
-                      Price :{(buyAmt / sellAmt).toString().slice(0, 8)}
-                    </Text>
-                  </View>
-                  <View style={{ margin: 8, right: 0, position: 'relative' }}>
-                    <TouchableOpacity
-                      onPress={() =>
-                        //TODO: Make it refresh
-                        account?.cancelOrder(k)
-                      }
-                    >
-                      <Text
-                        style={{
-                          color: account ? colors.BrandYellow : '#999',
-                          fontSize: 18,
-                        }}
-                      >
-                        CANCEL
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              );
-            })}
+                  </TouchableOpacity>
+                ),
+              ),
+            )}
           <Text style={{ color: '#888', textAlign: 'center' }}>
             If you are not logged in some orders may not be shown
           </Text>
@@ -280,87 +232,24 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
       ) : (
         <ScrollView contentContainerStyle={{ paddingBottom: 200 }}>
           {history &&
-            [...history.entries()].map(([k, v]) => {
-              if (!k || !v) {
-                return null;
-              }
-              const { canceled, filled } = v;
-              const order = v.order.limit_order_create_operation;
-
-              const sellingAsset = order.amount_to_sell.asset;
-              const buyingAsset = order.min_to_receive.asset;
-
-              if (
-                ![assetA, assetB].includes(sellingAsset.symbol) ||
-                ![assetA, assetB].includes(buyingAsset.symbol)
-              ) {
-                return null;
-              }
-
-              // Closed order
-              if (!canceled && !filled.length && inFuture(order.expiration)) {
-                return null;
-              }
-
-              const buyAmt = amtToReadable(order.min_to_receive);
-
-              const sellAmt = amtToReadable(order.amount_to_sell);
-
-              const isBuy = buyingAsset.symbol === assetA;
-              const orderStatus = canceled ? 'Canceled' : filled.length ? 'Completed' : 'Expired';
-              let progress = 0;
-              if (filled.length) {
-                const pays = filled.reduce(
-                  (acc, { fill_order_operation: fillOp }) =>
-                    acc + amtToReadable(fillOp.is_maker ? fillOp.receives : fillOp.pays),
-                  0,
-                );
-                progress = pays / (isBuy ? sellAmt : buyAmt);
-              }
-              return (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                  }}
-                  key={`OrderHistorical_${k}`}
-                >
-                  <View style={{ margin: 8, width: 72 }}>
-                    <Text
-                      style={{
-                        color: isBuy ? '#0f0' : '#f00',
-                        fontSize: 18,
-                        textAlign: 'center',
-                        marginBottom: 8,
-                      }}
-                    >
-                      {isBuy ? 'Buy' : 'Sell'}
-                    </Text>
-                    <Circle progress={progress} isBuy={isBuy} />
-                  </View>
-                  <View style={{ margin: 8, width: 175 }}>
-                    <Text style={{ color: '#fff', fontSize: 18 }}>
-                      {assetA} / {assetB}
-                    </Text>
-                    <Text style={{ color: '#fff', fontSize: 18 }}>
-                      Amount: {isBuy ? buyAmt : sellAmt}
-                    </Text>
-                    <Text style={{ color: '#fff', fontSize: 18 }}>
-                      Price :{(buyAmt / sellAmt).toString().slice(0, 8)}
-                    </Text>
-                  </View>
-                  <View style={{ margin: 8, right: 0, position: 'relative' }}>
-                    <Text
-                      style={{
-                        color: orderStatus === 'Completed' ? '#0f0' : '#f00',
-                        fontSize: 18,
-                      }}
-                    >
-                      {orderStatus}
-                    </Text>
-                  </View>
-                </View>
-              );
-            })}
+            [...history.entries()].map(
+              RenderRow(
+                [assetA, assetB],
+                amtToReadable,
+                (canceled, filled, order) =>
+                  !canceled && !filled.length && inFuture(order.expiration),
+                orderStatus => (
+                  <Text
+                    style={{
+                      color: orderStatus === 'Completed' ? '#0f0' : '#f00',
+                      fontSize: 18,
+                    }}
+                  >
+                    {orderStatus}
+                  </Text>
+                ),
+              ),
+            )}
         </ScrollView>
       )}
     </SafeAreaView>
@@ -368,3 +257,90 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
 };
 
 export default MyOrders;
+
+type EValT = [
+  string,
+  {
+    order: HistoryRetT;
+    canceled: any;
+    filled: any[];
+  },
+];
+const RenderRow =
+  (
+    [assetA, assetB]: string[],
+    amtToReadable: any,
+    reject: (canceled: any, filled: any[], order: limitOrderObjExt) => boolean,
+    lastCol: (orderStaus: string, k: string) => JSX.Element,
+  ) =>
+  ([k, v]: EValT) => {
+    if (!k || !v) {
+      return null;
+    }
+    const { canceled, filled } = v;
+    const order = v.order.limit_order_create_operation;
+
+    const sellingAsset = order.amount_to_sell.asset;
+    const buyingAsset = order.min_to_receive.asset;
+
+    if (
+      ![assetA, assetB].includes(sellingAsset.symbol) ||
+      ![assetA, assetB].includes(buyingAsset.symbol)
+    ) {
+      return null;
+    }
+
+    if (reject(canceled, filled, order)) {
+      return null;
+    }
+
+    const buyAmt = amtToReadable(order.min_to_receive);
+
+    const sellAmt = amtToReadable(order.amount_to_sell);
+
+    const isBuy = buyingAsset.symbol === assetA;
+    const orderStatus = canceled ? 'Canceled' : filled.length ? 'Completed' : 'Expired';
+    let progress = 0;
+    if (filled.length) {
+      const pays = filled.reduce(
+        (acc, { fill_order_operation: fillOp }) =>
+          acc + amtToReadable(fillOp.is_maker ? fillOp.receives : fillOp.pays),
+        0,
+      );
+      progress = pays / (isBuy ? sellAmt : buyAmt);
+    }
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+        }}
+        key={`OrderHistorical_${k}`}
+      >
+        <View style={{ margin: 8, width: 72 }}>
+          <Text
+            style={{
+              color: isBuy ? '#0f0' : '#f00',
+              fontSize: 18,
+              textAlign: 'center',
+              marginBottom: 8,
+            }}
+          >
+            {isBuy ? 'Buy' : 'Sell'}
+          </Text>
+          <Circle progress={progress} isBuy={isBuy} />
+        </View>
+        <View style={{ margin: 8, width: 175 }}>
+          <Text style={{ color: '#fff', fontSize: 18 }}>
+            {assetA} / {assetB}
+          </Text>
+          <Text style={{ color: '#fff', fontSize: 18 }}>Amount: {isBuy ? buyAmt : sellAmt}</Text>
+          <Text style={{ color: '#fff', fontSize: 18 }}>
+            Price: {(buyAmt / sellAmt).toString().slice(0, 8)}
+          </Text>
+        </View>
+        <View style={{ margin: 8, right: 0, position: 'relative' }}>
+          {lastCol(orderStatus, k)}
+        </View>
+      </View>
+    );
+  };
