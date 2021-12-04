@@ -8,8 +8,10 @@ import {
   getHistoryForAsset,
   getOrderBook,
   getTradesForAssetPair,
+  HistoryRetT,
   useAssetsStore,
 } from '../app/utils/meta1Api';
+import meta1dex from '../app/utils/meta1dexTypes';
 import Meta1 from '../app/utils/meta1dexTypes';
 
 jest.mock('react-native-encrypted-storage');
@@ -119,7 +121,23 @@ describe('Meta1 api tests', () => {
   it('Cool order History', async () => {
     await useAssetsStore.getState().fetchUserAssets('kj-test2');
     const res = await getHistoricalOrders('kj-test2');
-    res.forEach(e => console.log(e.filled[0]?.fill_order_operation));
-    console.log('res', res);
+    const first: {
+      order: HistoryRetT;
+      canceled: any;
+      filled: any[];
+    } = res.values().next().value;
+    const acc = await meta1dex.login(
+      'kj-test2',
+      'P5KFSVTSJDmjPFWy51gfpskdxUJfUVXtVVAhz1q7TBqW2imhH4C1',
+    );
+    console.log(first.order);
+
+    const order = await acc.getOrder(
+      first.order.limit_order_create_operation.result.object_id_type,
+    );
+
+    console.log(order);
+
+    // console.log('res', res);
   });
 });
