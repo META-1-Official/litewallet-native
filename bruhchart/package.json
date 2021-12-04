@@ -1,0 +1,20 @@
+{
+  "name": "metachart-scratchpad",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Camisul",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel": "^2.0.1",
+    "posthtml-doctype": "^1.1.1",
+    "posthtml-inline-assets": "^3.1.0",
+    "posthtml-shorten": "^1.0.0"
+  },
+  "dependencies": {
+    "lightweight-charts": "^3.7.0"
+  }
+}

@@ -63,3 +63,6 @@ buck-out/
 dist/*
 
 !/**/.gitkeep
+
+.parcel-cache
+dist
