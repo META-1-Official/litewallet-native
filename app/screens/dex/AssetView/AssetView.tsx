@@ -15,6 +15,7 @@ import { ProfitIndicator } from '../../../components/PortfolioHeader';
 import { colors } from '../../../styles/colors';
 import meta1dex, { Ticker } from '../../../utils/meta1dexTypes';
 import { useAVStore } from './AssetViewStore';
+import Candle from './Chart';
 import AssetViewModal from './Modal';
 import MyOrders from './MyOrders';
 import Orders from './Orders';
@@ -136,6 +137,7 @@ const DexAssetView: React.FC<StackScreenProps<AssetViewModalStackParamList>> = (
   route: { params },
   navigation,
 }) => {
+  console.log(' ------ render');
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -182,7 +184,11 @@ const DexAssetView: React.FC<StackScreenProps<AssetViewModalStackParamList>> = (
         },
       })}
     >
-      <Tab.Screen initialParams={params} name="ASSET__Chart" component={screenWithHeader(Black)} />
+      <Tab.Screen
+        initialParams={params}
+        name="ASSET__Chart"
+        component={screenWithHeader(Candle)}
+      />
       <Tab.Screen
         initialParams={params}
         name="ASSET__Trades"

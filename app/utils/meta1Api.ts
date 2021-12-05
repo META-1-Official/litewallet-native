@@ -1,14 +1,18 @@
 import assert from 'assert';
 import { zip, zipObject } from 'lodash';
 import QRCode from 'qrcode';
+import { useEffect, useState } from 'react';
 import create from 'zustand';
 import config from '../config';
 import { useStore } from '../store';
 import {
+  BucketSizeT,
   default as Meta1,
   default as meta1dex,
+  fcTime,
   iAsset,
   iBalance,
+  ITicker,
   OP_TYPE,
   RESULT_TYPE,
   TypeIdPrefixed,
@@ -484,4 +488,80 @@ export const getHistoricalOrders = async (accountName: string) => {
   }));
 
   return new Map(zip(orderIds, orderStatuses)) as FullHistoryOrder;
+};
+
+export type OHLC = {
+  high: number;
+  low: number;
+  open: number;
+  close: number;
+};
+
+const Based = (t: ITicker): OHLC => {
+  const assets = useAssetsStore.getState().userAssets?.assetsWithBalance;
+
+  assert(assets, 'No, asset data, cant calculate real amounts');
+
+  const baseAsset = assets.find(e => e._asset.id === t.key.base);
+  const quoteAsset = assets.find(e => e._asset.id === t.key.quote);
+
+  assert(baseAsset, 'Could not find base asset');
+  assert(quoteAsset, 'Could not find quote asset');
+
+  const base = Object.keys(t).filter(k => k.indexOf('_base') >= 0);
+  const quote = Object.keys(t).filter(k => k.indexOf('_quote') >= 0);
+
+  assert(base.length === quote.length, 'Base vs quout length mismatch');
+
+  const mixed = zip(base, quote);
+  const entries = mixed.map(e => {
+    const [keyA, keyB] = e;
+
+    assert(keyA && keyB, 'Not all keys are present');
+    assert(keyA.split('_').at(0) === keyB.split('_').at(0), 'Key prefix mismatch');
+
+    const [amountBase, amoutnQuote] = [
+      t[keyA as keyof ITicker] as number,
+      t[keyB as keyof ITicker] as number,
+    ];
+
+    const realBase = amountBase / 10 ** baseAsset._asset.precision;
+    const realQuote = amoutnQuote / 10 ** quoteAsset._asset.precision;
+
+    const price = realBase / realQuote;
+    return [keyA.split('_').at(0)!, +(1 / price).toFixed(2)];
+  });
+  // console.log(entries);
+  return Object.fromEntries(entries) as OHLC;
+};
+
+export const useTicker = (
+  assetA: string,
+  assetB: string,
+  bucket_seconds: BucketSizeT,
+): OHLC[] | null => {
+  const [x, setX] = useState<OHLC[] | null>(null);
+
+  // eslint-disable-next-line no-shadow
+  const _fn = async (assetA: string, assetB: string, bucket_seconds: BucketSizeT) => {
+    console.log('call');
+    const ticks = await meta1dex.history.get_market_history(
+      assetA,
+      assetB,
+      bucket_seconds,
+      new fcTime(new Date().getTime() - 200 * bucket_seconds * 1000),
+      new fcTime(),
+    );
+
+    return ticks.map(e => ({
+      time: new fcTime(e.key.open).asDate().getTime() / 1000,
+      ...Based(e),
+    }));
+  };
+
+  useEffect(() => {
+    _fn(assetA, assetB, bucket_seconds).then(e => setX(e));
+  }, [assetA, assetB, bucket_seconds]);
+
+  return x;
 };

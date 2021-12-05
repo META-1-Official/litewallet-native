@@ -396,7 +396,38 @@ export enum RESULT_TYPE {
   extendable_operation_result /* 5 */,
 }
 
+export interface ITicker {
+  id: string;
+  key: {
+    base: string;
+    quote: string;
+    seconds: number;
+    open: string;
+  };
+  high_base: number;
+  high_quote: number;
+  low_base: number;
+  low_quote: number;
+  open_base: number;
+  open_quote: number;
+  close_base: number;
+  close_quote: number;
+  base_volume: number;
+  quote_volume: number;
+}
+
 export type TypeIdPrefixed<T> = [number, ...T[]];
+export type BucketSizeT = 60 | 300 | 900 | 1800 | 3600 | 14400 | 86400;
+// prettier-ignore
+export const ALL_BUCKETS: { [k: string] : BucketSizeT} = {
+  '1M' : 60,
+  '5M' : 300,
+  '15M': 900,
+  '30M': 1800,
+  '1H' : 3600,
+  '4H' : 14400,
+  '1D' : 86400,
+};
 
 export interface Meta1Module {
   connect: (connection?: string) => Promise<any>;
@@ -425,9 +456,45 @@ export interface Meta1Module {
   };
   history: {
     get_account_history: (account: string, bleh: string, limit: number, blah: string) => any;
+    get_market_history_buckets: () => Promise<number[]>;
+    get_market_history: (
+      assetA: string,
+      assetB: string,
+      bucket_seconds: BucketSizeT,
+      start: fcTime,
+      end: fcTime,
+    ) => Promise<ITicker[]>;
   };
   subscribe: SubT_A | SubT_B | SubT_C;
   login: (accountName: string, password: string) => Promise<LoginRetT>;
+}
+
+export class fcTime extends String {
+  // This field is needed to disallow direct conversion between stiring and fcTime
+  __pad: any;
+  val: string;
+  constructor(s?: string | number | Date) {
+    let val;
+    if (s) {
+      //Append a to get the same value on output as in the input
+      if (typeof s === 'string' && (s.length === 23 || s.length === 19)) {
+        s += 'Z';
+      }
+      val = new Date(s).toISOString().slice(0, -1);
+    } else {
+      val = new Date().toISOString().slice(0, -1);
+    }
+    super(val);
+    this.val = val;
+    return;
+  }
+  static zero() {
+    return new fcTime('2018-01-01T00:00:00');
+  }
+
+  public asDate() {
+    return new Date(this.val + 'Z');
+  }
 }
 
 const meta1dex = require('meta1dex');

@@ -11,7 +11,7 @@ import {
   HistoryRetT,
   useAssetsStore,
 } from '../app/utils/meta1Api';
-import meta1dex from '../app/utils/meta1dexTypes';
+import meta1dex, { fcTime } from '../app/utils/meta1dexTypes';
 import Meta1 from '../app/utils/meta1dexTypes';
 
 jest.mock('react-native-encrypted-storage');
@@ -130,14 +130,30 @@ describe('Meta1 api tests', () => {
       'kj-test2',
       'P5KFSVTSJDmjPFWy51gfpskdxUJfUVXtVVAhz1q7TBqW2imhH4C1',
     );
-    console.log(first.order);
 
     const order = await acc.getOrder(
       first.order.limit_order_create_operation.result.object_id_type,
     );
-
-    console.log(order);
+    order;
 
     // console.log('res', res);
+  });
+
+  it('Fc time is correct', () => {
+    const inp = '2018-01-01T00:00:00';
+    const out = new fcTime(inp);
+    expect(out.slice(0, -4)).toEqual(inp);
+  });
+
+  it('Gets OCHL data', async () => {
+    const ticks = await meta1dex.history.get_market_history(
+      'META1',
+      'USDT',
+      60,
+      new fcTime('2018-01-01T00:00:00'),
+      new fcTime(),
+    );
+
+    console.log(ticks);
   });
 });
