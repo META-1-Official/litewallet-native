@@ -25,6 +25,7 @@ import DexRecive from './ReciveScreen';
 import DexSwapScreen from './SwapScreen';
 import DexSend from './SendScreen';
 import AssetViewStack from './AssetView/AssetView';
+import HelpStack from '../help';
 
 const Black = () => <Loader bgc="#000" />;
 
@@ -133,9 +134,7 @@ export type DexDrawerParamList = {
   DEX_HOME: undefined;
   __Notifications: undefined;
   __Settings: undefined;
-  DEX__Convert: undefined;
-  DEX__Send: undefined;
-  DEX__Recive: undefined;
+  __Help: undefined;
 };
 
 const Drawer = createDrawerNavigator<DexDrawerParamList>();
@@ -165,9 +164,7 @@ export const DexNav: React.FC = () => {
         />
         <Drawer.Screen name="__Notifications" component={Black} />
         <Drawer.Screen name="__Settings" component={Black} />
-        <Drawer.Screen name="DEX__Convert" component={Black} />
-        <Drawer.Screen name="DEX__Send" component={Black} />
-        <Drawer.Screen name="DEX__Recive" component={Black} />
+        <Drawer.Screen name="__Help" options={{ headerShown: false }} component={HelpStack} />
       </Drawer.Navigator>
     </View>
   );

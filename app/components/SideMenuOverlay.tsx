@@ -99,7 +99,7 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
         <ListItem title="Invite Friends" icon={UserPlus} />
         <ListItem title="Backing Assets" icon={PieChart} />
         <ListItem title="Create Paper Wallet" icon={Archive} />
-        <ListItem title="Help" icon={HelpCircle} />
+        <ListItem title="Help" icon={HelpCircle} onPress={() => navigation.navigate('__Help')}/>
       </View>
       <TouchableOpacity
         onPress={() => logout()}
