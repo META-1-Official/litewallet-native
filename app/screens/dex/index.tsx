@@ -167,7 +167,11 @@ export const DexNav: React.FC = () => {
         <Drawer.Screen name="__Notifications" component={Black} />
         <Drawer.Screen name="__Settings" component={Black} />
         <Drawer.Screen name="__Help" options={{ headerShown: false }} component={HelpStack} />
-        <Drawer.Screen name="__ExploreAssets" component={ExploreAssets} />
+        <Drawer.Screen
+          name="__ExploreAssets"
+          options={{ headerShown: false }}
+          component={ExploreAssets}
+        />
       </Drawer.Navigator>
     </View>
   );
