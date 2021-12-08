@@ -8,6 +8,7 @@ export const personAsset = require('./person.png');
 export const ppIconAsset = require('./pp.png');
 export const tosIconAsset = require('./tos.png');
 export const personIconAsset = require('./personIcon.png');
+export const goldAsset = require('./gold.jpg');
 
 export const loaderGif = require('./loader.gif');
 export const SvgIcons = {

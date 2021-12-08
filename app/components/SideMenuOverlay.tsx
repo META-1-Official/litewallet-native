@@ -97,9 +97,13 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
         <ListItem onPress={() => navigation.closeDrawer()} title="DEX" icon={SvgIcons.Trade} />
         <ListItem title="Buy / Sell" icon={CreditCard} />
         <ListItem title="Invite Friends" icon={UserPlus} />
-        <ListItem title="Backing Assets" icon={PieChart} />
+        <ListItem
+          title="Backing Assets"
+          icon={PieChart}
+          onPress={() => navigation.navigate('__ExploreAssets')}
+        />
         <ListItem title="Create Paper Wallet" icon={Archive} />
-        <ListItem title="Help" icon={HelpCircle} onPress={() => navigation.navigate('__Help')}/>
+        <ListItem title="Help" icon={HelpCircle} onPress={() => navigation.navigate('__Help')} />
       </View>
       <TouchableOpacity
         onPress={() => logout()}
