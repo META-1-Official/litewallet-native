@@ -1,4 +1,4 @@
-const BASEURL = 'http://65.21.242.70:3333/';
+const BASEURL = 'http://65.21.242.70:3333';
 
 enum ENDPOINT {
   _signUp = '/api/signUp',
@@ -45,7 +45,7 @@ export async function getHistory(args: getHistoryArgs) {
   });
 }
 
-interface Notification {
+export interface Notification {
   id: number;
   content: string;
   type: 'USER' | 'GLOBAl';

@@ -27,6 +27,7 @@ import DexSend from './SendScreen';
 import AssetViewStack from './AssetView/AssetView';
 import HelpStack from '../help';
 import ExploreAssets from '../ExploreAssets';
+import Notifications from '../Notifications';
 
 const Black = () => <Loader bgc="#000" />;
 
@@ -164,7 +165,7 @@ export const DexNav: React.FC = () => {
           }}
           component={DexStack}
         />
-        <Drawer.Screen name="__Notifications" component={Black} />
+        <Drawer.Screen name="__Notifications" component={Notifications} />
         <Drawer.Screen name="__Settings" component={Black} />
         <Drawer.Screen name="__Help" options={{ headerShown: false }} component={HelpStack} />
         <Drawer.Screen
