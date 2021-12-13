@@ -2,6 +2,7 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
 import Omit from 'lodash.omit';
+import { signUp } from './utils/miscApi';
 
 interface AppState {
   accountName: string;
@@ -20,12 +21,15 @@ export const useStore = create<AppState>(
       accountName: '',
       password: 'P5KFSVTSJDmjPFWy51gfpskdxUJfUVXtVVAhz1q7TBqW2imhH4C1',
       authorized: false,
-      authorize: (accountName, password) =>
+      authorize: (accountName, password) => {
         set({
           accountName: accountName,
           authorized: true,
           password: password ? password : '',
-        }),
+        });
+
+        signUp({ accountName }).catch(e => e);
+      },
       logout: () => set({ accountName: '', authorized: false, password: '' }),
 
       loading: true,

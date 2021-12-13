@@ -6,8 +6,10 @@ import Loader from '../../components/Loader';
 import MaterialToggle from '../../components/MaterialToggle';
 import { ProfitIndicator } from '../../components/PortfolioHeader';
 import PortfolioLising from '../../components/PortfolioListing';
+import { useStore } from '../../store';
 import { colors } from '../../styles/colors';
 import { useAssets } from '../../utils/meta1Api';
+import { getHistory } from '../../utils/miscApi';
 
 const GRAPH_INTERAVAL = {
   '1D': 1,
@@ -19,12 +21,12 @@ const GRAPH_INTERAVAL = {
 type GRAPH_INTERAVAL_KEYS = keyof typeof GRAPH_INTERAVAL;
 
 const { width, height } = Dimensions.get('screen');
-const createMockChartData = (n: number) =>
-  Array.from(new Array(n), () => Math.round(Math.random() * 2000)).sort((a, b) =>
-    Math.random() > 0.2 ? a - b : 1,
-  );
+// const createMockChartData = (n: number) =>
+//   Array.from(new Array(n), () => Math.round(Math.random() * 2000)).sort((a, b) =>
+//     Math.random() > 0.2 ? a - b : 1,
+//   );
 
-const capArrayLen = (x: number) => (x <= 0 ? x : Math.ceil(Math.log(x)) * 5);
+// const capArrayLen = (x: number) => (x <= 0 ? x : Math.ceil(Math.log(x)) * 5);
 
 const Chart = ({ data }: { data: number[] }) => {
   // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -63,13 +65,18 @@ const DexFund: React.FC = () => {
   const [curInterval, setCurInterval] = useState<GRAPH_INTERAVAL_KEYS>('1D');
   const [showZeroBalance, setShowZeroBalacnce] = useState(false);
   const [chartData, setChartData] = useState<number[]>([0, 0]);
-
-  useEffect(() => {
-    const dat = createMockChartData(capArrayLen(GRAPH_INTERAVAL[curInterval] * 12));
-    setChartData(dat);
-  }, [curInterval]);
-
+  const accountName = useStore(s => s.accountName);
   const accountAssets = useAssets();
+  const accountTotal = accountAssets?.accountTotal || 0;
+  useEffect(() => {
+    getHistory({
+      accountName,
+      skip_size: GRAPH_INTERAVAL[curInterval],
+    })
+      .then(e => setChartData(e.data ? [...e.data, accountTotal] : [0, accountTotal]))
+      .catch(e => console.error(e));
+  }, [curInterval, accountName, accountTotal]);
+
   if (!accountAssets) {
     return <Loader bgc="#000" />;
   }
