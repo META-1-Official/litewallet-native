@@ -542,7 +542,7 @@ export const useTicker = (
 ): OHLC[] | null => {
   const [x, setX] = useState<OHLC[] | null>(null);
 
-  // eslint-disable-next-line no-shadow
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   const _fn = async (assetA: string, assetB: string, bucket_seconds: BucketSizeT) => {
     console.log('call');
     const ticks = await meta1dex.history.get_market_history(

@@ -3,8 +3,13 @@ module.exports = {
   extends: '@react-native-community',
   rules: {
     'react-native/no-inline-styles': 'off',
-    'no-shadow': ['error', { builtinGlobals: false, hoist: 'functions', allow: ['_'] }],
-    'no-unused-vars': [
+    'no-shadow': 'off', // replaced by ts-eslint rule below
+    '@typescript-eslint/no-shadow': [
+      'error',
+      { builtinGlobals: false, hoist: 'functions', allow: ['_'] },
+    ],
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': [
       'error',
       {
         vars: 'all',
@@ -14,13 +19,7 @@ module.exports = {
         ignoreRestSiblings: false,
       },
     ],
-    '@typescript-eslint/no-unused-vars': [
-      'warn',
-      {
-        argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_',
-      },
-    ],
+    'no-undef': 'off',
     'prettier/prettier': 1,
     'react-hooks/exhaustive-deps': 1,
   },

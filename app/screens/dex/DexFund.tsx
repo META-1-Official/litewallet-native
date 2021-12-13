@@ -27,7 +27,7 @@ const createMockChartData = (n: number) =>
 const capArrayLen = (x: number) => (x <= 0 ? x : Math.ceil(Math.log(x)) * 5);
 
 const Chart = ({ data }: { data: number[] }) => {
-  // eslint-disable-next-line no-shadow
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   const Decorator = ({ x, y, data }: { x: any; y: any; data: number[] }) => {
     return data.map((value, index, arr) => {
       if (index === 0 || index === arr.length - 1) {
