@@ -3,17 +3,15 @@ import {
   BottomTabScreenProps,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import React from 'react';
 import Loader from '../../components/Loader';
 import { colors } from '../../styles/colors';
-import { DexHeader, DexStackHeader } from '../../components/DexHeader';
-import { Pressable, Text, View } from 'react-native';
+import { DexHeader } from '../../components/DexHeader';
+import { Pressable, Text } from 'react-native';
 import { SvgIcons } from '../../../assets';
 import DexHome from './DexHome';
 import DexTrade from './TradeScreen';
-import { OverlayContent } from '../../components/SideMenuOverlay';
 import {
   createStackNavigator,
   StackNavigationProp,
@@ -25,9 +23,7 @@ import DexRecive from './ReciveScreen';
 import DexSwapScreen from './SwapScreen';
 import DexSend from './SendScreen';
 import AssetViewStack from './AssetView/AssetView';
-import HelpStack from '../help';
-import ExploreAssets from '../ExploreAssets';
-import Notifications from '../Notifications';
+import { DexDrawerParamList } from '../../WalletNav';
 
 const Black = () => <Loader bgc="#000" />;
 
@@ -61,7 +57,7 @@ const Name2Icon: Record<keyof DexTabParamList, any> = {
   DEX__Orders: SvgIcons.Orders,
   DEX__Fund: SvgIcons.Wallet,
 };
-const DexStack = () => {
+export const DexStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -129,51 +125,5 @@ const DexTabs = ({ navigation }: DexSSP) => {
       <Tab.Screen name="DEX__Orders" component={Black} />
       <Tab.Screen name="DEX__Fund" component={DexFund} />
     </Tab.Navigator>
-  );
-};
-
-export type DexDrawerParamList = {
-  DEX_HOME: undefined;
-  __Notifications: undefined;
-  __Settings: undefined;
-  __Help: undefined;
-  __ExploreAssets: undefined;
-};
-
-const Drawer = createDrawerNavigator<DexDrawerParamList>();
-
-export const DexNav: React.FC = () => {
-  return (
-    <View style={{ flex: 1 }}>
-      <Drawer.Navigator
-        screenOptions={{
-          // headerMode: 'screen',
-          header: DexStackHeader,
-          drawerStyle: {
-            backgroundColor: '#000',
-          },
-        }}
-        drawerContent={props => {
-          return <OverlayContent {...props} />;
-        }}
-        initialRouteName="DEX_HOME"
-      >
-        <Drawer.Screen
-          name="DEX_HOME"
-          options={{
-            headerShown: false,
-          }}
-          component={DexStack}
-        />
-        <Drawer.Screen name="__Notifications" component={Notifications} />
-        <Drawer.Screen name="__Settings" component={Black} />
-        <Drawer.Screen name="__Help" options={{ headerShown: false }} component={HelpStack} />
-        <Drawer.Screen
-          name="__ExploreAssets"
-          options={{ headerShown: false }}
-          component={ExploreAssets}
-        />
-      </Drawer.Navigator>
-    </View>
   );
 };

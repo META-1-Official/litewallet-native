@@ -88,8 +88,9 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
       >
         <ListItem
           onPress={() => {
+            console.log(navigation.getState(), navigation.getParent());
             navigation.closeDrawer();
-            navigation.getParent()?.navigate('Wallet');
+            navigation.jumpTo('Wallet');
           }}
           title="Lite Wallet"
           icon={SvgIcons.Wallet}

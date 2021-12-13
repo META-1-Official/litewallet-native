@@ -96,7 +96,7 @@ const DexFund: React.FC = () => {
         <Chart data={chartData} />
         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
           {(Object.keys(GRAPH_INTERAVAL) as GRAPH_INTERAVAL_KEYS[]).map(e => (
-            <TouchableOpacity onPress={() => setCurInterval(e)}>
+            <TouchableOpacity onPress={() => setCurInterval(e)} key={e}>
               <Text
                 key={e}
                 style={{

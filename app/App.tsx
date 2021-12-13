@@ -3,7 +3,6 @@ import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Provider as PaperProvider } from 'react-native-paper';
 import SplashScreen from 'react-native-splash-screen';
 
@@ -13,14 +12,8 @@ import CreateWalletScreen from './screens/CreateWalletScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import LinkWalletScreen from './screens/LinkWalletScreen';
 import { useStore } from './store';
-import WalletScreen from './screens/WalletScreen';
 import { Connect } from './utils/meta1Api';
-import { colors } from './styles/colors';
-import Loader from './components/Loader';
-import { SvgIcons } from '../assets';
-import SettingsScreen from './screens/SettingsScreen';
-import FundAccount from './screens/FundAccountScreen';
-import { DexNav } from './screens/dex';
+import { DexNav } from './WalletNav';
 
 const { useEffect } = React;
 
@@ -56,71 +49,15 @@ const AuthNav = () => {
   );
 };
 
-const Tab = createBottomTabNavigator();
-
-const WalletNav = () => {
-  const loading = useStore(state => state.loading);
-  if (loading) {
-    return <Loader />;
-  }
-  return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarStyle: { display: route.name === 'DEX' ? 'none' : undefined },
-        headerShown: false,
-        tabBarActiveTintColor: colors.BrandYellow,
-        tabBarIcon: ({ color, size }) => {
-          const Name2Icon = {
-            Wallet: SvgIcons.wallet,
-            DEX: SvgIcons.trading,
-            Settings: SvgIcons.settings,
-            'Fund Account': SvgIcons.fundAccount,
-          };
-
-          if (!(route.name in Name2Icon)) {
-            return null;
-          }
-          const key = route.name as keyof typeof Name2Icon;
-          const TheIcon: typeof Name2Icon['Wallet'] = Name2Icon[key];
-
-          return <TheIcon width={size} height={size} fill={color} color={color} />;
-        },
-      })}
-    >
-      <Tab.Screen name="Wallet" component={WalletScreen} />
-      <Tab.Screen name="Fund Account" component={FundAccount} />
-      <Tab.Screen name="DEX" component={DexNav} />
-      <Tab.Screen name="Settings" component={SettingsScreen} />
-    </Tab.Navigator>
-  );
-};
-
 function App() {
   useEffect(() => {
     SplashScreen.hide();
     Connect();
-    // try {
-    //   console.log('Going to create a ws connection to wss://api.meta1.io/ws');
-    //   const ws = new WebSocket('wss://api.meta1.io/ws');
-    //   ws.onmessage = console.log;
-    //   ws.send(`{"jsonrpc": "2.0"}`);
-    // } catch (e) {
-    //   console.error(e);
-    // }
-
-    // try {
-    //   // TODO: connect to a real test server
-    //   // const ws = new WebSocket('wss://api.meta1.io/ws');
-    //   // ws.onmessage = console.log;
-    //   // ws.send(`{"jsonrpc": "2.0"}`);
-    // } catch (e) {
-    //   console.error(e);
-    // }
   });
 
   const authorized = useStore(state => state.authorized);
 
-  const CurrentNav = authorized ? WalletNav : AuthNav;
+  const CurrentNav = authorized ? DexNav : AuthNav;
   return (
     <PaperProvider>
       <SafeAreaProvider>

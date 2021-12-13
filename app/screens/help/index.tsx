@@ -49,6 +49,7 @@ function Index({ navigation }: SSP) {
     <SafeAreaView style={{ backgroundColor: '#000', flex: 1 }}>
       {Names.map((e, i) => (
         <TouchableOpacity
+          key={`Nav_io${i}}`}
           onPress={() => navigation.navigate(name2id(e))}
           style={{
             flexDirection: 'row',
@@ -59,7 +60,6 @@ function Index({ navigation }: SSP) {
           }}
         >
           <Text
-            key={`Nav_io${i}}`}
             style={{
               fontSize: 18,
               fontWeight: '500',
