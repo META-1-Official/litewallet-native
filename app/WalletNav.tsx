@@ -54,15 +54,7 @@ export const WalletNav: React.FC<DrawerScreenProps<DexDrawerParamList>> = ({ nav
         name="Settings"
         options={{
           tabBarButton: props => {
-            return (
-              <Pressable
-                {...props}
-                onPress={e => {
-                  props.onPress?.(e);
-                  navigation.openDrawer();
-                }}
-              />
-            );
+            return <Pressable {...props} onPress={() => navigation.openDrawer()} />;
           },
         }}
         component={SettingsScreen}
