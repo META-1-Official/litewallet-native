@@ -250,12 +250,13 @@ export const depositAddress = async (accountName: string, asset: string) => {
     mode: 'cors',
   });
 
-  try {
-    const json: { address: string } = await res.json();
-    return json.address;
-  } catch (e) {
-    return '';
+  const { address }: { address: string } = await res.json();
+
+  if (!address) {
+    throw new Error('No address key in json response');
   }
+
+  return address;
 };
 
 const saitizeISOString = (x: string) => x.slice(0, -1);

@@ -71,16 +71,46 @@ const { width } = Dimensions.get('screen');
 const AddressView: React.FC<AddressViewProps> = ({ asset }) => {
   const accountName = useStore(state => state.accountName);
   const [compoundAddress, setCA] = useState<AddrT | null>(null);
+  const [err, setErr] = useState(false);
 
   useEffect(() => {
     const fn = async () =>
-      await getAddressForAccountAsset(accountName, asset.symbol).then(e => setCA(e));
+      await getAddressForAccountAsset(accountName, asset.symbol)
+        .then(e => setCA(e))
+        .catch(e => {
+          console.error(e);
+          setErr(true);
+        });
     fn();
-  });
+  }, [accountName, asset.symbol]);
 
   if (!compoundAddress) {
+    if (err) {
+      return (
+        <SafeAreaView
+          style={{
+            backgroundColor: '#000',
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Text
+            style={{
+              color: '#a33',
+              fontSize: 18,
+              width: '60%',
+              textAlign: 'center',
+            }}
+          >
+            Failed to get deposit address, try again later.
+          </Text>
+        </SafeAreaView>
+      );
+    }
     return <Loader bgc="#000" />;
   }
+
   return (
     <SafeAreaView style={{ backgroundColor: '#000', height: '100%' }}>
       <View
