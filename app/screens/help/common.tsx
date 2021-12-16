@@ -57,7 +57,7 @@ export function Code({ children }: WithChildren<{}>) {
 
 export function Page({ children }: WithChildren) {
   return (
-    <SafeAreaView style={{ backgroundColor: '#000', flex: 1 }}>
+    <SafeAreaView style={{ backgroundColor: '#000', flex: 1, marginHorizontal: 18 }}>
       <ScrollView contentContainerStyle={{ paddingBottom: 200 }}>{children}</ScrollView>
     </SafeAreaView>
   );
