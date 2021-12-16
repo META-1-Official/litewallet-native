@@ -79,7 +79,7 @@ export const DexStack = () => {
 };
 
 export type DexSSP = StackScreenProps<DexModalStackParamList>;
-export type DexTNP = BottomTabScreenProps<DexTabParamList>;
+export type DexTSP = BottomTabScreenProps<DexTabParamList>;
 const DexTabs = ({ navigation }: DexSSP) => {
   return (
     <Tab.Navigator

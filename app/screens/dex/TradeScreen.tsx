@@ -1,9 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Image, SafeAreaView, ScrollView, Text, TextInput, View } from 'react-native';
+import {
+  Image,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { Search } from 'react-native-feather';
 import { Grid, LineChart } from 'react-native-svg-charts';
+import { DexTSP } from '.';
 import Loader from '../../components/Loader';
 import { getHistoryForAsset, useAssets } from '../../utils/meta1Api';
+import { dexAssetView } from './AssetView/AssetViewStore';
 
 const Chart: React.FC<{ symbol: string; color: string }> = ({ symbol, color }) => {
   const [data, setData] = useState<number[]>([1, 1]);
@@ -26,7 +36,7 @@ const Chart: React.FC<{ symbol: string; color: string }> = ({ symbol, color }) =
   );
 };
 
-const DexTrade: React.FC = () => {
+const DexTrade: React.FC<DexTSP> = ({ navigation }) => {
   const accountAssets = useAssets();
   const [searchText, setSearchText] = useState('');
 
@@ -76,43 +86,47 @@ const DexTrade: React.FC = () => {
         >
           {assets.map(e => {
             return (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  // padding: 8,
-                  marginVertical: 12,
-                }}
+              <TouchableOpacity
+                onPress={() => dexAssetView(navigation, e.symbol)}
                 key={`Asset_${e.symbol}`}
               >
-                <View style={{ flexDirection: 'row', width: 144 }}>
-                  <Image
-                    source={e._asset.icon}
-                    style={{
-                      width: 48,
-                      height: 48,
-                      resizeMode: 'contain',
-                    }}
-                  />
-                  <View style={{ marginLeft: 8 }}>
-                    <Text style={{ color: '#fff', fontSize: 16 }}>{e.symbol}</Text>
-                    <Text style={{ color: '#fff', fontSize: 12 }}>{e.symbol}</Text>
-                  </View>
-                </View>
-                <Chart symbol={e.symbol} color={e.delta >= 0 ? '#419e7f' : '#b02a27'} />
                 <View
                   style={{
-                    width: 80,
-                    marginLeft: 18,
-                    alignItems: 'flex-end',
+                    flexDirection: 'row',
+                    // padding: 8,
+                    marginVertical: 12,
                   }}
                 >
-                  <Text style={{ color: '#fff', fontSize: 15 }}>${e.usdt_value.toFixed(2)}</Text>
-                  <Text style={{ color: e.delta >= 0 ? '#419e7f' : '#b02a27' }}>
-                    {e.delta >= 0 ? '+ ' : '- '}
-                    {Math.abs(e.delta)}%
-                  </Text>
+                  <View style={{ flexDirection: 'row', width: 144 }}>
+                    <Image
+                      source={e._asset.icon}
+                      style={{
+                        width: 48,
+                        height: 48,
+                        resizeMode: 'contain',
+                      }}
+                    />
+                    <View style={{ marginLeft: 8 }}>
+                      <Text style={{ color: '#fff', fontSize: 16 }}>{e.symbol}</Text>
+                      <Text style={{ color: '#fff', fontSize: 12 }}>{e.symbol}</Text>
+                    </View>
+                  </View>
+                  <Chart symbol={e.symbol} color={e.delta >= 0 ? '#419e7f' : '#b02a27'} />
+                  <View
+                    style={{
+                      width: 80,
+                      marginLeft: 18,
+                      alignItems: 'flex-end',
+                    }}
+                  >
+                    <Text style={{ color: '#fff', fontSize: 15 }}>${e.usdt_value.toFixed(2)}</Text>
+                    <Text style={{ color: e.delta >= 0 ? '#419e7f' : '#b02a27' }}>
+                      {e.delta >= 0 ? '+ ' : '- '}
+                      {Math.abs(e.delta)}%
+                    </Text>
+                  </View>
                 </View>
-              </View>
+              </TouchableOpacity>
             );
           })}
         </View>

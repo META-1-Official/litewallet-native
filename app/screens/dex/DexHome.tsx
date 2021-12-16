@@ -12,7 +12,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Loader from '../../components/Loader';
 import { getHistoryForAsset, useAssets } from '../../utils/meta1Api';
 import { LineChart, Grid } from 'react-native-svg-charts';
-import { DexTNP } from '.';
+import { DexTSP } from '.';
 import { dexAssetView } from './AssetView/AssetViewStore';
 
 const { width } = Dimensions.get('screen');
@@ -38,7 +38,7 @@ const Chart: React.FC<{ symbol: string; color: string }> = ({ symbol, color }) =
   );
 };
 
-const DexHome: React.FC<DexTNP> = ({ navigation }) => {
+const DexHome: React.FC<DexTSP> = ({ navigation }) => {
   const accountAssets = useAssets();
   if (!accountAssets) {
     return <Loader bgc="#000" />;
