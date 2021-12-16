@@ -49,7 +49,15 @@ export const WalletNav: React.FC<DrawerScreenProps<DexDrawerParamList>> = ({ nav
     >
       <Tab.Screen name="Wallet" component={WalletScreen} />
       <Tab.Screen name="Fund Account" component={FundAccount} />
-      <Tab.Screen name="DEX" component={DexStack} />
+      <Tab.Screen
+        name="DEX"
+        options={{
+          tabBarButton: props => {
+            return <Pressable {...props} onPress={() => navigation.jumpTo('DEX_HOME')} />;
+          },
+        }}
+        component={SettingsScreen}
+      />
       <Tab.Screen
         name="Settings"
         options={{

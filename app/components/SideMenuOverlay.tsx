@@ -90,7 +90,7 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
           onPress={() => {
             console.log(navigation.getState(), navigation.getParent());
             navigation.closeDrawer();
-            navigation.jumpTo('Wallet');
+            navigation.jumpTo('__Home');
           }}
           title="Lite Wallet"
           icon={SvgIcons.Wallet}
