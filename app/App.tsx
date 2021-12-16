@@ -1,6 +1,6 @@
 import * as React from 'react';
 import 'react-native-gesture-handler';
-import { NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider as PaperProvider } from 'react-native-paper';
@@ -50,6 +50,7 @@ const AuthNav = () => {
 };
 
 function App() {
+  const [dark, setDark] = React.useState(false);
   useEffect(() => {
     SplashScreen.hide();
     Connect();
@@ -61,7 +62,20 @@ function App() {
   return (
     <PaperProvider>
       <SafeAreaProvider>
-        <NavigationContainer>{<CurrentNav />}</NavigationContainer>
+        <NavigationContainer
+          theme={{
+            ...DefaultTheme,
+            colors: {
+              ...DefaultTheme.colors,
+              background: dark ? '#000' : DefaultTheme.colors.background,
+            },
+          }}
+          onStateChange={state =>
+            setDark(state?.key.startsWith('drawer') ? state?.index !== 0 : false)
+          }
+        >
+          {<CurrentNav />}
+        </NavigationContainer>
       </SafeAreaProvider>
     </PaperProvider>
   );
