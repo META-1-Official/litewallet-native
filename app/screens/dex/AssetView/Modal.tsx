@@ -1,6 +1,18 @@
+import { file } from '@babel/types';
 import assert from 'assert';
+import { fill } from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { Keyboard, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  Dimensions,
+  Keyboard,
+  LayoutRectangle,
+  PixelRatio,
+  Platform,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { Minus, Plus } from 'react-native-feather';
 import { SvgIcons } from '../../../../assets';
 import { useStore } from '../../../store';
@@ -247,18 +259,43 @@ const SellTab: React.FC = () => {
   );
 };
 
+const { height } = Dimensions.get('window');
+
+const useKeyboard = () => {
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
+  useEffect(() => {
+    const l1 = Keyboard.addListener('keyboardDidShow', () => setKeyboardOpen(true));
+    const l2 = Keyboard.addListener('keyboardDidHide', () => setKeyboardOpen(false));
+    return () => {
+      l1.remove();
+      l2.remove();
+    };
+  }, []);
+
+  return keyboardOpen;
+};
 const AssetViewModal: React.FC<AssetViewSSP> = ({ navigation }) => {
   const [leftTabSelected, setLTSelected] = useState(true);
-  const [backdropY, setBackdropY] = useState(45);
+  const [backdropY, setBackdropY] = useState(height * 0.45);
+  const [contentSize, setContentSize] = useState<LayoutRectangle>({
+    width: 0,
+    height: 0,
+    x: 0,
+    y: 0,
+  });
+
+  const keyboardOpen = useKeyboard();
   useEffect(() => {
-    Keyboard.addListener('keyboardDidShow', () => setBackdropY(15));
-    Keyboard.addListener('keyboardDidHide', () => setBackdropY(45));
-  }, []);
+    const forKb = height * 0.05;
+    const regular = height - contentSize.height;
+    setBackdropY(keyboardOpen ? forKb : regular);
+  }, [keyboardOpen, contentSize]);
+
   return (
     <View style={{ height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.35)' }}>
       <TouchableOpacity
         style={{
-          height: `${backdropY}%`,
+          height: backdropY,
         }}
         onPress={() => navigation.goBack()}
       />
@@ -266,8 +303,9 @@ const AssetViewModal: React.FC<AssetViewSSP> = ({ navigation }) => {
         style={{
           // height: '65%',
           backgroundColor: '#330000',
-          flexGrow: 1,
+          // flexGrow: 1,
         }}
+        onLayout={e => setContentSize(e.nativeEvent.layout)}
       >
         <View
           style={{
