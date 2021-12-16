@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Dimensions, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import { Circle } from 'react-native-svg';
 import { Grid, LineChart } from 'react-native-svg-charts';
+import { DexTSP } from '.';
 import Loader from '../../components/Loader';
 import MaterialToggle from '../../components/MaterialToggle';
 import { ProfitIndicator } from '../../components/PortfolioHeader';
@@ -10,6 +11,7 @@ import { useStore } from '../../store';
 import { colors } from '../../styles/colors';
 import { useAssets } from '../../utils/meta1Api';
 import { getHistory } from '../../utils/miscApi';
+import { dexAssetView } from './AssetView/AssetViewStore';
 
 const GRAPH_INTERAVAL = {
   '1D': 1,
@@ -61,7 +63,7 @@ const Chart = ({ data }: { data: number[] }) => {
   );
 };
 
-const DexFund: React.FC = () => {
+const DexFund: React.FC<DexTSP> = ({ navigation }) => {
   const [curInterval, setCurInterval] = useState<GRAPH_INTERAVAL_KEYS>('1D');
   const [showZeroBalance, setShowZeroBalacnce] = useState(false);
   const [chartData, setChartData] = useState<number[]>([0, 0]);
@@ -155,6 +157,7 @@ const DexFund: React.FC = () => {
           textPrimary: '#fff',
           textSecondary: '#fff',
         }}
+        onPress={s => dexAssetView(navigation, s)}
         usdPrimary
       />
     </SafeAreaView>

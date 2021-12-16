@@ -1,5 +1,13 @@
 import React from 'react';
-import { Dimensions, ScrollView, Image, StyleSheet, Text, View } from 'react-native';
+import {
+  Dimensions,
+  ScrollView,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import { grey200, grey600 } from 'react-native-paper/src/styles/colors';
 import { AccountBalanceT, AssetBalanceT } from '../utils/meta1Api';
 
@@ -15,12 +23,14 @@ interface Props {
     textSecondary?: string;
   };
   usdPrimary?: boolean;
+  onPress?: (asset: string) => void;
 }
 const PortfolioLising: React.FC<Props> = ({
   showZeroBallance,
   accountBallance,
   colors,
   usdPrimary,
+  onPress,
 }) => {
   const defaultColors: typeof colors = {
     background: '#fff',
@@ -61,7 +71,7 @@ const PortfolioLising: React.FC<Props> = ({
         </Text>
       );
 
-    return (
+    const ret = (
       <View key={`CoinBalance_${i}`} style={[styles.portfolioRow, backgroundColor]}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Image style={styles.coinIcon} source={e._asset.icon} />
@@ -73,6 +83,14 @@ const PortfolioLising: React.FC<Props> = ({
         </View>
       </View>
     );
+    if (onPress) {
+      return (
+        <TouchableOpacity key={`CoinBalance_Touch__${i}`} onPress={() => onPress(e.symbol)}>
+          {ret}
+        </TouchableOpacity>
+      );
+    }
+    return ret;
   };
 
   return (
