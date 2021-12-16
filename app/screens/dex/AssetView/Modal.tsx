@@ -1,13 +1,9 @@
-import { file } from '@babel/types';
 import assert from 'assert';
-import { fill } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import {
   Dimensions,
   Keyboard,
   LayoutRectangle,
-  PixelRatio,
-  Platform,
   Text,
   TextInput,
   TouchableOpacity,
