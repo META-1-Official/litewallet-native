@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import throttle from 'lodash.throttle';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useAssetPicker } from '../components/AssetSelectModal';
@@ -161,18 +161,17 @@ const AmountInput = ({ asset }: AssetProp) => {
   const [usd, setUsd] = useState(asset.toUsdt().toFixed(2));
 
   useEffect(() => {
-    console.log('change');
     setAmt(asset.amount);
     setUsd(asset.toUsdt().toFixed(2));
   }, [asset]);
 
-  const throttled = useCallback(
-    throttle((tt: string) => {
-      console.log('throttled');
-      asset.formUsdt(tt);
-      asset.opponent().formUsdt(tt);
-    }, 1500),
-    [],
+  const throttled = useMemo(
+    () =>
+      throttle((tt: string) => {
+        asset.formUsdt(tt);
+        asset.opponent().formUsdt(tt);
+      }, 1500),
+    [asset],
   );
   return (
     <View>
@@ -190,17 +189,10 @@ const AmountInput = ({ asset }: AssetProp) => {
       <View style={styles.rowEnd}>
         <TextSecondary style={styles.usdtLable}>US$</TextSecondary>
         <TextInput
-          onChangeText={
-            t => {
-              setUsd(t);
-              throttled(t);
-            }
-            // throttle(tt => {
-            //   setUsd(tt);
-            //   asset.formUsdt(tt);
-            //   asset.opponent().formUsdt(tt);
-            // }, 700)(t)
-          }
+          onChangeText={t => {
+            setUsd(t);
+            throttled(t);
+          }}
           value={usd}
           style={styles.usdInput}
         />
