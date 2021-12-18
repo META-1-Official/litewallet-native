@@ -170,11 +170,17 @@ export const Timeout = (fn: Promise<any>, message: string) =>
 export const jsonEquals = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
 
 // Jank
-export const catchError = async (fn: () => void, anyway?: () => void, onErr?: () => void) => {
+export const catchError = async (
+  fn: () => void,
+  anyway?: () => void,
+  onErr?: (e: unknown) => void,
+) => {
   try {
     await fn();
   } catch (e) {
-    onErr?.();
+    if (onErr?.(e)) {
+      return anyway?.();
+    }
     console.error(e);
     Alert.alert('Error', (e as Error).message);
   }

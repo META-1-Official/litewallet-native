@@ -32,6 +32,7 @@ const PortfolioLising: React.FC<Props> = ({
   usdPrimary,
   onPress,
 }) => {
+  console.log(onPress);
   const defaultColors: typeof colors = {
     background: '#fff',
     stripe: grey200,
@@ -83,6 +84,7 @@ const PortfolioLising: React.FC<Props> = ({
         </View>
       </View>
     );
+
     if (onPress) {
       return (
         <TouchableOpacity key={`CoinBalance_Touch__${i}`} onPress={() => onPress(e.symbol)}>
@@ -90,6 +92,7 @@ const PortfolioLising: React.FC<Props> = ({
         </TouchableOpacity>
       );
     }
+
     return ret;
   };
 

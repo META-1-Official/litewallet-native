@@ -306,7 +306,7 @@ export const useAssets = () => {
   const accountName = useStore(state => state.accountName);
   const userAssets = useAssetsStore(state => state.userAssets);
   const fetch = useAssetsStore(state => state.fetchUserAssets);
-  if (userAssets === null) {
+  if (!userAssets.assetsWithBalance.length) {
     fetch(accountName);
   }
 
@@ -318,12 +318,17 @@ export async function getOrderBook(assetA: string, assetB: string) {
 }
 
 interface AssetsStore {
-  userAssets: AccountBalanceT | null;
+  userAssets: AccountBalanceT;
   fetchUserAssets: (accountName: string) => Promise<void>;
 }
 
 export const useAssetsStore = create<AssetsStore>(set => ({
-  userAssets: null,
+  userAssets: {
+    assetsWithBalance: [],
+    accountTotal: 0,
+    changePercent: 0,
+    toatalChnage: 0,
+  },
   fetchUserAssets: async (accountName: string) => {
     const res = await fetchAccountBalances(accountName);
     set({ userAssets: res! });
@@ -332,7 +337,14 @@ export const useAssetsStore = create<AssetsStore>(set => ({
 
 useStore.subscribe(
   () => {
-    useAssetsStore.setState({ userAssets: null });
+    useAssetsStore.setState({
+      userAssets: {
+        assetsWithBalance: [],
+        accountTotal: 0,
+        changePercent: 0,
+        toatalChnage: 0,
+      },
+    });
   },
   state => state.authorized,
 );
