@@ -113,7 +113,7 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
         <ListItem
           title="Create Paper Wallet"
           icon={Archive}
-          onPress={() => navigation.navigate('__CreatePaperWallet')}
+          onPress={() => navigation.navigate('CreatePaperWallet')}
         />
         <ListItem title="Help" icon={HelpCircle} onPress={() => navigation.navigate('__Help')} />
       </View>

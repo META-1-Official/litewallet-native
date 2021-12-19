@@ -11,6 +11,8 @@
 </head>
 
 <body>
+  <img src="https://i.imgur.com/Nt3soc2.gif"
+    style=" display: block; margin-left: auto; margin-right: auto; width: 30%;" />
   <div id="qrcode" style="display: none;"></div>
   <script>
 
@@ -126,13 +128,14 @@
       });
 
       Promise.all(content).then(() => {
-        pdf.save(
+        const x = pdf.save(
           'meta' +
           '-paper-wallet-' +
           (locked ? 'public-' : 'private-') +
-          accountName +
-          '.pdf',
+          accountName + new Date().getTime() + 
+          '.pdf'
         );
+        setTimeout(() => window.close(), 500);
       });
     };
     const decodeArgs = () => {
