@@ -110,7 +110,11 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
           icon={PieChart}
           onPress={() => navigation.navigate('__ExploreAssets')}
         />
-        <ListItem title="Create Paper Wallet" icon={Archive} />
+        <ListItem
+          title="Create Paper Wallet"
+          icon={Archive}
+          onPress={() => navigation.navigate('__CreatePaperWallet')}
+        />
         <ListItem title="Help" icon={HelpCircle} onPress={() => navigation.navigate('__Help')} />
       </View>
       <TouchableOpacity

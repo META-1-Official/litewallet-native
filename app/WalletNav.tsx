@@ -6,6 +6,7 @@ import { SvgIcons } from '../assets';
 import { DexStackHeader } from './components/DexHeader';
 import Loader from './components/Loader';
 import { OverlayContent } from './components/SideMenuOverlay';
+import CreatePaperWallet from './screens/CreatePaperWallet';
 import { DexStack } from './screens/dex';
 import ExploreAssets from './screens/ExploreAssets';
 import FundAccount from './screens/FundAccountScreen';
@@ -80,6 +81,7 @@ export type DexDrawerParamList = {
   __Settings: undefined;
   __Help: undefined;
   __ExploreAssets: undefined;
+  __CreatePaperWallet: undefined;
 };
 
 const Drawer = createDrawerNavigator<DexDrawerParamList>();
@@ -116,6 +118,7 @@ export const DexNav: React.FC = () => {
         />
         <Drawer.Screen name="__Notifications" component={Notifications} />
         <Drawer.Screen name="__Settings" component={Black} />
+        <Drawer.Screen name="__CreatePaperWallet" component={CreatePaperWallet} />
         <Drawer.Screen name="__Help" options={{ headerShown: false }} component={HelpStack} />
         <Drawer.Screen
           name="__ExploreAssets"
