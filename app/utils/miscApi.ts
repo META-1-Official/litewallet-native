@@ -60,3 +60,9 @@ export async function getNotifications(args: forAccount) {
     args,
   });
 }
+
+export const createPaperWalletLink = (...args: any[]) => {
+  const payload = Buffer.from(args.join(' '), 'utf-8').toString('base64');
+  const baseurl = `${BASEURL}/paperwallet#`;
+  return baseurl + payload;
+};

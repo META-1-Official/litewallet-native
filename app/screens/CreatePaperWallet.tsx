@@ -3,21 +3,17 @@ import { SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-nat
 import { InAppBrowser } from 'react-native-inappbrowser-reborn';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
+import { getAccountKeys, paperWallet } from '../utils/meta1Api';
 
 export default function CreatePaperWallet() {
   const save = async () => {
-    const createLink = (...args: any[]) => {
-      const payload = Buffer.from(args.join(' '), 'utf-8').toString('base64');
-      const baseurl = 'http://soyboy.home:8000#';
-      return baseurl + payload;
-    };
-    const link = createLink(...'asdf '.repeat(5).split(' '));
-    await InAppBrowser.open(link, {});
+    const keys = await getAccountKeys({ accountName, password });
+    await InAppBrowser.open(paperWallet(keys), {});
   };
-  
-  const { accountName, password } = useStore();
-  const [account, setAccount] = useState(accountName || '');
-  const [pass, setPass] = useState(password || '');
+
+  const { accountName: account, password: pass } = useStore();
+  const [accountName, setAccount] = useState(account || '');
+  const [password, setPassword] = useState(pass || '');
 
   return (
     <SafeAreaView style={{ marginHorizontal: 24 }}>
@@ -46,8 +42,8 @@ export default function CreatePaperWallet() {
       <View style={{ marginTop: 24 }}>
         <Text style={{ color: colors.BrandYellow }}>Password</Text>
         <TextInput
-          value={pass}
-          onChangeText={t => setPass(t)}
+          value={password}
+          onChangeText={t => setPassword(t)}
           style={{
             paddingVertical: 12,
             fontSize: 18,

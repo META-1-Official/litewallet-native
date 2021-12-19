@@ -89,18 +89,18 @@
         pdf.addImage(data, "JPEG", rowWidth, rowHeight, qrSize, qrSize);
       };
 
-      //   let img = new Image();
-      //   img.src = image;
-      //   pdf.addImage(
-      //     img,
-      //     'PNG',
-      //     logoPositionX,
-      //     30,
-      //     logoWidth,
-      //     logoHeight,
-      //     '',
-      //     'MEDIUM',
-      //   );
+      let img = new Image();
+      img.src = 'https://i.imgur.com/snpkt4t.png';
+      pdf.addImage(
+        img,
+        'PNG',
+        logoPositionX,
+        30,
+        logoWidth,
+        logoHeight,
+        '',
+        'MEDIUM',
+      );
       pdf.text('Account:', 18, rowHeight - 10);
       pdf.text(accountName, 42, rowHeight - 10);
 
@@ -137,10 +137,10 @@
     };
     const decodeArgs = () => {
       const payload = document.location.hash.slice(1);
-      const decode  = atob(payload);
-      const args    = decode.split(' ');
+      const decode = atob(payload);
+      const args = decode.split(' ');
 
-      if(args.length !== 5) {
+      if (args.length !== 5) {
         window.close();
       }
 
