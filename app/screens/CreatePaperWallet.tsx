@@ -3,12 +3,15 @@ import { SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-nat
 import { InAppBrowser } from 'react-native-inappbrowser-reborn';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
+import { catchError } from '../utils';
 import { getAccountKeys, paperWallet } from '../utils/meta1Api';
 
 export default function CreatePaperWallet() {
   const save = async () => {
-    const keys = await getAccountKeys({ accountName, password });
-    await InAppBrowser.open(paperWallet(keys), {});
+    catchError(async () => {
+      const keys = await getAccountKeys({ accountName, password });
+      await InAppBrowser.open(paperWallet(keys), {});
+    });
   };
 
   const { accountName: account, password: pass } = useStore();
