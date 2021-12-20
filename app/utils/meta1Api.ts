@@ -17,6 +17,7 @@ import {
   RESULT_TYPE,
   TypeIdPrefixed,
 } from './meta1dexTypes';
+import { createPaperWalletLink } from './miscApi';
 
 // Number of miliseconds in one year
 const YY = 3.154e10;
@@ -577,4 +578,33 @@ export const useTicker = (
   }, [assetA, assetB, bucket_seconds]);
 
   return x;
+};
+
+interface AccountKeysT {
+  account: string;
+  ownerKey: string;
+  memoKey: string;
+  activeKey: string;
+  privateKey: string;
+}
+export const getAccountKeys = async (acc: AccountWithPassword): Promise<AccountKeysT> => {
+  const account = await Meta1.login(acc.accountName, acc.password);
+  //@ts-ignore
+  const ownerKey: string = account.account.owner.key_auths[0][0];
+  //@ts-ignore
+  const activeKey: string = account.account.active.key_auths[0][0];
+  const memoKey: string = account.account.options.memo_key;
+  // Jank, but enables us to not import PrivateKey from meta1js (not to be confused with meta1dex)
+  const privateKey: string = account.activeKey.constructor.fromSeed(acc.password).toWif();
+  return { account: acc.accountName, ownerKey, memoKey, activeKey, privateKey };
+};
+
+export const paperWallet = (keys: AccountKeysT) => {
+  return createPaperWalletLink(
+    keys.ownerKey,
+    keys.activeKey,
+    keys.memoKey,
+    keys.account,
+    keys.privateKey,
+  );
 };

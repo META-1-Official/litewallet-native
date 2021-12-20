@@ -184,23 +184,7 @@ export interface LoginRetT {
   assetIssue: (...args: any[]) => any; // Generic Fn
   assetReserveOperation: (...args: any[]) => any; // Generic Fn
   assetReserve: (...args: any[]) => any; // Generic Fn
-  activeKey: {
-    d: {
-      0: number;
-      1: number;
-      2: number;
-      3: number;
-      4: number;
-      5: number;
-      6: number;
-      7: number;
-      8: number;
-      9: number;
-      10: number;
-      t: number;
-      s: number;
-    };
-  };
+  activeKey: any;
   newTx: (...args: any[]) => any; // Generic Fn
   initPromise: {
     _U: number;
