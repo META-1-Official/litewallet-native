@@ -14,7 +14,8 @@
     "clean:ios": "xcodebuild clean -workspace ./ios/nativeapp.xcworkspace -scheme nativeapp",
     "repod": "cd ios; pod deintegrate; pod install",
     "clean": "yarn clean:ios; yarn repod",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "react-native": "react-native"
   },
   "dependencies": {
     "@react-native-clipboard/clipboard": "^1.9.0",
