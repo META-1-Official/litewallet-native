@@ -1,6 +1,6 @@
 import { DrawerContentComponentProps } from '@react-navigation/drawer/src/types';
 import React from 'react';
-import { SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, TouchableOpacity, View, } from 'react-native';
 import {
   Archive,
   ArrowLeft,
@@ -16,19 +16,15 @@ import { useStore } from '../store';
 interface ListItemProps {
   title: string;
   icon?: any;
+  rawIcon?: boolean;
   onPress?: () => void;
 }
-const ListItem: React.FC<ListItemProps> = ({ title, icon, onPress }) => {
-  let TheIcon: any = () => null;
-  let isRawSvg = false;
-  if (icon) {
-    isRawSvg = icon.name === 'SvgComponent';
-    TheIcon = icon;
-  }
+const ListItem: React.FC<ListItemProps> = ({ title, icon, onPress, rawIcon }) => {
+  const TheIcon: React.ReactNode = icon!;
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={onPress}> 
       <View style={{ flexDirection: 'row', padding: 12 }}>
-        <TheIcon fill={isRawSvg ? '#fff' : undefined} color="#fff" width={24} height={24} />
+        <TheIcon fill={rawIcon ? '#fff' : undefined} color="#fff" width={24} height={24} />
         <Text style={{ color: '#fff', fontSize: 18, marginLeft: 24 }}>{title}</Text>
       </View>
     </TouchableOpacity>
@@ -93,6 +89,7 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
             navigation.jumpTo('__Home');
           }}
           title="Lite Wallet"
+          rawIcon
           icon={SvgIcons.Wallet}
         />
         <ListItem
@@ -101,6 +98,7 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
             navigation.navigate('DEX__Home');
           }}
           title="DEX"
+          rawIcon
           icon={SvgIcons.Trade}
         />
         <ListItem title="Buy / Sell" icon={CreditCard} />
