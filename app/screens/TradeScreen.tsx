@@ -15,7 +15,6 @@ import {
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SvgIcons } from '../../assets';
-import { useAssetPicker } from '../components/AssetSelectModal';
 import { List } from '../components/List';
 import Loader from '../components/Loader';
 import { useLoaderModal } from '../components/LoaderModal';
@@ -25,6 +24,7 @@ import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { catchError, ensure, promptPromise, shadow, style } from '../utils';
 import { AssetBalanceT, swapWithPassword, useAssets, useAssetsStore } from '../utils/meta1Api';
+import { createPair, theAsset, useAsset } from '../utils/useAsset';
 import { WalletNavigationProp } from './WalletScreen';
 
 const { width, height } = Dimensions.get('screen');
@@ -41,67 +41,8 @@ const Backdrop = () => (
   />
 );
 
-type theAsset = {
-  asset: AssetBalanceT;
-  open: () => void;
-  amount: string;
-  setAmount: React.Dispatch<React.SetStateAction<string>>;
-  Modal: ReturnType<typeof useAssetPicker>[3];
-  formUsdt: (usdtAmount: string | number, updateAmount?: boolean) => number;
-  toUsdt: (amt?: string | number | undefined) => number;
-  opponent: () => theAsset;
-};
-
-const useAsset = (dv?: AssetBalanceT): Omit<theAsset, 'opponent'> => {
-  const [asset, open, _close, Modal] = useAssetPicker(dv);
-  if (!asset) {
-    throw new Error('No such asset');
-  }
-
-  const formUsdt = (usdtAmount: string | number, updateAmount = true) => {
-    const n = Number(usdtAmount);
-    if (!n && n !== 0) {
-      console.error('Invalid amount');
-      return 0;
-    }
-
-    const newAmount = n / asset.usdt_value;
-
-    if (updateAmount) {
-      setAmount(newAmount.toFixed(8));
-    }
-
-    return newAmount;
-  };
-
-  const toUsdt = (amt?: string | number) => {
-    const n = Number(typeof amt === 'undefined' ? amount : amt);
-    if (!n && n !== 0) {
-      console.error('Invalid amount');
-      return 0;
-    }
-    const usdt = n * asset.usdt_value;
-    return usdt;
-  };
-
-  const [amount, setAmount] = useState('0.00');
-  return {
-    asset,
-    open,
-    amount,
-    setAmount,
-    Modal,
-    formUsdt,
-    toUsdt,
-  };
-};
-
 const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanceT) => {
-  const _A = useAsset(defaultAssetA);
-  const _B = useAsset(defaultAssetB);
-
-  const A: theAsset = { ..._A, opponent: () => B };
-  const B: theAsset = { ..._B, opponent: () => A };
+  const [A, B] = createPair(useAsset(defaultAssetA), useAsset(defaultAssetB));
 
   return {
     assets: { A, B },
@@ -393,8 +334,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
         </View>
       </LightMode>
       <DarkMode>
-        <View style={[styles.center, styles.m12]}>
-        </View>
+        <View style={[styles.center, styles.m12]}></View>
         <TouchableOpacity onPress={fn}>
           <View style={styles.darkBtnView}>
             <Text style={styles.font18x500}>Convert</Text>
