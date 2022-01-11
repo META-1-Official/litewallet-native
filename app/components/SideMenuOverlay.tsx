@@ -102,7 +102,6 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
           icon={SvgIcons.Trade}
         />
         <ListItem title="Buy / Sell" icon={CreditCard} />
-        <ListItem title="Invite Friends" icon={UserPlus} />
         <ListItem
           title="Backing Assets"
           icon={PieChart}
