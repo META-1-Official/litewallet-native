@@ -103,6 +103,7 @@ export type AccountBalanceT = {
   accountTotal: number;
   toatalChnage: number;
   changePercent: number;
+  find: (symbol: string) => AssetBalanceT | null;
 };
 
 const emptyBalance = (assetId: string): iBalance => ({
@@ -113,7 +114,7 @@ const emptyBalance = (assetId: string): iBalance => ({
   maintenance_flag: false, // whatever
 });
 
-export async function fetchAccountBalances(accountName: string) {
+export async function fetchAccountBalances(accountName: string): Promise<AccountBalanceT | void> {
   const accounts = await Meta1.db
     .get_full_accounts([accountName], false)
     .then(res => new Map(res));
@@ -141,7 +142,13 @@ export async function fetchAccountBalances(accountName: string) {
     .map(e => e.delta * e.total_value * 0.01)
     .reduce((acc, cv) => acc + cv, 0);
   const changePercent = toatalChnage / (accountTotal * 0.01);
-  return { assetsWithBalance, changePercent, toatalChnage, accountTotal };
+  return {
+    assetsWithBalance,
+    changePercent,
+    toatalChnage,
+    accountTotal,
+    find: str => assetsWithBalance.find(e => e.symbol === str) || null,
+  };
 }
 
 export interface AccountWithPassword {
@@ -310,7 +317,6 @@ export const useAssets = () => {
   if (!userAssets.assetsWithBalance.length) {
     fetch(accountName);
   }
-
   return userAssets;
 };
 
@@ -329,6 +335,7 @@ export const useAssetsStore = create<AssetsStore>(set => ({
     accountTotal: 0,
     changePercent: 0,
     toatalChnage: 0,
+    find: () => null,
   },
   fetchUserAssets: async (accountName: string) => {
     const res = await fetchAccountBalances(accountName);
@@ -344,6 +351,7 @@ useStore.subscribe(
         accountTotal: 0,
         changePercent: 0,
         toatalChnage: 0,
+        find: () => null,
       },
     });
   },
