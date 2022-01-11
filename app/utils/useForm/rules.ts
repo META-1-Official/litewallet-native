@@ -16,6 +16,10 @@ export const same: (cmp: string) => RuleFn = cmp => (text, name, state) =>
     ? null
     : `${name} is Should match ${cmp.charAt(0).toUpperCase() + cmp.slice(1)}`;
 
+export const includes =
+  (str: string): RuleFn =>
+  (text, name) =>
+    rule(text.includes(str), `${name} should include '${str}'`);
 export const includeOr =
   (a: string, b: string): RuleFn =>
   (text, name) =>

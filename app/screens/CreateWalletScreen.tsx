@@ -10,7 +10,7 @@ import { colors } from '../styles/colors';
 import { catchError } from '../utils';
 import createAccountWithPassword from '../utils/accountCreate';
 import useForm from '../utils/useForm';
-import { email, includeOr, required, same } from '../utils/useForm/rules';
+import { email, includes, required, same } from '../utils/useForm/rules';
 import Clipboard from '@react-native-clipboard/clipboard';
 
 const CreateWalletScreen: React.FC = () => {
@@ -20,7 +20,7 @@ const CreateWalletScreen: React.FC = () => {
     { name: 'last_name', lable: 'Last name', rules: [required] },
     { name: 'email', lable: 'Email', rules: [required, email] },
     { name: 'mobile', lable: 'Mobile number', rules: [required] },
-    { name: 'account_name', lable: 'Account name', rules: [required, includeOr('.', '-')] },
+    { name: 'account_name', lable: 'Account name', rules: [required, includes('-')] },
     {
       name: 'password',
       lable: 'Password',
