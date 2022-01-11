@@ -21,7 +21,7 @@ import DexModal from '../../components/DexMainModal';
 import DexFund from './DexFund';
 import DexRecive from './ReciveScreen';
 import DexSwapScreen from './SwapScreen';
-import DexSend from './SendScreen';
+import Send from './SendScreen';
 import AssetViewStack from './AssetView/AssetView';
 import { DexDrawerParamList } from '../../WalletNav';
 
@@ -70,7 +70,7 @@ export const DexStack = () => {
         options={{ presentation: 'transparentModal' }}
         name="__Modal"
       />
-      <Stack.Screen component={DexSend} name="DEX__Send" />
+      <Stack.Screen component={Send} name="DEX__Send" />
       <Stack.Screen component={DexRecive} name="DEX__Recive" />
       <Stack.Screen component={DexSwapScreen} name="DEX__Convert" />
       <Stack.Screen component={AssetViewStack} name="DEX__AssetViewStack" />
