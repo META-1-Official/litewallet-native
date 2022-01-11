@@ -390,12 +390,10 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
               <Text style={styles.buttonText}>Exchange</Text>
             </View>
           </TouchableOpacity>
-          <Text>The spread for this transaction is 0.423%</Text>
         </View>
       </LightMode>
       <DarkMode>
         <View style={[styles.center, styles.m12]}>
-          <Text style={{ color: '#fff' }}>The spread for this transaction is 0.423%</Text>
         </View>
         <TouchableOpacity onPress={fn}>
           <View style={styles.darkBtnView}>
