@@ -11,7 +11,7 @@ export type theAsset = {
   formUsdt: (usdtAmount: string | number, updateAmount?: boolean) => number;
   toUsdt: (amt?: string | number | undefined) => number;
   getMax: () => number;
-  setMax: () => void; 
+  setMax: () => void;
   opponent: () => theAsset;
 };
 
