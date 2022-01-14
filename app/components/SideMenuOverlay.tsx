@@ -1,14 +1,7 @@
 import { DrawerContentComponentProps } from '@react-navigation/drawer/src/types';
 import React from 'react';
-import { SafeAreaView, TouchableOpacity, View, } from 'react-native';
-import {
-  Archive,
-  ArrowLeft,
-  CreditCard,
-  HelpCircle,
-  PieChart,
-  UserPlus,
-} from 'react-native-feather';
+import { SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { Archive, ArrowLeft, CreditCard, HelpCircle, PieChart } from 'react-native-feather';
 import { Text } from 'react-native-paper';
 import { SvgIcons } from '../../assets';
 import { useStore } from '../store';
@@ -20,9 +13,9 @@ interface ListItemProps {
   onPress?: () => void;
 }
 const ListItem: React.FC<ListItemProps> = ({ title, icon, onPress, rawIcon }) => {
-  const TheIcon: React.ReactNode = icon!;
+  const TheIcon: any = icon!;
   return (
-    <TouchableOpacity onPress={onPress}> 
+    <TouchableOpacity onPress={onPress}>
       <View style={{ flexDirection: 'row', padding: 12 }}>
         <TheIcon fill={rawIcon ? '#fff' : undefined} color="#fff" width={24} height={24} />
         <Text style={{ color: '#fff', fontSize: 18, marginLeft: 24 }}>{title}</Text>
@@ -59,7 +52,10 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
         <Text style={{ color: '#fff', fontSize: 22, fontWeight: '700' }}>{accountName}</Text>
       </View>
       <TouchableOpacity
-        onPress={() => {}}
+        onPress={() => {
+          navigation.closeDrawer();
+          navigation.jumpTo('__Settings');
+        }}
         style={{
           margin: 4,
           marginTop: 18,

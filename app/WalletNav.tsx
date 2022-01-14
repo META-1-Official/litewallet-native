@@ -72,8 +72,6 @@ export const WalletNav: React.FC<DrawerScreenProps<DexDrawerParamList>> = ({ nav
   );
 };
 
-const Black = () => <Loader bgc="#000" />;
-
 export type DexDrawerParamList = {
   DEX_HOME: undefined;
   __Home: undefined;
@@ -117,8 +115,12 @@ export const DexNav: React.FC = () => {
           component={DexStack}
         />
         <Drawer.Screen name="__Notifications" component={Notifications} />
-        <Drawer.Screen name="__Settings" component={Black} />
         <Drawer.Screen name="CreatePaperWallet" component={CreatePaperWallet} />
+        <Drawer.Screen
+          name="__Settings"
+          options={{ headerShown: false }}
+          component={SettingsScreen}
+        />
         <Drawer.Screen name="__Help" options={{ headerShown: false }} component={HelpStack} />
         <Drawer.Screen
           name="__ExploreAssets"
