@@ -358,7 +358,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '500',
     textAlign: 'right',
-    width: 100,
+    width: 150,
     color: '#000',
   },
   rowEnd: {
