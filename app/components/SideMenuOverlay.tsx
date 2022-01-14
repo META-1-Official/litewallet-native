@@ -98,15 +98,6 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
           icon={SvgIcons.Trade}
         />
         <ListItem
-          title="Buy / Sell"
-          icon={CreditCard}
-          onPress={() => {
-            navigation.navigate('__Home');
-            navigation.jumpTo('Fund Account');
-            navigation.closeDrawer();
-          }}
-        />
-        <ListItem
           title="Backing Assets"
           icon={PieChart}
           onPress={() => navigation.navigate('__ExploreAssets')}
