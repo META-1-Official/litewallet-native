@@ -1,7 +1,7 @@
 import { DrawerContentComponentProps } from '@react-navigation/drawer/src/types';
 import React from 'react';
 import { SafeAreaView, TouchableOpacity, View } from 'react-native';
-import { Archive, ArrowLeft, CreditCard, HelpCircle, PieChart } from 'react-native-feather';
+import { Archive, ArrowLeft, HelpCircle, PieChart } from 'react-native-feather';
 import { Text } from 'react-native-paper';
 import { SvgIcons } from '../../assets';
 import { useStore } from '../store';
