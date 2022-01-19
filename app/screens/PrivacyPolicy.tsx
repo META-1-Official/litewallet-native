@@ -182,17 +182,17 @@ export function TOSScreen() {
         5. The Association specializes in a variety of financial programs related to digital assets
         and other such services, among others. More specifically, the Association’s member benefits
         include but are not limited to the following:
-        <View style={{ paddingLeft: 18, paddingTop: 8 }}>
-          <Paragraph>a. Access to the META Exchange and associated features</Paragraph>
-          <Paragraph>b. Access to the META Wallet and associated features </Paragraph>
-          <Paragraph>c. Access to the META Investment Bank and its DeFi services </Paragraph>
-          <Paragraph>d. Access to acquire META 1 Coin and other digital assets </Paragraph>
-          <Paragraph>e. Access to Universal Law and provided services</Paragraph>
-          <Paragraph>
-            f. The ability to settle fiat currencies for META 1 and Other Digital Assets
-          </Paragraph>
-        </View>
       </Paragraph>
+      <View style={{ paddingLeft: 18, paddingTop: 8 }}>
+        <Paragraph>a. Access to the META Exchange and associated features</Paragraph>
+        <Paragraph>b. Access to the META Wallet and associated features </Paragraph>
+        <Paragraph>c. Access to the META Investment Bank and its DeFi services </Paragraph>
+        <Paragraph>d. Access to acquire META 1 Coin and other digital assets </Paragraph>
+        <Paragraph>e. Access to Universal Law and provided services</Paragraph>
+        <Paragraph>
+          f. The ability to settle fiat currencies for META 1 and Other Digital Assets
+        </Paragraph>
+      </View>
       <Spacer />
       <Paragraph>
         6. The Association will recognize any person (irrespective of race, color, or religion) who
