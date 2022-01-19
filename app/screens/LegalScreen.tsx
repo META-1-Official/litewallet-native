@@ -31,8 +31,19 @@ export default function Legal() {
             margin: 18,
           }}
         >
-          <ListItem title="Terms of Service" icon={tosIconAsset} separator arrow />
-          <ListItem title="Privacy Policy" icon={ppIconAsset} arrow />
+          <ListItem
+            title="Terms of Service"
+            onPress={() => nav.navigate('TOS')}
+            icon={tosIconAsset}
+            separator
+            arrow
+          />
+          <ListItem
+            title="Privacy Policy"
+            onPress={() => nav.navigate('Privacy')}
+            icon={ppIconAsset}
+            arrow
+          />
         </List>
         <RoundedButton title="Accept" onPress={() => nav.navigate('CreateWallet')} />
       </View>

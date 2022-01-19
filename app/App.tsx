@@ -14,14 +14,17 @@ import LinkWalletScreen from './screens/LinkWalletScreen';
 import { useStore } from './store';
 import { Connect } from './utils/meta1Api';
 import { DexNav } from './WalletNav';
+import { PrivacyPolicy, TOSScreen } from './screens/PrivacyPolicy';
 
 const { useEffect } = React;
 
 export type RootStackParamList = {
   Home: undefined;
   Legal: undefined;
+  Privacy: undefined;
   CreateWallet: undefined;
   LinkWallet: undefined;
+  TOS: undefined;
 };
 
 export type RootNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
@@ -43,6 +46,8 @@ const AuthNav = () => {
         component={WelcomeScreen}
       />
       <Stack.Screen name="Legal" component={Legal} />
+      <Stack.Screen name="Privacy" component={PrivacyPolicy} />
+      <Stack.Screen name="TOS" component={TOSScreen} />
       <Stack.Screen name="CreateWallet" component={CreateWalletScreen} />
       <Stack.Screen name="LinkWallet" component={LinkWalletScreen} />
     </Stack.Navigator>
