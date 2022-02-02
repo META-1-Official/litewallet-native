@@ -7,7 +7,7 @@ import RoundedButton from '../components/RoundedButton';
 import { Heading, TextSecondary } from '../components/typography';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
-import { catchError } from '../utils';
+import { catchError, getRadomByteArray } from '../utils';
 import createAccountWithPassword from '../utils/accountCreate';
 import useForm from '../utils/useForm';
 import { email, includes, required, same } from '../utils/useForm/rules';
@@ -24,7 +24,7 @@ const CreateWalletScreen: React.FC = () => {
     {
       name: 'password',
       lable: 'Password',
-      value: 'P5KMuEeXky2vKWQNt4w1RyNR73DMS1dqEdkwVULnX7jmJ7G7JZRA',
+      value: Buffer.from(getRadomByteArray(24)).toString('base64').replace(/\W/g, ''),
       valid: true,
     },
     {
