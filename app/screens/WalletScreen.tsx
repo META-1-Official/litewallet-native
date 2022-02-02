@@ -75,7 +75,7 @@ export type WalletStackParamList = {
   Wallet__Main: undefined;
   Wallet__Trade: undefined;
   Wallet__Send: undefined;
-  Wallet__Recive: undefined;
+  Wallet__Receive: undefined;
 };
 
 export type WalletNavigationProp = StackNavigationProp<WalletStackParamList, 'Wallet__Main'>;
@@ -95,7 +95,7 @@ function WalletScreenStack() {
       />
       <Stack.Screen name="Wallet__Trade" component={TradeScreen} />
       <Stack.Screen name="Wallet__Send" component={SendScreen} />
-      <Stack.Screen name="Wallet__Recive" component={ReciveScreen} />
+      <Stack.Screen name="Wallet__Receive" component={ReciveScreen} />
     </Stack.Navigator>
   );
 }

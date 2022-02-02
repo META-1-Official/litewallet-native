@@ -64,7 +64,7 @@ const ReciveScreen: React.FC<{}> = () => {
     open();
     return (
       <SafeAreaView>
-        <Modal title="Recive" key="zxcv" onClose={() => nav.goBack()} />
+        <Modal title="Receive" key="zxcv" onClose={() => nav.goBack()} />
       </SafeAreaView>
     );
   }

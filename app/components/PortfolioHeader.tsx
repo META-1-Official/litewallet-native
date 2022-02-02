@@ -68,7 +68,7 @@ const ButtonGroup = () => {
     >
       <Button onPress={() => navigation.navigate('Wallet__Send')} title="Send" />
       <SeparatorHorizontal />
-      <Button onPress={() => navigation.navigate('Wallet__Recive')} title="Receive" />
+      <Button onPress={() => navigation.navigate('Wallet__Receive')} title="Receive" />
 
       <SeparatorHorizontal />
       <Button onPress={() => navigation.navigate('Wallet__Trade')} title="Trade" />
