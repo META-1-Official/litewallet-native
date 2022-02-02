@@ -24,6 +24,97 @@ interface AssetPickerProps {
 }
 const { width, height } = Dimensions.get('screen');
 
+const Search = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const allAssets = useAssets();
+
+  const found = allAssets!.assetsWithBalance
+    .filter(ass => ass.symbol.includes(searchTerm.toUpperCase()))
+    .sort((a, b) => a.symbol.localeCompare(b.symbol));
+  const pad = (
+    <View
+      style={{
+        height,
+      }}
+    >
+      {found &&
+        found.map(e => (
+          <TouchableOpacity key={`FoundCoin_${e.symbol}`} onPress={() => onSelect(e)}>
+            <View style={styles.portfolioRow}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Image style={styles.coinIcon} source={e._asset.icon} />
+                <Text style={styles.textPrimaty}> {e.symbol}</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        ))}
+    </View>
+  );
+  return (
+    <View>
+      <TextInput
+        placeholder="Search for a coin..."
+        // value={searchTerm}
+        onChangeText={t => {
+          console.log(t);
+          setSearchTerm(t);
+        }}
+        placeholderTextColor="#5a6777"
+        style={{
+          fontSize: 18,
+          padding: 12,
+          paddingHorizontal: 24,
+          backgroundColor: '#eff0f2',
+          borderRadius: 100,
+          marginVertical: 24,
+        }}
+      />
+      {!searchTerm ? null : pad}
+    </View>
+  );
+};
+
+const PickerContent = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
+  const allAssets = useAssets();
+
+  const suggested = allAssets!.assetsWithBalance
+    .filter(ass => ass.symbol === 'BTC' || ass.symbol === 'ETH' || ass.symbol === 'META1')
+    .sort((a, b) => a.symbol.localeCompare(b.symbol));
+
+  const rest = allAssets!.assetsWithBalance
+    .filter(ass => !suggested.includes(ass))
+    .sort((a, b) => a.symbol.localeCompare(b.symbol));
+
+  return (
+    <>
+      <Search onSelect={onSelect} />
+      <TextSecondary style={{ fontSize: 14 }}> Suggested </TextSecondary>
+      {suggested &&
+        suggested.map(e => (
+          <TouchableOpacity key={`CoinBalance_${e.symbol}`} onPress={() => onSelect(e)}>
+            <View style={styles.portfolioRow}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Image style={styles.coinIcon} source={e._asset.icon} />
+                <Text style={styles.textPrimaty}> {e.symbol}</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        ))}
+      <TextSecondary style={{ fontSize: 14, marginTop: 32 }}> All Coins </TextSecondary>
+      {rest &&
+        rest.map(e => (
+          <TouchableOpacity key={`CoinBalance_${e.symbol}`} onPress={() => onSelect(e)}>
+            <View style={styles.portfolioRow}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Image style={styles.coinIcon} source={e._asset.icon} />
+                <Text style={styles.textPrimaty}> {e.symbol}</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        ))}
+    </>
+  );
+};
 const AssetPicker: React.FC<AssetPickerProps> = ({ title, visible, onClose, onSelect }) => {
   const Header = () => (
     <View
@@ -45,16 +136,6 @@ const AssetPicker: React.FC<AssetPickerProps> = ({ title, visible, onClose, onSe
       <View style={{ width: 24, height: 24 }} />
     </View>
   );
-  const allAssets = useAssets();
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const suggested = allAssets!.assetsWithBalance
-    .filter(ass => ass.symbol === 'BTC' || ass.symbol === 'ETH' || ass.symbol === 'META1')
-    .sort((a, b) => a.symbol.localeCompare(b.symbol));
-
-  const rest = allAssets!.assetsWithBalance
-    .filter(ass => !suggested.includes(ass))
-    .sort((a, b) => a.symbol.localeCompare(b.symbol));
 
   return (
     <Modal
@@ -73,46 +154,7 @@ const AssetPicker: React.FC<AssetPickerProps> = ({ title, visible, onClose, onSe
           }}
         >
           <Header />
-          <View>
-            <TextInput
-              placeholder="Search for a coin..."
-              value={searchTerm}
-              onChangeText={t => setSearchTerm(t)}
-              placeholderTextColor="#5a6777"
-              style={{
-                fontSize: 18,
-                padding: 12,
-                paddingHorizontal: 24,
-                backgroundColor: '#eff0f2',
-                borderRadius: 100,
-                marginVertical: 24,
-              }}
-            />
-          </View>
-          <TextSecondary style={{ fontSize: 14 }}> Suggested </TextSecondary>
-          {suggested &&
-            suggested.map(e => (
-              <TouchableOpacity key={`CoinBalance_${e.symbol}`} onPress={() => onSelect(e)}>
-                <View style={styles.portfolioRow}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Image style={styles.coinIcon} source={e._asset.icon} />
-                    <Text style={styles.textPrimaty}> {e.symbol}</Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            ))}
-          <TextSecondary style={{ fontSize: 14, marginTop: 32 }}> All Coins </TextSecondary>
-          {rest &&
-            rest.map(e => (
-              <TouchableOpacity key={`CoinBalance_${e.symbol}`} onPress={() => onSelect(e)}>
-                <View style={styles.portfolioRow}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Image style={styles.coinIcon} source={e._asset.icon} />
-                    <Text style={styles.textPrimaty}> {e.symbol}</Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            ))}
+          <PickerContent onSelect={onSelect} />
         </View>
       </SafeAreaView>
     </Modal>
