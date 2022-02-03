@@ -10,17 +10,25 @@ import { colors } from '../styles/colors';
 import { catchError, getRadomByteArray } from '../utils';
 import createAccountWithPassword from '../utils/accountCreate';
 import useForm from '../utils/useForm';
-import { email, includes, required, same } from '../utils/useForm/rules';
+import { asyncRule, email, includes, required, RuleFn, same } from '../utils/useForm/rules';
 import Clipboard from '@react-native-clipboard/clipboard';
+import { getAccount } from '../utils/meta1Api';
 
 const CreateWalletScreen: React.FC = () => {
   const authorize = useStore(state => state.authorize);
+
+  const freeName: RuleFn = text =>
+    asyncRule(async () => {
+      const acc = await getAccount(text).catch(console.debug);
+      return !acc;
+    }, 'This account name is already taken');
+
   const { Input, formState, valid } = useForm([
     { name: 'first_name', lable: 'First name', rules: [required] },
     { name: 'last_name', lable: 'Last name', rules: [required] },
     { name: 'email', lable: 'Email', rules: [required, email] },
     { name: 'mobile', lable: 'Mobile number', rules: [required] },
-    { name: 'account_name', lable: 'Account name', rules: [required, includes('-')] },
+    { name: 'account_name', lable: 'Account name', rules: [required, includes('-'), freeName] },
     {
       name: 'password',
       lable: 'Password',
