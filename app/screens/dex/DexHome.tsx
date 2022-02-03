@@ -15,7 +15,7 @@ import { LineChart, Grid } from 'react-native-svg-charts';
 import { DexTSP } from '.';
 import { dexAssetView } from './AssetView/AssetViewStore';
 
-const { width } = Dimensions.get('screen');
+const { width } = Dimensions.get('window');
 
 const Chart: React.FC<{ symbol: string; color: string }> = ({ symbol, color }) => {
   const [data, setData] = useState<number[]>([]);
@@ -51,7 +51,7 @@ const DexHome: React.FC<DexTSP> = ({ navigation }) => {
         height: '100%',
       }}
     >
-      <ScrollView style={{ marginHorizontal: 12 }}>
+      <ScrollView style={{ marginHorizontal: 'auto' }}>
         <Text style={{ color: '#ccc' }}> Portfolio Balance</Text>
         <Text style={{ color: '#fff', fontSize: 32, fontWeight: '700' }}>
           ${accountAssets?.accountTotal.toFixed(2)}
@@ -64,6 +64,7 @@ const DexHome: React.FC<DexTSP> = ({ navigation }) => {
             padding: 18,
             paddingVertical: 12,
             marginTop: 18,
+            //width: width - 40,
           }}
         >
           {assets.map(e => {

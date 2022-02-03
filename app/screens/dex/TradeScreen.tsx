@@ -77,7 +77,7 @@ const DexTrade: React.FC<DexTSP> = ({ navigation }) => {
           onChangeText={t => setSearchText(t)}
         />
       </View>
-      <ScrollView style={{ marginHorizontal: 12 }}>
+      <ScrollView style={{ marginHorizontal: 'auto' }}>
         <View
           style={{
             marginTop: 18,

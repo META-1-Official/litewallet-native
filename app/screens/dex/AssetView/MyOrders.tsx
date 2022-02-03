@@ -329,7 +329,7 @@ const RenderRow =
           </Text>
           <Circle progress={progress} isBuy={isBuy} />
         </View>
-        <View style={{ margin: 8, width: 175 }}>
+        <View style={{ margin: 8, flexGrow: 1 }}>
           <Text style={{ color: '#fff', fontSize: 18 }}>
             {assetA} / {assetB}
           </Text>
@@ -338,9 +338,7 @@ const RenderRow =
             Price: {(buyAmt / sellAmt).toString().slice(0, 8)}
           </Text>
         </View>
-        <View style={{ margin: 8, right: 0, position: 'relative' }}>
-          {lastCol(orderStatus, k)}
-        </View>
+        <View style={{ margin: 8 }}>{lastCol(orderStatus, k)}</View>
       </View>
     );
   };
