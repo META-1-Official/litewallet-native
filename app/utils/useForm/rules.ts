@@ -11,7 +11,8 @@ export const rule = (cond: boolean, errorMsg: string) => (cond ? null : errorMsg
 export const asyncRule = async (fn: () => Promise<boolean>, errorMsg: string) =>
   (await fn()) ? null : errorMsg;
 export const required: RuleFn = (text, name) => rule(text.length > 0, `${name} is required`);
-
+export const lettersOnly: RuleFn = (text, name) =>
+  rule(/^[a-zA-Z]+$/.test(text), `${name} could contain only english letters`);
 export const same: (cmp: string) => RuleFn = cmp => (text, name, state) =>
   text === state[cmp]
     ? null
