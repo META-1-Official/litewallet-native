@@ -31,7 +31,7 @@ const SendScreen: React.FC<{}> = () => {
   const nav = useNavigation<WalletNavigationProp>();
   const [toAccount, setToAccount] = useState('');
   const accountName = useStore(state => state.accountName);
-  const { password, PasswordView } = usePasswordView();
+  const { password, setPassword } = usePasswordView();
 
   const assets = useAssets();
   const meta1 = assets.find('META1');
@@ -134,7 +134,7 @@ const SendScreen: React.FC<{}> = () => {
             marginVertical: Platform.OS === 'ios' ? undefined : 8,
           }}
         >
-          <PasswordView />
+          <PasswordView darkMode={false} password={password} setPassword={setPassword} />
         </List>
         <View
           style={{
@@ -418,22 +418,30 @@ const AmountInput = ({ asset, darkMode }: { asset: StandaloneAsset; darkMode?: b
   );
 };
 
+interface PVProps {
+  darkMode: boolean;
+  password: string;
+  setPassword: (s: string) => void;
+}
+
+const PasswordView = ({ darkMode, password, setPassword }: PVProps) => (
+  <View style={{ padding: 16 }}>
+    <Text style={styles.SectionTitleDex}>Password</Text>
+    <TextInput
+      style={{ fontSize: 18, fontWeight: '500', color: darkMode ? '#fff' : '#000' }}
+      value={password}
+      placeholder="Password"
+      placeholderTextColor={darkMode ? '#aaa' : '#bbb'}
+      onChangeText={t => setPassword(t)}
+    />
+  </View>
+);
+
 const usePasswordView = () => {
   const saved = useStore(s => s.password);
   const [password, setPassword] = useState(saved || '');
-  const PasswordView = () => (
-    <View style={{ padding: 16 }}>
-      <Text style={styles.SectionTitleDex}>Password</Text>
-      <TextInput
-        style={{ fontSize: 18, fontWeight: '500', color: '#fff' }}
-        value={password}
-        placeholder="Password"
-        placeholderTextColor="#fff"
-        onChangeText={t => setPassword(t)}
-      />
-    </View>
-  );
-  return { password, PasswordView };
+
+  return { password, setPassword };
 };
 
 type DexProps = DexSSP & {
@@ -470,7 +478,7 @@ export const DexSend: React.FC<DexProps> = props => {
   const nav = props.navigation;
   const [toAccount, setToAccount] = useState('');
   const accountName = useStore(state => state.accountName);
-  const { password, PasswordView } = usePasswordView();
+  const { password, setPassword } = usePasswordView();
 
   const assets = useAssets();
   const meta1 = assets.find('META1');
@@ -583,7 +591,7 @@ export const DexSend: React.FC<DexProps> = props => {
               marginVertical: Platform.OS === 'ios' ? undefined : 8,
             }}
           >
-            <PasswordView />
+            <PasswordView darkMode={true} password={password} setPassword={setPassword} />
           </List>
 
           <TouchableOpacity onPress={() => sendFn(password, anAsset, toAccount)}>
