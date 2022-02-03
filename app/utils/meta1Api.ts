@@ -180,7 +180,7 @@ export const swapWithPassword: swapWPassSig = async (accountInfo, from, to, amou
   const pair = await Meta1.db.get_ticker(from, to);
 
   if (!pair) {
-    throw new Error(`Pair ${from}:${to} dosen't exist`);
+    throw new Error(`Pair ${from}:${to} doesn't exist`);
   }
 
   const account = await Meta1.login(accountInfo.accountName, accountInfo.password);
@@ -189,8 +189,12 @@ export const swapWithPassword: swapWPassSig = async (accountInfo, from, to, amou
     to,
     from,
     amount,
-    loweset_ask: pair.lowest_ask,
+    lowest_ask: pair.lowest_ask,
   });
+
+  if (Number(pair.lowest_ask) <= 0) {
+    throw new Error('Failed to estimate exchange rate. Try again later.');
+  }
 
   const buyResult = await account.buy(
     to,
