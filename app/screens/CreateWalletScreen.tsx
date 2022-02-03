@@ -13,6 +13,7 @@ import useForm from '../utils/useForm';
 import { asyncRule, email, includes, required, RuleFn, same } from '../utils/useForm/rules';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { getAccount } from '../utils/meta1Api';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const CreateWalletScreen: React.FC = () => {
   const authorize = useStore(state => state.authorize);
@@ -50,91 +51,91 @@ const CreateWalletScreen: React.FC = () => {
         backgroundColor: '#fff',
       }}
     >
-      <View style={{ marginHorizontal: 24 }}>
-        <Heading style={{ marginBottom: 8 }}>Create META Wallet</Heading>
-        <TextSecondary style={{ marginBottom: 18 }}>
-          Provide access to your META Lite Wallet
-        </TextSecondary>
-        <KeyboardAwareScrollView
-          extraHeight={Platform.OS === 'ios' ? 1 : 120}
-          enableOnAndroid={true}
-        >
-          <View>
-            <View style={{ flexDirection: 'row' }}>
-              <Input style={{ width: '48%' }} name="first_name" />
-              <View style={{ width: '4%' }} />
-              <Input style={{ width: '48%' }} name="last_name" />
+      <ScrollView>
+        <View style={{ marginHorizontal: 24 }}>
+          <Heading style={{ marginBottom: 8 }}>Create META Wallet</Heading>
+          <TextSecondary style={{ marginBottom: 18 }}>
+            Provide access to your META Lite Wallet
+          </TextSecondary>
+
+          <KeyboardAwareScrollView extraHeight={Platform.OS === 'ios' ? 1 : 120}>
+            <View>
+              <View style={{ flexDirection: 'row' }}>
+                <Input style={{ width: '48%' }} name="first_name" />
+                <View style={{ width: '4%' }} />
+                <Input style={{ width: '48%' }} name="last_name" />
+              </View>
+              <Input
+                name="email"
+                autoCapitalize="none"
+                autoCorrect={false}
+                autoCompleteType="email"
+              />
+              <Input
+                name="mobile"
+                render={props => (
+                  //@ts-ignore
+                  <TextInputMask {...props} mask="+[099] ([000]) [000] [00] [00]" />
+                )}
+              />
+              <Input name="account_name" autoCapitalize="none" autoCorrect={false} />
+              <Input
+                name="password"
+                render={props => (
+                  <View key={123} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <TextInput
+                      {...props}
+                      autoCapitalize={'none'}
+                      autoCorrect={false}
+                      onChangeText={() => {}}
+                      style={[props.style, { maxWidth: '88%', paddingRight: 8 }]}
+                    />
+                    <TouchableOpacity onPress={() => Clipboard.setString(formState.password)}>
+                      <View
+                        style={{
+                          backgroundColor: colors.BrandYellow,
+                          padding: 6,
+                          borderRadius: 5,
+                        }}
+                      >
+                        <Copy width={24} height={24} color="#000" />
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              />
+              <Input name="password_repeat" secureTextEntry={true} />
             </View>
-            <Input
-              name="email"
-              autoCapitalize="none"
-              autoCorrect={false}
-              autoCompleteType="email"
-            />
-            <Input
-              name="mobile"
-              render={props => (
-                //@ts-ignore
-                <TextInputMask {...props} mask="+[099] ([000]) [000] [00] [00]" />
-              )}
-            />
-            <Input name="account_name" autoCapitalize="none" autoCorrect={false} />
-            <Input
-              name="password"
-              render={props => (
-                <View key={123} style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <TextInput
-                    {...props}
-                    autoCapitalize={'none'}
-                    autoCorrect={false}
-                    onChangeText={() => {}}
-                    style={[props.style, { maxWidth: '88%', paddingRight: 8 }]}
-                  />
-                  <TouchableOpacity onPress={() => Clipboard.setString(formState.password)}>
-                    <View
-                      style={{
-                        backgroundColor: colors.BrandYellow,
-                        padding: 6,
-                        borderRadius: 5,
-                      }}
-                    >
-                      <Copy width={24} height={24} color="#000" />
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              )}
-            />
-            <Input name="password_repeat" secureTextEntry={true} />
-          </View>
-        </KeyboardAwareScrollView>
-      </View>
-      <View>
-        <RoundedButton
-          title="Submit"
-          onPress={() => {
-            console.log({ formState, valid: valid() });
-            if (valid()) {
-              catchError(async () => {
-                const _apiRes = await createAccountWithPassword(
-                  formState.account_name,
-                  formState.password,
-                  // --Who cares
-                  false,
-                  '',
-                  1,
-                  '',
-                  // --
-                  formState.phone,
-                  formState.email,
-                  formState.last_name,
-                  formState.first_name,
-                );
-                authorize(formState.account_name, formState.password);
-              });
-            }
-          }}
-        />
-      </View>
+          </KeyboardAwareScrollView>
+        </View>
+        <View>
+          <RoundedButton
+            title="Submit"
+            onPress={() => {
+              console.log({ formState, valid: valid() });
+              if (valid()) {
+                catchError(async () => {
+                  const _apiRes = await createAccountWithPassword(
+                    formState.account_name,
+                    formState.password,
+                    // --Who cares
+                    false,
+                    '',
+                    1,
+                    '',
+                    // --
+                    formState.phone,
+                    formState.email,
+                    formState.last_name,
+                    formState.first_name,
+                  );
+                  authorize(formState.account_name, formState.password);
+                });
+              }
+            }}
+          />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
