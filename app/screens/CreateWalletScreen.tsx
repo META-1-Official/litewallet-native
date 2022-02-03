@@ -53,7 +53,7 @@ const CreateWalletScreen: React.FC = () => {
       <View style={{ marginHorizontal: 24 }}>
         <Heading style={{ marginBottom: 8 }}>Create META Wallet</Heading>
         <TextSecondary style={{ marginBottom: 18 }}>
-          Provide acess to your META Lite Wallet
+          Provide access to your META Lite Wallet
         </TextSecondary>
         <KeyboardAwareScrollView
           extraHeight={Platform.OS === 'ios' ? 1 : 120}
