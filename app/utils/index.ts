@@ -192,13 +192,13 @@ export const promptPromise = (
   msg: string,
   type?: AlertType,
 ): Promise<string | null> =>
-  new Promise(resolve => {
+  new Promise((resolve, reject) => {
     prompt(
       title,
       msg,
       [
         { text: 'Cancel', onPress: () => resolve(null) },
-        { text: 'Ok', onPress: t => resolve(t || null) },
+        { text: 'Ok', onPress: t => (t ? resolve(t) : reject(new Error('Password is required'))) },
       ],
       { type },
     );
