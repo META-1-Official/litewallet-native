@@ -114,11 +114,16 @@ const emptyBalance = (assetId: string): iBalance => ({
   maintenance_flag: false, // whatever
 });
 
-export async function fetchAccountBalances(accountName: string): Promise<AccountBalanceT | void> {
+export async function getAccount(accountName: string) {
   const accounts = await Meta1.db
     .get_full_accounts([accountName], false)
     .then(res => new Map(res));
   const account = accounts.get(accountName);
+  return account;
+}
+
+export async function fetchAccountBalances(accountName: string): Promise<AccountBalanceT | void> {
+  const account = await getAccount(accountName);
 
   if (!account) {
     console.warn('Api did not return requestd account', accountName);
@@ -257,7 +262,7 @@ export const depositAddress = async (accountName: string, asset: string) => {
     method: 'POST',
     mode: 'cors',
   });
-
+  console.log('getAddress status:', res.status, res.statusText);
   const { address }: { address: string } = await res.json();
 
   if (!address) {
@@ -305,9 +310,14 @@ export interface AddrT {
 }
 
 export async function getAddressForAccountAsset(accountName: string, symbol: string) {
-  const addr = await depositAddress(accountName, symbol);
-  const qr = await QRCode.toString(addr);
-  return { qr, addr };
+  try {
+    const addr = await depositAddress(accountName, symbol);
+    const qr = await QRCode.toString(addr);
+    return { qr, addr };
+  } catch (e) {
+    console.log('-ERROR-', e);
+    return null;
+  }
 }
 
 export const useAssets = () => {

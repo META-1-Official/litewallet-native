@@ -12,14 +12,20 @@ import { personAsset, personIconAsset } from '../../assets';
 import RoundedButton from '../components/RoundedButton';
 import { Heading, TextSecondary } from '../components/typography';
 import { useStore } from '../store';
+import { getAccount } from '../utils/meta1Api';
 import useForm from '../utils/useForm';
-import { required } from '../utils/useForm/rules';
+import { asyncRule, required, RuleFn } from '../utils/useForm/rules';
 
 const { width, height } = Dimensions.get('screen');
 
 const LinkWalletScreen: React.FC = () => {
+  const knownAccount: RuleFn = text =>
+    asyncRule(async () => {
+      const acc = await getAccount(text).catch(console.debug);
+      return Boolean(acc);
+    }, 'Account not found');
   const { Input, formState, valid } = useForm([
-    { name: 'account_name', lable: 'Account Name', rules: [required] },
+    { name: 'account_name', lable: 'Account Name', rules: [required, knownAccount] },
   ]);
   const offsetY = useRef(new Animated.Value(0)).current;
 

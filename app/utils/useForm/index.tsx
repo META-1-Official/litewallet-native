@@ -45,16 +45,16 @@ export default function useForm<T extends DefautlStateItem[]>(defautState: T) {
     };
 
     const [error, setError] = useState<string | null>();
-    const validate = () => {
+    const validate = async () => {
       const rules = ruleSets[name];
       if (!rules) {
         return;
       }
 
-      const errors: string[] = rules
-        .map(rule => rule(formState[name], lables[name], formState))
-        .map(e => (e !== null ? (e as string) : ''))
-        .filter(e => e);
+      const promised = await Promise.all(
+        rules.map(rule => rule(formState[name], lables[name], formState)),
+      );
+      const errors: string[] = promised.map(e => (e !== null ? (e as string) : '')).filter(e => e);
 
       const newErr = errors[0] || null;
       setError(newErr);
