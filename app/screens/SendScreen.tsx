@@ -456,6 +456,10 @@ const makeSendFn =
     console.log('--SENDING:', standalone.asset.symbol, standalone.amount);
     catchError(
       async () => {
+        if (!standalone.canAfford()) {
+          throw new Error('Insufficient balance.');
+        }
+
         await sendWithPassword(
           {
             accountName,

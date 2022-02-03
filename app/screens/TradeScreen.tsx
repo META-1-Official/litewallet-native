@@ -213,7 +213,7 @@ const usePerformSwap = (
     const accountInfo = await getAccountInfo();
 
     onBeforeSwap();
-
+    assets.A.isAffordableForSwap();
     await swapWithPassword(
       accountInfo,
       assets.A.asset.symbol,
