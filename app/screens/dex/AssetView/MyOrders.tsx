@@ -171,7 +171,7 @@ export const OpenOrdersPage = () => {
   return (
     <ScrollView contentContainerStyle={{ paddingBottom: 200 }}>
       {!history || [...history.entries()].length === 0 ? (
-        <Text style={{ color: '#888', textAlign: 'center' }}>No open orders</Text>
+        <Text style={{ color: '#888', textAlign: 'center' }}>No orders</Text>
       ) : null}
       {history &&
         [...history.entries()].map(e =>
