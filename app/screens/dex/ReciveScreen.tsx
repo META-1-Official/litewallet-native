@@ -285,7 +285,7 @@ const DexRecive: React.FC<DexSSP> = props => {
     <>
       <Header
         {...props}
-        title={`Recive ${asset ? asset.symbol : ''}`}
+        title={`Receive ${asset ? asset.symbol : ''}`}
         titleSubscript={asset ? shareThisAddressText : selectCoinText}
       />
       {asset ? (
