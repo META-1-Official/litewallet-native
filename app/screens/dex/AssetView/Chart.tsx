@@ -11,6 +11,8 @@ import { colors } from '../../../styles/colors';
 
 const mkInject = (s: any) =>
   `window.candleSeries.setData(JSON.parse('${JSON.stringify(s)}'));
+   window.chart.timeScale().resetTimeScale();
+   window.chart.timeScale().fitContent();
    true;`;
 
 const Candle: React.FC<{}> = () => {

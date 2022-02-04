@@ -3,6 +3,7 @@ import { zip, zipObject } from 'lodash';
 import QRCode from 'qrcode';
 import { useEffect, useState } from 'react';
 import create from 'zustand';
+import { excludeIndex } from '.';
 import config from '../config';
 import { useStore } from '../store';
 import {
@@ -532,8 +533,11 @@ export type OHLC = {
   open: number;
   close: number;
 };
-
-const Based = (t: ITicker): OHLC => {
+type enT = {
+  0: string;
+  1: number;
+};
+const Based = (t: ITicker, inverted?: boolean): OHLC => {
   const assets = useAssetsStore.getState().userAssets?.assetsWithBalance;
 
   assert(assets, 'No, asset data, cant calculate real amounts');
@@ -556,18 +560,37 @@ const Based = (t: ITicker): OHLC => {
     assert(keyA && keyB, 'Not all keys are present');
     assert(keyA.split('_').at(0) === keyB.split('_').at(0), 'Key prefix mismatch');
 
-    const [amountBase, amoutnQuote] = [
+    const [amountBase, amountQuote] = [
       t[keyA as keyof ITicker] as number,
       t[keyB as keyof ITicker] as number,
     ];
 
     const realBase = amountBase / 10 ** baseAsset._asset.precision;
-    const realQuote = amoutnQuote / 10 ** quoteAsset._asset.precision;
+    const realQuote = amountQuote / 10 ** quoteAsset._asset.precision;
+    const price = inverted ? realQuote / realBase : realBase / realQuote;
 
-    const price = realBase / realQuote;
-    return [keyA.split('_').at(0)!, +(1 / price).toFixed(2)];
+    return [keyA.split('_').at(0)!, price];
   });
-  // console.log(entries);
+
+  {
+    const ent = entries as any as enT[];
+    const deltas = ent.map((a, i) =>
+      ent.map((b, ii) => (ii === i ? null : Math.abs(a[1] / b[1]))),
+    );
+    const means = deltas.map(e => e.reduce<number>((acc, cv) => acc + (cv || 0), 0) / 4);
+    const error = means.findIndex(e => Math.abs(e) > 3);
+
+    if (error >= 0) {
+      console.log('[ECC] Found bad indexes: ', error);
+      console.log(deltas);
+      console.log(means);
+      console.log(t);
+      const valid = excludeIndex(ent, error);
+      const fixValue = valid.map(e => e[1]).reduce((acc, v) => acc + v, 0) / valid.length;
+      entries[error][1] = fixValue;
+    }
+  }
+
   return Object.fromEntries(entries) as OHLC;
 };
 
@@ -591,7 +614,7 @@ export const useTicker = (
 
     return ticks.map(e => ({
       time: new fcTime(e.key.open).asDate().getTime() / 1000,
-      ...Based(e),
+      ...Based(e, assetA === 'META1'),
     }));
   };
 

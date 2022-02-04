@@ -66,3 +66,4 @@ dist/*
 
 .parcel-cache
 dist
+crash
