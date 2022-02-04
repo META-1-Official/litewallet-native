@@ -7,6 +7,9 @@ import { catchError } from '../utils';
 import { getAccountKeys, paperWallet } from '../utils/meta1Api';
 
 export default function CreatePaperWallet() {
+  const { accountName, password: pass } = useStore();
+  const [password, setPassword] = useState(pass || '');
+
   const save = async () => {
     catchError(async () => {
       const keys = await getAccountKeys({ accountName, password });
@@ -14,9 +17,6 @@ export default function CreatePaperWallet() {
     });
   };
 
-  const { accountName: account, password: pass } = useStore();
-  const [accountName, setAccount] = useState(account || '');
-  const [password, setPassword] = useState(pass || '');
 
   return (
     <SafeAreaView style={{ marginHorizontal: 24 }}>
@@ -25,14 +25,14 @@ export default function CreatePaperWallet() {
         style={{ backgroundColor: 'darkred', padding: 12, marginVertical: 24, borderRadius: 6 }}
       >
         <Text style={{ color: '#fff', fontSize: 18, fontWeight: '500' }}>
-          Unlock / login before creating the paper wallt to include private keys
+          Unlock / login before creating the paper wallet to include private keys
         </Text>
       </View>
       <View>
         <Text style={{ color: colors.BrandYellow }}>Account Name</Text>
         <TextInput
-          value={account}
-          onChangeText={t => setAccount(t)}
+          value={accountName}
+          editable={false}
           style={{
             paddingVertical: 12,
             fontSize: 18,
