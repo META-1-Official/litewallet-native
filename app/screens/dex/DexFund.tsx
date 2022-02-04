@@ -157,7 +157,7 @@ const DexFund: React.FC<DexTSP> = ({ navigation }) => {
           textPrimary: '#fff',
           textSecondary: '#fff',
         }}
-        onPress={s => dexAssetView(navigation, s)}
+        onPress={s => (s === 'USDT' ? null : dexAssetView(navigation, s))}
         usdPrimary
       />
     </SafeAreaView>

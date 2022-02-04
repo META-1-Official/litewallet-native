@@ -11,7 +11,6 @@ import { colors } from '../../../styles/colors';
 
 const mkInject = (s: any) =>
   `window.candleSeries.setData(JSON.parse('${JSON.stringify(s)}'));
-   window.chart.timeScale().resetTimeScale();
    window.chart.timeScale().fitContent();
    true;`;
 
@@ -47,13 +46,14 @@ const Candle: React.FC<{}> = () => {
           </TouchableOpacity>
         ))}
       </View>
-      <View style={{ paddingVertical: 24, flex: 1 }}>
+      <View style={{ flex: 1 }}>
         <WebView
           ref={wwRef}
           source={{
             //uri: 'http://localhost:1234/',
             html: Buffer.from(html, 'base64').toString(),
           }}
+          scrollEnabled={false}
           onMessage={event => {
             console.log(event.nativeEvent.data);
           }}

@@ -17,7 +17,6 @@ export default function CreatePaperWallet() {
     });
   };
 
-
   return (
     <SafeAreaView style={{ marginHorizontal: 24 }}>
       <Text style={{ color: '#fff', fontSize: 26, fontWeight: '700' }}>Create Paper Wallet</Text>
