@@ -1,7 +1,7 @@
 import { createChart, CrosshairMode } from 'lightweight-charts';
 var chart = createChart(document.body, {
   width: window.innerWidth,
-  height: window.innerHeight,
+  height: window.innerHeight - 32,
   layout: {
     backgroundColor: '#000000',
     textColor: 'rgba(255, 255, 255, 0.9)',
