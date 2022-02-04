@@ -127,6 +127,93 @@ const _amtToReadable = (amt: AmountT, userAssets: AccountBalanceT | null) => {
   return a / 10 ** precision;
 };
 
+type HistoryEntry = Exclude<ReturnType<FullHistoryOrder['get']>, undefined>;
+export const OpenOrdersPage = () => {
+  const { accountName, password } = useStore();
+  const { userAssets } = useAssetsStore();
+  const account = useAccount(accountName, password);
+
+  const amtToReadable = (amt: AmountT) => _amtToReadable(amt, userAssets);
+
+  const [refreshing, setRefreshing] = React.useState(false);
+  const [history, setHistory] = useState<FullHistoryOrder | null>(null);
+
+  useEffect(() => {
+    const fn = async () => {
+      const hist = await getHistoricalOrders(accountName);
+      // Fetch all open orders for real
+      if (account) {
+        const tmp: { id: string }[] = await account.orders();
+        console.log(tmp);
+        const open = await Promise.all(tmp.map(e => account.getOrder(e.id)));
+        open.forEach(e =>
+          hist.set(e.id as string, {
+            order: preprocessOrder(e, userAssets),
+            canceled: undefined,
+            filled: [],
+          }),
+        );
+      }
+      console.log(account);
+      setHistory(hist);
+      if (refreshing) {
+        setRefreshing(false);
+      }
+    };
+    fn();
+  }, [accountName, account, refreshing, userAssets]);
+
+  const getTradingPair = ({ order }: HistoryEntry) => {
+    const give = order.limit_order_create_operation.amount_to_sell.asset.symbol;
+    const get = order.limit_order_create_operation.min_to_receive.asset.symbol;
+    return [give, get];
+  };
+  return (
+    <ScrollView contentContainerStyle={{ paddingBottom: 200 }}>
+      {!history || [...history.entries()].length === 0 ? (
+        <Text style={{ color: '#888', textAlign: 'center' }}>No open orders</Text>
+      ) : null}
+      {history &&
+        [...history.entries()].map(e =>
+          RenderRow(
+            getTradingPair(e[1]),
+            amtToReadable,
+            () => false,
+            (status, k) =>
+              !inFuture(e[1].order.limit_order_create_operation.expiration) &&
+              !e[1].canceled &&
+              !e[1].filled ? (
+                <TouchableOpacity
+                  onPress={() => {
+                    setRefreshing(true);
+                    account?.cancelOrder(k);
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: account ? colors.BrandYellow : '#999',
+                      fontSize: 18,
+                    }}
+                  >
+                    CANCEL
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <Text
+                  style={{
+                    color: status === 'Completed' ? '#0f0' : '#f00',
+                    fontSize: 18,
+                  }}
+                >
+                  {status}
+                </Text>
+              ),
+          )(e),
+        )}
+    </ScrollView>
+  );
+};
+
 export const MyOrders: React.FC<AssetViewTSP> = () => {
   const { assetA, assetB } = useAVStore(x => x);
   const { accountName, password } = useStore();

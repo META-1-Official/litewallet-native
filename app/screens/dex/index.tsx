@@ -24,6 +24,7 @@ import DexSwapScreen from './SwapScreen';
 import Send from './SendScreen';
 import AssetViewStack from './AssetView/AssetView';
 import { DexDrawerParamList } from '../../WalletNav';
+import { OpenOrdersPage } from './AssetView/MyOrders';
 
 const Black = () => <Loader bgc="#000" />;
 
@@ -122,7 +123,7 @@ const DexTabs = ({ navigation }: DexSSP) => {
         }}
         component={Black}
       />
-      <Tab.Screen name="DEX__Orders" component={Black} />
+      <Tab.Screen name="DEX__Orders" component={OpenOrdersPage} />
       <Tab.Screen name="DEX__Fund" component={DexFund} />
     </Tab.Navigator>
   );
