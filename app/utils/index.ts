@@ -218,6 +218,9 @@ export const style = (common: AllStyles, specific: PlatformSpecific) => {
   return {};
 };
 
+export const excludeIndex = <T>(arr: T[], idx: number) =>
+  arr.reduce<T[]>((r, v, i) => (i === idx ? r : [...r, v]), []);
+
 export const shadow = {
   D3: {
     shadowColor: '#000',
