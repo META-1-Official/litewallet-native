@@ -68,7 +68,7 @@ const DexHome: React.FC<DexTSP> = ({ navigation }) => {
           }}
         >
           {assets.map(e => {
-            return (
+            return e.symbol === 'USDT' ? null : (
               <TouchableOpacity
                 onPress={() => dexAssetView(navigation, e.symbol)}
                 key={`Asset_${e.symbol}`}
@@ -140,7 +140,7 @@ const DexHome: React.FC<DexTSP> = ({ navigation }) => {
                     source={item._asset.icon}
                     style={{ width: 64, height: 64, resizeMode: 'contain' }}
                   />
-                  <Text style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>
+                  <Text style={{ color: '#fff', fontSize: 16, fontWeight: '600', textAlign: 'center'}}>
                     {item.symbol}: $
                     {item.usdt_value > 1000
                       ? item.usdt_value.toFixed(0)
