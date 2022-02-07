@@ -1,5 +1,8 @@
 #!/bin/bash
 
+SDIR=$(pwd)
+cd $(git rev-parse --show-toplevel)
+
 cd android
 ./gradlew build -x lint
 cd ..
@@ -29,3 +32,5 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 else
   echo "TODO: Add clipboard support for $OSTYPE"
 fi
+
+cd $SDIR
