@@ -91,7 +91,9 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
         <ListItem
           onPress={() => {
             navigation.closeDrawer();
-            navigation.navigate('DEX__Home');
+            navigation.navigate('DEX_HOME', {
+              screen: '__Tabs',
+            });
           }}
           title="DEX"
           rawIcon
@@ -100,12 +102,12 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
         <ListItem
           title="Backing Assets"
           icon={PieChart}
-          onPress={() => navigation.navigate('__ExploreAssets')}
+          onPress={() => navigation.jumpTo('__ExploreAssets')}
         />
         <ListItem
           title="Create Paper Wallet"
           icon={Archive}
-          onPress={() => navigation.navigate('CreatePaperWallet')}
+          onPress={() => navigation.jumpTo('CreatePaperWallet')}
         />
         <ListItem title="Help" icon={HelpCircle} onPress={() => navigation.navigate('__Help')} />
       </View>
