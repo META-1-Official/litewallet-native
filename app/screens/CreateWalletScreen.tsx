@@ -10,7 +10,15 @@ import { colors } from '../styles/colors';
 import { catchError, getRadomByteArray } from '../utils';
 import createAccountWithPassword from '../utils/accountCreate';
 import useForm from '../utils/useForm';
-import { asyncRule, email, includes, lettersOnly, required, RuleFn, same } from '../utils/useForm/rules';
+import {
+  asyncRule,
+  email,
+  includes,
+  lettersOnly,
+  required,
+  RuleFn,
+  same,
+} from '../utils/useForm/rules';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { getAccount } from '../utils/meta1Api';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -89,6 +97,7 @@ const CreateWalletScreen: React.FC = () => {
                       autoCorrect={false}
                       onChangeText={() => {}}
                       style={[props.style, { maxWidth: '88%', paddingRight: 8 }]}
+                      editable={false}
                     />
                     <TouchableOpacity onPress={() => Clipboard.setString(formState.password)}>
                       <View
