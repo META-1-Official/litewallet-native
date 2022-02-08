@@ -180,6 +180,7 @@ const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
             throttled(t);
           }}
           value={usd}
+          keyboardType="numeric"
           style={darkStyle({ color: '#fff' }, styles.usdInput)}
         />
       </View>
