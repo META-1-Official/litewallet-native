@@ -247,6 +247,19 @@ interface AmountState {
 const amountReducer =
   (asset: StandaloneAsset) =>
   (state: AmountState, action: AmountAction): AmountState => {
+    // Sanitize input
+    if (action.payload !== '') {
+      const clean = action.payload
+        .replace(/[^(\d+(\.?\d+))]/gm, '')
+        .match(/^\d+(\.)?(\d+)?$/)
+        ?.at(0);
+
+      if (!clean) {
+        return { ...state };
+      }
+      action.payload = clean;
+    }
+
     switch (action.type) {
       case UpdateType.COIN:
         asset.setAmount(action.payload);
