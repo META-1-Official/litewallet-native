@@ -44,6 +44,12 @@ const Backdrop = () => (
 const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanceT) => {
   const [A, B] = createPair(useAsset(defaultAssetA), useAsset(defaultAssetB));
 
+  useEffect(() => {
+    console.log('One of Assets Changed');
+    const baseUsdt = A.toUsdt();
+    const _targetAmount = B.formUsdt(baseUsdt);
+  }, [A.asset, B.asset]);
+
   return {
     assets: { A, B },
     Modal: () => (
