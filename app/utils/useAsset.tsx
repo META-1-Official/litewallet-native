@@ -8,6 +8,9 @@ export type theAsset = {
   amount: string;
   setAmount: React.Dispatch<React.SetStateAction<string>>;
   Modal: ReturnType<typeof useAssetPicker>[3];
+  /**
+   * @param {updateAmount} updateAmount - true by default
+   */
   formUsdt: (usdtAmount: string | number, updateAmount?: boolean) => number;
   toUsdt: (amt?: string | number | undefined) => number;
   getMax: () => number;
