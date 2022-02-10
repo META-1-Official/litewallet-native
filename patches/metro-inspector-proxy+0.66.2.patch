@@ -1,0 +1,99 @@
+diff --git a/node_modules/metro-inspector-proxy/src/Device.js b/node_modules/metro-inspector-proxy/src/Device.js
+index 4269c06..3317e8d 100644
+--- a/node_modules/metro-inspector-proxy/src/Device.js
++++ b/node_modules/metro-inspector-proxy/src/Device.js
+@@ -1,5 +1,11 @@
+ "use strict";
+ 
++const { URL } = require("url");
++
++const http = require('http');
++
+ var fs = _interopRequireWildcard(require("fs"));
+ 
+ var path = _interopRequireWildcard(require("path"));
+@@ -177,11 +183,11 @@ class Device {
+       }
+     });
+ 
+-    socket.on("message", message => {
++    socket.on("message", async (message) => {
+       debug("(Debugger) -> (Proxy)    (Device): " + message);
+       const debuggerRequest = JSON.parse(message);
+ 
+-      const interceptedResponse = this._interceptMessageFromDebugger(
++      const interceptedResponse = await this._interceptMessageFromDebugger(
+         debuggerRequest,
+         debuggerInfo
+       );
+@@ -473,7 +479,7 @@ class Device {
+     }
+   } // Allows to make changes in incoming messages from debugger.
+ 
+-  _interceptMessageFromDebugger(req, debuggerInfo) {
++  async _interceptMessageFromDebugger(req, debuggerInfo) {
+     let response = null;
+ 
+     if (req.method === "Debugger.setBreakpointByUrl") {
+@@ -481,7 +487,7 @@ class Device {
+     } else if (req.method === "Debugger.getScriptSource") {
+       response = {
+         id: req.id,
+-        result: this._processDebuggerGetScriptSource(req)
++        result: await this._processDebuggerGetScriptSource(req, debuggerInfo)
+       };
+     }
+ 
+@@ -516,21 +522,42 @@ class Device {
+     }
+   }
+ 
+-  _processDebuggerGetScriptSource(req) {
++  async _processDebuggerGetScriptSource(req) {
+     let scriptSource = `Source for script with id '${req.params.scriptId}' was not found.`;
+
+     const pathToSource = this._scriptIdToSourcePathMapping.get(
+       req.params.scriptId
+     );
++
++    const isUrl = (s) => {
++      try {
++        const _ = new URL(s);
++        return true;
++      } catch {
++        return false;
++      }
++    };
++
++    const http_get = url => new Promise(resolve => {
++        http.get(url, (res) => {
++          let rawData = '';
++          res.on('data', d => {
++            rawData += d;
++          });
++          res.on('end', () => resolve(rawData));
++        });
++      });
+
+     if (pathToSource) {
+-      try {
+-        scriptSource = fs.readFileSync(
+-          path.resolve(this._projectRoot, pathToSource),
+-          "utf8"
+-        );
+-      } catch (err) {
+-        scriptSource = err.message;
++      if (isUrl(pathToSource)) {
++        scriptSource = await http_get(pathToSource);
++      } else {
++        try {
++          scriptSource = fs.readFileSync(
++            path.resolve(this._projectRoot, pathToSource),
++            "utf8"
++          );
++        } catch (err) {
++          scriptSource = err.message;
++        }
+       }
+     }
+ 
