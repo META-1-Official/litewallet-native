@@ -181,6 +181,9 @@ export const catchError = async (
     if (onErr?.(e)) {
       return anyway?.();
     }
+    // Try to format the errors
+    //@ts-ignore
+    e.message = e.message.split('bitshares-crypto')[0];
     console.error(e);
     Alert.alert('Error', (e as Error).message);
   }
