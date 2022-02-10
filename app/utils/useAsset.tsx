@@ -74,7 +74,7 @@ export const useAsset = (dv?: AssetBalanceT): StandaloneAsset => {
       throw new Error('Failed to get META1 asset. Try again later.');
     }
 
-    if (meta1.amount > 36e-5) {
+    if (meta1.amount - 35e-5 <= 0) {
       throw new Error('Insufficient balance to pay transaction fees.');
     }
     return;
