@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAssetPicker } from '../components/AssetSelectModal';
-import { AssetBalanceT } from './meta1Api';
+import { AssetBalanceT, useAssetsStore } from './meta1Api';
 
 export type theAsset = {
   asset: AssetBalanceT;
@@ -12,6 +12,8 @@ export type theAsset = {
   toUsdt: (amt?: string | number | undefined) => number;
   getMax: () => number;
   setMax: () => void;
+  canAfford: () => boolean;
+  isAffordableForSwap: () => void;
   opponent: () => theAsset;
 };
 
@@ -57,6 +59,24 @@ export const useAsset = (dv?: AssetBalanceT): StandaloneAsset => {
   const setMax = () => setAmount(asset.amount.toFixed(8));
   const getMax = () => asset.amount;
 
+  const canAfford = () => asset.amount >= Number(amount);
+
+  const isAffordableForSwap = () => {
+    if (!canAfford()) {
+      throw new Error('Insufficient balance');
+    }
+
+    const meta1 = useAssetsStore.getState().userAssets.find('META1');
+    if (!meta1) {
+      throw new Error('Failed to get META1 asset. Try again later.');
+    }
+
+    if (meta1.amount > 36e-5) {
+      throw new Error('Insufficient balance to pay transaction fees.');
+    }
+    return;
+  };
+
   const [amount, setAmount] = useState('0.00');
   return {
     asset,
@@ -68,5 +88,7 @@ export const useAsset = (dv?: AssetBalanceT): StandaloneAsset => {
     toUsdt,
     getMax,
     setMax,
+    canAfford,
+    isAffordableForSwap,
   };
 };
