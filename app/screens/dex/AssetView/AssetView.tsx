@@ -87,7 +87,6 @@ const AssetViewHeader: React.FC<AssetViewTSP> = ({ navigation }) => {
   useEffect(() => {
     const fn = async () => {
       const v = await meta1dex.db.get_ticker(assetB, assetA);
-      console.log('update', v);
       setTicker(v);
     };
 
