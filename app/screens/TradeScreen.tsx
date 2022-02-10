@@ -235,16 +235,15 @@ const usePerformSwap = (
   };
 
   return () =>
-    catchError(
-      fn,
-      () => update(accountName),
-      e => {
+    catchError(fn, {
+      anyway: () => update(accountName),
+      onErr: e => {
         onFail();
         if ((e as Error).message === 'Expected value, got null') {
           return true; // Swallow this exception
         }
       },
-    );
+    });
 };
 
 const makeMessage = (assets: ScreenAssets) =>

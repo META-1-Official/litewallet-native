@@ -492,7 +492,7 @@ const makeSendFn =
         await useAssetsStore.getState().fetchUserAssets(accountName);
         nav.goBack();
       },
-      () => onEnd(),
+      { anyway: () => onEnd() },
     );
   };
 
