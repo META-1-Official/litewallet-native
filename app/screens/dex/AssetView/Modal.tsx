@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Minus, Plus } from 'react-native-feather';
 import { SvgIcons } from '../../../../assets';
+import { useLoaderModal } from '../../../components/LoaderModal';
 import { useStore } from '../../../store';
 import { colors } from '../../../styles/colors';
 import { catchError, ensure, promptPromise, Timeout } from '../../../utils';
@@ -140,9 +141,10 @@ const BuyTab: React.FC = () => {
     setTotal(price * amount);
   }, [price, amount]);
 
-  const fn = useCreateOrder(assetB, assetA, 'placeLimitOrder - Buy');
+  const { fn, Loader } = useCreateOrder(assetB, assetA, 'placeLimitOrder - Buy');
   return (
     <View style={{ flexGrow: 1, padding: 12 }}>
+      <Loader />
       <InputRow title={`AT PRICE | ${assetB}`} value={price} onChange={setPrice} />
       <InputRow title={`AMOUNT | ${assetA}`} value={amount} onChange={setAmount} />
       <InputRow title={`TOTAL | ${assetB}`} value={total} onChange={setTotal} />
@@ -153,7 +155,7 @@ const BuyTab: React.FC = () => {
           setAmount(n / price);
         }}
       />
-      <TouchableOpacity onPress={() => fn(price, amount)}>
+      <TouchableOpacity onPress={() => fn(amount, total)}>
         <View
           style={{
             backgroundColor: colors.BrandYellow,
@@ -171,6 +173,7 @@ const BuyTab: React.FC = () => {
 };
 
 const useCreateOrder = (toGive: any, toGet: any, message: string) => {
+  const { LoaderModal, showLoader, hideLoader } = useLoaderModal();
   const { accountName, password } = useStore();
   const getPassword = async () =>
     password
@@ -186,22 +189,36 @@ const useCreateOrder = (toGive: any, toGet: any, message: string) => {
     password: ensure(await getPassword()),
   });
 
-  const fn = (price: number, amount: number) => async () => {
+  const fn = (totalPrice: number, amount: number) => async () => {
     const accountInfo = await getAccountInfo();
     if (accountInfo.password === null) {
       return;
     }
-    return Timeout(
+    showLoader();
+    const to = await Timeout(
       placeLimitOrder(accountInfo, {
         toGet,
         toGive,
-        price,
+        totalPrice,
         amount,
       }),
       message,
     );
+    return to;
   };
-  return (price: number, amount: number) => catchError(fn(price, amount));
+  return {
+    fn: (price: number, amount: number) =>
+      catchError(fn(price, amount), {
+        anyway: () => hideLoader(),
+        errorMiddleware: (err: Error) => {
+          if (err.message === 'Amount equal 0!') {
+            err.message = 'Total too small';
+          }
+          return err;
+        },
+      }),
+    Loader: LoaderModal,
+  };
 };
 
 const SellTab: React.FC = () => {
@@ -223,10 +240,11 @@ const SellTab: React.FC = () => {
     setTotal(price * amount);
   }, [price, amount]);
 
-  const fn = useCreateOrder(assetA, assetB, 'placeLimitOrder - Sell');
+  const { fn, Loader } = useCreateOrder(assetA, assetB, 'placeLimitOrder - Sell');
 
   return (
     <View style={{ flexGrow: 1, padding: 12 }}>
+      <Loader />
       <InputRow title={`AT PRICE | ${assetB}`} value={price} onChange={setPrice} />
       <InputRow title={`AMOUNT | ${assetA}`} value={amount} onChange={setAmount} />
       <TotalRow
