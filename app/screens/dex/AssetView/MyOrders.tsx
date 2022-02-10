@@ -17,6 +17,7 @@ import { inFuture } from '../../../utils';
 import {
   AccountBalanceT,
   AmountT,
+  FilledRetT,
   FullHistoryOrder,
   getHistoricalOrders,
   HistoryRetT,
@@ -350,14 +351,14 @@ type EValT = [
   {
     order: HistoryRetT;
     canceled: any;
-    filled: any[];
+    filled: FilledRetT[];
   },
 ];
 const RenderRow =
   (
     [assetA, assetB]: string[],
     amtToReadable: any,
-    reject: (canceled: any, filled: any[], order: limitOrderObjExt) => boolean,
+    reject: (canceled: any, filled: FilledRetT[], order: limitOrderObjExt) => boolean,
     lastCol: (orderStaus: string, k: string) => JSX.Element,
   ) =>
   ([k, v]: EValT) => {
@@ -382,20 +383,33 @@ const RenderRow =
     }
 
     const buyAmt = amtToReadable(order.min_to_receive);
-
     const sellAmt = amtToReadable(order.amount_to_sell);
 
+    console.log(JSON.stringify({ order }, null, 4));
+    console.log({ buyAmt, sellAmt });
+
+    const meanFilled =
+      filled.reduce<number>((acc, e) => {
+        const realPayed = amtToReadable(e.fill_order_operation.pays);
+        const realGot = amtToReadable(e.fill_order_operation.receives);
+        const price = realPayed / realGot;
+        return acc + price;
+      }, 0) / filled.length;
+
     const isBuy = buyingAsset.symbol === assetA;
-    const orderStatus = canceled ? 'Canceled' : filled.length ? 'Completed' : 'Expired';
+    const orderStatus = filled.length ? 'Completed' : canceled ? 'Canceled' :'Expired';
     let progress = 0;
     if (filled.length) {
       const pays = filled.reduce(
         (acc, { fill_order_operation: fillOp }) =>
-          acc + amtToReadable(fillOp.is_maker ? fillOp.receives : fillOp.pays),
+          acc + amtToReadable(!isBuy ? fillOp.receives : fillOp.pays),
         0,
       );
       progress = pays / (isBuy ? sellAmt : buyAmt);
     }
+
+    const buyPrice = filled.length ? meanFilled : sellAmt / buyAmt;
+    const sellPirce = filled.length ? 1 / meanFilled : buyAmt / sellAmt;
     return (
       <View
         style={{
@@ -420,9 +434,11 @@ const RenderRow =
           <Text style={{ color: '#fff', fontSize: 18 }}>
             {assetA} / {assetB}
           </Text>
-          <Text style={{ color: '#fff', fontSize: 18 }}>Amount: {isBuy ? buyAmt : sellAmt}</Text>
           <Text style={{ color: '#fff', fontSize: 18 }}>
-            Price: {(buyAmt / sellAmt).toString().slice(0, 8)}
+            Amount: {isBuy ? buyAmt / sellAmt : sellAmt}
+          </Text>
+          <Text style={{ color: '#fff', fontSize: 18 }}>
+            Price: {(isBuy ? buyPrice : sellPirce).toString().slice(0, 8)}
           </Text>
         </View>
         <View style={{ margin: 8 }}>{lastCol(orderStatus, k)}</View>
