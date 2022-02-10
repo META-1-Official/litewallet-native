@@ -162,30 +162,39 @@ export const Timeout = (fn: Promise<any>, message: string) =>
   Promise.race([
     fn,
     new Promise((resolve, reject) =>
-      setTimeout(() => reject('Promise timedout: ' + message), 10000),
+      setTimeout(() => reject('Promise timeout: ' + message), 30000),
     ),
   ]);
 
 /** Not exactly deepEquals but good enought */
 export const jsonEquals = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
 
+type params = {
+  anyway?: () => void;
+  onErr?: (e: unknown) => void;
+  errorMiddleware?: (e: any) => any;
+};
 // Jank
-export const catchError = async (
-  fn: () => void,
-  anyway?: () => void,
-  onErr?: (e: unknown) => void,
-) => {
+export const catchError = async (fn: () => void, params?: params) => {
+  const { anyway, onErr, errorMiddleware } = params || {};
   try {
     await fn();
   } catch (e) {
     if (onErr?.(e)) {
       return anyway?.();
     }
+    console.log('oError', e);
     // Try to format the errors
+    let err: any = e;
     //@ts-ignore
-    e.message = e.message.split('bitshares-crypto')[0];
-    console.error(e);
-    Alert.alert('Error', (e as Error).message);
+    if (err.message) {
+      err.message = err.message.split('bitshares-crypto')[0];
+    }
+    if (errorMiddleware) {
+      err = errorMiddleware(e);
+    }
+    console.error(err);
+    Alert.alert('Error', (err as Error).message);
   }
   anyway?.();
 };
