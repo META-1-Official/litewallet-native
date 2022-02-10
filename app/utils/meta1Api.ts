@@ -241,12 +241,13 @@ type OrderInfoT = {
 
 export const placeLimitOrder = async (accountInfo: AccountWithPassword, orderInfo: OrderInfoT) => {
   const account = await Meta1.login(accountInfo.accountName, accountInfo.password);
-  console.log('login', account);
+  console.log('login', account.sell.toString());
+  console.log({orderInfo});
   const sellResult = await account.sell(
     orderInfo.toGive,
     orderInfo.toGet,
-    orderInfo.amount,
-    orderInfo.price,
+    orderInfo.amount.toFixed(8),
+    orderInfo.price.toFixed(8),
     false, // whatever
     new Date(new Date().getTime() + YY), // idk
   );

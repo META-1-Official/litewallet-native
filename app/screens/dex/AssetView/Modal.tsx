@@ -13,7 +13,7 @@ import { Minus, Plus } from 'react-native-feather';
 import { SvgIcons } from '../../../../assets';
 import { useStore } from '../../../store';
 import { colors } from '../../../styles/colors';
-import { catchError, Timeout } from '../../../utils';
+import { catchError, ensure, promptPromise, Timeout } from '../../../utils';
 import { placeLimitOrder, useAssets } from '../../../utils/meta1Api';
 import meta1dex from '../../../utils/meta1dexTypes';
 import { AssetViewSSP } from './AssetView';
@@ -120,10 +120,8 @@ const TotalRow: React.FC<{ symbol: string; set: (n: number) => void }> = ({ symb
     </View>
   );
 };
-const BuyTab: React.FC = () => {
-  const accountName = useStore(state => state.accountName);
-  const password = useStore(state => state.password);
 
+const BuyTab: React.FC = () => {
   const { assetA, assetB } = useAVStore(s => s);
 
   const [price, setPrice] = useState(0);
@@ -142,6 +140,7 @@ const BuyTab: React.FC = () => {
     setTotal(price * amount);
   }, [price, amount]);
 
+  const fn = useCreateOrder(assetB, assetA, 'placeLimitOrder - Buy');
   return (
     <View style={{ flexGrow: 1, padding: 12 }}>
       <InputRow title={`AT PRICE | ${assetB}`} value={price} onChange={setPrice} />
@@ -154,22 +153,7 @@ const BuyTab: React.FC = () => {
           setAmount(n / price);
         }}
       />
-      <TouchableOpacity
-        onPress={() =>
-          Timeout(
-            placeLimitOrder(
-              { accountName, password },
-              {
-                toGet: assetA,
-                toGive: assetB,
-                price,
-                amount,
-              },
-            ),
-            'placeLimitOrder - Buy',
-          )
-        }
-      >
+      <TouchableOpacity onPress={() => fn(price, amount)}>
         <View
           style={{
             backgroundColor: colors.BrandYellow,
@@ -186,10 +170,41 @@ const BuyTab: React.FC = () => {
   );
 };
 
-const SellTab: React.FC = () => {
-  const accountName = useStore(state => state.accountName);
-  const password = useStore(state => state.password);
+const useCreateOrder = (toGive: any, toGet: any, message: string) => {
+  const { accountName, password } = useStore();
+  const getPassword = async () =>
+    password
+      ? password
+      : await promptPromise(
+          'Enter password',
+          'Password is required for this operation',
+          'secure-text',
+        );
 
+  const getAccountInfo = async () => ({
+    accountName,
+    password: ensure(await getPassword()),
+  });
+
+  const fn = (price: number, amount: number) => async () => {
+    const accountInfo = await getAccountInfo();
+    if (accountInfo.password === null) {
+      return;
+    }
+    return Timeout(
+      placeLimitOrder(accountInfo, {
+        toGet,
+        toGive,
+        price,
+        amount,
+      }),
+      message,
+    );
+  };
+  return (price: number, amount: number) => catchError(fn(price, amount));
+};
+
+const SellTab: React.FC = () => {
   const { assetA, assetB } = useAVStore(s => s);
 
   const [price, setPrice] = useState(0);
@@ -208,6 +223,8 @@ const SellTab: React.FC = () => {
     setTotal(price * amount);
   }, [price, amount]);
 
+  const fn = useCreateOrder(assetA, assetB, 'placeLimitOrder - Sell');
+
   return (
     <View style={{ flexGrow: 1, padding: 12 }}>
       <InputRow title={`AT PRICE | ${assetB}`} value={price} onChange={setPrice} />
@@ -220,25 +237,7 @@ const SellTab: React.FC = () => {
         }}
       />
       <InputRow title={`TOTAL | ${assetB}`} value={total} onChange={setTotal} />
-      <TouchableOpacity
-        onPress={() =>
-          catchError(
-            async () =>
-              await Timeout(
-                placeLimitOrder(
-                  { accountName, password },
-                  {
-                    toGet: assetB,
-                    toGive: assetA,
-                    price,
-                    amount,
-                  },
-                ),
-                'placeLimitOrder - Sell',
-              ),
-          )
-        }
-      >
+      <TouchableOpacity onPress={() => fn(price, amount)}>
         <View
           style={{
             backgroundColor: colors.BrandYellow,
