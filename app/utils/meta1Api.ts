@@ -236,18 +236,18 @@ type OrderInfoT = {
   toGive: string;
   toGet: string;
   amount: number;
-  price: number;
+  totalPrice: number;
 };
 
 export const placeLimitOrder = async (accountInfo: AccountWithPassword, orderInfo: OrderInfoT) => {
   const account = await Meta1.login(accountInfo.accountName, accountInfo.password);
   console.log('login', account.sell.toString());
-  console.log({orderInfo});
+  console.log({ orderInfo });
   const sellResult = await account.sell(
     orderInfo.toGive,
     orderInfo.toGet,
-    orderInfo.amount.toFixed(8),
-    orderInfo.price.toFixed(8),
+    orderInfo.amount,
+    orderInfo.totalPrice,
     false, // whatever
     new Date(new Date().getTime() + YY), // idk
   );
@@ -441,6 +441,23 @@ export type limitOrderObjBase<amtT> = {
 export type limitOrderObj = limitOrderObjBase<AmountT>;
 export type limitOrderObjExt = limitOrderObjBase<AmountT & { asset: AssetBalanceT }>;
 
+export type fillOrderObjBase<amtT> = {
+  fee: amtT;
+  order_id: string;
+  account_id: string;
+  pays: amtT;
+  receives: amtT;
+  fill_price: {
+    base: amtT;
+    quote: amtT;
+  };
+  is_maker: boolean;
+  result: {
+    void_result: {};
+  };
+};
+export type fillOrderObj = fillOrderObjBase<AmountT>;
+
 export const parseHistoryEntry = (
   rawOp: TypeIdPrefixed<limitOrderObj>,
   rawResult: TypeIdPrefixed<string>,
@@ -477,6 +494,10 @@ export const parseHistoryEntry = (
   };
 };
 export interface HistoryRetT extends Record<keyof typeof OP_TYPE, limitOrderObjExt> {
+  raw: any;
+}
+
+export interface FilledRetT extends Record<keyof typeof OP_TYPE, fillOrderObj> {
   raw: any;
 }
 
