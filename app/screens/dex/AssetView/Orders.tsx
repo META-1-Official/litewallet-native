@@ -165,6 +165,11 @@ export const Orders: React.FC<AssetViewTSP> = () => {
               ))}
           </View>
         </View>
+        {orders?.asks.length || orders?.bids.length ? null : (
+          <View style={{ flex: 1, alignItems: 'center' }}>
+            <Text style={{ color: '#888', fontSize: 18 }}>No open orders</Text>
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
