@@ -469,14 +469,15 @@ const makeSendFn =
     console.log('--SENDING:', standalone.asset.symbol, standalone.amount);
     catchError(
       async () => {
-        if (!standalone.canAfford()) {
-          throw new Error('Insufficient balance.');
-        }
-
         if (accountName === toAccount) {
           throw new Error('Field "To" must be different form field "From"');
         }
 
+        if (!toAccount) {
+          throw new Error("To account can't be empty");
+        }
+
+        standalone.isAffordableForSend();
         await sendWithPassword(
           {
             accountName,
@@ -485,7 +486,7 @@ const makeSendFn =
           {
             toAccount,
             asset: standalone.asset.symbol,
-            amount: Number(standalone.amount) - (standalone.asset.symbol === 'META1' ? 35e-5 : 0), // 0.00035 fixed fee
+            amount: Number(standalone.amount), // 0.00035 fixed fee
           },
         );
         await useAssetsStore.getState().fetchUserAssets(accountName);

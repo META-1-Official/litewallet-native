@@ -17,6 +17,7 @@ export type theAsset = {
   setMax: () => void;
   canAfford: () => boolean;
   isAffordableForSwap: () => void;
+  isAffordableForSend: () => void;
   opponent: () => theAsset;
 };
 
@@ -80,6 +81,26 @@ export const useAsset = (dv?: AssetBalanceT): StandaloneAsset => {
     return;
   };
 
+  const isAffordableForSend = () => {
+    if (!canAfford()) {
+      throw new Error('Insufficient balance');
+    }
+
+    const meta1 = useAssetsStore.getState().userAssets.find('META1');
+    if (!meta1) {
+      throw new Error('Failed to get META1 asset. Try again later.');
+    }
+    const totalCost = Number(asset.symbol === 'META1') * 35e-5 + Number(amount);
+    if (meta1.amount - totalCost <= 0) {
+      throw new Error(
+        `Insufficient balance to pay transaction fees. This transaction requires ${totalCost} ${
+          asset.symbol
+        } (${35e-5} META1 fee)`,
+      );
+    }
+    return;
+  };
+
   const [amount, setAmount] = useState('0.00');
   return {
     asset,
@@ -93,5 +114,6 @@ export const useAsset = (dv?: AssetBalanceT): StandaloneAsset => {
     setMax,
     canAfford,
     isAffordableForSwap,
+    isAffordableForSend,
   };
 };
