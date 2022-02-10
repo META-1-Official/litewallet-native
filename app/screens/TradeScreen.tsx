@@ -221,6 +221,9 @@ const usePerformSwap = (
 
     onBeforeSwap();
     assets.A.isAffordableForSwap();
+    if (assets.A.asset.symbol === assets.B.asset.symbol) {
+      throw new Error("Can't swap the same assets");
+    }
     await swapWithPassword(
       accountInfo,
       assets.A.asset.symbol,
@@ -245,7 +248,7 @@ const usePerformSwap = (
 };
 
 const makeMessage = (assets: ScreenAssets) =>
-  `Succesfully traded ${assets.A.amount} ${assets.A.asset.symbol}` +
+  `Successfully traded ${assets.A.amount} ${assets.A.asset.symbol}` +
   ' to ' +
   `${assets.B.amount} ${assets.A.asset.symbol}`;
 
