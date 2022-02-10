@@ -133,7 +133,7 @@ const BuyTab: React.FC = () => {
   useEffect(() => {
     const fn = async () => {
       const t = await meta1dex.db.get_ticker(assetB, assetA);
-      setPrice(Number(t.lowest_ask));
+      setPrice(Number(t.lowest_ask) || Number(t.latest));
     };
     fn();
   }, [assetA, assetB]);
@@ -199,7 +199,7 @@ const SellTab: React.FC = () => {
   useEffect(() => {
     const fn = async () => {
       const t = await meta1dex.db.get_ticker(assetB, assetA);
-      setPrice(Number(t.highest_bid));
+      setPrice(Number(t.highest_bid) || Number(t.latest));
     };
     fn();
   }, [assetA, assetB]);
