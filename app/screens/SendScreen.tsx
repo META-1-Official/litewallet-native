@@ -473,6 +473,10 @@ const makeSendFn =
           throw new Error('Insufficient balance.');
         }
 
+        if (accountName === toAccount) {
+          throw new Error('Field "To" must be different form field "From"');
+        }
+
         await sendWithPassword(
           {
             accountName,
