@@ -81,7 +81,7 @@ const PortfolioHeader: React.FC<Props> = ({ protfolioAssets }) => {
     <View style={styles.container}>
       <Text style={styles.accountName}>@{accountName}</Text>
       <Text style={styles.accountTotal}>${protfolioAssets!.accountTotal.toFixed(2)}</Text>
-      <ProfitIndicator change={protfolioAssets!.toatalChnage} />
+      <ProfitIndicator change={protfolioAssets!.totalChange} />
       <ButtonGroup />
     </View>
   );
