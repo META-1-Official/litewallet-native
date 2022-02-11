@@ -20,7 +20,7 @@ import {
 } from './meta1dexTypes';
 import { createPaperWalletLink } from './miscApi';
 
-// Number of miliseconds in one year
+// Number of milliseconds in one year
 const YY = 3.154e10;
 
 const setLoading = useStore.getState().setLoading;
@@ -33,7 +33,7 @@ Meta1.subscribe('connected', () => {
 });
 
 export async function fetchAssetWithIcon(asset_name: string) {
-  // Uising imgur as a fallback image host is sub optimal
+  // Using imgur as a fallback image host is sub optimal
   // Or maybe its ok https://webapps.stackexchange.com/a/75994
   const fallback = new Map(
     Object.entries({
@@ -78,7 +78,7 @@ export const getReadableBalance = (awb: PartialAssetBalanceT) =>
 
 export const getAssetToUSDTTicket = (assetSymbol: string) =>
   assetSymbol === 'USDT'
-    ? { latest: 1, percent_change: 0 } // USDT/USDT pair does not extists
+    ? { latest: 1, percent_change: 0 } // USDT/USDT pair does not exists
     : Meta1.db.get_ticker('USDT', assetSymbol).then(e => ({
         latest: Number(e.latest),
         percent_change: Number(e.percent_change),
@@ -102,7 +102,7 @@ function* AssetBalanceGenerator(base: PartialAssetBalanceT[]) {
 export type AccountBalanceT = {
   assetsWithBalance: AssetBalanceT[];
   accountTotal: number;
-  toatalChnage: number;
+  totalChange: number;
   changePercent: number;
   find: (symbol: string) => AssetBalanceT | null;
 };
@@ -119,6 +119,7 @@ export async function getAccount(accountName: string) {
   const accounts = await Meta1.db
     .get_full_accounts([accountName], false)
     .then(res => new Map(res));
+
   const account = accounts.get(accountName);
   return account;
 }
@@ -127,7 +128,7 @@ export async function fetchAccountBalances(accountName: string): Promise<Account
   const account = await getAccount(accountName);
 
   if (!account) {
-    console.warn('Api did not return requestd account', accountName);
+    console.warn('Api did not return requested account', accountName);
     return logout();
   }
 
@@ -144,14 +145,14 @@ export async function fetchAccountBalances(accountName: string): Promise<Account
 
   const accountTotal = assetsWithBalance.reduce((acc, cv) => acc + cv.total_value, 0);
 
-  const toatalChnage = assetsWithBalance
+  const totalChange = assetsWithBalance
     .map(e => e.delta * e.total_value * 0.01)
     .reduce((acc, cv) => acc + cv, 0);
-  const changePercent = toatalChnage / (accountTotal * 0.01);
+  const changePercent = totalChange / (accountTotal * 0.01);
   return {
     assetsWithBalance,
     changePercent,
-    toatalChnage,
+    totalChange: totalChange,
     accountTotal,
     find: str => assetsWithBalance.find(e => e.symbol === str) || null,
   };
@@ -278,21 +279,21 @@ export const depositAddress = async (accountName: string, asset: string) => {
   return address;
 };
 
-const saitizeISOString = (x: string) => x.slice(0, -1);
+const sanitizeISOString = (x: string) => x.slice(0, -1);
 
 export async function getHistoryForAsset(assetA: string) {
-  // USDT/USDT pair just dosent make any sense, returning two datapoints for a straight line
+  // USDT/USDT pair just doesn't make any sense, returning two data points for a straight line
   if (assetA === 'USDT') {
     return [1, 1];
   }
   const history = await meta1dex.db.get_trade_history(
     'USDT',
     assetA,
-    saitizeISOString(new Date().toISOString()),
+    sanitizeISOString(new Date().toISOString()),
     '2021-01-01T00:00:00.000',
     100,
   );
-  // A hackish way to drop all the unnecasary floating point precision
+  // A hackish way to drop all the unnecessary floating point precision
   const prices = history.map(e => +Number(e.price).toFixed(2));
   return prices;
 }
@@ -301,7 +302,7 @@ export async function getTradesForAssetPair(assetA: string, assetB: string) {
   const history = await meta1dex.db.get_trade_history(
     assetB,
     assetA,
-    saitizeISOString(new Date().toISOString()),
+    sanitizeISOString(new Date().toISOString()),
     '2021-01-01T00:00:00.000',
     100,
   );
@@ -350,7 +351,7 @@ export const useAssetsStore = create<AssetsStore>(set => ({
     assetsWithBalance: [],
     accountTotal: 0,
     changePercent: 0,
-    toatalChnage: 0,
+    totalChange: 0,
     find: () => null,
   },
   fetchUserAssets: async (accountName: string) => {
@@ -366,7 +367,7 @@ useStore.subscribe(
         assetsWithBalance: [],
         accountTotal: 0,
         changePercent: 0,
-        toatalChnage: 0,
+        totalChange: 0,
         find: () => null,
       },
     });
@@ -573,7 +574,7 @@ const Based = (t: ITicker, inverted?: boolean): OHLC => {
   const base = Object.keys(t).filter(k => k.indexOf('_base') >= 0);
   const quote = Object.keys(t).filter(k => k.indexOf('_quote') >= 0);
 
-  assert(base.length === quote.length, 'Base vs quout length mismatch');
+  assert(base.length === quote.length, 'Base vs quote length mismatch');
 
   const mixed = zip(base, quote);
   const entries = mixed.map(e => {

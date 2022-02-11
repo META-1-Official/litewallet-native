@@ -21,7 +21,9 @@ const { width, height } = Dimensions.get('screen');
 const LinkWalletScreen: React.FC = () => {
   const knownAccount: RuleFn = text =>
     asyncRule(async () => {
+      console.log(text);
       const acc = await getAccount(text).catch(console.debug);
+      console.log(acc);
       return Boolean(acc);
     }, 'Account not found');
   const { Input, formState, valid } = useForm([
@@ -93,6 +95,7 @@ const LinkWalletScreen: React.FC = () => {
                 {...props}
                 autoCapitalize={'none'}
                 autoCorrect={false}
+                keyboardType={'email-address'}
                 style={[props.style, { paddingLeft: 8 }]}
               />
             </View>

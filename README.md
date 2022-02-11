@@ -1,5 +1,5 @@
 # nativeapp
-
+On hermes branch make shure to produce clean build if you are swithcing from master
 ### Building Locally
 
 The code is built using React-Native and running code locally requires a Mac or Linux OS.
