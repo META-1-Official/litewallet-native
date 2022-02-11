@@ -179,7 +179,7 @@ const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
         value={amt}
       />
       <View style={styles.rowEnd}>
-        <TextSecondary style={darkStyle({ color: '#fff' }, styles.usdtLable)}>US$</TextSecondary>
+        <TextSecondary style={darkStyle({ color: '#fff' }, styles.usdtLabel)}>US$</TextSecondary>
         <TextInput
           onChangeText={t => {
             setUsd(t);
@@ -249,7 +249,7 @@ const usePerformSwap = (
 const makeMessage = (assets: ScreenAssets) =>
   `Successfully traded ${assets.A.amount} ${assets.A.asset.symbol}` +
   ' to ' +
-  `${assets.B.amount} ${assets.A.asset.symbol}`;
+  `${assets.B.amount} ${assets.B.asset.symbol}`;
 
 interface Props {
   darkMode?: boolean;
@@ -267,12 +267,12 @@ const optStyleFactory =
 
 const TradeScreen: React.FC<Props> = ({ darkMode }) => {
   const allAssets = useAssets();
-  const avaliableAssets = useMemo(
+  const availableAssets = useMemo(
     () => allAssets?.assetsWithBalance.sort((a, b) => a.symbol.localeCompare(b.symbol)),
     [allAssets],
   );
 
-  const { assets, Modal } = useAssetPair(avaliableAssets.at(0), avaliableAssets.at(3));
+  const { assets, Modal } = useAssetPair(availableAssets.at(0), availableAssets.at(3));
 
   const nav = useNavigation<WalletNavigationProp>();
 
@@ -286,7 +286,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
     () => hideLoader(),
   );
 
-  if (allAssets === null || !avaliableAssets) {
+  if (allAssets === null || !availableAssets) {
     return <Loader />;
   }
   const DarkMode: React.FC = ({ children }) => <>{darkMode ? children : null}</>;
@@ -375,7 +375,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
 
-  usdtLable: { fontSize: 14, textAlign: 'right', padding: 0 },
+  usdtLabel: { fontSize: 14, textAlign: 'right', padding: 0 },
   listStyle: { backgroundColor: '#fff', borderRadius: 8, margin: 18 },
   listView: { padding: 16, borderBottomWidth: 2, borderBottomColor: '#eceef0' },
   rowJustifyBetween: {
