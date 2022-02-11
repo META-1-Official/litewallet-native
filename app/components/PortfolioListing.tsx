@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Dimensions,
   ScrollView,
@@ -7,15 +7,16 @@ import {
   Text,
   View,
   TouchableOpacity,
+  RefreshControl,
 } from 'react-native';
 import { grey200, grey600 } from 'react-native-paper/src/styles/colors';
-import { AccountBalanceT, AssetBalanceT } from '../utils/meta1Api';
+import { BrandYellow } from '../styles/colors';
+import { AssetBalanceT, refreshAssets, useAssets } from '../utils/meta1Api';
 
 const { width } = Dimensions.get('screen');
 
 interface Props {
   showZeroBallance: boolean;
-  accountBallance: AccountBalanceT | null;
   colors?: {
     background?: string;
     stripe?: string;
@@ -25,14 +26,31 @@ interface Props {
   usdPrimary?: boolean;
   onPress?: (asset: string) => void;
 }
-const PortfolioLising: React.FC<Props> = ({
-  showZeroBallance,
-  accountBallance,
-  colors,
-  usdPrimary,
-  onPress,
-}) => {
-  console.log(onPress);
+
+const wait = (timeout: number) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
+
+const Refresher = () => {
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    refreshAssets();
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
+  return (
+    <RefreshControl
+      colors={[BrandYellow]}
+      tintColor={BrandYellow}
+      onRefresh={onRefresh}
+      refreshing={refreshing}
+    />
+  );
+};
+
+const PortfolioListing: React.FC<Props> = ({ showZeroBallance, colors, usdPrimary, onPress }) => {
   const defaultColors: typeof colors = {
     background: '#fff',
     stripe: grey200,
@@ -40,9 +58,16 @@ const PortfolioLising: React.FC<Props> = ({
     textSecondary: grey600,
   };
   const curColor = colors || defaultColors;
-  const protfolioAssets = accountBallance!.assetsWithBalance;
-  const assets = showZeroBallance ? protfolioAssets : protfolioAssets.filter(e => e.amount > 0);
-  const storted = assets.sort((a, b) => b.total_value - a.total_value);
+  const accountBallance = useAssets();
+  const portfolioAssets = accountBallance!.assetsWithBalance;
+  const assets = showZeroBallance ? portfolioAssets : portfolioAssets.filter(e => e.amount > 0);
+  const sorted = assets.sort((a, b) => b.total_value - a.total_value);
+
+  useEffect(() => {
+    const timer = setInterval(() => refreshAssets(), 5000);
+
+    return () => clearInterval(timer);
+  });
 
   const renderRow = (e: AssetBalanceT, i: number) => {
     const backgroundColor = {
@@ -53,7 +78,7 @@ const PortfolioLising: React.FC<Props> = ({
     const primaryString = (
       <Text
         style={[
-          usdPrimary ? styles.textSecondary : styles.textPrimaty,
+          usdPrimary ? styles.textSecondary : styles.textPrimary,
           { color: curColor.textPrimary },
         ]}
       >
@@ -64,7 +89,7 @@ const PortfolioLising: React.FC<Props> = ({
       e.amount === 0 ? null : (
         <Text
           style={[
-            usdPrimary ? styles.textPrimaty : styles.textSecondary,
+            usdPrimary ? styles.textPrimary : styles.textSecondary,
             { color: curColor.textSecondary },
           ]}
         >
@@ -76,7 +101,7 @@ const PortfolioLising: React.FC<Props> = ({
       <View key={`CoinBalance_${i}`} style={[styles.portfolioRow, backgroundColor]}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Image style={styles.coinIcon} source={e._asset.icon} />
-          <Text style={[styles.textPrimaty, { color: curColor.textPrimary }]}> {e.symbol}</Text>
+          <Text style={[styles.textPrimary, { color: curColor.textPrimary }]}> {e.symbol}</Text>
         </View>
         <View style={{ alignItems: 'flex-end' }}>
           {usdPrimary ? secondaryString : primaryString}
@@ -98,8 +123,12 @@ const PortfolioLising: React.FC<Props> = ({
 
   return (
     <View style={{ flex: 1, flexGrow: 1, backgroundColor: curColor.background }}>
-      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
-        {storted && storted.map(renderRow)}
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ flexGrow: 1 }}
+        refreshControl={<Refresher />}
+      >
+        {sorted && sorted.map(renderRow)}
       </ScrollView>
     </View>
   );
@@ -120,7 +149,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     marginRight: 8,
   },
-  textPrimaty: {
+  textPrimary: {
     fontSize: 16,
     fontWeight: '500',
   },
@@ -129,4 +158,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PortfolioLising;
+export default PortfolioListing;
