@@ -60,7 +60,7 @@ describe('Meta1 api tests', () => {
     const assets = await fetchAccountBalances('kj-test2');
     expect(assets).toBeTruthy();
     expect(assets!.accountTotal).toEqual(expect.any(Number));
-    expect(assets!.toatalChnage).toEqual(expect.any(Number));
+    expect(assets!.totalChange).toEqual(expect.any(Number));
     expect(assets!.changePercent).toEqual(expect.any(Number));
   });
   it('Fetches historical data', async () => {
