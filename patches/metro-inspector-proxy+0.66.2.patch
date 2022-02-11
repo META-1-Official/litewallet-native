@@ -1,23 +1,21 @@
 diff --git a/node_modules/metro-inspector-proxy/src/Device.js b/node_modules/metro-inspector-proxy/src/Device.js
-index 4269c06..3317e8d 100644
+index 4269c06..82e050a 100644
 --- a/node_modules/metro-inspector-proxy/src/Device.js
 +++ b/node_modules/metro-inspector-proxy/src/Device.js
-@@ -1,5 +1,11 @@
+@@ -1,4 +1,7 @@
  "use strict";
- 
-+const { URL } = require("url");
++const { URL } = require('url');
 +
 +const http = require('http');
-+
+ 
  var fs = _interopRequireWildcard(require("fs"));
  
- var path = _interopRequireWildcard(require("path"));
-@@ -177,11 +183,11 @@ class Device {
+@@ -177,11 +180,11 @@ class Device {
        }
      });
  
 -    socket.on("message", message => {
-+    socket.on("message", async (message) => {
++    socket.on("message", async message => {
        debug("(Debugger) -> (Proxy)    (Device): " + message);
        const debuggerRequest = JSON.parse(message);
  
@@ -26,7 +24,7 @@ index 4269c06..3317e8d 100644
          debuggerRequest,
          debuggerInfo
        );
-@@ -473,7 +479,7 @@ class Device {
+@@ -473,7 +476,7 @@ class Device {
      }
    } // Allows to make changes in incoming messages from debugger.
  
@@ -35,54 +33,52 @@ index 4269c06..3317e8d 100644
      let response = null;
  
      if (req.method === "Debugger.setBreakpointByUrl") {
-@@ -481,7 +487,7 @@ class Device {
+@@ -481,7 +484,7 @@ class Device {
      } else if (req.method === "Debugger.getScriptSource") {
        response = {
          id: req.id,
 -        result: this._processDebuggerGetScriptSource(req)
-+        result: await this._processDebuggerGetScriptSource(req, debuggerInfo)
++        result: await this._processDebuggerGetScriptSource(req)
        };
      }
  
-@@ -516,21 +522,42 @@ class Device {
+@@ -516,21 +519,42 @@ class Device {
      }
    }
  
 -  _processDebuggerGetScriptSource(req) {
 +  async _processDebuggerGetScriptSource(req) {
      let scriptSource = `Source for script with id '${req.params.scriptId}' was not found.`;
-
+ 
      const pathToSource = this._scriptIdToSourcePathMapping.get(
        req.params.scriptId
      );
-+
+ 
+-    if (pathToSource) {
 +    const isUrl = (s) => {
-+      try {
-+        const _ = new URL(s);
-+        return true;
-+      } catch {
-+        return false;
-+      }
-+    };
-+
-+    const http_get = url => new Promise(resolve => {
-+        http.get(url, (res) => {
-+          let rawData = '';
-+          res.on('data', d => {
-+            rawData += d;
-+          });
-+          res.on('end', () => resolve(rawData));
-+        });
-+      });
-
-     if (pathToSource) {
--      try {
+       try {
 -        scriptSource = fs.readFileSync(
 -          path.resolve(this._projectRoot, pathToSource),
 -          "utf8"
 -        );
 -      } catch (err) {
 -        scriptSource = err.message;
++        const _ = new URL(s);
++        return true;
++      } catch (error) {
++        return false;
++      }
++    }
++    
++    const http_get = (url) => new Promise(resolve => {
++      http.get(url, (res) => {
++        let raw = '';
++        res.on('data', d => { raw += d });
++        res.on('end', () => resolve(raw));
++      })
++    })
++
++    if (pathToSource) {
 +      if (isUrl(pathToSource)) {
 +        scriptSource = await http_get(pathToSource);
 +      } else {
