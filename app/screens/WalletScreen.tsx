@@ -83,7 +83,7 @@ export type WalletStackParamList = {
 };
 
 export type WalletNavigationProp = StackNavigationProp<WalletStackParamList, 'Wallet__Main'>;
-
+export type WSP<K extends keyof WalletStackParamList> = StackScreenProps<WalletStackParamList, K>;
 function WalletScreenStack() {
   return (
     <Stack.Navigator
