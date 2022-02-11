@@ -86,7 +86,12 @@ const CreateWalletScreen: React.FC = () => {
                   <TextInputMask {...props} mask="+[099] ([000]) [000] [00] [00]" />
                 )}
               />
-              <Input name="account_name" autoCapitalize="none" autoCorrect={false} />
+              <Input
+                name="account_name"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
               <Input
                 name="password"
                 render={props => (

@@ -95,6 +95,7 @@ const LinkWalletScreen: React.FC = () => {
                 {...props}
                 autoCapitalize={'none'}
                 autoCorrect={false}
+                keyboardType={'email-address'}
                 style={[props.style, { paddingLeft: 8 }]}
               />
             </View>
