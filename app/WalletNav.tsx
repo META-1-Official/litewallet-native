@@ -1,5 +1,10 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator, DrawerScreenProps } from '@react-navigation/drawer';
+import {
+  createStackNavigator,
+  StackNavigationProp,
+  StackScreenProps,
+} from '@react-navigation/stack';
 import React from 'react';
 import { Pressable, View } from 'react-native';
 import { SvgIcons } from '../assets';
@@ -84,8 +89,31 @@ export type DexDrawerParamList = {
 
 const Drawer = createDrawerNavigator<DexDrawerParamList>();
 
+type RootParams = {
+  App: undefined;
+  modal: { component: any; props: any };
+};
+
+const RootStack = createStackNavigator<RootParams>();
+export type RootStackNP = StackNavigationProp<RootParams>;
+export type ROTProps = StackScreenProps<RootParams, 'modal'>;
+
+const RenderOnTop = ({ route, navigation }: ROTProps) => {
+  const Component = route.params.component;
+  if (Component) {
+    return <Component {...route.params.props} />;
+  }
+
+  setTimeout(() => {
+    console.warn('Failed to render modal');
+    navigation.goBack();
+  }, 100);
+
+  return null;
+};
+
 export const DexNav: React.FC = () => {
-  return (
+  const DrawerNav = () => (
     <View style={{ flex: 1 }}>
       <Drawer.Navigator
         screenOptions={{
@@ -129,5 +157,20 @@ export const DexNav: React.FC = () => {
         />
       </Drawer.Navigator>
     </View>
+  );
+
+  return (
+    <RootStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <RootStack.Screen component={DrawerNav} name="App" />
+      <RootStack.Screen
+        component={RenderOnTop}
+        name="modal"
+        options={{ presentation: 'transparentModal', cardOverlayEnabled: true }}
+      />
+    </RootStack.Navigator>
   );
 };
