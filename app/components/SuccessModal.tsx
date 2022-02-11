@@ -1,26 +1,26 @@
-import React, { useState } from 'react';
-import { View, Modal, Text, SafeAreaView, Platform } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useCardAnimation } from '@react-navigation/stack';
+
+import React from 'react';
+import { View, Text, SafeAreaView, Platform, Animated } from 'react-native';
 import { CheckCircle } from 'react-native-feather';
+import { RootStackNP } from '../WalletNav';
 import RoundedButton from './RoundedButton';
 
-interface Props {
-  visible: boolean;
-  onClose: () => void;
-  text?: string;
-}
-const SuccessModal: React.FC<Props> = ({ visible, onClose, text }) => {
-  const Backdrop: React.FC<{}> = ({ children }) => (
-    <Modal visible={visible} onRequestClose={onClose} animationType="fade" transparent={true}>
-      <SafeAreaView style={{ backgroundColor: '#0003', height: '100%', width: '100%' }} />
-      {children}
-    </Modal>
-  );
+type Props = { text: string; onClose: () => void };
 
-  const Content: React.FC<{}> = ({ children }) => (
-    <Modal visible={visible} onRequestClose={onClose} animationType="slide" transparent={true}>
-      {children}
+const SuccessModal: React.FC<Props> = ({ text, onClose }) => {
+  const navigation = useNavigation();
+  const { current } = useCardAnimation();
+  return (
+    <View
+      style={{
+        height: '100%',
+        backgroundColor: 'rgba(0,0,0,0.3)',
+      }}
+    >
       <SafeAreaView style={{ height: '100%' }}>
-        <View
+        <Animated.View
           style={{
             height: '50%',
             marginTop: 'auto',
@@ -31,6 +31,15 @@ const SuccessModal: React.FC<Props> = ({ visible, onClose, text }) => {
             padding: 24,
             alignItems: 'center',
             justifyContent: 'space-evenly',
+            transform: [
+              {
+                scale: current.progress.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0.9, 1],
+                  extrapolate: 'clamp',
+                }),
+              },
+            ],
           }}
         >
           <CheckCircle color="#2E933C" width={80} height={80} />
@@ -46,50 +55,28 @@ const SuccessModal: React.FC<Props> = ({ visible, onClose, text }) => {
                 : 'This is a very log description of what could possibly fit into a half sized Modal'}
             </Text>
           </View>
-          <RoundedButton title="Close" onPress={() => onClose()} />
-        </View>
+          <RoundedButton
+            title="Close"
+            onPress={() => {
+              navigation.goBack();
+              onClose();
+            }}
+          />
+        </Animated.View>
       </SafeAreaView>
-    </Modal>
+    </View>
   );
-
-  if (Platform.OS === 'ios') {
-    return (
-      <Backdrop>
-        <Content />
-      </Backdrop>
-    );
-  } else if (Platform.OS === 'android') {
-    return (
-      <Content>
-        <Backdrop />
-      </Content>
-    );
-  }
-
-  return <></>;
 };
 
-export const useSuccessModal = (openDefault?: boolean) => {
-  const [open, setOpen] = useState(openDefault || false);
-  const [text, setText] = useState('');
-  const _Modal = ({ onClose }: { onClose?: () => void }) => (
-    <SuccessModal
-      visible={open}
-      text={text}
-      onClose={() => {
-        onClose?.();
-        setOpen(false);
-      }}
-    />
-  );
-
-  return {
-    SuccessModal: _Modal,
-    show: (t: string) => {
-      setText(t);
-      setOpen(true);
-    },
+export const useShowModal = () => {
+  const navigation = useNavigation<RootStackNP>();
+  return (text: string, onClose: () => void) => {
+    navigation.navigate('modal', {
+      component: SuccessModal,
+      props: {
+        text,
+        onClose,
+      },
+    });
   };
 };
-
-export default SuccessModal;
