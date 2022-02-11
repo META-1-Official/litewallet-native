@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { SafeAreaView, View, Text } from 'react-native';
-import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  StackNavigationProp,
+  StackScreenProps,
+} from '@react-navigation/stack';
 import MaterialToggle from '../components/MaterialToggle';
 import PortfolioHeader from '../components/PortfolioHeader';
-import PortfolioLising from '../components/PortfolioListing';
+import PortfolioListing from '../components/PortfolioListing';
 import { colors } from '../styles/colors';
 import { useAssets } from './../utils/meta1Api';
 import Loader from '../components/Loader';
@@ -64,7 +68,7 @@ const WalletScreen = () => {
           <MaterialToggle onChange={v => setShowZeroBalacnce(v)} />
         </View>
       </View>
-      <PortfolioLising accountBallance={allAssets} showZeroBallance={showZeroBalance} />
+      <PortfolioListing showZeroBallance={showZeroBalance} />
     </SafeAreaView>
   );
 };

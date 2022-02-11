@@ -6,7 +6,7 @@ import { DexTSP } from '.';
 import Loader from '../../components/Loader';
 import MaterialToggle from '../../components/MaterialToggle';
 import { ProfitIndicator } from '../../components/PortfolioHeader';
-import PortfolioLising from '../../components/PortfolioListing';
+import PortfolioListing from '../../components/PortfolioListing';
 import { useStore } from '../../store';
 import { colors } from '../../styles/colors';
 import { useAssets } from '../../utils/meta1Api';
@@ -149,8 +149,7 @@ const DexFund: React.FC<DexTSP> = ({ navigation }) => {
           <MaterialToggle onChange={v => setShowZeroBalacnce(v)} />
         </View>
       </View>
-      <PortfolioLising
-        accountBallance={accountAssets}
+      <PortfolioListing
         showZeroBallance={showZeroBalance}
         colors={{
           background: '#000',
