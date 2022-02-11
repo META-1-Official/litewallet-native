@@ -327,6 +327,12 @@ export async function getAddressForAccountAsset(accountName: string, symbol: str
   }
 }
 
+export const refreshAssets = () => {
+  const { accountName } = useStore.getState();
+  const fetch = useAssetsStore.getState().fetchUserAssets;
+  return fetch(accountName);
+};
+
 export const useAssets = () => {
   const accountName = useStore(state => state.accountName);
   const userAssets = useAssetsStore(state => state.userAssets);
