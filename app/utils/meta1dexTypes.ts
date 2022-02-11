@@ -416,6 +416,7 @@ export const ALL_BUCKETS: { [k: string] : BucketSizeT} = {
 export interface Meta1Module {
   connect: (connection?: string) => Promise<any>;
   disconnect: () => void;
+  connectPromise: Promise<void>;
   db: {
     get_objects: (ids: string[]) => Promise<any>;
     list_assets: (symbol: string, limit: number) => Promise<iAsset[]>;
