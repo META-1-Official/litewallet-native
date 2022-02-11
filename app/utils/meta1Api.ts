@@ -119,7 +119,7 @@ export async function getAccount(accountName: string) {
   const accounts = await Meta1.db
     .get_full_accounts([accountName], false)
     .then(res => new Map(res));
-  console.log(accounts);
+
   const account = accounts.get(accountName);
   return account;
 }
