@@ -18,14 +18,13 @@ import { SvgIcons } from '../../assets';
 import { List } from '../components/List';
 import Loader from '../components/Loader';
 import { useLoaderModal } from '../components/LoaderModal';
-import { useSuccessModal } from '../components/SuccessModal';
+import { useShowModal } from '../components/SuccessModal';
 import { Heading, TextSecondary } from '../components/typography';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { catchError, ensure, promptPromise, shadow, style } from '../utils';
 import { AssetBalanceT, swapWithPassword, useAssets, useAssetsStore } from '../utils/meta1Api';
 import { createPair, theAsset, useAsset } from '../utils/useAsset';
-import { WalletNavigationProp } from './WalletScreen';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -236,7 +235,7 @@ const usePerformSwap = (
 
   return () =>
     catchError(fn, {
-      anyway: () => update(accountName),
+      anyway: () => setTimeout(() => update(accountName), 100),
       onErr: e => {
         onFail();
         if ((e as Error).message === 'Expected value, got null') {
@@ -266,23 +265,26 @@ const optStyleFactory =
   };
 
 const TradeScreen: React.FC<Props> = ({ darkMode }) => {
+  const nav = useNavigation();
   const allAssets = useAssets();
   const availableAssets = useMemo(
     () => allAssets?.assetsWithBalance.sort((a, b) => a.symbol.localeCompare(b.symbol)),
     [allAssets],
   );
-
   const { assets, Modal } = useAssetPair(availableAssets.at(0), availableAssets.at(3));
 
-  const nav = useNavigation<WalletNavigationProp>();
+  const open = useShowModal();
 
   const { LoaderModal, showLoader, hideLoader } = useLoaderModal();
-  const { SuccessModal, show } = useSuccessModal(false);
 
   const fn = usePerformSwap(
     assets,
     () => showLoader(),
-    () => show(makeMessage(assets)),
+    () => {
+      console.log('Should hide');
+      hideLoader();
+      open(makeMessage(assets), () => nav.goBack());
+    },
     () => hideLoader(),
   );
 
@@ -301,7 +303,6 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
       </LightMode>
       <Modal />
       <LoaderModal />
-      <SuccessModal onClose={() => nav.goBack()} />
       <View>
         <LightMode>
           <FloatingButton assets={assets} />
@@ -343,7 +344,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
         </View>
       </LightMode>
       <DarkMode>
-        <View style={[styles.center, styles.m12]}></View>
+        <View style={[styles.center, styles.m12]} />
         <TouchableOpacity onPress={fn}>
           <View style={styles.darkBtnView}>
             <Text style={styles.font18x500}>Convert</Text>
@@ -353,6 +354,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
     </SafeAreaView>
   );
 };
+
 export default TradeScreen;
 
 const styles = StyleSheet.create({
