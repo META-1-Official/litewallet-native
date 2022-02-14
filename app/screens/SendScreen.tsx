@@ -175,7 +175,7 @@ const BottomRow = ({ onPress, darkMode }: { onPress: () => void; darkMode?: bool
         alignItems: 'center',
       }}
     >
-      <Text style={{ color: '#617283', fontWeight: '500' }}> FEE: 0.0035 META1 </Text>
+      <Text style={{ color: '#617283', fontWeight: '500' }}> FEE: 0.00035 META1 </Text>
       <View
         style={{
           backgroundColor: '#330000',
@@ -200,7 +200,7 @@ const BottomRow = ({ onPress, darkMode }: { onPress: () => void; darkMode?: bool
         alignItems: 'center',
       }}
     >
-      <Text style={{ color: '#617283', fontWeight: '500' }}> FEE: 0.0035 META1 </Text>
+      <Text style={{ color: '#617283', fontWeight: '500' }}> FEE: 0.00035 META1 </Text>
       <View
         style={{
           backgroundColor: '#fff',
