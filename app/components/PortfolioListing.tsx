@@ -8,6 +8,7 @@ import {
   View,
   TouchableOpacity,
   RefreshControl,
+  Platform,
 } from 'react-native';
 import { grey200, grey600 } from 'react-native-paper/src/styles/colors';
 import { BrandYellow } from '../styles/colors';
@@ -62,10 +63,9 @@ const PortfolioListing: React.FC<Props> = ({ showZeroBallance, colors, usdPrimar
   const portfolioAssets = accountBallance!.assetsWithBalance;
   const assets = showZeroBallance ? portfolioAssets : portfolioAssets.filter(e => e.amount > 0);
   const sorted = assets.sort((a, b) => b.total_value - a.total_value);
-
+  console.log('render');
   useEffect(() => {
     const timer = setInterval(() => refreshAssets(), 5000);
-
     return () => clearInterval(timer);
   });
 
@@ -117,7 +117,6 @@ const PortfolioListing: React.FC<Props> = ({ showZeroBallance, colors, usdPrimar
         </TouchableOpacity>
       );
     }
-
     return ret;
   };
 
@@ -126,7 +125,7 @@ const PortfolioListing: React.FC<Props> = ({ showZeroBallance, colors, usdPrimar
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={{ flexGrow: 1 }}
-        refreshControl={<Refresher />}
+        refreshControl={Platform.OS === 'ios' ? <Refresher /> : undefined}
       >
         {sorted && sorted.map(renderRow)}
       </ScrollView>
