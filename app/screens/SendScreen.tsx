@@ -18,7 +18,7 @@ import RoundedButton from '../components/RoundedButton';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { catchError } from '../utils';
-import { sendWithPassword, useAssets, useAssetsStore } from '../utils/meta1Api';
+import { getAccount, sendWithPassword, useAssets, useAssetsStore } from '../utils/meta1Api';
 import { WalletNavigationProp } from './WalletScreen';
 import { useNavigation } from '@react-navigation/core';
 import { useLoaderModal } from '../components/LoaderModal';
@@ -475,6 +475,10 @@ const makeSendFn =
 
         if (!toAccount) {
           throw new Error("To account can't be empty");
+        }
+
+        if (!(await getAccount(toAccount))) {
+          throw new Error(`Account ${toAccount} not found`);
         }
 
         standalone.isAffordableForSend();
