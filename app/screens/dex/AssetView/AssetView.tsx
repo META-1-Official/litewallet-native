@@ -144,7 +144,6 @@ const DexAssetView: React.FC<StackScreenProps<AssetViewModalStackParamList>> = (
   route: { params },
   navigation,
 }) => {
-  console.log(' ------ render');
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({

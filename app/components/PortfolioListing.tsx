@@ -63,7 +63,6 @@ const PortfolioListing: React.FC<Props> = ({ showZeroBallance, colors, usdPrimar
   const portfolioAssets = accountBallance!.assetsWithBalance;
   const assets = showZeroBallance ? portfolioAssets : portfolioAssets.filter(e => e.amount > 0);
   const sorted = assets.sort((a, b) => b.total_value - a.total_value);
-  console.log('render');
   useEffect(() => {
     const timer = setInterval(() => refreshAssets(), 5000);
     return () => clearInterval(timer);
