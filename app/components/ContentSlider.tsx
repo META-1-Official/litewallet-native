@@ -68,7 +68,7 @@ const DATA: Content[] = [
         }}
       >
         <MockCard text="Sent from" username="Abobous" address={getRandomAddress()} />
-        <MockCard text="Recived by" username="Amogus" address={getRandomAddress()} />
+        <MockCard text="Received by" username="Amogus" address={getRandomAddress()} />
       </View>
     ),
     heading: 'Easily send and receive\ncryptocurrency',

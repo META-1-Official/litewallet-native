@@ -18,7 +18,7 @@ export default function BackupHelp() {
         {'>'} Store this backup in at least two secure locations only accessible by you
       </Paragraph>
       <Paragraph>
-        {'>'} The backup is encrypted with your passphrase/password so do not store your passwrod
+        {'>'} The backup is encrypted with your passphrase/password so do not store your password
         in the same location
       </Paragraph>
       <Heading>Advanced Users Only</Heading>
