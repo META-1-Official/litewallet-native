@@ -1,8 +1,10 @@
+import { useNavigation } from '@react-navigation/native';
+import { useCardAnimation } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import {
+  Animated,
   Dimensions,
   Image,
-  Modal,
   Platform,
   SafeAreaView,
   StyleSheet,
@@ -13,12 +15,12 @@ import {
 } from 'react-native';
 import { X } from 'react-native-feather';
 import { AssetBalanceT, useAssets } from '../utils/meta1Api';
+import { RootStackNP } from '../WalletNav';
 import { TextSecondary } from './typography';
 
 interface AssetPickerProps {
   key: string;
   title: string;
-  visible: boolean;
   onClose: (...args: any[]) => void;
   onSelect: (asset: AssetBalanceT) => void;
 }
@@ -61,6 +63,7 @@ const Search = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
         }}
         placeholderTextColor="#5a6777"
         style={{
+          color: '#000',
           fontSize: 18,
           padding: 12,
           paddingHorizontal: 24,
@@ -115,7 +118,9 @@ const PickerContent = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
     </>
   );
 };
-const AssetPicker: React.FC<AssetPickerProps> = ({ title, visible, onClose, onSelect }) => {
+const AssetPicker: React.FC<AssetPickerProps> = ({ title, onClose, onSelect }) => {
+  const navigation = useNavigation();
+  const { current } = useCardAnimation();
   const Header = () => (
     <View
       style={{
@@ -124,7 +129,10 @@ const AssetPicker: React.FC<AssetPickerProps> = ({ title, visible, onClose, onSe
       }}
     >
       <TouchableOpacity
-        onPress={() => onClose(!visible)}
+        onPress={() => {
+          onClose();
+          navigation.goBack();
+        }}
         style={{ paddingVertical: Platform.OS === 'android' ? 16 : 4 }}
       >
         <X width={24} height={24} stroke="#000" />
@@ -138,13 +146,17 @@ const AssetPicker: React.FC<AssetPickerProps> = ({ title, visible, onClose, onSe
   );
 
   return (
-    <Modal
-      key={`AssetPickerModal_${Math.floor(Math.random() * 10)}`}
-      animationType="slide"
-      transparent={true}
-      visible={visible}
-      onRequestClose={() => {
-        onClose(!visible);
+    <Animated.View
+      style={{
+        transform: [
+          {
+            translateY: current.progress.interpolate({
+              inputRange: [0, 1],
+              outputRange: [100, 0],
+              extrapolate: 'clamp',
+            }),
+          },
+        ],
       }}
     >
       <SafeAreaView style={{ backgroundColor: '#fff', width, height }}>
@@ -154,38 +166,49 @@ const AssetPicker: React.FC<AssetPickerProps> = ({ title, visible, onClose, onSe
           }}
         >
           <Header />
-          <PickerContent onSelect={onSelect} />
+          <PickerContent
+            onSelect={(...args) => {
+              onSelect(...args);
+              navigation.goBack();
+            }}
+          />
         </View>
       </SafeAreaView>
-    </Modal>
+    </Animated.View>
   );
 };
 
-type modalT = ({ title, onClose }: { title: string; onClose?: () => void }) => JSX.Element;
-export const useAssetPicker = (
-  defaultValue?: AssetBalanceT,
-): [AssetBalanceT | null, () => void, () => void, modalT] => {
-  const [isOpen, setIsOpen] = useState(false);
+export const useAssetPicker = ({
+  defaultValue,
+  title,
+  onClose,
+}: {
+  defaultValue?: AssetBalanceT;
+  title: string;
+  onClose?: () => void;
+}): [AssetBalanceT | null, () => void] => {
   const [selected, setSelected] = useState<AssetBalanceT | null>(defaultValue || null);
-  const open = () => (!isOpen ? setIsOpen(true) : null);
-  const close = () => setIsOpen(false);
-  const modal: modalT = ({ title, onClose }) => (
-    <AssetPicker
-      key={`AssetPicker_${Math.floor(Math.random() * 10)}`}
-      title={title}
-      visible={isOpen}
-      onClose={() => {
-        close();
-        onClose?.();
-      }}
-      onSelect={e => {
-        setSelected(e);
-        close();
-      }}
-    />
-  );
 
-  return [selected, open, close, modal];
+  const navigation = useNavigation<RootStackNP>();
+  const open = () => {
+    navigation.navigate('modal', {
+      component: () => (
+        <AssetPicker
+          key={`AssetPicker_${Math.floor(Math.random() * 10)}`}
+          title={title}
+          onClose={() => {
+            onClose?.();
+          }}
+          onSelect={e => {
+            setSelected(e);
+          }}
+        />
+      ),
+      props: {},
+    });
+  };
+
+  return [selected, open];
 };
 
 export default AssetPicker;

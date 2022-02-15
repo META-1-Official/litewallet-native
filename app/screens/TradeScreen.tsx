@@ -41,7 +41,10 @@ const Backdrop = () => (
 );
 
 const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanceT) => {
-  const [A, B] = createPair(useAsset(defaultAssetA), useAsset(defaultAssetB));
+  const [A, B] = createPair(
+    useAsset({ defaultValue: defaultAssetA, title: 'Trade' }),
+    useAsset({ defaultValue: defaultAssetB, title: 'Trade' }),
+  );
 
   useEffect(() => {
     console.log('One of Assets Changed');
@@ -51,12 +54,6 @@ const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanc
 
   return {
     assets: { A, B },
-    Modal: () => (
-      <>
-        <A.Modal key="AssetPicker_A" title="Trade" />
-        <B.Modal key="AssetPicker_B" title="Trade" />
-      </>
-    ),
   };
 };
 
@@ -271,7 +268,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
     () => allAssets?.assetsWithBalance.sort((a, b) => a.symbol.localeCompare(b.symbol)),
     [allAssets],
   );
-  const { assets, Modal } = useAssetPair(availableAssets.at(0), availableAssets.at(3));
+  const { assets } = useAssetPair(availableAssets.at(0), availableAssets.at(3));
 
   const open = useShowModal();
 
@@ -301,7 +298,6 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
       <LightMode>
         <Backdrop />
       </LightMode>
-      <Modal />
       <LoaderModal />
       <View>
         <LightMode>

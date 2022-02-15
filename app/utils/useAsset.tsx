@@ -7,7 +7,6 @@ export type theAsset = {
   open: () => void;
   amount: string;
   setAmount: React.Dispatch<React.SetStateAction<string>>;
-  Modal: ReturnType<typeof useAssetPicker>[3];
   /**
    * @param {updateAmount} updateAmount - true by default
    */
@@ -28,8 +27,20 @@ export const createPair = (a: StandaloneAsset, b: StandaloneAsset): theAsset[] =
   const B: theAsset = { ...b, opponent: () => A };
   return [A, B];
 };
-export const useAsset = (dv?: AssetBalanceT): StandaloneAsset => {
-  const [asset, open, _close, Modal] = useAssetPicker(dv);
+export const useAsset = ({
+  defaultValue,
+  title,
+  onClose,
+}: {
+  defaultValue?: AssetBalanceT;
+  title: string;
+  onClose?: () => void;
+}): StandaloneAsset => {
+  const [asset, open] = useAssetPicker({
+    defaultValue,
+    title,
+    onClose,
+  });
   if (!asset) {
     throw new Error('No such asset');
   }
@@ -107,7 +118,6 @@ export const useAsset = (dv?: AssetBalanceT): StandaloneAsset => {
     open,
     amount,
     setAmount,
-    Modal,
     formUsdt,
     toUsdt,
     getMax,

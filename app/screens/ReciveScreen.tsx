@@ -41,7 +41,10 @@ const INDICATOR_WIDTH = width * 0.8;
 const ReciveScreen: React.FC<{}> = () => {
   const nav = useNavigation<WalletNavigationProp>();
   const accountName = useStore(state => state.accountName);
-  const [selected, open, _, Modal] = useAssetPicker();
+  const [selected, open] = useAssetPicker({
+    title: 'Receive',
+    onClose: () => nav.goBack(),
+  });
   const [realAddress, setRealAddress] = useState<AddrT | null>(null);
   useEffect(() => {
     const fn = async () => {
@@ -62,11 +65,8 @@ const ReciveScreen: React.FC<{}> = () => {
   const flatListRef = useRef<FlatList<any> | null>(null);
   if (!selected) {
     open();
-    return (
-      <SafeAreaView>
-        <Modal title="Receive" key="zxcv" onClose={() => nav.goBack()} />
-      </SafeAreaView>
-    );
+    // FIXME: We no longer use react-native built in modals, so this not real
+    return <SafeAreaView />;
   }
 
   const RealAddressView = () => {
