@@ -1,12 +1,14 @@
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useCardAnimation } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import {
   Animated,
+  BackHandler,
   Dimensions,
   Image,
   Platform,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -14,6 +16,7 @@ import {
   View,
 } from 'react-native';
 import { X } from 'react-native-feather';
+import { useScroll } from '../utils';
 import { AssetBalanceT, useAssets } from '../utils/meta1Api';
 import { RootStackNP } from '../WalletNav';
 import { TextSecondary } from './typography';
@@ -45,7 +48,7 @@ const Search = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
             <View style={styles.portfolioRow}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Image style={styles.coinIcon} source={e._asset.icon} />
-                <Text style={styles.textPrimaty}> {e.symbol}</Text>
+                <Text style={styles.textPrimary}> {e.symbol}</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -79,7 +82,7 @@ const Search = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
 
 const PickerContent = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
   const allAssets = useAssets();
-
+  const scroll = useScroll();
   const suggested = allAssets!.assetsWithBalance
     .filter(ass => ass.symbol === 'BTC' || ass.symbol === 'ETH' || ass.symbol === 'META1')
     .sort((a, b) => a.symbol.localeCompare(b.symbol));
@@ -91,36 +94,48 @@ const PickerContent = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
   return (
     <>
       <Search onSelect={onSelect} />
-      <TextSecondary style={{ fontSize: 14 }}> Suggested </TextSecondary>
-      {suggested &&
-        suggested.map(e => (
-          <TouchableOpacity key={`CoinBalance_${e.symbol}`} onPress={() => onSelect(e)}>
-            <View style={styles.portfolioRow}>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Image style={styles.coinIcon} source={e._asset.icon} />
-                <Text style={styles.textPrimaty}> {e.symbol}</Text>
+      <ScrollView contentContainerStyle={{ paddingBottom: 350 }} {...scroll}>
+        <TextSecondary style={{ fontSize: 14 }}> Suggested </TextSecondary>
+        {suggested &&
+          suggested.map(e => (
+            <TouchableOpacity key={`CoinBalance_${e.symbol}`} onPress={() => onSelect(e)}>
+              <View style={styles.portfolioRow}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Image style={styles.coinIcon} source={e._asset.icon} />
+                  <Text style={styles.textPrimary}> {e.symbol}</Text>
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-        ))}
-      <TextSecondary style={{ fontSize: 14, marginTop: 32 }}> All Coins </TextSecondary>
-      {rest &&
-        rest.map(e => (
-          <TouchableOpacity key={`CoinBalance_${e.symbol}`} onPress={() => onSelect(e)}>
-            <View style={styles.portfolioRow}>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Image style={styles.coinIcon} source={e._asset.icon} />
-                <Text style={styles.textPrimaty}> {e.symbol}</Text>
+            </TouchableOpacity>
+          ))}
+        <TextSecondary style={{ fontSize: 14, marginTop: 32 }}> All Coins </TextSecondary>
+        {rest &&
+          rest.map(e => (
+            <TouchableOpacity key={`CoinBalance_${e.symbol}`} onPress={() => onSelect(e)}>
+              <View style={styles.portfolioRow}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Image style={styles.coinIcon} source={e._asset.icon} />
+                  <Text style={styles.textPrimary}> {e.symbol}</Text>
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-        ))}
+            </TouchableOpacity>
+          ))}
+        <View />
+      </ScrollView>
     </>
   );
 };
 const AssetPicker: React.FC<AssetPickerProps> = ({ title, onClose, onSelect }) => {
   const navigation = useNavigation();
   const { current } = useCardAnimation();
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => true;
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, []),
+  );
+
   const Header = () => (
     <View
       style={{
@@ -228,7 +243,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     marginRight: 8,
   },
-  textPrimaty: {
+  textPrimary: {
     fontSize: 16,
     fontWeight: '500',
   },
