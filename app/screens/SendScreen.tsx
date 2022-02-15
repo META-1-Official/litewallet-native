@@ -1,7 +1,5 @@
 import React, { useReducer, useState } from 'react';
 import {
-  Dimensions,
-  LayoutChangeEvent,
   Platform,
   SafeAreaView,
   StyleSheet,
@@ -17,7 +15,7 @@ import Loader from '../components/Loader';
 import RoundedButton from '../components/RoundedButton';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
-import { catchError } from '../utils';
+import { catchError, useScroll } from '../utils';
 import { getAccount, sendWithPassword, useAssets, useAssetsStore } from '../utils/meta1Api';
 import { WalletNavigationProp } from './WalletScreen';
 import { useNavigation } from '@react-navigation/core';
@@ -145,22 +143,6 @@ const SendScreen: React.FC<{}> = () => {
       </ScrollView>
     </SafeAreaView>
   );
-};
-
-const useScroll = () => {
-  const onLayout: (_: LayoutChangeEvent) => void = layout => {
-    const heightDiff = Dimensions.get('screen').height - layout.nativeEvent.layout.height;
-    if (heightDiff < 155) {
-      setScrollEnabled(true);
-    }
-  };
-
-  const [scrollEnabled, setScrollEnabled] = useState(false);
-
-  return {
-    onLayout,
-    scrollEnabled,
-  };
 };
 
 const BottomRow = ({ onPress, darkMode }: { onPress: () => void; darkMode?: boolean }) =>

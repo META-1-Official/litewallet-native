@@ -1,5 +1,15 @@
 import assert from 'assert';
-import { Alert, AlertType, ImageStyle, Platform, TextStyle, ViewStyle } from 'react-native';
+import { useState } from 'react';
+import {
+  Alert,
+  AlertType,
+  Dimensions,
+  ImageStyle,
+  LayoutChangeEvent,
+  Platform,
+  TextStyle,
+  ViewStyle,
+} from 'react-native';
 import prompt from 'react-native-prompt-android';
 
 export function getRadomByteArray(len: number) {
@@ -232,6 +242,22 @@ export const style = (common: AllStyles, specific: PlatformSpecific) => {
 
 export const excludeIndex = <T>(arr: T[], idx: number) =>
   arr.reduce<T[]>((r, v, i) => (i === idx ? r : [...r, v]), []);
+
+export const useScroll = () => {
+  const onLayout: (_: LayoutChangeEvent) => void = _layout => {
+    const h = Dimensions.get('window').height;
+    if (h < 700) {
+      setScrollEnabled(true);
+    }
+  };
+
+  const [scrollEnabled, setScrollEnabled] = useState(false);
+
+  return {
+    onLayout,
+    scrollEnabled,
+  };
+};
 
 export const shadow = {
   D3: {
