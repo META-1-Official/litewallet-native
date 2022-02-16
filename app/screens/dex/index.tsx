@@ -7,7 +7,7 @@ import {
 import React from 'react';
 import Loader from '../../components/Loader';
 import { colors } from '../../styles/colors';
-import { DexHeader } from '../../components/DexHeader';
+import { DexHeader, DexStackHeader } from '../../components/DexHeader';
 import { Pressable, Text } from 'react-native';
 import { SvgIcons } from '../../../assets';
 import DexHome from './DexHome';
@@ -25,6 +25,7 @@ import Send from './SendScreen';
 import AssetViewStack from './AssetView/AssetView';
 import { DexDrawerParamList } from '../../WalletNav';
 import { OpenOrdersPage } from './AssetView/MyOrders';
+import Notifications from '../Notifications';
 
 const Black = () => <Loader bgc="#000" />;
 
@@ -45,6 +46,7 @@ export type DexModalStackParamList = {
   DEX__Recive: undefined;
   DEX__Convert: undefined;
   DEX__AssetViewStack: undefined;
+  DEX__Notifications: undefined;
 };
 export type DexModalStackNavigationProp = StackNavigationProp<DexModalStackParamList, '__Tabs'>;
 
@@ -75,6 +77,11 @@ export const DexStack = () => {
       <Stack.Screen component={DexRecive} name="DEX__Recive" />
       <Stack.Screen component={DexSwapScreen} name="DEX__Convert" />
       <Stack.Screen component={AssetViewStack} name="DEX__AssetViewStack" />
+      <Stack.Screen
+        component={Notifications}
+        name="DEX__Notifications"
+        options={{ header: DexStackHeader, headerShown: true }}
+      />
     </Stack.Navigator>
   );
 };

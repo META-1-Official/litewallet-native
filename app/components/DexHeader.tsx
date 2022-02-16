@@ -19,7 +19,11 @@ export function DexHeader({ navigation: nav, route, options }: BottomTabHeaderPr
     <TouchableOpacity
       style={{ marginHorizontal: 12 }}
       activeOpacity={0.5}
-      onPress={() => nav.getParent()!.navigate('__Notifications')}
+      onPress={() =>
+        nav.navigate('DEX_HOME', {
+          screen: 'DEX__Notifications',
+        })
+      }
     >
       <Bell width={32} height={32} stroke={color} />
     </TouchableOpacity>

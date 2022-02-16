@@ -48,7 +48,7 @@ const AccountGroup = () => {
 
       <ListItem
         onPress={() => {
-          navigation.getParent()!.navigate('__Notifications');
+          navigation.getParent()!.navigate('DEX_HOME', { screen: 'DEX__Notifications' });
         }}
         text="Notification"
       />

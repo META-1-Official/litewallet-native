@@ -16,7 +16,6 @@ import { DexStack } from './screens/dex';
 import ExploreAssets from './screens/ExploreAssets';
 import FundAccount from './screens/FundAccountScreen';
 import HelpStack from './screens/help';
-import Notifications from './screens/Notifications';
 import SettingsScreen from './screens/SettingsScreen';
 import WalletScreen from './screens/WalletScreen';
 import { useStore } from './store';
@@ -80,7 +79,6 @@ export const WalletNav: React.FC<DrawerScreenProps<DexDrawerParamList>> = ({ nav
 export type DexDrawerParamList = {
   DEX_HOME: undefined;
   __Home: undefined;
-  __Notifications: undefined;
   __Settings: undefined;
   __Help: undefined;
   __ExploreAssets: undefined;
@@ -142,7 +140,6 @@ export const DexNav: React.FC = () => {
           }}
           component={DexStack}
         />
-        <Drawer.Screen name="__Notifications" component={Notifications} />
         <Drawer.Screen name="CreatePaperWallet" component={CreatePaperWallet} />
         <Drawer.Screen
           name="__Settings"
