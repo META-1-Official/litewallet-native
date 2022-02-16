@@ -1,6 +1,10 @@
 import * as React from 'react';
 import 'react-native-gesture-handler';
-import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import {
+  DefaultTheme,
+  NavigationContainer,
+  useNavigationContainerRef,
+} from '@react-navigation/native';
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider as PaperProvider } from 'react-native-paper';
@@ -61,6 +65,9 @@ function App() {
     Connect();
   });
 
+  const navigationRef = useNavigationContainerRef();
+  const routePrefixRef = React.useRef<string | undefined>();
+
   const authorized = useStore(state => state.authorized);
 
   const CurrentNav = authorized ? DexNav : AuthNav;
@@ -68,6 +75,7 @@ function App() {
     <PaperProvider>
       <SafeAreaProvider>
         <NavigationContainer
+          ref={navigationRef}
           theme={{
             ...DefaultTheme,
             colors: {
@@ -75,9 +83,22 @@ function App() {
               background: dark ? '#000' : DefaultTheme.colors.background,
             },
           }}
-          onStateChange={state =>
-            setDark(state?.key.startsWith('drawer') ? state?.index !== 0 : false)
-          }
+          onReady={() => {
+            routePrefixRef.current = navigationRef.getCurrentRoute()?.name?.split('_').at(0);
+          }}
+          onStateChange={() => {
+            const oldPrefix = routePrefixRef.current;
+            const currentRouteName = navigationRef.getCurrentRoute()?.name;
+            // Unprefixed route
+            if (currentRouteName?.indexOf('_') === -1) {
+              return;
+            }
+            const prefix = currentRouteName?.split('_').at(0);
+            if (prefix !== oldPrefix) {
+              setDark(prefix !== 'Wallet');
+              routePrefixRef.current = prefix;
+            }
+          }}
         >
           {<CurrentNav />}
         </NavigationContainer>
