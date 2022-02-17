@@ -127,7 +127,6 @@ const CreateWalletScreen: React.FC = () => {
           <RoundedButton
             title="Submit"
             onPress={() => {
-              console.log({ formState, valid: valid() });
               if (valid()) {
                 catchError(async () => {
                   const _apiRes = await createAccountWithPassword(

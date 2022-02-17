@@ -253,7 +253,6 @@ const amountReducer =
       case UpdateType.MAX:
         asset.setMax();
         const max = asset.getMax();
-        console.log();
         return { ...state, amt: max.toFixed(8), usd: asset.toUsdt(max).toFixed(2) };
       default:
         return { ...state };
@@ -447,7 +446,6 @@ const makeSendFn =
   (password: string, standalone: StandaloneAsset, toAccount: string) => {
     const accountName = useStore.getState().accountName;
     onStart();
-    console.log('--SENDING:', standalone.asset.symbol, standalone.amount);
     catchError(
       async () => {
         if (accountName === toAccount) {

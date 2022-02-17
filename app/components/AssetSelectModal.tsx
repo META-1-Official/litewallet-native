@@ -61,7 +61,6 @@ const Search = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
         placeholder="Search for a coin..."
         // value={searchTerm}
         onChangeText={t => {
-          console.log(t);
           setSearchTerm(t);
         }}
         placeholderTextColor="#5a6777"

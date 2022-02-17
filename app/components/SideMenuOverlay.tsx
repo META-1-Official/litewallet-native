@@ -80,7 +80,6 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
       >
         <ListItem
           onPress={() => {
-            console.log(navigation.getState(), navigation.getParent());
             navigation.closeDrawer();
             navigation.jumpTo('__Home');
           }}

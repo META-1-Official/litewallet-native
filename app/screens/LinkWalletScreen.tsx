@@ -21,9 +21,7 @@ const { width, height } = Dimensions.get('screen');
 const LinkWalletScreen: React.FC = () => {
   const knownAccount: RuleFn = text =>
     asyncRule(async () => {
-      console.log(text);
       const acc = await getAccount(text).catch(console.debug);
-      console.log(acc);
       return Boolean(acc);
     }, 'Account not found');
   const { Input, formState, valid } = useForm([
@@ -106,7 +104,6 @@ const LinkWalletScreen: React.FC = () => {
         <RoundedButton
           title="Submit"
           onPress={() => {
-            console.log({ formState, valid: valid() });
             if (valid()) {
               authorzie(formState.account_name);
             }

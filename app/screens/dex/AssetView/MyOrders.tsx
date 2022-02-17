@@ -56,7 +56,6 @@ const useAccount = (accountName: string, password: string) => {
 
   useEffect(() => {
     const fn = async () => {
-      console.log(accountName, password);
       if (!password) {
         return;
       }
@@ -155,7 +154,6 @@ export const OpenOrdersPage = () => {
           }),
         );
       }
-      console.log(account);
       setHistory(hist);
       if (refreshing) {
         setRefreshing(false);
@@ -241,7 +239,6 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
           }),
         );
       }
-      console.log(account);
       setHistory(hist);
       if (refreshing) {
         setRefreshing(false);
@@ -384,9 +381,6 @@ const RenderRow =
 
     const buyAmt = amtToReadable(order.min_to_receive);
     const sellAmt = amtToReadable(order.amount_to_sell);
-
-    console.log(JSON.stringify({ order }, null, 4));
-    console.log({ buyAmt, sellAmt });
 
     const meanFilled =
       filled.reduce<number>((acc, e) => {
