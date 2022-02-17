@@ -103,6 +103,7 @@ const CreateWalletScreen: React.FC = () => {
                       onChangeText={() => {}}
                       style={[props.style, { maxWidth: '88%', paddingRight: 8 }]}
                       editable={false}
+                      secureTextEntry
                     />
                     <TouchableOpacity onPress={() => Clipboard.setString(formState.password)}>
                       <View
