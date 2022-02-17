@@ -391,7 +391,7 @@ const RenderRow =
       }, 0) / filled.length;
 
     const isBuy = buyingAsset.symbol === assetA;
-    const orderStatus = filled.length ? 'Completed' : canceled ? 'Canceled' :'Expired';
+    const orderStatus = filled.length ? 'Completed' : canceled ? 'Canceled' : 'Expired';
     let progress = 0;
     if (filled.length) {
       const pays = filled.reduce(
@@ -429,10 +429,16 @@ const RenderRow =
             {assetA} / {assetB}
           </Text>
           <Text style={{ color: '#fff', fontSize: 18 }}>
-            Amount: {isBuy ? buyAmt / sellAmt : sellAmt}
+            Amount:{' '}
+            {(isBuy ? buyAmt / sellAmt : sellAmt).toFixed(
+              Math.max(sellingAsset._asset.precision, buyingAsset._asset.precision),
+            )}
           </Text>
           <Text style={{ color: '#fff', fontSize: 18 }}>
-            Price: {(isBuy ? buyPrice : sellPirce).toString().slice(0, 8)}
+            Price:{' '}
+            {(isBuy ? buyPrice : sellPirce)
+              .toFixed(Math.min(sellingAsset._asset.precision, buyingAsset._asset.precision))
+              .slice(0, 10)}
           </Text>
         </View>
         <View style={{ margin: 8 }}>{lastCol(orderStatus, k)}</View>
