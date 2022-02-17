@@ -21,12 +21,12 @@ import {
   FullHistoryOrder,
   getHistoricalOrders,
   HistoryRetT,
-  limitOrderObjExt,
   useAssetsStore,
 } from '../../../utils/meta1Api';
 import { AssetViewTSP } from './AssetView';
 import { useAVStore } from './AssetViewStore';
 import meta1dex, { LoginRetT } from '../../../utils/meta1dexTypes';
+import { isOpen, isResolved, preprocessOrder, RejectFn } from '../../../utils/historyUtils';
 const { width } = Dimensions.get('screen');
 
 const Circle = ({ progress, isBuy }: { progress: number; isBuy: boolean }) => {
@@ -94,31 +94,6 @@ const useTabs = () => {
   return { tab, lt, rt, offsetX };
 };
 
-const preprocessOrder = (order: any, userAssets: AccountBalanceT | null): HistoryRetT => {
-  return {
-    raw: order,
-    limit_order_create_operation: {
-      fee: order.deferred_paid_fee,
-      seller: order.seller,
-      expiration: order.expiration,
-      fill_or_kill: false,
-      result: { void_result: {} } as any,
-      extensions: [],
-      amount_to_sell: {
-        ...order.sell_price.base,
-        asset: userAssets!.assetsWithBalance.find(
-          e => e._asset.id === order.sell_price.base.asset_id,
-        )!,
-      },
-      min_to_receive: {
-        ...order.sell_price.quote,
-        asset: userAssets!.assetsWithBalance.find(
-          e => e._asset.id === order.sell_price.quote.asset_id,
-        )!,
-      },
-    },
-  } as HistoryRetT;
-};
 
 const _amtToReadable = (amt: AmountT, userAssets: AccountBalanceT | null) => {
   const a = amt.amount;
@@ -286,29 +261,23 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
         <ScrollView contentContainerStyle={{ paddingBottom: 200 }}>
           {history &&
             [...history.entries()].map(
-              RenderRow(
-                [assetA, assetB],
-                amtToReadable,
-                (canceled, filled, order) =>
-                  canceled || filled.length || !inFuture(order.expiration),
-                (_, k) => (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setRefreshing(true);
-                      account?.cancelOrder(k);
+              RenderRow([assetA, assetB], amtToReadable, isOpen, (_, k) => (
+                <TouchableOpacity
+                  onPress={() => {
+                    setRefreshing(true);
+                    account?.cancelOrder(k);
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: account ? colors.BrandYellow : '#999',
+                      fontSize: 18,
                     }}
                   >
-                    <Text
-                      style={{
-                        color: account ? colors.BrandYellow : '#999',
-                        fontSize: 18,
-                      }}
-                    >
-                      CANCEL
-                    </Text>
-                  </TouchableOpacity>
-                ),
-              ),
+                    CANCEL
+                  </Text>
+                </TouchableOpacity>
+              )),
             )}
           <Text style={{ color: '#888', textAlign: 'center' }}>
             If you are not logged in some orders may not be shown
@@ -318,22 +287,16 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
         <ScrollView contentContainerStyle={{ paddingBottom: 200 }}>
           {history &&
             [...history.entries()].map(
-              RenderRow(
-                [assetA, assetB],
-                amtToReadable,
-                (canceled, filled, order) =>
-                  !canceled && !filled.length && inFuture(order.expiration),
-                orderStatus => (
-                  <Text
-                    style={{
-                      color: orderStatus === 'Completed' ? '#0f0' : '#f00',
-                      fontSize: 18,
-                    }}
-                  >
-                    {orderStatus}
-                  </Text>
-                ),
-              ),
+              RenderRow([assetA, assetB], amtToReadable, isResolved, orderStatus => (
+                <Text
+                  style={{
+                    color: orderStatus === 'Completed' ? '#0f0' : '#f00',
+                    fontSize: 18,
+                  }}
+                >
+                  {orderStatus}
+                </Text>
+              )),
             )}
         </ScrollView>
       )}
@@ -355,7 +318,7 @@ const RenderRow =
   (
     [assetA, assetB]: string[],
     amtToReadable: any,
-    reject: (canceled: any, filled: FilledRetT[], order: limitOrderObjExt) => boolean,
+    reject: RejectFn,
     lastCol: (orderStaus: string, k: string) => JSX.Element,
   ) =>
   ([k, v]: EValT) => {
