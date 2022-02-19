@@ -24,16 +24,19 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import { getAccount } from '../utils/meta1Api';
 import { ScrollView } from 'react-native-gesture-handler';
 
-const DOUBLE_DASH_RE = /--+/gm;
-
 const freeName: RuleFn = text =>
   asyncRule(async () => {
     const acc = await getAccount(text).catch(console.debug);
     return !acc;
   }, 'This account name is already taken');
 
+const DOUBLE_DASH_RE = /--+/gm;
 const notDoubleDash: RuleFn = (t, l) =>
   rule(!DOUBLE_DASH_RE.test(t), `${l} should have only one dash in a row.`);
+
+const DANGLING_DASH_RE = /-$/gm;
+const notDanglingDash: RuleFn = (t, l) =>
+  rule(!DANGLING_DASH_RE.test(t), `${l} should end with a letter or digit.`);
 
 const CreateWalletScreen: React.FC = () => {
   const authorize = useStore(state => state.authorize);
@@ -46,7 +49,7 @@ const CreateWalletScreen: React.FC = () => {
     {
       name: 'account_name',
       lable: 'Account name',
-      rules: [required, includes('-'), freeName, notDoubleDash],
+      rules: [required, includes('-'), freeName, notDoubleDash, notDanglingDash],
     },
     {
       name: 'password',
