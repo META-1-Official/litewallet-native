@@ -82,7 +82,7 @@ export type DexDrawerParamList = {
   __Settings: undefined;
   __Help: undefined;
   __ExploreAssets: undefined;
-  CreatePaperWallet: undefined;
+  _CreatePaperWallet: undefined;
 };
 
 const Drawer = createDrawerNavigator<DexDrawerParamList>();
@@ -140,7 +140,7 @@ export const DexNav: React.FC = () => {
           }}
           component={DexStack}
         />
-        <Drawer.Screen name="CreatePaperWallet" component={CreatePaperWallet} />
+        <Drawer.Screen name="_CreatePaperWallet" component={CreatePaperWallet} />
         <Drawer.Screen
           name="__Settings"
           options={{ headerShown: false }}

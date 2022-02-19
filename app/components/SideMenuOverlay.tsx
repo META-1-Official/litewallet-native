@@ -106,7 +106,7 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
         <ListItem
           title="Create Paper Wallet"
           icon={Archive}
-          onPress={() => navigation.jumpTo('CreatePaperWallet')}
+          onPress={() => navigation.jumpTo('_CreatePaperWallet')}
         />
         <ListItem title="Help" icon={HelpCircle} onPress={() => navigation.navigate('__Help')} />
       </View>
