@@ -16,6 +16,7 @@ import {
   includes,
   lettersOnly,
   required,
+  rule,
   RuleFn,
   same,
 } from '../utils/useForm/rules';
@@ -23,21 +24,30 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import { getAccount } from '../utils/meta1Api';
 import { ScrollView } from 'react-native-gesture-handler';
 
+const DOUBLE_DASH_RE = /--+/gm;
+
+const freeName: RuleFn = text =>
+  asyncRule(async () => {
+    const acc = await getAccount(text).catch(console.debug);
+    return !acc;
+  }, 'This account name is already taken');
+
+const notDoubleDash: RuleFn = (t, l) =>
+  rule(!DOUBLE_DASH_RE.test(t), `${l} should have only one dash in a row.`);
+
 const CreateWalletScreen: React.FC = () => {
   const authorize = useStore(state => state.authorize);
-
-  const freeName: RuleFn = text =>
-    asyncRule(async () => {
-      const acc = await getAccount(text).catch(console.debug);
-      return !acc;
-    }, 'This account name is already taken');
 
   const { Input, formState, valid } = useForm([
     { name: 'first_name', lable: 'First name', rules: [required, lettersOnly] },
     { name: 'last_name', lable: 'Last name', rules: [required, lettersOnly] },
     { name: 'email', lable: 'Email', rules: [required, email] },
     { name: 'mobile', lable: 'Mobile number', rules: [required] },
-    { name: 'account_name', lable: 'Account name', rules: [required, includes('-'), freeName] },
+    {
+      name: 'account_name',
+      lable: 'Account name',
+      rules: [required, includes('-'), freeName, notDoubleDash],
+    },
     {
       name: 'password',
       lable: 'Password',
