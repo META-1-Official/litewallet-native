@@ -20,10 +20,13 @@ const { width } = Dimensions.get('window');
 const Chart: React.FC<{ symbol: string; color: string }> = ({ symbol, color }) => {
   const [data, setData] = useState<number[]>([]);
   useEffect(() => {
+    let noop = false;
     async function fn() {
-      await getHistoryForAsset(symbol).then(d => setData(d));
+      await getHistoryForAsset(symbol).then(d => !noop && setData(d));
     }
     fn();
+    // eslint-disable-next-line prettier/prettier
+    return () => { noop = true;};
   });
 
   return (
