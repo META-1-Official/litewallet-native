@@ -38,6 +38,13 @@ const DANGLING_DASH_RE = /-$/gm;
 const notDanglingDash: RuleFn = (t, l) =>
   rule(!DANGLING_DASH_RE.test(t), `${l} should end with a letter or digit.`);
 
+const GENERAL_RE = /[a-zA-Z0-9\-]{4,64}/gm;
+const validName: RuleFn = (t, l) =>
+  rule(
+    t.match(GENERAL_RE)?.at(0) === t,
+    `${l} must contain from 4 to 63 characters and must consist of latin letters, dashes, digits.`,
+  );
+
 const CreateWalletScreen: React.FC = () => {
   const authorize = useStore(state => state.authorize);
 
@@ -49,7 +56,7 @@ const CreateWalletScreen: React.FC = () => {
     {
       name: 'account_name',
       lable: 'Account name',
-      rules: [required, includes('-'), freeName, notDoubleDash, notDanglingDash],
+      rules: [required, includes('-'), freeName, notDoubleDash, notDanglingDash, validName],
     },
     {
       name: 'password',
