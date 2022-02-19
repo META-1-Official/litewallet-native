@@ -9,6 +9,8 @@ import { Platform, SafeAreaView, Text, TouchableOpacity, View } from 'react-nati
 import { ArrowLeft, ChevronRight } from 'react-native-feather';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
+import CreatePaperWallet from './CreatePaperWallet';
+import Notifications from './Notifications';
 
 const AccountGroup = () => {
   const navigation = useNavigation<SNP>();
@@ -41,14 +43,14 @@ const AccountGroup = () => {
 
       <ListItem
         onPress={() => {
-          navigation.getParent()!.navigate('CreatePaperWallet');
+          navigation.navigate('Settings_CreatePaperWallet');
         }}
         text="View Keys"
       />
 
       <ListItem
         onPress={() => {
-          navigation.getParent()!.navigate('DEX_HOME', { screen: 'DEX__Notifications' });
+          navigation.navigate('Settings_Notifications');
         }}
         text="Notification"
       />
@@ -114,6 +116,8 @@ const MainSettingsScreen = () => {
 type Screens = {
   Settings_Home: undefined;
   Settings_SwitchLanguage: undefined;
+  Settings_CreatePaperWallet: undefined;
+  Settings_Notifications: undefined;
 };
 
 const Names = ['Switch Language'];
@@ -170,6 +174,8 @@ const SettingsScreen = () => {
     >
       <Stack.Screen name="Settings_Home" component={MainSettingsScreen} />
       <Stack.Screen name="Settings_SwitchLanguage" component={SwitchLanguage} />
+      <Stack.Screen name="Settings_CreatePaperWallet" component={CreatePaperWallet} />
+      <Stack.Screen name="Settings_Notifications" component={Notifications} />
     </Stack.Navigator>
   );
 };
