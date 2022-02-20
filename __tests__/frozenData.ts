@@ -401,57 +401,57 @@ export const filledFake = {
 };
 
 export const expired = {
-    order: {
-      raw: {
-        id: '1.11.31864645',
-        op: [
-          1,
-          {
-            fee: {
-              amount: 2,
-              asset_id: '1.3.0',
-            },
-            seller: '1.2.102',
-            amount_to_sell: {
-              amount: 169785862,
-              asset_id: '1.3.0',
-            },
-            min_to_receive: {
-              amount: 40125222,
-              asset_id: '1.3.1',
-            },
-            expiration: '1970-01-01T00:00:00.000Z',
-            fill_or_kill: false,
-            extensions: [],
+  order: {
+    raw: {
+      id: '1.11.31864645',
+      op: [
+        1,
+        {
+          fee: {
+            amount: 2,
+            asset_id: '1.3.0',
           },
-        ],
-        result: [1, '1.7.10294583'],
-        block_num: 9794685,
-        trx_in_block: 3,
-        op_in_trx: 0,
-        virtual_op: 0,
+          seller: '1.2.102',
+          amount_to_sell: {
+            amount: 169785862,
+            asset_id: '1.3.0',
+          },
+          min_to_receive: {
+            amount: 40125222,
+            asset_id: '1.3.1',
+          },
+          expiration: '1970-01-01T00:00:00.000Z',
+          fill_or_kill: false,
+          extensions: [],
+        },
+      ],
+      result: [1, '1.7.10294583'],
+      block_num: 9794685,
+      trx_in_block: 3,
+      op_in_trx: 0,
+      virtual_op: 0,
+    },
+    limit_order_create_operation: {
+      fee: {
+        amount: 2,
+        asset_id: '1.3.0',
       },
-      limit_order_create_operation: {
-        fee: {
-          amount: 2,
-          asset_id: '1.3.0',
-        },
-        seller: '1.2.102',
-        amount_to_sell: {
-          amount: 169785862,
-          asset_id: '1.3.0',
-        },
-        min_to_receive: {
-          amount: 40125222,
-          asset_id: '1.3.1',
-        },
-        expiration: '1970-01-01T00:00:00.000Z',
-        fill_or_kill: false,
-        extensions: [],
-        result: {
-          object_id_type: '1.7.10294583',
-        },
+      seller: '1.2.102',
+      amount_to_sell: {
+        amount: 169785862,
+        asset_id: '1.3.0',
+      },
+      min_to_receive: {
+        amount: 40125222,
+        asset_id: '1.3.1',
+      },
+      expiration: '1970-01-01T00:00:00.000Z',
+      fill_or_kill: false,
+      extensions: [],
+      result: {
+        object_id_type: '1.7.10294583',
       },
     },
-    filled: [],
-  };
+  },
+  filled: [],
+};
