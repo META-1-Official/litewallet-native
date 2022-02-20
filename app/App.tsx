@@ -19,6 +19,7 @@ import { useStore } from './store';
 import { Connect } from './utils/meta1Api';
 import { DexNav } from './WalletNav';
 import { PrivacyPolicy, TOSScreen } from './screens/PrivacyPolicy';
+import Loader from './components/Loader';
 
 const { useEffect } = React;
 
@@ -71,6 +72,12 @@ function App() {
   const authorized = useStore(state => state.authorized);
 
   const CurrentNav = authorized ? DexNav : AuthNav;
+
+  const loading = useStore(state => state.loading);
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
     <PaperProvider>
       <SafeAreaProvider>
