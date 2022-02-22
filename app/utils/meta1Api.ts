@@ -2,6 +2,7 @@ import assert from 'assert';
 import { zip, zipObject } from 'lodash';
 import QRCode from 'qrcode';
 import { useEffect, useState } from 'react';
+import { Alert } from 'react-native';
 import create from 'zustand';
 import { excludeIndex } from '.';
 import config from '../config';
@@ -18,6 +19,7 @@ import {
   RESULT_TYPE,
   TypeIdPrefixed,
 } from './meta1dexTypes';
+import { setupOnStatusCallbackHook } from './meta1wsHook';
 import { createPaperWalletLink } from './miscApi';
 
 // Number of milliseconds in one year
@@ -31,6 +33,13 @@ export const Connect = () => {
   // A hack to patch into websocket status update callback
   // Show loader, if connection is closed
   // We probably will not recover
+
+  setupOnStatusCallbackHook(s => {
+    if (s !== 'open') {
+      Alert.alert('Server connection lost, application restart is advised');
+      throw new Error(`Server connection lost, Websocket status: ${s}`);
+    }
+  });
   // TRASH!
   // setupOnStatusCallbackHook(s => {
   //   if (s !== 'open') {
