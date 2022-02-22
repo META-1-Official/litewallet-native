@@ -20,8 +20,26 @@ import { Connect } from './utils/meta1Api';
 import { DexNav } from './WalletNav';
 import { PrivacyPolicy, TOSScreen } from './screens/PrivacyPolicy';
 import Loader from './components/Loader';
+import * as Sentry from '@sentry/react-native';
 
 const { useEffect } = React;
+
+// Construct a new instrumentation instance. This is needed to communicate between the integration and React
+const routingInstrumentation = new Sentry.ReactNavigationInstrumentation();
+
+Sentry.init({
+  dsn: 'https://a887e58f15314fac8350e83e5f28468e@o1150526.ingest.sentry.io/6223480',
+  // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+  // We recommend adjusting this value in production.
+  tracesSampleRate: 1.0,
+  integrations: [
+    new Sentry.ReactNativeTracing({
+      // Pass instrumentation to be used as `routingInstrumentation`
+      routingInstrumentation,
+      // ...
+    }),
+  ],
+});
 
 export type RootStackParamList = {
   Home: undefined;
@@ -60,6 +78,7 @@ const AuthNav = () => {
 };
 
 function App() {
+
   const [dark, setDark] = React.useState(false);
   useEffect(() => {
     SplashScreen.hide();
@@ -91,6 +110,7 @@ function App() {
             },
           }}
           onReady={() => {
+            routingInstrumentation.registerNavigationContainer(navigationRef);
             routePrefixRef.current = navigationRef.getCurrentRoute()?.name?.split('_').at(0);
           }}
           onStateChange={() => {
@@ -114,4 +134,4 @@ function App() {
   );
 }
 
-export default App;
+export default Sentry.wrap(App);
