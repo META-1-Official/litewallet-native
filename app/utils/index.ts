@@ -1,15 +1,17 @@
 import assert from 'assert';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Alert,
   AlertType,
   Dimensions,
   ImageStyle,
+  Keyboard,
   LayoutChangeEvent,
   Platform,
   TextStyle,
   ViewStyle,
 } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import prompt from 'react-native-prompt-android';
 
 export function getRadomByteArray(len: number) {
@@ -248,14 +250,43 @@ export const useScroll = () => {
     const h = Dimensions.get('window').height;
     if (h < 700) {
       setScrollEnabled(true);
+      setOld(true);
+      console.log('set old');
     }
   };
 
+  const ref = useRef<ScrollView>(null);
   const [scrollEnabled, setScrollEnabled] = useState(false);
+  const [old, setOld] = useState(false);
 
+  useEffect(() => {
+    const listeners = [
+      Keyboard.addListener('keyboardDidShow', () => {
+        setOld(scrollEnabled);
+        setScrollEnabled(true);
+      }),
+      Keyboard.addListener('keyboardDidHide', () => {
+        setScrollEnabled(old);
+        if (!old) {
+          const scv = ref.current! as ScrollView;
+          scv.scrollTo({
+            x: 0,
+            y: 0,
+            animated: true,
+          });
+        }
+      }),
+    ];
+
+    return () => listeners.forEach(e => e.remove());
+  }, [old, scrollEnabled]);
   return {
     onLayout,
     scrollEnabled,
+    ref,
+    contentContainerStyle: {
+      paddingBottom: 200,
+    },
   };
 };
 

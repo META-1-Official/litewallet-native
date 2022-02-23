@@ -36,7 +36,7 @@ const SendScreen: React.FC<{}> = () => {
   const anAsset = useAsset({ defaultValue: meta1!, title: 'Send' });
 
   const { LoaderModal, showLoader, hideLoader } = useLoaderModal();
-  const { onLayout, scrollEnabled } = useScroll();
+  const scroll = useScroll();
 
   const sendFn = makeSendFn(
     nav,
@@ -60,7 +60,7 @@ const SendScreen: React.FC<{}> = () => {
     <SafeAreaView>
       <Backdrop />
       <LoaderModal />
-      <ScrollView scrollEnabled={scrollEnabled} onLayout={onLayout}>
+      <ScrollView {...scroll}>
         <List
           style={{
             backgroundColor: '#fff',
@@ -490,7 +490,7 @@ export const DexSend: React.FC<DexProps> = props => {
   const anAsset = useAsset({ defaultValue: meta1!, title: 'Send' });
 
   const { LoaderModal, showLoader, hideLoader } = useLoaderModal();
-  const { onLayout, scrollEnabled } = useScroll();
+  const scroll = useScroll();
 
   const sendFn = makeSendFn(
     nav,
@@ -515,7 +515,7 @@ export const DexSend: React.FC<DexProps> = props => {
       <Header {...props} title={`Send ${anAsset.asset.symbol}`} />
       <SafeAreaView style={{ height: '100%', backgroundColor: '#320001' }}>
         <LoaderModal />
-        <ScrollView scrollEnabled={scrollEnabled} onLayout={onLayout}>
+        <ScrollView {...scroll}>
           <List
             style={{
               backgroundColor: '#3c0000',
