@@ -251,7 +251,6 @@ export const useScroll = () => {
     if (h < 700) {
       setScrollEnabled(true);
       setOld(true);
-      console.log('set old');
     }
   };
 
