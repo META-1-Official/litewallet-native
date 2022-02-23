@@ -13,7 +13,7 @@ export default function Notifications() {
 
   useEffect(() => {
     getNotifications({ accountName })
-      .then(e => setNotifData(e))
+      .then(e => setNotifData(e.reverse()))
       .catch(err => console.error(err));
   }, [accountName]);
 
