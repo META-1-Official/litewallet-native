@@ -78,7 +78,6 @@ const AuthNav = () => {
 };
 
 function App() {
-
   const [dark, setDark] = React.useState(false);
   useEffect(() => {
     SplashScreen.hide();
