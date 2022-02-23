@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useAssetPicker } from '../components/AssetSelectModal';
 import { AssetBalanceT, useAssetsStore } from './meta1Api';
 
@@ -6,7 +6,7 @@ export type theAsset = {
   asset: AssetBalanceT;
   open: () => void;
   amount: string;
-  setAmount: React.Dispatch<React.SetStateAction<string>>;
+  setAmount: (value: string) => void;
   /**
    * @param {updateAmount} updateAmount - true by default
    */
@@ -101,7 +101,7 @@ export const useAsset = ({
     if (!meta1) {
       throw new Error('Failed to get META1 asset. Try again later.');
     }
-    const totalCost = Number(asset.symbol === 'META1') * 35e-5 + Number(amount);
+    const totalCost = Number(asset.symbol === 'META1') * (35e-5 + Number(amount));
     if (meta1.amount - totalCost <= 0) {
       throw new Error(
         `Insufficient balance to pay transaction fees. This transaction requires ${totalCost} ${
@@ -112,7 +112,8 @@ export const useAsset = ({
     return;
   };
 
-  const [amount, setAmount] = useState('0.00');
+  const [amount, _setAmount] = useState('0.00');
+  const setAmount = (s: string) => setTimeout(() => _setAmount(s), 0);
   return {
     asset,
     open,
