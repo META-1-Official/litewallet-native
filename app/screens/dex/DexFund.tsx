@@ -13,14 +13,14 @@ import { useAssets } from '../../utils/meta1Api';
 import { getHistory } from '../../utils/miscApi';
 import { dexAssetView } from './AssetView/AssetViewStore';
 
-const GRAPH_INTERAVAL = {
+const GRAPH_INTERVAL = {
   '1D': 1,
   '1W': 7,
   '1M': 31,
   '1Y': 365,
   All: 0,
 };
-type GRAPH_INTERAVAL_KEYS = keyof typeof GRAPH_INTERAVAL;
+type GRAPH_INTERVAL_KEYS = keyof typeof GRAPH_INTERVAL;
 
 const { width, height } = Dimensions.get('screen');
 // const createMockChartData = (n: number) =>
@@ -62,10 +62,10 @@ const Chart = ({ data }: { data: number[] }) => {
     </View>
   );
 };
-
+const MAX_SAMPLES = 500;
 const DexFund: React.FC<DexTSP> = ({ navigation }) => {
-  const [curInterval, setCurInterval] = useState<GRAPH_INTERAVAL_KEYS>('1D');
-  const [showZeroBalance, setShowZeroBalacnce] = useState(false);
+  const [curInterval, setCurInterval] = useState<GRAPH_INTERVAL_KEYS>('1D');
+  const [showZeroBalance, setShowZeroBalance] = useState(false);
   const [chartData, setChartData] = useState<number[]>([0, 0]);
   const accountName = useStore(s => s.accountName);
   const accountAssets = useAssets();
@@ -73,9 +73,29 @@ const DexFund: React.FC<DexTSP> = ({ navigation }) => {
   useEffect(() => {
     getHistory({
       accountName,
-      skip_size: GRAPH_INTERAVAL[curInterval],
+      skip_size: GRAPH_INTERVAL[curInterval],
     })
-      .then(e => setChartData(e.data ? [...e.data, accountTotal] : [0, accountTotal]))
+      .then(e => {
+        if (!e.data) {
+          setChartData([0, accountTotal]);
+          return;
+        }
+        let data = e.data;
+        console.log('[old]', data.length);
+        if (data.length > MAX_SAMPLES) {
+          const interval = Math.floor(data.length / MAX_SAMPLES);
+          const newData = [];
+          for (let i = 0; i < data.length; i += interval) {
+            newData.push(data[i]);
+          }
+          newData.push(data[data.length - 1]);
+          data = newData;
+          console.log(newData.length);
+        }
+        console.log('[new]', data.length);
+
+        setChartData(data);
+      })
       .catch(e => console.error(e));
   }, [curInterval, accountName, accountTotal]);
 
@@ -97,7 +117,7 @@ const DexFund: React.FC<DexTSP> = ({ navigation }) => {
 
         <Chart data={chartData} />
         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-          {(Object.keys(GRAPH_INTERAVAL) as GRAPH_INTERAVAL_KEYS[]).map(e => (
+          {(Object.keys(GRAPH_INTERVAL) as GRAPH_INTERVAL_KEYS[]).map(e => (
             <TouchableOpacity onPress={() => setCurInterval(e)} key={e}>
               <Text
                 key={e}
@@ -146,7 +166,7 @@ const DexFund: React.FC<DexTSP> = ({ navigation }) => {
           >
             HIDE 0 BALANCE WALLET
           </Text>
-          <MaterialToggle onChange={v => setShowZeroBalacnce(v)} />
+          <MaterialToggle onChange={v => setShowZeroBalance(v)} />
         </View>
       </View>
       <PortfolioListing
