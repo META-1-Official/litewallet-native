@@ -50,15 +50,16 @@ export default function useForm<T extends DefautlStateItem[]>(defautState: T) {
       if (!rules) {
         return;
       }
-
-      const promised = await Promise.all(
-        rules.map(rule => rule(formState[name], lables[name], formState)),
-      );
-      const errors: string[] = promised.map(e => (e !== null ? (e as string) : '')).filter(e => e);
-
-      const newErr = errors[0] || null;
-      setError(newErr);
-      setValid(name, newErr === null);
+      for (const rule of rules) {
+        const maybeError = await rule(formState[name], lables[name], formState);
+        if (maybeError) {
+          setError(maybeError);
+          setValid(name, false);
+          return;
+        }
+      }
+      setError(null);
+      setValid(name, true);
     };
 
     return (
