@@ -29,7 +29,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   sleep 2
   osx_copy "./dist/app-release.apk"
   echo "APK File copied to clipboard"
-  NOW=$(date +"%m_%d_%YT%H:%M")
+  NOW=$(date +"%m_%d_%YT%H-%M")
   cp ./dist/app-release.apk ~/Documents/app-release_$NOW.apk
 else
   echo "TODO: Add clipboard support for $OSTYPE"
