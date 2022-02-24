@@ -24,7 +24,13 @@ import { Heading, TextSecondary } from '../components/typography';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { catchError, ensure, promptPromise, shadow, style } from '../utils';
-import { AssetBalanceT, swapWithPassword, useAssets, useAssetsStore } from '../utils/meta1Api';
+import {
+  AssetBalanceT,
+  refreshAssets,
+  swapWithPassword,
+  useAssets,
+  useAssetsStore,
+} from '../utils/meta1Api';
 import { createPair, theAsset, useAsset } from '../utils/useAsset';
 
 const { width, height } = Dimensions.get('screen');
@@ -49,16 +55,26 @@ const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanc
 
   useEffect(() => {
     console.log('One of Assets Changed');
+    if (!A || !B) {
+      return;
+    }
     const baseUsdt = A.toUsdt();
     const _targetAmount = B.formUsdt(baseUsdt);
-  }, [A.asset, B.asset]);
+  }, [A?.asset, B?.asset]);
+
+  if (!A || !B) {
+    return null;
+  }
 
   return {
     assets: { A, B },
   };
 };
 
-type ScreenAssets = ReturnType<typeof useAssetPair>['assets'];
+type ScreenAssets = {
+  A: theAsset;
+  B: theAsset;
+};
 interface AssetsProp {
   assets: ScreenAssets;
 }
@@ -191,14 +207,14 @@ const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
   );
 };
 
-const usePerformSwap = (
+const mkPerformSwap = (
   assets: ScreenAssets,
   onBeforeSwap: () => void,
   onAfterSwap: () => void,
   onFail: () => void,
 ) => {
-  const { accountName, password } = useStore();
-  const update = useAssetsStore(e => e.fetchUserAssets);
+  const { accountName, password } = useStore.getState();
+  const update = useAssetsStore.getState().fetchUserAssets;
   const getPassword = async () =>
     password
       ? password
@@ -262,6 +278,11 @@ const optStyleFactory =
     return [defaults];
   };
 
+const refresh = throttle(() => {
+  console.log('BEGIN Refresh');
+  refreshAssets().then(() => console.log('END Refresh'));
+}, 30000);
+
 const TradeScreen: React.FC<Props> = ({ darkMode }) => {
   const nav = useNavigation();
   const allAssets = useAssets();
@@ -269,13 +290,19 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
     () => allAssets?.assetsWithBalance.sort((a, b) => a.symbol.localeCompare(b.symbol)),
     [allAssets],
   );
-  const { assets } = useAssetPair(availableAssets.at(0), availableAssets.at(3));
+  const pair = useAssetPair(availableAssets.at(0), availableAssets.at(3));
 
   const open = useShowModal();
 
   const { LoaderModal, showLoader, hideLoader } = useLoaderModal();
 
-  const fn = usePerformSwap(
+  if (allAssets === null || !availableAssets || !pair) {
+    refresh();
+    return <Loader />;
+  }
+
+  const { assets } = pair;
+  const fn = mkPerformSwap(
     assets,
     () => showLoader(),
     () => {
@@ -286,9 +313,6 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
     () => hideLoader(),
   );
 
-  if (allAssets === null || !availableAssets) {
-    return <Loader />;
-  }
   const DarkMode: React.FC = ({ children }) => <>{darkMode ? children : null}</>;
 
   const darkStyle = optStyleFactory(darkMode);

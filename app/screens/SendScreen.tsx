@@ -16,7 +16,13 @@ import RoundedButton from '../components/RoundedButton';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { catchError, useScroll } from '../utils';
-import { getAccount, sendWithPassword, useAssets, useAssetsStore } from '../utils/meta1Api';
+import {
+  getAccount,
+  refreshAssets,
+  sendWithPassword,
+  useAssets,
+  useAssetsStore,
+} from '../utils/meta1Api';
 import { WalletNavigationProp } from './WalletScreen';
 import { useNavigation } from '@react-navigation/core';
 import { useLoaderModal } from '../components/LoaderModal';
@@ -24,6 +30,15 @@ import { DexSSP } from './dex';
 import { HeaderProps } from './dex/SendScreen';
 import { SvgIcons } from '../../assets';
 import { StandaloneAsset, useAsset } from '../utils/useAsset';
+import throttle from 'lodash.throttle';
+
+const refresh = throttle(() => {
+  console.log('BEGIN Refresh');
+  refreshAssets().then(() => {
+    // console.log(useAssetsStore.getState().userAssets);
+    console.log('END Refresh');
+  });
+}, 30000);
 
 const SendScreen: React.FC<{}> = () => {
   const nav = useNavigation<WalletNavigationProp>();
@@ -44,7 +59,8 @@ const SendScreen: React.FC<{}> = () => {
     () => hideLoader(),
   );
 
-  if (!assets) {
+  if (!assets || !meta1 || !anAsset) {
+    refresh();
     return <Loader />;
   }
 
@@ -498,7 +514,8 @@ export const DexSend: React.FC<DexProps> = props => {
     () => hideLoader(),
   );
 
-  if (!assets) {
+  if (!assets || !anAsset) {
+    refresh();
     return <Loader />;
   }
 

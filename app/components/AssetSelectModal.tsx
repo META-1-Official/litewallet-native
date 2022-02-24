@@ -1,6 +1,6 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useCardAnimation } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Animated,
   BackHandler,
@@ -82,6 +82,7 @@ const Search = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
 const PickerContent = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
   const allAssets = useAssets();
   const scroll = useScroll();
+  scroll.contentContainerStyle.paddingBottom = 350;
   const suggested = allAssets!.assetsWithBalance
     .filter(ass => ass.symbol === 'BTC' || ass.symbol === 'ETH' || ass.symbol === 'META1')
     .sort((a, b) => a.symbol.localeCompare(b.symbol));
@@ -93,7 +94,7 @@ const PickerContent = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
   return (
     <>
       <Search onSelect={onSelect} />
-      <ScrollView contentContainerStyle={{ paddingBottom: 350 }} {...scroll}>
+      <ScrollView {...scroll}>
         <TextSecondary style={{ fontSize: 14 }}> Suggested </TextSecondary>
         {suggested &&
           suggested.map(e => (
@@ -202,6 +203,12 @@ export const useAssetPicker = ({
   onClose?: () => void;
 }): [AssetBalanceT | null, () => void] => {
   const [selected, setSelected] = useState<AssetBalanceT | null>(defaultValue || null);
+
+  useEffect(() => {
+    if (defaultValue && !selected) {
+      setSelected(defaultValue);
+    }
+  }, [defaultValue, selected]);
 
   const navigation = useNavigation<RootStackNP>();
   const open = () => {

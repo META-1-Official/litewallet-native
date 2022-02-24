@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAssetPicker } from '../components/AssetSelectModal';
 import { AssetBalanceT, useAssetsStore } from './meta1Api';
+import * as Sentry from '@sentry/react-native';
 
 export type theAsset = {
   asset: AssetBalanceT;
@@ -22,7 +23,13 @@ export type theAsset = {
 
 export type StandaloneAsset = Omit<theAsset, 'opponent'>;
 
-export const createPair = (a: StandaloneAsset, b: StandaloneAsset): theAsset[] => {
+export const createPair = (
+  a: StandaloneAsset | null,
+  b: StandaloneAsset | null,
+): theAsset[] | null[] => {
+  if (!a || !b) {
+    return [null, null];
+  }
   const A: theAsset = { ...a, opponent: () => B };
   const B: theAsset = { ...b, opponent: () => A };
   return [A, B];
@@ -35,14 +42,20 @@ export const useAsset = ({
   defaultValue?: AssetBalanceT;
   title: string;
   onClose?: () => void;
-}): StandaloneAsset => {
+}): StandaloneAsset | null => {
+  const [amount, _setAmount] = useState('0.00');
   const [asset, open] = useAssetPicker({
     defaultValue,
     title,
     onClose,
   });
+
   if (!asset) {
-    throw new Error('No such asset');
+    console.log('== DV', defaultValue);
+    console.log('==========');
+    console.log('== ASSET', asset);
+    Sentry.captureMessage('No meta1 asset');
+    return null;
   }
 
   const formUsdt = (usdtAmount: string | number, updateAmount = true) => {
@@ -112,7 +125,6 @@ export const useAsset = ({
     return;
   };
 
-  const [amount, _setAmount] = useState('0.00');
   const setAmount = (s: string) => setTimeout(() => _setAmount(s), 0);
   return {
     asset,
