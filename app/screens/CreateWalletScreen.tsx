@@ -30,11 +30,11 @@ const freeName: RuleFn = text =>
     return !acc;
   }, 'This account name is already taken');
 
-const DOUBLE_DASH_RE = /--+/gm;
+const DOUBLE_DASH_RE = /--+/m;
 const notDoubleDash: RuleFn = (t, l) =>
   rule(!DOUBLE_DASH_RE.test(t), `${l} should have only one dash in a row.`);
 
-const DANGLING_DASH_RE = /-$/gm;
+const DANGLING_DASH_RE = /-$/m;
 const notDanglingDash: RuleFn = (t, l) =>
   rule(!DANGLING_DASH_RE.test(t), `${l} should end with a letter or digit.`);
 
@@ -56,7 +56,7 @@ const CreateWalletScreen: React.FC = () => {
     {
       name: 'account_name',
       lable: 'Account name',
-      rules: [required, includes('-'), freeName, notDoubleDash, notDanglingDash, validName],
+      rules: [required, includes('-'), notDoubleDash, notDanglingDash, validName, freeName,],
     },
     {
       name: 'password',
