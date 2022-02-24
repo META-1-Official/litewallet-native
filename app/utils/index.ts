@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import prompt from 'react-native-prompt-android';
+import * as Sentry from '@sentry/react-native';
 
 export function getRadomByteArray(len: number) {
   return Array.from(new Uint8Array(len), () => Math.floor(Math.random() * 256));
@@ -195,7 +196,8 @@ export const catchError = async (fn: () => void, params?: params) => {
     if (onErr?.(e)) {
       return anyway?.();
     }
-    console.log('oError', e);
+    const oErr = e;
+    console.log('oError', oErr);
     // Try to format the errors
     let err: any = e;
     //@ts-ignore
@@ -205,6 +207,14 @@ export const catchError = async (fn: () => void, params?: params) => {
     if (errorMiddleware) {
       err = errorMiddleware(e);
     }
+
+    Sentry.addBreadcrumb({
+      category: 'expected',
+      message: (e as any).message,
+      level: Sentry.Severity.Info,
+    });
+    Sentry.captureException(oErr);
+
     console.error(err);
     Alert.alert('Error', (err as Error).message);
   }
