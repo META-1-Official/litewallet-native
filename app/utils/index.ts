@@ -208,6 +208,7 @@ export const catchError = async (fn: () => void, params?: params) => {
       err = errorMiddleware(e);
     }
 
+    Sentry.setTag('isExpected', true);
     Sentry.addBreadcrumb({
       category: 'expected',
       message: (e as any).message,
