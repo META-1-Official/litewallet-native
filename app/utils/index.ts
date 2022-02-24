@@ -282,7 +282,7 @@ export const useScroll = () => {
   return {
     onLayout,
     scrollEnabled,
-    ref,
+    ref: ref as any,
     contentContainerStyle: {
       paddingBottom: 200,
     },
