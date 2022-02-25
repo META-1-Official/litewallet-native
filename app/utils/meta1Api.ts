@@ -265,7 +265,6 @@ type OrderInfoT = {
 
 export const placeLimitOrder = async (accountInfo: AccountWithPassword, orderInfo: OrderInfoT) => {
   const account = await Meta1.login(accountInfo.accountName, accountInfo.password);
-  console.log('login', account.sell.toString());
   console.log({ orderInfo });
   const sellResult = await account.sell(
     orderInfo.toGive,

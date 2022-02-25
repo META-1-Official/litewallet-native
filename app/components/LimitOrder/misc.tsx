@@ -182,7 +182,7 @@ export const useCreateOrder = (toGive: any, toGet: any, type: OrderType) => {
       placeLimitOrder(accountInfo as any, {
         toGet,
         toGive,
-        totalPrice: type === OrderType.Sell ? 1 / price : price,
+        totalPrice: type === OrderType.Sell ? price : 1 / price,
         amount,
       }),
       `Place Limit Order - ${type}`,
