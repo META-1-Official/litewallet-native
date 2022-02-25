@@ -6,7 +6,7 @@ import { SvgIcons } from '../../../assets';
 import { useAVStore } from '../../screens/dex/AssetView/AssetViewStore';
 import { useStore } from '../../store';
 import { colors } from '../../styles/colors';
-import { catchError, ensure, promptPromise, Timeout } from '../../utils';
+import { catchError, promptPromise, Timeout } from '../../utils';
 import { placeLimitOrder, useAssets, useAssetsStore } from '../../utils/meta1Api';
 import { useLoaderModal } from '../LoaderModal';
 
@@ -169,7 +169,7 @@ export const useCreateOrder = (toGive: any, toGet: any, type: OrderType) => {
 
   const getAccountInfo = async () => ({
     accountName,
-    password: ensure(await getPassword()),
+    password: await getPassword(),
   });
 
   const fn = (price: number, amount: number) => async () => {
@@ -179,7 +179,7 @@ export const useCreateOrder = (toGive: any, toGet: any, type: OrderType) => {
     }
     showLoader();
     const to = await Timeout(
-      placeLimitOrder(accountInfo, {
+      placeLimitOrder(accountInfo as any, {
         toGet,
         toGive,
         totalPrice: type === OrderType.Sell ? 1 / price : price,
