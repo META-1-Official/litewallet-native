@@ -56,7 +56,7 @@ const CreateWalletScreen: React.FC = () => {
     {
       name: 'account_name',
       lable: 'Account name',
-      rules: [required, includes('-'), notDoubleDash, notDanglingDash, validName, freeName,],
+      rules: [required, includes('-'), notDoubleDash, notDanglingDash, validName, freeName],
     },
     {
       name: 'password',
@@ -139,6 +139,10 @@ const CreateWalletScreen: React.FC = () => {
                   </View>
                 )}
               />
+              <TextSecondary style={{ fontSize: 14 }}>
+                Please keep your password in a safe place. Don’t share it with any third-parties or
+                send it online.
+              </TextSecondary>
               <Input name="password_repeat" secureTextEntry={true} />
             </View>
           </KeyboardAwareScrollView>
