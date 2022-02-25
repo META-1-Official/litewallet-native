@@ -236,7 +236,7 @@ export const useOrderState = (assetA: string, assetB: string, oType: OrderType) 
   };
   const Str = (asset: string) => (n: number) => n.toFixed(asAsset(asset).precision());
   const [aStr, bStr] = [Str(assetA), Str(assetB)];
-  const calcTotal = (a: s, b: s) => bStr(Num(a) * price(Num(b)));
+  const calcTotal = (a: s, b: s) => bStr((Num(a) * price(Num(b))) || 0);
   const price = (n: number) => (oType === OrderType.Sell ? 1 / n : n);
 
   const reducer = (state: State, action: Action): State => {
