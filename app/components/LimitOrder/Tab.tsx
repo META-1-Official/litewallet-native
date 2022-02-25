@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { colors } from '../../styles/colors';
 import meta1dex from '../../utils/meta1dexTypes';
+import { useShowModal } from '../SuccessModal';
 import {
   useCreateOrder,
   InputRow,
@@ -12,6 +13,7 @@ import {
   useOrderState,
   Update,
 } from './misc';
+
 interface Props {
   type: OrderType;
 }
@@ -20,6 +22,7 @@ export const Tab: React.FC<Props> = ({ type }) => {
   const [assetA, assetB] = usePair(type);
   const [state, dispatch] = useOrderState(assetA, assetB, type);
   const decimals = asAsset(assetB).precision();
+  const modal = useShowModal();
   const fixedB = (n: number) => n.toFixed(decimals);
   useEffect(() => {
     const fn = async () => {
@@ -34,7 +37,9 @@ export const Tab: React.FC<Props> = ({ type }) => {
     fn();
   }, [assetA, assetB]);
 
-  const { fn, Loader } = useCreateOrder(assetB, assetA, type);
+  const { fn, Loader } = useCreateOrder(assetB, assetA, type, () =>
+    modal(`Successfully placed ${type} order`, () => {}),
+  );
   return (
     <View style={{ flexGrow: 1, padding: 12 }}>
       <Loader />

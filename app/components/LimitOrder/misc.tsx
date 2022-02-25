@@ -155,7 +155,7 @@ export enum OrderType {
   Buy = 'BUY',
   Sell = 'SELL',
 }
-export const useCreateOrder = (toGive: any, toGet: any, type: OrderType) => {
+export const useCreateOrder = (toGive: any, toGet: any, type: OrderType, afterFn: () => void) => {
   const { LoaderModal, showLoader, hideLoader } = useLoaderModal();
   const { accountName, password } = useStore();
   const getPassword = async () =>
@@ -187,6 +187,7 @@ export const useCreateOrder = (toGive: any, toGet: any, type: OrderType) => {
       }),
       `Place Limit Order - ${type}`,
     );
+    afterFn();
     return to;
   };
   return {
@@ -236,7 +237,7 @@ export const useOrderState = (assetA: string, assetB: string, oType: OrderType) 
   };
   const Str = (asset: string) => (n: number) => n.toFixed(asAsset(asset).precision());
   const [aStr, bStr] = [Str(assetA), Str(assetB)];
-  const calcTotal = (a: s, b: s) => bStr((Num(a) * price(Num(b))) || 0);
+  const calcTotal = (a: s, b: s) => bStr(Num(a) * price(Num(b)) || 0);
   const price = (n: number) => (oType === OrderType.Sell ? 1 / n : n);
 
   const reducer = (state: State, action: Action): State => {
