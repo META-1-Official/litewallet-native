@@ -85,9 +85,10 @@ const AssetViewHeader: React.FC<AssetViewTSP> = ({ navigation }) => {
   const [ticker, setTicker] = useState<Ticker | null>(null);
 
   useEffect(() => {
+    let canceled = false;
     const fn = async () => {
       const v = await meta1dex.db.get_ticker(assetB, assetA);
-      setTicker(v);
+      return !canceled ? setTicker(v) : 0;
     };
 
     if (ticker === null) {
@@ -96,7 +97,10 @@ const AssetViewHeader: React.FC<AssetViewTSP> = ({ navigation }) => {
 
     const timer = setInterval(fn, 1500);
 
-    return () => clearInterval(timer);
+    return () => {
+      canceled = true;
+      clearInterval(timer);
+    };
   }, [assetA, assetB, navigation]);
 
   return (
