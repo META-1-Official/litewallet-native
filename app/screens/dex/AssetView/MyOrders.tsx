@@ -294,7 +294,7 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
                 >
                   <Text
                     style={{
-                      color: account ? colors.BrandYellow : '#999',
+                      color: colors.BrandYellow,
                       fontSize: 18,
                     }}
                   >
