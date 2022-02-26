@@ -79,6 +79,7 @@ const DexHome: React.FC<DexTSP> = ({ navigation }) => {
                 <View
                   style={{
                     flexDirection: 'row',
+                    justifyContent: 'space-between',
                     // padding: 8,
                     marginVertical: 12,
                   }}
