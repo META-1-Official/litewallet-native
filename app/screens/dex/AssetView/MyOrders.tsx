@@ -175,7 +175,7 @@ export const OpenOrdersPage = () => {
               ) : (
                 <Text
                   style={{
-                    color: status === 'Completed' ? '#0f0' : '#f00',
+                    color: status === 'Completed' || status === 'Open' ? '#0f0' : '#f00',
                     fontSize: 18,
                   }}
                 >
@@ -378,7 +378,23 @@ const RenderRow =
       }, 0) / filled.length;
 
     const isBuy = buyingAsset.symbol === assetA;
-    const orderStatus = filled.length ? 'Completed' : canceled ? 'Canceled' : 'Expired';
+    const getOrderStatus = () => {
+      if (filled.length) {
+        return 'Completed';
+      }
+
+      if (canceled) {
+        return 'Canceled';
+      }
+
+      if (!inFuture(order.expiration)) {
+        return 'Expired';
+      }
+
+      return 'Open';
+    };
+
+    const orderStatus = getOrderStatus();
     let progress = 0;
     if (filled.length) {
       const pays = filled.reduce(
