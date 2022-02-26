@@ -13,7 +13,7 @@ import {
 import { ProgressCircle } from 'react-native-svg-charts';
 import { useStore } from '../../../store';
 import { colors } from '../../../styles/colors';
-import { inFuture } from '../../../utils';
+import { catchError, inFuture, promptPromise } from '../../../utils';
 import {
   AccountBalanceT,
   AmountT,
@@ -94,7 +94,6 @@ const useTabs = () => {
   return { tab, lt, rt, offsetX };
 };
 
-
 const _amtToReadable = (amt: AmountT, userAssets: AccountBalanceT | null) => {
   const a = amt.amount;
   const precision =
@@ -142,6 +141,7 @@ export const OpenOrdersPage = () => {
     const get = order.limit_order_create_operation.min_to_receive.asset.symbol;
     return [give, get];
   };
+
   return (
     <ScrollView contentContainerStyle={{ paddingBottom: 200 }}>
       {!history || [...history.entries()].length === 0 ? (
@@ -224,6 +224,31 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
 
   const amtToReadable = (amt: AmountT) => _amtToReadable(amt, userAssets);
 
+  const cancelOrder = async (orderId: string) =>
+    catchError(async () => {
+      console.log('canceling');
+      if (account) {
+        return await account.cancelOrder(orderId);
+      }
+
+      const getPassword = async () =>
+        password
+          ? password
+          : await promptPromise(
+              'Enter password',
+              'Password is required for this operation',
+              'secure-text',
+            );
+
+      const passwd = await getPassword();
+      if (passwd === null) {
+        return;
+      }
+
+      const authorized = await meta1dex.login(accountName, passwd);
+      return await authorized.cancelOrder(orderId);
+    });
+
   return (
     <SafeAreaView style={{ height: '100%', backgroundColor: '#000', padding: 12 }}>
       <View style={{ flexDirection: 'row', paddingVertical: 12 }}>
@@ -264,8 +289,7 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
               RenderRow([assetA, assetB], amtToReadable, isOpen, (_, k) => (
                 <TouchableOpacity
                   onPress={() => {
-                    setRefreshing(true);
-                    account?.cancelOrder(k);
+                    cancelOrder(k).then(() => setRefreshing(true));
                   }}
                 >
                   <Text
