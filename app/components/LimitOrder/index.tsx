@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Dimensions, Keyboard, LayoutRectangle, Text, TouchableOpacity, View } from 'react-native';
 import { AssetViewSSP } from './../../screens/dex/AssetView/AssetView';
 import { BuyTab, SellTab } from './Tab';
@@ -22,6 +22,7 @@ const useKeyboard = () => {
 const AssetViewModal: React.FC<AssetViewSSP> = ({ navigation }) => {
   const [leftTabSelected, setLTSelected] = useState(true);
   const [backdropY, setBackdropY] = useState(height * 0.45);
+  const kbdHeight = useRef<number | null>(null);
   const [contentSize, setContentSize] = useState<LayoutRectangle>({
     width: 0,
     height: 0,
@@ -31,9 +32,14 @@ const AssetViewModal: React.FC<AssetViewSSP> = ({ navigation }) => {
 
   const keyboardOpen = useKeyboard();
   useEffect(() => {
-    const forKb = height * 0.05;
+    const l = Keyboard.addListener('keyboardDidShow', e => {
+      kbdHeight.current = e.endCoordinates.height;
+    });
+
+    const forKb = height - contentSize.height - (kbdHeight.current || 0);
     const regular = height - contentSize.height;
     setBackdropY(keyboardOpen ? forKb : regular);
+    return () => l.remove();
   }, [keyboardOpen, contentSize]);
 
   return (
