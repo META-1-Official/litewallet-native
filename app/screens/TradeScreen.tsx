@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SvgIcons } from '../../assets';
-import { DismissKeyboardView, DKSAV } from '../components/DismissKeyboard';
+import { DKSAV } from '../components/DismissKeyboard';
 import { List } from '../components/List';
 import Loader from '../components/Loader';
 import { useLoaderModal } from '../components/LoaderModal';
@@ -323,7 +323,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
         <Backdrop />
       </LightMode>
       <LoaderModal />
-      <DismissKeyboardView>
+      <View>
         <LightMode>
           <FloatingButton assets={assets} />
         </LightMode>
@@ -353,7 +353,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
             </View>
           </View>
         </List>
-      </DismissKeyboardView>
+      </View>
       <LightMode>
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={fn}>
