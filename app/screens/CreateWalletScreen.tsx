@@ -13,7 +13,6 @@ import useForm from '../utils/useForm';
 import {
   asyncRule,
   email,
-  includes,
   lettersOnly,
   required,
   rule,
@@ -56,7 +55,7 @@ const CreateWalletScreen: React.FC = () => {
     {
       name: 'account_name',
       lable: 'Account name',
-      rules: [required, includes('-'), notDoubleDash, notDanglingDash, validName, freeName],
+      rules: [required, notDoubleDash, notDanglingDash, validName, freeName],
     },
     {
       name: 'password',
