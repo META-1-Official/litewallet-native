@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableWithoutFeedback, Keyboard, View } from 'react-native';
+import { TouchableWithoutFeedback, Keyboard, View, SafeAreaView } from 'react-native';
 
 const DismissKeyboardHOC = (Comp: any) => {
   return ({ children, ...props }: any) => (
@@ -9,3 +9,4 @@ const DismissKeyboardHOC = (Comp: any) => {
   );
 };
 export const DismissKeyboardView = DismissKeyboardHOC(View);
+export const DKSAV = DismissKeyboardHOC(SafeAreaView);

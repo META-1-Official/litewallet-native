@@ -5,7 +5,6 @@ import {
   Dimensions,
   Image,
   ImageStyle,
-  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
@@ -15,7 +14,7 @@ import {
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SvgIcons } from '../../assets';
-import { DismissKeyboardView } from '../components/DismissKeyboard';
+import { DismissKeyboardView, DKSAV } from '../components/DismissKeyboard';
 import { List } from '../components/List';
 import Loader from '../components/Loader';
 import { useLoaderModal } from '../components/LoaderModal';
@@ -319,7 +318,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
 
   const LightMode: React.FC = ({ children }) => <>{darkMode ? null : children}</>;
   return (
-    <SafeAreaView style={darkStyle(styles.darkRoot)}>
+    <DKSAV style={darkStyle(styles.darkRoot)}>
       <LightMode>
         <Backdrop />
       </LightMode>
@@ -372,7 +371,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
           </View>
         </TouchableOpacity>
       </DarkMode>
-    </SafeAreaView>
+    </DKSAV>
   );
 };
 
