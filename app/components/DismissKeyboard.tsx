@@ -9,4 +9,7 @@ const DismissKeyboardHOC = (Comp: any) => {
   );
 };
 export const DismissKeyboardView = DismissKeyboardHOC(View);
+/**
+ * Dismiss Keyboard SafeAreaView
+ */
 export const DKSAV = DismissKeyboardHOC(SafeAreaView);
