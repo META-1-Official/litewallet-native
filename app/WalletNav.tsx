@@ -84,6 +84,7 @@ export type DexDrawerParamList = {
   __Help: undefined;
   __ExploreAssets: undefined;
   _CreatePaperWallet: undefined;
+  Sandbox: undefined;
 };
 
 const Drawer = createDrawerNavigator<DexDrawerParamList>();
@@ -91,7 +92,6 @@ const Drawer = createDrawerNavigator<DexDrawerParamList>();
 type RootParams = {
   App: undefined;
   modal: { component: any; props: any };
-  Sandbox: undefined;
 };
 
 const RootStack = createStackNavigator<RootParams>();
@@ -148,6 +148,7 @@ export const DexNav: React.FC = () => {
           options={{ headerShown: false }}
           component={SettingsScreen}
         />
+        <Drawer.Screen component={Sandbox} name="Sandbox" />
         <Drawer.Screen name="__Help" options={{ headerShown: false }} component={HelpStack} />
         <Drawer.Screen
           name="__ExploreAssets"
@@ -165,7 +166,6 @@ export const DexNav: React.FC = () => {
       }}
     >
       <RootStack.Screen component={DrawerNav} name="App" />
-      <RootStack.Screen component={Sandbox} name="Sandbox" />
       <RootStack.Screen
         component={RenderOnTop}
         name="modal"
