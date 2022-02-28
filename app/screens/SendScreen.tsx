@@ -507,7 +507,7 @@ export const DexSend: React.FC<DexProps> = props => {
 
   const { LoaderModal, showLoader, hideLoader } = useLoaderModal();
   const scroll = useScroll();
-
+  scroll.contentContainerStyle.paddingBottom = 420; // Nice.
   const sendFn = makeSendFn(
     nav,
     () => showLoader(),
