@@ -109,13 +109,13 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
           onPress={() => navigation.jumpTo('_CreatePaperWallet')}
         />
         <ListItem title="Help" icon={HelpCircle} onPress={() => navigation.navigate('__Help')} />
-        {/* {process.env.NODE_ENV === 'production' ? null : ( */}
-        <ListItem
-          title="Debug Sandbox"
-          icon={Activity}
-          onPress={() => navigation.navigate('Sandbox')}
-        />
-        {/* )} */}
+        {process.env.NODE_ENV === 'production' ? null : (
+          <ListItem
+            title="Debug Sandbox"
+            icon={Activity}
+            onPress={() => navigation.navigate('Sandbox')}
+          />
+        )}
       </View>
       <TouchableOpacity
         onPress={() => logout()}
