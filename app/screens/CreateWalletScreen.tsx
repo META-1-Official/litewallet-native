@@ -22,7 +22,8 @@ import {
 import Clipboard from '@react-native-clipboard/clipboard';
 import { getAccount } from '../utils/meta1Api';
 import { ScrollView } from 'react-native-gesture-handler';
-
+//@ts-ignore
+import { ChainValidation } from 'meta1js';
 const freeName: RuleFn = text =>
   asyncRule(async () => {
     const acc = await getAccount(text).catch(console.debug);
@@ -44,6 +45,12 @@ const validName: RuleFn = (t, l) =>
     `${l} must contain from 4 to 63 characters and must consist of latin letters, dashes, digits.`,
   );
 
+const premiumName: RuleFn = t =>
+  rule(
+    ChainValidation.is_cheap_name(t),
+    `This is a premium name which is not supported by this faucet. Please enter a regular name containing least one dash or a number
+    `,
+  );
 const CreateWalletScreen: React.FC = () => {
   const authorize = useStore(state => state.authorize);
 
@@ -55,7 +62,7 @@ const CreateWalletScreen: React.FC = () => {
     {
       name: 'account_name',
       lable: 'Account name',
-      rules: [required, notDoubleDash, notDanglingDash, validName, freeName],
+      rules: [required, notDoubleDash, notDanglingDash, validName, premiumName, freeName],
     },
     {
       name: 'password',
