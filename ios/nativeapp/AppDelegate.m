@@ -49,6 +49,10 @@ static void InitializeFlipper(UIApplication *application) {
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   [RNSplashScreen show];
+#if DEBUG
+  [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+#endif
+
   return YES;
 }
 
