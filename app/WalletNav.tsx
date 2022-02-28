@@ -16,6 +16,7 @@ import { DexStack } from './screens/dex';
 import ExploreAssets from './screens/ExploreAssets';
 import FundAccount from './screens/FundAccountScreen';
 import HelpStack from './screens/help';
+import Sandbox from './screens/Sandbox';
 import SettingsScreen from './screens/SettingsScreen';
 import WalletScreen from './screens/WalletScreen';
 import { useStore } from './store';
@@ -90,6 +91,7 @@ const Drawer = createDrawerNavigator<DexDrawerParamList>();
 type RootParams = {
   App: undefined;
   modal: { component: any; props: any };
+  Sandbox: undefined;
 };
 
 const RootStack = createStackNavigator<RootParams>();
@@ -163,6 +165,7 @@ export const DexNav: React.FC = () => {
       }}
     >
       <RootStack.Screen component={DrawerNav} name="App" />
+      <RootStack.Screen component={Sandbox} name="Sandbox" />
       <RootStack.Screen
         component={RenderOnTop}
         name="modal"
