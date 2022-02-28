@@ -1,30 +1,38 @@
 import React from 'react';
-import { SafeAreaView, Text } from 'react-native';
+import { Pressable, SafeAreaView, Text, View } from 'react-native';
 import { useNewLoaderModal } from '../components/LoaderModal';
 import { useStore } from '../store';
 import { catchError, Timeout } from '../utils';
 import RoundedButton from '../components/RoundedButton';
 import { useShowModal } from '../components/SuccessModal';
-const sleep = (ms: number) => new Promise<void>(resolve => setTimeout(() => resolve(), ms));
+import { createStackNavigator } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
+const resolves = (ms: number) => new Promise<void>(resolve => setTimeout(() => resolve(), ms));
+const rejects = (ms: number) => new Promise<void>((_, reject) => setTimeout(() => reject(), ms));
 
-export const useCreateOrder = () => {
+export const useCreateOrder = (exec: any) => {
   const loader = useNewLoaderModal();
   const { accountName, password } = useStore();
   const modal = useShowModal();
   console.log(accountName, password);
   const fn = () => async () => {
     loader.open();
-    const to = await Timeout(sleep(5000), `Sheesh`);
+    const to = await Timeout(exec(5000), `Sheesh`);
     loader.close();
+    loader.close = () => console.log('NOPE');
     modal('Done!', () => {});
     return to;
   };
   return {
     fn: () =>
       catchError(fn(), {
-        anyway: () => {},
+        anyway: () => {
+          console.log('Should close');
+          console.log(loader.close);
+          loader.close();
+        },
         errorMiddleware: (err: Error) => {
-          if (err.message === 'Amount equal 0!') {
+          if (err && err.message === 'Amount equal 0!') {
             err.message = 'Total too small';
           }
           return err;
@@ -34,16 +42,72 @@ export const useCreateOrder = () => {
 };
 
 const Sandbox = () => {
-  const { fn } = useCreateOrder();
+  const nav = useNavigation<any>();
+  const ok = useCreateOrder(resolves);
+  const err = useCreateOrder(rejects);
   return (
     <>
       <SafeAreaView>
         <Text style={{ fontSize: 24, fontWeight: 'bold' }}> Sandbox </Text>
         <Text> Node env: {process.env.NODE_ENV}</Text>
-        <RoundedButton title="Show loader modal for 5 second" onPress={() => fn()} />
+        <RoundedButton title="Show modal" onPress={() => nav.navigate('SbxModal')} />
+        <RoundedButton title="Show loader modal for 5 second (resolves)" onPress={() => ok.fn()} />
+        <RoundedButton title="Show loader modal for 5 second (throws)" onPress={() => err.fn()} />
       </SafeAreaView>
     </>
   );
 };
 
-export default Sandbox;
+const SandboxModal = () => {
+  const nav = useNavigation();
+  const ok = useCreateOrder(resolves);
+  const err = useCreateOrder(rejects);
+
+  return (
+    <View
+      style={{
+        height: '100%',
+        backgroundColor: 'rgba(0,0,0,0.3)',
+      }}
+    >
+      <SafeAreaView style={{ height: '100%' }}>
+        <Pressable onPress={() => nav.goBack()} style={{ height: '50%' }} />
+        <View
+          style={{
+            height: '50%',
+            marginTop: 'auto',
+            backgroundColor: '#fff',
+            borderRadius: 32,
+            padding: 24,
+          }}
+        >
+          <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Sandbox Modal</Text>
+          <RoundedButton
+            title="Show loader modal for 5 second (resolves)"
+            onPress={() => ok.fn()}
+          />
+          <RoundedButton
+            title="Show loader modal for 5 second (throws)"
+            onPress={() => err.fn()}
+          />
+        </View>
+      </SafeAreaView>
+    </View>
+  );
+};
+
+const Stack = createStackNavigator();
+const SandboxNav = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Home" component={Sandbox} />
+      <Stack.Screen
+        name="SbxModal"
+        component={SandboxModal}
+        options={{ presentation: 'transparentModal', headerShown: false }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+export default SandboxNav;
