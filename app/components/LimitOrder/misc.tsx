@@ -8,7 +8,8 @@ import { useStore } from '../../store';
 import { colors } from '../../styles/colors';
 import { catchError, promptPromise, Timeout } from '../../utils';
 import { placeLimitOrder, useAssets, useAssetsStore } from '../../utils/meta1Api';
-import { useLoaderModal } from '../LoaderModal';
+import { useNewLoaderModal } from '../LoaderModal';
+import { useShowModal } from '../SuccessModal';
 
 interface InputRowProps {
   title: string;
@@ -155,9 +156,12 @@ export enum OrderType {
   Buy = 'BUY',
   Sell = 'SELL',
 }
-export const useCreateOrder = (toGive: any, toGet: any, type: OrderType, afterFn: () => void) => {
-  const { LoaderModal, showLoader, hideLoader } = useLoaderModal();
+
+export const useCreateOrder = (toGive: any, toGet: any, type: OrderType) => {
+  const loaderModal = useNewLoaderModal();
   const { accountName, password } = useStore();
+  const successModal = useShowModal();
+
   const getPassword = async () =>
     password
       ? password
@@ -177,7 +181,7 @@ export const useCreateOrder = (toGive: any, toGet: any, type: OrderType, afterFn
     if (accountInfo.password === null) {
       return;
     }
-    showLoader();
+    loaderModal.open();
     const to = await Timeout(
       placeLimitOrder(accountInfo as any, {
         toGet,
@@ -187,13 +191,17 @@ export const useCreateOrder = (toGive: any, toGet: any, type: OrderType, afterFn
       }),
       `Place Limit Order - ${type}`,
     );
-    afterFn();
+    loaderModal.close();
+    successModal(`Successfully placed ${type} order`, () => {});
     return to;
   };
   return {
     fn: (price: number, amount: number) =>
       catchError(fn(price, amount), {
-        anyway: () => hideLoader(),
+        anyway: () => {
+          loaderModal.close();
+          console.log('All done');
+        },
         errorMiddleware: (err: Error) => {
           if (err.message === 'Amount equal 0!') {
             err.message = 'Total too small';
@@ -201,7 +209,6 @@ export const useCreateOrder = (toGive: any, toGet: any, type: OrderType, afterFn
           return err;
         },
       }),
-    Loader: LoaderModal,
   };
 };
 
