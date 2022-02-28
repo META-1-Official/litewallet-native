@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Dimensions, Image, Modal, SafeAreaView, View } from 'react-native';
 import { loaderGif } from '../../assets';
 import { RootStackNP } from '../WalletNav';
@@ -62,13 +62,24 @@ export const useLoaderModal = (openDefault?: boolean) => {
 
 export const useNewLoaderModal = () => {
   const navigation = useNavigation<RootStackNP>();
-  const open = () =>
+  const canClose = useRef(false);
+  const open = () => {
+    canClose.current = true;
     navigation.navigate('modal', {
       component: LoaderModalContent,
       props: {},
     });
+  };
 
-  const close = () => navigation.goBack();
+  const close = () => {
+    console.log(canClose);
+    if (canClose.current) {
+      console.log('Closing');
+      navigation.navigate('App');
+      canClose.current = false;
+    }
+  };
+
   return { open, close };
 };
 export default LoaderModal;
