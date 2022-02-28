@@ -196,6 +196,11 @@ export const catchError = async (fn: () => void, params?: params) => {
     if (onErr?.(e)) {
       return anyway?.();
     }
+    if (!e) {
+      Alert.alert('Error', 'Something went wrong');
+      Sentry.captureException(e);
+      return anyway?.();
+    }
     const oErr = e;
     console.log('oError', oErr);
     // Try to format the errors
