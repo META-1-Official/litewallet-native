@@ -19,7 +19,7 @@ export const useStore = create<AppState>(
   persist(
     set => ({
       accountName: '',
-      password: 'P5KFSVTSJDmjPFWy51gfpskdxUJfUVXtVVAhz1q7TBqW2imhH4C1',
+      password: '',
       authorized: false,
       authorize: (accountName, password) => {
         set({
