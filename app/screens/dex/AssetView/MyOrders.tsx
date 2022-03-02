@@ -27,10 +27,11 @@ import { AssetViewTSP } from './AssetView';
 import { useAVStore } from './AssetViewStore';
 import meta1dex, { LoginRetT } from '../../../utils/meta1dexTypes';
 import { isOpen, isResolved, preprocessOrder, RejectFn } from '../../../utils/historyUtils';
+import { useNewLoaderModal } from '../../../components/LoaderModal';
 const { width } = Dimensions.get('screen');
 
 const Circle = ({ progress, isBuy }: { progress: number; isBuy: boolean }) => {
-  const lable = Math.min(100, Math.round(progress * 10000)).toString();
+  const label = Math.min(100, Math.round(progress * 10000)).toString();
   return (
     <ProgressCircle
       style={{ height: 48 }}
@@ -42,11 +43,11 @@ const Circle = ({ progress, isBuy }: { progress: number; isBuy: boolean }) => {
       endAngle={Math.PI * 2}
     >
       <RNSvg.Text
-        x={-1 * Math.round(lable.length * 3.33) - 0.5}
+        x={-1 * Math.round(label.length * 3.33) - 0.5}
         y="3.7"
         fill={isBuy ? '#0f0' : '#f00'}
       >
-        {lable}
+        {label}
       </RNSvg.Text>
     </ProgressCircle>
   );
@@ -198,6 +199,8 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
   const [refreshing, setRefreshing] = React.useState(false);
   const [history, setHistory] = useState<FullHistoryOrder | null>(null);
 
+  const loader = useNewLoaderModal();
+
   useEffect(() => {
     const fn = async () => {
       const hist = await getHistoricalOrders(accountName);
@@ -216,6 +219,7 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
       }
       setHistory(hist);
       if (refreshing) {
+        loader.close();
         setRefreshing(false);
       }
     };
@@ -246,6 +250,7 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
       }
 
       const authorized = await meta1dex.login(accountName, passwd);
+      loader.open();
       return await authorized.cancelOrder(orderId);
     });
 
