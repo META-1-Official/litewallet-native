@@ -348,7 +348,7 @@ const RenderRow =
     [assetA, assetB]: string[],
     amtToReadable: any,
     reject: RejectFn,
-    lastCol: (orderStaus: string, k: string) => JSX.Element,
+    lastCol: (orderStatus: string, k: string) => JSX.Element,
   ) =>
   ([k, v]: EValT) => {
     if (!k || !v) {
@@ -411,7 +411,7 @@ const RenderRow =
     }
 
     const buyPrice = filled.length ? meanFilled : sellAmt / buyAmt;
-    const sellPirce = filled.length ? 1 / meanFilled : buyAmt / sellAmt;
+    const sellPrice = filled.length ? 1 / meanFilled : buyAmt / sellAmt;
     return (
       <View
         style={{
@@ -444,7 +444,7 @@ const RenderRow =
           </Text>
           <Text style={{ color: '#fff', fontSize: 18 }}>
             Price:{' '}
-            {(isBuy ? buyPrice : sellPirce)
+            {(isBuy ? buyPrice : sellPrice)
               .toFixed(Math.min(sellingAsset._asset.precision, buyingAsset._asset.precision))
               .slice(0, 10)}
           </Text>
