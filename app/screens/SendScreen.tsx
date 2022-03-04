@@ -23,14 +23,13 @@ import {
   useAssets,
   useAssetsStore,
 } from '../utils/meta1Api';
-import { WalletNavigationProp } from './WalletScreen';
-import { useNavigation } from '@react-navigation/core';
-import { useLoaderModal } from '../components/LoaderModal';
+import { useNewLoaderModal } from '../components/LoaderModal';
 import { DexSSP } from './dex';
 import { HeaderProps } from './dex/SendScreen';
 import { SvgIcons } from '../../assets';
 import { StandaloneAsset, useAsset } from '../utils/useAsset';
 import throttle from 'lodash.throttle';
+import { useShowModal } from '../components/SuccessModal';
 
 const refresh = throttle(() => {
   console.log('BEGIN Refresh');
@@ -41,7 +40,6 @@ const refresh = throttle(() => {
 }, 30000);
 
 const SendScreen: React.FC<{}> = () => {
-  const nav = useNavigation<WalletNavigationProp>();
   const [toAccount, setToAccount] = useState('');
   const accountName = useStore(state => state.accountName);
   const { password, setPassword } = usePasswordView();
@@ -49,14 +47,14 @@ const SendScreen: React.FC<{}> = () => {
   const assets = useAssets();
   const meta1 = assets.find('META1');
   const anAsset = useAsset({ defaultValue: meta1!, title: 'Send' });
-
-  const { LoaderModal, showLoader, hideLoader } = useLoaderModal();
+  const suc = useShowModal();
+  const loader = useNewLoaderModal();
   const scroll = useScroll();
 
   const sendFn = makeSendFn(
-    nav,
-    () => showLoader(),
-    () => hideLoader(),
+    suc,
+    () => loader.open(),
+    () => loader.close(),
   );
 
   if (!assets || !meta1 || !anAsset) {
@@ -75,7 +73,6 @@ const SendScreen: React.FC<{}> = () => {
   return (
     <SafeAreaView>
       <Backdrop />
-      <LoaderModal />
       <ScrollView {...scroll}>
         <List
           style={{
@@ -458,7 +455,7 @@ type DexProps = DexSSP & {
 };
 
 const makeSendFn =
-  (nav: any, onStart: () => void, onEnd: () => void) =>
+  (modal: any, onStart: () => void, onEnd: () => void) =>
   (password: string, standalone: StandaloneAsset, toAccount: string) => {
     const accountName = useStore.getState().accountName;
     onStart();
@@ -489,14 +486,16 @@ const makeSendFn =
           },
         );
         await useAssetsStore.getState().fetchUserAssets(accountName);
-        nav.goBack();
+        modal(
+          `Successfully sent ${standalone.amount} ${standalone.asset.symbol}to ${toAccount}`,
+          () => {},
+        );
       },
-      { anyway: () => onEnd() },
+      { onErr: () => onEnd() },
     );
   };
 
 export const DexSend: React.FC<DexProps> = props => {
-  const nav = props.navigation;
   const [toAccount, setToAccount] = useState('');
   const accountName = useStore(state => state.accountName);
   const { password, setPassword } = usePasswordView();
@@ -504,14 +503,14 @@ export const DexSend: React.FC<DexProps> = props => {
   const assets = useAssets();
   const meta1 = assets.find('META1');
   const anAsset = useAsset({ defaultValue: meta1!, title: 'Send' });
-
-  const { LoaderModal, showLoader, hideLoader } = useLoaderModal();
+  const suc = useShowModal();
+  const loader = useNewLoaderModal();
   const scroll = useScroll();
   scroll.contentContainerStyle.paddingBottom = 420; // Nice.
   const sendFn = makeSendFn(
-    nav,
-    () => showLoader(),
-    () => hideLoader(),
+    suc,
+    () => loader.open(),
+    () => loader.close(),
   );
 
   if (!assets || !anAsset) {
@@ -531,7 +530,6 @@ export const DexSend: React.FC<DexProps> = props => {
     <>
       <Header {...props} title={`Send ${anAsset.asset.symbol}`} />
       <SafeAreaView style={{ height: '100%', backgroundColor: '#320001' }}>
-        <LoaderModal />
         <ScrollView {...scroll}>
           <List
             style={{
