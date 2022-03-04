@@ -44,7 +44,7 @@ const DexModal: React.FC<DexSSP> = ({ navigation }) => {
                   fontSize: 16,
                 }}
               >
-                Covert one crypto to another
+                Convert one crypto to another
               </Text>
             </View>
           </View>
@@ -94,7 +94,7 @@ const DexModal: React.FC<DexSSP> = ({ navigation }) => {
                   fontSize: 16,
                 }}
               >
-                Receive crypto from another wallet
+                Receive crypto from another {'\n'}wallet
               </Text>
             </View>
           </View>

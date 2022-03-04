@@ -120,6 +120,7 @@ export const TotalRow: React.FC<{ symbol: string; set: (n: number) => void }> = 
     </View>
   );
 };
+
 export const asAsset = (assetName: string) => {
   const assets = useAssetsStore.getState().userAssets;
   if (assets.assetsWithBalance.length === 0) {
