@@ -107,16 +107,28 @@ export const TotalRow: React.FC<{ symbol: string; set: (n: number) => void }> = 
           flexGrow: 1,
         }}
       >
-        <TouchableOpacity onPress={() => set(found.amount * 0.25)}>
+        <TouchableOpacity
+          accessibilityLabel="LimitOrder/TotalPercent/25"
+          onPress={() => set(found.amount * 0.25)}
+        >
           <LeText>25%</LeText>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => set(found.amount * 0.5)}>
+        <TouchableOpacity
+          accessibilityLabel="LimitOrder/TotalPercent/50"
+          onPress={() => set(found.amount * 0.5)}
+        >
           <LeText>50%</LeText>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => set(found.amount * 0.75)}>
+        <TouchableOpacity
+          accessibilityLabel="LimitOrder/TotalPercent/75"
+          onPress={() => set(found.amount * 0.75)}
+        >
           <LeText>75%</LeText>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => set(found.amount * 1.0)}>
+        <TouchableOpacity
+          accessibilityLabel="LimitOrder/TotalPercent/100"
+          onPress={() => set(found.amount * 1.0)}
+        >
           <LeText>100%</LeText>
         </TouchableOpacity>
       </View>

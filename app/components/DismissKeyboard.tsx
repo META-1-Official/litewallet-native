@@ -3,7 +3,11 @@ import { TouchableWithoutFeedback, Keyboard, View, SafeAreaView } from 'react-na
 
 const DismissKeyboardHOC = (Comp: any) => {
   return ({ children, ...props }: any) => (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+    <TouchableWithoutFeedback
+      accessibilityLabel="DismissKeyboard"
+      onPress={Keyboard.dismiss}
+      accessible={false}
+    >
       <Comp {...props}>{children}</Comp>
     </TouchableWithoutFeedback>
   );

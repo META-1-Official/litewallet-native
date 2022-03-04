@@ -118,7 +118,11 @@ const DexFund: React.FC<DexTSP> = ({ navigation }) => {
         <Chart data={chartData} />
         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
           {(Object.keys(GRAPH_INTERVAL) as GRAPH_INTERVAL_KEYS[]).map(e => (
-            <TouchableOpacity onPress={() => setCurInterval(e)} key={e}>
+            <TouchableOpacity
+              accessibilityLabel={`DexFund/GraphInterval/${e}`}
+              onPress={() => setCurInterval(e)}
+              key={e}
+            >
               <Text
                 key={e}
                 style={{

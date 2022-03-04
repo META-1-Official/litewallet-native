@@ -127,6 +127,7 @@ const ReciveScreen: React.FC<{}> = () => {
         </Text>
         {children}
         <TouchableOpacity
+          accessibilityLabel="Recive/CopyAddress"
           onPress={() => {
             if (shareMsg) {
               Share.share({ message: shareMsg });
@@ -226,6 +227,7 @@ const ReciveScreen: React.FC<{}> = () => {
         }}
       >
         <TouchableOpacity
+          accessibilityLabel="Recive/Pils/Address"
           onPress={() => {
             flatListRef.current?.scrollToOffset({
               animated: true,
@@ -253,6 +255,7 @@ const ReciveScreen: React.FC<{}> = () => {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
+          accessibilityLabel="Recive/Pils/Username"
           onPress={() => {
             flatListRef.current?.scrollToIndex({
               animated: true,

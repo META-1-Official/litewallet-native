@@ -623,7 +623,10 @@ export const DexSend: React.FC<DexProps> = props => {
             <PasswordView darkMode={true} password={password} setPassword={setPassword} />
           </List>
 
-          <TouchableOpacity onPress={() => sendFn(password, anAsset, toAccount)}>
+          <TouchableOpacity
+            accessibilityLabel="SendScreen/Send"
+            onPress={() => sendFn(password, anAsset, toAccount)}
+          >
             <View
               style={{
                 backgroundColor: colors.BrandYellow,

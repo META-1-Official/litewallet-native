@@ -30,7 +30,7 @@ const MaterialToggle: React.FC<Props> = ({ onChange, defaultValue }) => {
     onoff ? off() : on();
   }, [onoff]);
   return (
-    <TouchableWithoutFeedback onPress={() => setOnOff(!onoff)}>
+    <TouchableWithoutFeedback accessibilityLabel="MUI/Toggle" onPress={() => setOnOff(!onoff)}>
       <View
         style={{
           height: KNOB_SIZE,

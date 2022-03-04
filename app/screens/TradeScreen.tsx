@@ -95,6 +95,7 @@ const FloatingButton = ({ assets }: AssetsProp) => {
       }}
     >
       <TouchableOpacity
+        accessibilityLabel="TradeScreen/MAX"
         onPress={() => {
           const aMax = assets.A.asset.amount;
           assets.A.setAmount(aMax.toString());
@@ -120,6 +121,7 @@ const DarkFloatingButton = ({ assets }: AssetsProp) => {
       }}
     >
       <TouchableOpacity
+        accessibilityLabel="TradeScreen/MAX"
         onPress={() => {
           const aMax = assets.A.asset.amount;
           assets.A.setAmount(aMax.toString());
@@ -144,7 +146,7 @@ const AssetDisplay = ({ asset, darkMode }: DM<AssetProp>) => {
   const darkStyle = optStyleFactory(darkMode);
 
   return (
-    <TouchableOpacity onPress={() => asset.open()}>
+    <TouchableOpacity accessibilityLabel="TradeScreen/SelectAsset" onPress={() => asset.open()}>
       <View style={styles.rowCenter}>
         <Image style={styles.assetIcon} source={asset.asset._asset.icon /*Bruh wtf is dis */} />
         <View>
@@ -358,7 +360,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
       </View>
       <LightMode>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={fn}>
+          <TouchableOpacity accessibilityLabel="TradeScreen/Trade" onPress={fn}>
             <View style={styles.button}>
               <Text style={styles.buttonText}>Exchange</Text>
             </View>
@@ -367,7 +369,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
       </LightMode>
       <DarkMode>
         <View style={[styles.center, styles.m12]} />
-        <TouchableOpacity onPress={fn}>
+        <TouchableOpacity accessibilityLabel="TradeScreen/Trade" onPress={fn}>
           <View style={styles.darkBtnView}>
             <Text style={styles.font18x500}>Convert</Text>
           </View>

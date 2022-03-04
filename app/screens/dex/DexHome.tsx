@@ -26,7 +26,9 @@ const Chart: React.FC<{ symbol: string; color: string }> = ({ symbol, color }) =
     }
     fn();
     // eslint-disable-next-line prettier/prettier
-    return () => { noop = true;};
+    return () => {
+      noop = true;
+    };
   });
 
   return (
@@ -73,6 +75,7 @@ const DexHome: React.FC<DexTSP> = ({ navigation }) => {
           {assets.map(e => {
             return e.symbol === 'USDT' ? null : (
               <TouchableOpacity
+                accessibilityLabel={`DexHome/Asset_${e.symbol}`}
                 onPress={() => dexAssetView(navigation, e.symbol)}
                 key={`Asset_${e.symbol}`}
               >

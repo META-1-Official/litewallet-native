@@ -88,6 +88,7 @@ const DexTrade: React.FC<DexTSP> = ({ navigation }) => {
           {assets.map(e => {
             return e.symbol === 'USDT' ? null : (
               <TouchableOpacity
+                accessibilityLabel={`DexTrade/Asset_${e.symbol}`}
                 onPress={() => dexAssetView(navigation, e.symbol)}
                 key={`Asset_${e.symbol}`}
               >

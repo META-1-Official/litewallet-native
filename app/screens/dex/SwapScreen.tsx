@@ -12,6 +12,7 @@ type HeaderProps = {
 const Header: React.FC<HeaderProps> = ({ title, navigation, titleSubscript }) => {
   const BackButton = ({ color }: { color: string }) => (
     <TouchableOpacity
+      accessibilityLabel="Back"
       style={{ marginHorizontal: 12 }}
       activeOpacity={0.5}
       onPress={() => navigation.navigate('__Tabs')}

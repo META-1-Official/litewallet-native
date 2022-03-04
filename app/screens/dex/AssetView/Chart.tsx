@@ -41,7 +41,11 @@ const Candle: React.FC<{}> = () => {
         }}
       >
         {Object.keys(ALL_BUCKETS).map(e => (
-          <TouchableOpacity key={`IntervalSel_${e}`} onPress={() => setBucket(ALL_BUCKETS[e])}>
+          <TouchableOpacity
+            accessibilityLabel={`AssetView/CandleChartInterval/${e}`}
+            key={`IntervalSel_${e}`}
+            onPress={() => setBucket(ALL_BUCKETS[e])}
+          >
             <Text style={{ color: bucket === ALL_BUCKETS[e] ? '#888' : '#000' }}>{e}</Text>
           </TouchableOpacity>
         ))}

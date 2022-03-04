@@ -38,7 +38,11 @@ export const ProfitIndicator: React.FC<ProfitIndicatorProps> = ({ change }) => {
 
 const ButtonGroup = () => {
   const Button = ({ title, onPress }: { title: string; onPress: () => void }) => (
-    <TouchableOpacity activeOpacity={0.5} onPress={onPress}>
+    <TouchableOpacity
+      accessibilityLabel={`ButtonGroup/Button/${title}`}
+      activeOpacity={0.5}
+      onPress={onPress}
+    >
       <Text style={{ color: '#fff', fontWeight: '600', fontSize: 15 }}> {title} </Text>
     </TouchableOpacity>
   );

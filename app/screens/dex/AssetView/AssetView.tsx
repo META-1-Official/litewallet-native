@@ -114,7 +114,10 @@ const AssetViewHeader: React.FC<AssetViewTSP> = ({ navigation }) => {
         alignItems: 'center',
       }}
     >
-      <TouchableOpacity onPress={() => navigation.navigate<any>('__Tabs')}>
+      <TouchableOpacity
+        accessibilityLabel="Back"
+        onPress={() => navigation.navigate<any>('__Tabs')}
+      >
         <ArrowLeft width={32} height={32} stroke={colors.BrandYellow} />
       </TouchableOpacity>
       <Text

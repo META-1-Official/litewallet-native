@@ -37,6 +37,7 @@ export const ListItem: ListItemT = ({ title, icon, arrow, separator, onPress }) 
   let iconToRender = React.isValidElement(icon) ? icon : Img(icon);
   return (
     <TouchableOpacity
+      accessibilityLabel={`ListItem/${title}`}
       onPress={onPress}
       style={[styles.itemTouchable, { borderBottomWidth: separator ? 2 : 0 }]}
     >

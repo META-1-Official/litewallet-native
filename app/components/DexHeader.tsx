@@ -8,6 +8,7 @@ import { BottomTabHeaderProps } from '@react-navigation/bottom-tabs';
 export function DexHeader({ navigation: nav, route, options }: BottomTabHeaderProps) {
   const SideMenu = ({ color }: { color: string }) => (
     <TouchableOpacity
+      accessibilityLabel="DexHeader/Menu"
       style={{ marginHorizontal: 12 }}
       activeOpacity={0.5}
       onPress={() => (nav.getParent() as any).openDrawer()}
@@ -17,6 +18,7 @@ export function DexHeader({ navigation: nav, route, options }: BottomTabHeaderPr
   );
   const Notifications = ({ color }: { color: string }) => (
     <TouchableOpacity
+      accessibilityLabel="DexHeader/Notifications"
       style={{ marginHorizontal: 12 }}
       activeOpacity={0.5}
       onPress={() =>
@@ -64,6 +66,7 @@ export function DexHeader({ navigation: nav, route, options }: BottomTabHeaderPr
 export function DexStackHeader({ navigation, route, options }: any) {
   const BackButton = ({ color }: { color: string }) => (
     <TouchableOpacity
+    accessibilityLabel="DexHeader/Back"
       style={{ marginHorizontal: 12 }}
       activeOpacity={0.5}
       onPress={navigation.goBack}

@@ -59,7 +59,10 @@ export const Tab: React.FC<Props> = ({ type }) => {
           dispatch({ type: Update.TOTAL, payload: n.toString() });
         }}
       />
-      <TouchableOpacity onPress={() => fn(Number(state.price), Number(state.total))}>
+      <TouchableOpacity
+        accessibilityLabel="LimitOrder/ActionButton"
+        onPress={() => fn(Number(state.price), Number(state.total))}
+      >
         <View
           style={{
             backgroundColor: colors.BrandYellow,

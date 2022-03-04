@@ -27,6 +27,7 @@ type HeaderProps = {
 const Header: React.FC<HeaderProps> = ({ title, navigation, titleSubscript }) => {
   const BackButton = ({ color }: { color: string }) => (
     <TouchableOpacity
+      accessibilityLabel="Back"
       style={{ marginHorizontal: 12 }}
       activeOpacity={0.5}
       onPress={() => navigation.navigate('__Tabs')}
@@ -132,7 +133,10 @@ const AddressView: React.FC<AddressViewProps> = ({ asset }) => {
                 {compoundAddress.addr.slice(0, 10)}...{compoundAddress.addr.slice(-10)}
               </Text>
             </View>
-            <TouchableOpacity onPress={() => Clipboard.setString(compoundAddress.addr)}>
+            <TouchableOpacity
+              accessibilityLabel="DexReceive/CopyAddress"
+              onPress={() => Clipboard.setString(compoundAddress.addr)}
+            >
               <View
                 style={{
                   justifyContent: 'center',
@@ -156,7 +160,10 @@ const AddressView: React.FC<AddressViewProps> = ({ asset }) => {
           </View>
         </View>
       </View>
-      <TouchableOpacity onPress={() => Share.share({ message: compoundAddress.addr })}>
+      <TouchableOpacity
+        accessibilityLabel="DexReceive/ShareAddress"
+        onPress={() => Share.share({ message: compoundAddress.addr })}
+      >
         <View
           style={{
             backgroundColor: colors.BrandYellow,
@@ -228,7 +235,11 @@ const AssetSelection: React.FC<AssetSelectionProps> = ({ select }) => {
         >
           {assets.map(e => {
             return (
-              <TouchableOpacity key={`Asset_${e.symbol}`} onPress={() => select(e)}>
+              <TouchableOpacity
+                accessibilityLabel={`DexReceive/Asset_${e.symbol}`}
+                key={`Asset_${e.symbol}`}
+                onPress={() => select(e)}
+              >
                 <View
                   style={{
                     flexDirection: 'row',

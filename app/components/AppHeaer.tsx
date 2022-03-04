@@ -8,6 +8,7 @@ import { colors } from '../styles/colors';
 export default function AppHeader({ navigation, route, options, back }: StackHeaderProps) {
   const BackButton = ({ color }: { color: string }) => (
     <TouchableOpacity
+      accessibilityLabel="AppHeader/Back"
       style={{ marginHorizontal: 12 }}
       activeOpacity={0.5}
       onPress={navigation.goBack}

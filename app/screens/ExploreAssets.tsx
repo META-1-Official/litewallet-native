@@ -48,6 +48,7 @@ const darken = (c: string, amt: number) => {
 export function Header({ navigation }: any) {
   const BackButton = ({ color }: { color: string }) => (
     <TouchableOpacity
+      accessibilityLabel="Back"
       style={{ marginHorizontal: 12 }}
       activeOpacity={0.5}
       onPress={navigation.goBack}
@@ -206,18 +207,21 @@ export default function ExploreAssets({ navigation }: any) {
           }}
         >
           <TouchableOpacity
+            accessibilityLabel="ExploreAssets/Approved"
             onPress={() => setTab(0)}
             style={{ ...comm, backgroundColor: '#10913a' }}
           >
             <Text style={{ fontSize: 18, fontWeight: '500', color: '#fff' }}>Approved</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            accessibilityLabel="ExploreAssets/Cancelled"
             onPress={() => setTab(1)}
             style={{ ...comm, backgroundColor: '#4e0000' }}
           >
             <Text style={{ fontSize: 18, fontWeight: '500', color: '#d8404c' }}>Cancelled</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            accessibilityLabel="ExploreAssets/Pending"
             onPress={() => setTab(2)}
             style={{ ...comm, backgroundColor: '#422d00' }}
           >

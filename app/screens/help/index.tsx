@@ -49,6 +49,7 @@ function Index({ navigation }: SSP) {
     <SafeAreaView style={{ backgroundColor: '#000', flex: 1 }}>
       {Names.map((e, i) => (
         <TouchableOpacity
+          accessibilityLabel={`Help/Item/${e}`}
           key={`Nav_io${i}}`}
           onPress={() => navigation.navigate(name2id(e))}
           style={{
@@ -85,6 +86,7 @@ function HelpStack() {
         header: ({ navigation, route }) => {
           const BackButton = ({ color }: { color: string }) => (
             <TouchableOpacity
+              accessibilityLabel="Back"
               style={{ marginHorizontal: 12 }}
               activeOpacity={0.5}
               onPress={navigation.goBack}

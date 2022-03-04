@@ -111,7 +111,11 @@ const PortfolioListing: React.FC<Props> = ({ showZeroBallance, colors, usdPrimar
 
     if (onPress) {
       return (
-        <TouchableOpacity key={`CoinBalance_Touch__${i}`} onPress={() => onPress(e.symbol)}>
+        <TouchableOpacity
+          accessibilityLabel={`PortfolioItem/${e.symbol}`}
+          key={`CoinBalance_Touch__${i}`}
+          onPress={() => onPress(e.symbol)}
+        >
           {ret}
         </TouchableOpacity>
       );

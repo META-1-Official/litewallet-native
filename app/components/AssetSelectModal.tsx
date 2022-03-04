@@ -44,7 +44,11 @@ const Search = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
     >
       {found &&
         found.map(e => (
-          <TouchableOpacity key={`FoundCoin_${e.symbol}`} onPress={() => onSelect(e)}>
+          <TouchableOpacity
+            accessibilityLabel={`AssetSelect/${e.symbol}`}
+            key={`FoundCoin_${e.symbol}`}
+            onPress={() => onSelect(e)}
+          >
             <View style={styles.portfolioRow}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Image style={styles.coinIcon} source={e._asset.icon} />
@@ -99,7 +103,11 @@ const PickerContent = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
         <TextSecondary style={{ fontSize: 14 }}> Suggested </TextSecondary>
         {suggested &&
           suggested.map(e => (
-            <TouchableOpacity key={`CoinBalance_${e.symbol}`} onPress={() => onSelect(e)}>
+            <TouchableOpacity
+              accessibilityLabel={`AssetSelect/${e.symbol}`}
+              key={`CoinBalance_${e.symbol}`}
+              onPress={() => onSelect(e)}
+            >
               <View style={styles.portfolioRow}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <Image style={styles.coinIcon} source={e._asset.icon} />
@@ -111,7 +119,11 @@ const PickerContent = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
         <TextSecondary style={{ fontSize: 14, marginTop: 32 }}> All Coins </TextSecondary>
         {rest &&
           rest.map(e => (
-            <TouchableOpacity key={`CoinBalance_${e.symbol}`} onPress={() => onSelect(e)}>
+            <TouchableOpacity
+              accessibilityLabel={`AssetSelect/${e.symbol}`}
+              key={`CoinBalance_${e.symbol}`}
+              onPress={() => onSelect(e)}
+            >
               <View style={styles.portfolioRow}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <Image style={styles.coinIcon} source={e._asset.icon} />
@@ -145,6 +157,7 @@ const AssetPicker: React.FC<AssetPickerProps> = ({ title, onClose, onSelect }) =
       }}
     >
       <TouchableOpacity
+        accessibilityLabel="AssetSelect/Close"
         onPress={() => {
           onClose();
           navigation.goBack();

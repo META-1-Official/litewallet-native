@@ -15,7 +15,7 @@ import Notifications from './Notifications';
 const AccountGroup = () => {
   const navigation = useNavigation<SNP>();
   const ListItem = ({ onPress, text }: { onPress: () => void; text: string }) => (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity accessibilityLabel={`Settings/ListItem/${text}`} onPress={onPress}>
       <View
         style={{
           flexDirection: 'row',
@@ -135,6 +135,7 @@ const SettingsScreen = () => {
         header: ({ navigation, route }) => {
           const BackButton = ({ color }: { color: string }) => (
             <TouchableOpacity
+              accessibilityLabel="Back"
               style={{ marginHorizontal: 12 }}
               activeOpacity={0.5}
               onPress={navigation.goBack}

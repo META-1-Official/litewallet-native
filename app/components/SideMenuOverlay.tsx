@@ -15,7 +15,7 @@ interface ListItemProps {
 const ListItem: React.FC<ListItemProps> = ({ title, icon, onPress, rawIcon }) => {
   const TheIcon: any = icon!;
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity accessibilityLabel={`SideMenu/ListItem/${title}`} onPress={onPress}>
       <View style={{ flexDirection: 'row', padding: 12 }}>
         <TheIcon fill={rawIcon ? '#fff' : undefined} color="#fff" width={24} height={24} />
         <Text style={{ color: '#fff', fontSize: 18, marginLeft: 24 }}>{title}</Text>
@@ -30,7 +30,10 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
   return (
     <SafeAreaView style={{ padding: 12 }}>
       <View>
-        <TouchableOpacity onPress={() => navigation.closeDrawer()}>
+        <TouchableOpacity
+          accessibilityLabel="SideMenu/Back"
+          onPress={() => navigation.closeDrawer()}
+        >
           <ArrowLeft width={32} height={32} color="#fff" />
         </TouchableOpacity>
       </View>
@@ -52,6 +55,7 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
         <Text style={{ color: '#fff', fontSize: 22, fontWeight: '700' }}>{accountName}</Text>
       </View>
       <TouchableOpacity
+        accessibilityLabel="SideMenu/Settings"
         onPress={() => {
           navigation.closeDrawer();
           navigation.jumpTo('__Settings');
@@ -118,6 +122,7 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
         )}
       </View>
       <TouchableOpacity
+        accessibilityLabel="SideMenu/SignOut"
         onPress={() => logout()}
         style={{
           margin: 4,
