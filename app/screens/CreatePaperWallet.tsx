@@ -30,6 +30,7 @@ export default function CreatePaperWallet() {
       <View>
         <Text style={{ color: colors.BrandYellow }}>Account Name</Text>
         <TextInput
+          accessibilityLabel="CreatePaperWallet/accountName"
           value={accountName}
           editable={false}
           style={{
@@ -44,6 +45,7 @@ export default function CreatePaperWallet() {
       <View style={{ marginTop: 24 }}>
         <Text style={{ color: colors.BrandYellow }}>Password</Text>
         <TextInput
+          accessibilityLabel="CreatePaperWallet/password"
           value={password}
           onChangeText={t => setPassword(t)}
           style={{
@@ -56,7 +58,7 @@ export default function CreatePaperWallet() {
           secureTextEntry
         />
       </View>
-      <TouchableOpacity onPress={save}>
+      <TouchableOpacity accessibilityLabel="CreatePaperWallet/Save" onPress={save}>
         <View
           style={{
             backgroundColor: colors.BrandYellow,

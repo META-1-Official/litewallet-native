@@ -19,6 +19,7 @@ interface Props {
 const RoundedButton = ({ title, onPress, styles: propStyles }: Props) => {
   return (
     <TouchableOpacity
+      accessibilityLabel={`RoundedButton/${title}`}
       style={[styles.SubmitButtonStyle, propStyles]}
       activeOpacity={0.5}
       onPress={onPress}

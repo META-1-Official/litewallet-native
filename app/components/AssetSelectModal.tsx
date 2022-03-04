@@ -58,6 +58,7 @@ const Search = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
   return (
     <View>
       <TextInput
+        accessibilityLabel="AssetSelectModal/Search/Input"
         placeholder="Search for a coin..."
         // value={searchTerm}
         onChangeText={t => {

@@ -91,6 +91,7 @@ const LinkWalletScreen: React.FC = () => {
               />
               <TextInput
                 {...props}
+                accessibilityLabel="LinkWallet/AccountName"
                 autoCapitalize={'none'}
                 autoCorrect={false}
                 keyboardType={'email-address'}

@@ -72,6 +72,7 @@ export default function useForm<T extends DefautlStateItem[]>(defautState: T) {
           defaultValue={formState[name]}
           underlineColor={theme.colors.text}
           theme={theme}
+          accessibilityLabel={`useFrom/Input/${name}`}
           onChangeText={newText => {
             formState[name] = newText;
             validate();

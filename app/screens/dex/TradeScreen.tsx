@@ -62,6 +62,7 @@ const DexTrade: React.FC<DexTSP> = ({ navigation }) => {
       >
         <Search width={24} height={24} color="#fff" />
         <TextInput
+          accessibilityLabel="TradeScreen/Search"
           style={{
             alignSelf: 'stretch',
             flexGrow: 1,

@@ -180,6 +180,7 @@ const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
   return (
     <View>
       <TextInput
+        accessibilityLabel="TradeScreen/AmountInput/amount"
         style={darkStyle({ color: '#fff' }, styles.amountInput)}
         keyboardType="numeric"
         onChangeText={t => {
@@ -193,6 +194,7 @@ const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
       <View style={styles.rowEnd}>
         <TextSecondary style={darkStyle({ color: '#fff' }, styles.usdtLabel)}>US$</TextSecondary>
         <TextInput
+          accessibilityLabel="TradeScreen/AmountInput/amountUsd"
           onChangeText={t => {
             setUsd(t);
             throttled(t);

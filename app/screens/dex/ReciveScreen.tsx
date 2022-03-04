@@ -203,6 +203,7 @@ const AssetSelection: React.FC<AssetSelectionProps> = ({ select }) => {
       >
         <Search width={24} height={24} color="#fff" />
         <TextInput
+          accessibilityLabel="ReceiveScreen/AssetSelection/Search"
           style={{
             alignSelf: 'stretch',
             flexGrow: 1,

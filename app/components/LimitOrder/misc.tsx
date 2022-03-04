@@ -32,6 +32,7 @@ export const InputRow: React.FC<InputRowProps> = ({ title, value, onChange, onIn
 
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <TextInput
+          accessibilityLabel={`LimitOrder/InputRow/TextInput/${title}`}
           style={{
             color: '#fff',
             fontSize: 28,
@@ -45,6 +46,7 @@ export const InputRow: React.FC<InputRowProps> = ({ title, value, onChange, onIn
           {onChange ? (
             <>
               <TouchableOpacity
+                accessibilityLabel={`LimitOrder/InputRow/Minus/${title}`}
                 onPress={() => onDec?.()}
                 style={{
                   backgroundColor: '#481400',
@@ -57,6 +59,7 @@ export const InputRow: React.FC<InputRowProps> = ({ title, value, onChange, onIn
                 <Minus width={28} height={28} color={colors.BrandYellow} />
               </TouchableOpacity>
               <TouchableOpacity
+                accessibilityLabel={`LimitOrder/InputRow/Plus/${title}`}
                 onPress={() => onInc?.()}
                 style={{
                   backgroundColor: '#481400',

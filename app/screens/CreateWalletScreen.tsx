@@ -109,7 +109,11 @@ const CreateWalletScreen: React.FC = () => {
                 name="mobile"
                 render={props => (
                   //@ts-ignore
-                  <TextInputMask {...props} mask="+[099] ([000]) [000] [00] [00]" />
+                  <TextInputMask
+                    {...props}
+                    accessibilityLabel="CreateWallet/phoneNum"
+                    mask="+[099] ([000]) [000] [00] [00]"
+                  />
                 )}
               />
               <Input
@@ -124,6 +128,7 @@ const CreateWalletScreen: React.FC = () => {
                   <View key={123} style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <TextInput
                       {...props}
+                      accessibilityLabel="CreateWallet/password"
                       autoCapitalize={'none'}
                       autoCorrect={false}
                       onChangeText={() => {}}
@@ -131,7 +136,10 @@ const CreateWalletScreen: React.FC = () => {
                       editable={false}
                       secureTextEntry
                     />
-                    <TouchableOpacity onPress={() => Clipboard.setString(formState.password)}>
+                    <TouchableOpacity
+                      accessibilityLabel="CreateWallet/copyPassword"
+                      onPress={() => Clipboard.setString(formState.password)}
+                    >
                       <View
                         style={{
                           backgroundColor: colors.BrandYellow,
