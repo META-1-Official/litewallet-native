@@ -89,7 +89,7 @@ const DATA: Content[] = [
         </View>
       );
     })(),
-    heading: 'Decentralized Apps to Explorethe Universe',
+    heading: 'Decentralized Apps to Explore the Universe',
     body: 'Decentralized exchanges, digital\ncollectibles and more!',
   },
 ];
