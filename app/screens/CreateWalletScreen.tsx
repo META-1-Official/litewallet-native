@@ -121,6 +121,12 @@ const CreateWalletScreen: React.FC = () => {
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoCorrect={false}
+                render={props => (
+                  <TextInput
+                    {...props}
+                    onChangeText={t => props.onChangeText?.(t.toLowerCase())}
+                  />
+                )}
               />
               <Input
                 name="password"
