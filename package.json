@@ -24,7 +24,7 @@
     "bump:testnet": "GIT_HEAD=$(git rev-parse --short HEAD)-testnet bundle exec fastlane bump",
     "build:testnet": "yarn bump:testnet && yarn clean && yarn testnet:android && yarn testnet:ios && git reset --hard HEAD",
     "testnet:android": "NETWORK=TESTNET ./buildApkRelease.sh",
-    "testnet:ios": "NETWORK=TESTNET cd ios && xcodebuild -scheme nativeapp archive"
+    "testnet:ios": "export NETWORK=TESTNET; cd ios && xcodebuild -workspace nativeapp.xcworkspace -configuration Release -scheme nativeapp archive"
   },
   "dependencies": {
     "@react-native-clipboard/clipboard": "^1.9.0",
