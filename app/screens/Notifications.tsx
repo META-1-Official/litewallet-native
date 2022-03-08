@@ -1,3 +1,4 @@
+import { NETWORK } from '@env';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, Text, TextStyle, View } from 'react-native';
 import { Circle, TrendingUp } from 'react-native-feather';
@@ -12,6 +13,9 @@ export default function Notifications() {
   const accoutnAssets = useAssets();
 
   useEffect(() => {
+    if (NETWORK === 'TESTNET') {
+      return;
+    }
     getNotifications({ accountName })
       .then(e => setNotifData(e.reverse()))
       .catch(err => console.error(err));
@@ -27,7 +31,9 @@ export default function Notifications() {
           alignItems: 'center',
         }}
       >
-        <Text style={{ fontSize: 24, color: '#888' }}>No notifications</Text>
+        <Text style={{ fontSize: 24, color: '#888' }}>
+          No notifications {NETWORK === 'TESTNET' ? '(Disabled for testnet builds)' : ''}
+        </Text>
       </SafeAreaView>
     );
   }

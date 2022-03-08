@@ -3,6 +3,7 @@ import create from 'zustand';
 import { persist } from 'zustand/middleware';
 import Omit from 'lodash.omit';
 import { signUp } from './utils/miscApi';
+import { NETWORK } from '@env';
 
 interface AppState {
   accountName: string;
@@ -27,8 +28,9 @@ export const useStore = create<AppState>(
           authorized: true,
           password: password ? password : '',
         });
-
-        signUp({ accountName }).catch(e => e);
+        if (NETWORK !== 'TESTNET') {
+          signUp({ accountName }).catch(e => e);
+        }
       },
       logout: () => set({ accountName: '', authorized: false, password: '' }),
 
