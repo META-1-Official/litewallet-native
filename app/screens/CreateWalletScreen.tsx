@@ -38,6 +38,7 @@ const DANGLING_DASH_RE = /-$/m;
 const notDanglingDash: RuleFn = (t, l) =>
   rule(!DANGLING_DASH_RE.test(t), `${l} should end with a letter or digit.`);
 
+// eslint-disable-next-line no-useless-escape
 const GENERAL_RE = /[a-zA-Z0-9\-]{4,64}/gm;
 const validName: RuleFn = (t, l) =>
   rule(
