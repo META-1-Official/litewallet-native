@@ -1,6 +1,6 @@
 # nativeapp
 On hermes branch make shure to produce clean build if you are swithcing from master
-### Building Locally
+### Running Locally
 
 The code is built using React-Native and running code locally requires a Mac or Linux OS.
 
@@ -52,3 +52,19 @@ yarn android
 ```bash
 yarn ios
 ```
+
+### Building
+
+To produce mainnet build for ios and android
+```
+yarn build
+```
+To produce testnet build for ios and android
+```
+yarn build:testnet
+```
+To produce any package alone use either
+1. `yarn build:ios`
+2. `yarn build:android`
+3. `yarn testnet:ios`
+4. `yarn testnet:android`
