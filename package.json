@@ -9,8 +9,8 @@
     "start": "react-native start",
     "xcode": "xed -b ios",
     "test": "jest",
-    "build": "yarn build:android && yarn build:ios",
-    "build:ios": "./buildIOSRelease.sh",
+    "build": "yarn clean && yarn build:android && yarn build:ios",
+    "build:ios": "cd ios && xcodebuild -workspace nativeapp.xcworkspace -configuration Release -scheme nativeapp archive",
     "build:android": "./buildApkRelease.sh",
     "postinstall": "patch-package; yarn buildChart",
     "buildChart": "$(git rev-parse --show-toplevel)/buildChart.sh",
@@ -24,7 +24,7 @@
     "bump:testnet": "GIT_HEAD=$(git rev-parse --short HEAD)-testnet bundle exec fastlane bump",
     "build:testnet": "yarn bump:testnet && yarn clean && yarn testnet:android && yarn testnet:ios && git reset --hard HEAD",
     "testnet:android": "NETWORK=TESTNET ./buildApkRelease.sh",
-    "testnet:ios": "export NETWORK=TESTNET; cd ios && xcodebuild -workspace nativeapp.xcworkspace -configuration Release -scheme nativeapp archive"
+    "testnet:ios": "export NETWORK=TESTNET; yarn build:ios"
   },
   "dependencies": {
     "@react-native-clipboard/clipboard": "^1.9.0",
