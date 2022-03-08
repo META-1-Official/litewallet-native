@@ -7,6 +7,7 @@ import RoundedButton from '../components/RoundedButton';
 import { useShowModal } from '../components/SuccessModal';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
+import { NETWORK } from '@env';
 const resolves = (ms: number) => new Promise<void>(resolve => setTimeout(() => resolve(), ms));
 const rejects = (ms: number) => new Promise<void>((_, reject) => setTimeout(() => reject(), ms));
 
@@ -17,7 +18,7 @@ export const useCreateOrder = (exec: any) => {
   console.log(accountName, password);
   const fn = () => async () => {
     loader.open();
-    const to = await Timeout(exec(5000), `Sheesh`);
+    const to = await Timeout(exec(5000), 'Sheesh');
     loader.close();
     loader.close = () => console.log('NOPE');
     modal('Done!', () => {});
@@ -50,6 +51,7 @@ const Sandbox = () => {
       <SafeAreaView>
         <Text style={{ fontSize: 24, fontWeight: 'bold' }}> Sandbox </Text>
         <Text> Node env: {process.env.NODE_ENV}</Text>
+        <Text> isTestnet: {(NETWORK === 'TESTNET').toString()}</Text>
         <RoundedButton title="Show modal" onPress={() => nav.navigate('SbxModal')} />
         <RoundedButton title="Show loader modal for 5 second (resolves)" onPress={() => ok.fn()} />
         <RoundedButton title="Show loader modal for 5 second (throws)" onPress={() => err.fn()} />

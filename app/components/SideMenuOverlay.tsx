@@ -1,3 +1,4 @@
+import { NETWORK } from '@env';
 import { DrawerContentComponentProps } from '@react-navigation/drawer/src/types';
 import React from 'react';
 import { SafeAreaView, TouchableOpacity, View } from 'react-native';
@@ -113,7 +114,7 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
           onPress={() => navigation.jumpTo('_CreatePaperWallet')}
         />
         <ListItem title="Help" icon={HelpCircle} onPress={() => navigation.navigate('__Help')} />
-        {process.env.NODE_ENV === 'production' ? null : (
+        {process.env.NODE_ENV === 'production' && NETWORK !== 'TESTNET' ? null : (
           <ListItem
             title="Debug Sandbox"
             icon={Activity}
