@@ -483,6 +483,10 @@ export class fcTime extends String {
   }
 }
 
-const meta1dex = require('meta1dex');
+import { NETWORK } from '@env';
+const meta1dex = (() => {
+  console.log(NETWORK);
+  return NETWORK === 'TESTNET' ? require('meta1dex-testnet') : require('meta1dex');
+})();
 
 export default meta1dex as Meta1Module;
