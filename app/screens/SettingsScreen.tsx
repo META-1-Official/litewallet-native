@@ -34,26 +34,15 @@ const AccountGroup = () => {
       <Text style={{ color: '#fff', fontSize: 26, fontWeight: '600', marginBottom: 8 }}>
         Account
       </Text>
-      <ListItem
-        onPress={() => {
-          navigation.navigate('Settings_SwitchLanguage');
-        }}
-        text="Switch Language"
-      />
-
-      <ListItem
-        onPress={() => {
-          navigation.navigate('Settings_CreatePaperWallet');
-        }}
-        text="View Keys"
-      />
-
-      <ListItem
-        onPress={() => {
-          navigation.navigate('Settings_Notifications');
-        }}
-        text="Notification"
-      />
+      {Names.map((e, i) => (
+        <ListItem
+          key={e + i}
+          onPress={() => {
+            navigation.navigate(name2id(e));
+          }}
+          text={e}
+        />
+      ))}
     </View>
   );
 };
@@ -116,11 +105,11 @@ const MainSettingsScreen = () => {
 type Screens = {
   Settings_Home: undefined;
   Settings_SwitchLanguage: undefined;
-  Settings_CreatePaperWallet: undefined;
+  Settings_ViewKeys: undefined;
   Settings_Notifications: undefined;
 };
 
-const Names = ['Switch Language'];
+const Names = ['Switch Language', 'Notifications', 'View Keys'];
 
 const name2id = (s: string) => `Settings_${s.replace(/\s+/, '')}` as keyof Screens;
 const id2name = (k: string | keyof Screens) => Names.find(e => name2id(e) === k);
@@ -175,7 +164,7 @@ const SettingsScreen = () => {
     >
       <Stack.Screen name="Settings_Home" component={MainSettingsScreen} />
       <Stack.Screen name="Settings_SwitchLanguage" component={SwitchLanguage} />
-      <Stack.Screen name="Settings_CreatePaperWallet" component={CreatePaperWallet} />
+      <Stack.Screen name="Settings_ViewKeys" component={CreatePaperWallet} />
       <Stack.Screen name="Settings_Notifications" component={Notifications} />
     </Stack.Navigator>
   );
