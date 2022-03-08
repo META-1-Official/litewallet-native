@@ -15,11 +15,16 @@
     "postinstall": "patch-package; yarn buildChart",
     "buildChart": "$(git rev-parse --show-toplevel)/buildChart.sh",
     "clean:ios": "xcodebuild clean -workspace ./ios/nativeapp.xcworkspace -scheme nativeapp",
+    "clean:android": "cd android && ./gradlew clean",
     "repod": "cd ios; pod deintegrate; pod install",
-    "clean": "yarn clean:ios; yarn repod",
+    "clean": "yarn clean:android; yarn clean:ios; yarn repod",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "react-native": "react-native",
-    "bump": "GIT_HEAD=$(git rev-parse --short HEAD) bundle exec fastlane bump"
+    "bump": "GIT_HEAD=$(git rev-parse --short HEAD) bundle exec fastlane bump",
+    "bump:testnet": "GIT_HEAD=$(git rev-parse --short HEAD)-testnet bundle exec fastlane bump",
+    "build:testnet": "yarn bump:testnet && yarn clean && yarn testnet:android && yarn testnet:ios && git reset --hard HEAD",
+    "testnet:android": "NETWORK=TESTNET ./buildApkRelease.sh",
+    "testnet:ios": "NETWORK=TESTNET cd ios && xcodebuild -scheme nativeapp archive"
   },
   "dependencies": {
     "@react-native-clipboard/clipboard": "^1.9.0",
