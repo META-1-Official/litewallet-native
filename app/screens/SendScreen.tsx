@@ -15,7 +15,7 @@ import Loader from '../components/Loader';
 import RoundedButton from '../components/RoundedButton';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
-import { catchError, useScroll } from '../utils';
+import { catchError, tid, useScroll } from '../utils';
 import {
   getAccount,
   refreshAssets,
@@ -92,7 +92,7 @@ const SendScreen: React.FC<{}> = () => {
             >
               <View>
                 <TextInput
-                  accessibilityLabel="SendScreen/accountName"
+                  {...tid('SendScreen/accountName')}
                   style={{
                     fontSize: 18,
                     fontWeight: '500',
@@ -108,7 +108,7 @@ const SendScreen: React.FC<{}> = () => {
             <Text style={styles.SectionTitle}>To</Text>
             <View>
               <TextInput
-                accessibilityLabel="SendScreen/toAccount"
+                {...tid('SendScreen/toAccount')}
                 style={{
                   fontSize: 18,
                   fontWeight: '500',
@@ -179,7 +179,7 @@ const BottomRow = ({ onPress, darkMode }: { onPress: () => void; darkMode?: bool
           paddingHorizontal: 12,
         }}
       >
-        <TouchableOpacity accessibilityLabel="SendScreen/MAX" onPress={onPress}>
+        <TouchableOpacity {...tid('SendScreen/MAX')} onPress={onPress}>
           <Text style={{ textAlign: 'center', color: colors.BrandYellow, fontWeight: '700' }}>
             MAX
           </Text>
@@ -204,7 +204,7 @@ const BottomRow = ({ onPress, darkMode }: { onPress: () => void; darkMode?: bool
           paddingHorizontal: 12,
         }}
       >
-        <TouchableOpacity accessibilityLabel="SendScreen/MAX" onPress={onPress}>
+        <TouchableOpacity {...tid('SendScreen/MAX')} onPress={onPress}>
           <View style={{ flexDirection: 'row' }}>
             <SvgIcons.Wallet width={18} height={18} fill={colors.BrandYellow} />
             <Text
@@ -294,7 +294,7 @@ const AmountInput = ({ asset, darkMode }: { asset: StandaloneAsset; darkMode?: b
             }}
           >
             <TextInput
-              accessibilityLabel="SendScreen/amount"
+              {...tid('SendScreen/amount')}
               style={{
                 width: '85%',
                 fontSize: 20,
@@ -306,7 +306,7 @@ const AmountInput = ({ asset, darkMode }: { asset: StandaloneAsset; darkMode?: b
               value={state.amt}
             />
             <TouchableOpacity
-              accessibilityLabel="SendScreen/SelectAsset"
+              {...tid('SendScreen/SelectAsset')}
               onPress={() => {
                 asset.open();
                 dispatch({ type: UpdateType.RESET, payload: '' });
@@ -330,7 +330,7 @@ const AmountInput = ({ asset, darkMode }: { asset: StandaloneAsset; darkMode?: b
             }}
           >
             <TextInput
-              accessibilityLabel="SendScreen/amountUsd"
+              {...tid('SendScreen/amountUsd')}
               style={{
                 width: '85%',
                 fontSize: 18,
@@ -369,7 +369,7 @@ const AmountInput = ({ asset, darkMode }: { asset: StandaloneAsset; darkMode?: b
           }}
         >
           <TextInput
-            accessibilityLabel="SendScreen/amount"
+            {...tid('SendScreen/amount')}
             style={{
               width: '85%',
               fontSize: 20,
@@ -381,7 +381,7 @@ const AmountInput = ({ asset, darkMode }: { asset: StandaloneAsset; darkMode?: b
             value={state.amt}
           />
           <TouchableOpacity
-            accessibilityLabel="SendScreen/SelectAsset"
+            {...tid('SendScreen/SelectAsset')}
             onPress={() => {
               asset.open();
               dispatch({ type: UpdateType.RESET, payload: '' });
@@ -406,7 +406,7 @@ const AmountInput = ({ asset, darkMode }: { asset: StandaloneAsset; darkMode?: b
           }}
         >
           <TextInput
-            accessibilityLabel="SendScreen/amountUsd"
+            {...tid('SendScreen/amountUsd')}
             style={{
               width: '85%',
               fontSize: 18,
@@ -441,7 +441,7 @@ const PasswordView = ({ darkMode, password, setPassword }: PVProps) => (
   <View style={{ padding: 16 }}>
     <Text style={styles.SectionTitleDex}>Password</Text>
     <TextInput
-      accessibilityLabel="SendScreen/password"
+      {...tid('SendScreen/password')}
       style={{ fontSize: 18, fontWeight: '500', color: darkMode ? '#fff' : '#000' }}
       value={password}
       placeholder="Password"
@@ -566,7 +566,7 @@ export const DexSend: React.FC<DexProps> = props => {
               >
                 <View>
                   <TextInput
-                    accessibilityLabel="SendScreen/accountName"
+                    {...tid('SendScreen/accountName')}
                     style={{
                       fontSize: 18,
                       fontWeight: '500',
@@ -582,7 +582,7 @@ export const DexSend: React.FC<DexProps> = props => {
               <Text style={styles.SectionTitleDex}>To</Text>
               <View>
                 <TextInput
-                  accessibilityLabel="SendScreen/toAccount"
+                  {...tid('SendScreen/toAccount')}
                   style={{
                     fontSize: 18,
                     fontWeight: '500',
@@ -624,7 +624,7 @@ export const DexSend: React.FC<DexProps> = props => {
           </List>
 
           <TouchableOpacity
-            accessibilityLabel="SendScreen/Send"
+            {...tid('SendScreen/Send')}
             onPress={() => sendFn(password, anAsset, toAccount)}
           >
             <View

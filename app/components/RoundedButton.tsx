@@ -9,6 +9,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import { colors } from '../styles/colors';
+import { tid } from '../utils';
 
 interface Props {
   title: string;
@@ -19,7 +20,7 @@ interface Props {
 const RoundedButton = ({ title, onPress, styles: propStyles }: Props) => {
   return (
     <TouchableOpacity
-      accessibilityLabel={`RoundedButton/${title}`}
+      {...tid(`RoundedButton/${title}`)}
       style={[styles.SubmitButtonStyle, propStyles]}
       activeOpacity={0.5}
       onPress={onPress}

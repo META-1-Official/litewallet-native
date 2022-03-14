@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { colors } from '../../styles/colors';
+import { tid } from '../../utils';
 import meta1dex from '../../utils/meta1dexTypes';
 import { DismissKeyboardView } from '../DismissKeyboard';
 import {
@@ -61,7 +62,7 @@ export const Tab: React.FC<Props> = ({ type }) => {
         }}
       />
       <TouchableOpacity
-        accessibilityLabel="LimitOrder/ActionButton"
+        {...tid('LimitOrder/ActionButton')}
         onPress={() => fn(Number(state.price), Number(state.total))}
       >
         <View

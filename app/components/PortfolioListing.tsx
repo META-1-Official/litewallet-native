@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { grey200, grey600 } from 'react-native-paper/src/styles/colors';
 import { BrandYellow } from '../styles/colors';
+import { tid } from '../utils';
 import { AssetBalanceT, refreshAssets, useAssets } from '../utils/meta1Api';
 
 const { width } = Dimensions.get('screen');
@@ -112,7 +113,7 @@ const PortfolioListing: React.FC<Props> = ({ showZeroBallance, colors, usdPrimar
     if (onPress) {
       return (
         <TouchableOpacity
-          accessibilityLabel={`PortfolioItem/${e.symbol}`}
+          {...tid(`PortfolioItem/${e.symbol}`)}
           key={`CoinBalance_Touch__${i}`}
           onPress={() => onPress(e.symbol)}
         >

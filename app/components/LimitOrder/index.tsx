@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Dimensions, Keyboard, LayoutRectangle, Text, TouchableOpacity, View } from 'react-native';
+import { tid } from '../../utils';
 import { AssetViewSSP } from './../../screens/dex/AssetView/AssetView';
 import { BuyTab, SellTab } from './Tab';
 
@@ -45,7 +46,7 @@ const AssetViewModal: React.FC<AssetViewSSP> = ({ navigation }) => {
   return (
     <View style={{ height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.35)' }}>
       <TouchableOpacity
-        accessibilityLabel="LimitOrder/CloseModal"
+        {...tid('LimitOrder/CloseModal')}
         style={{
           height: backdropY,
         }}
@@ -71,10 +72,7 @@ const AssetViewModal: React.FC<AssetViewSSP> = ({ navigation }) => {
               backgroundColor: leftTabSelected ? '#330000' : '#1a0001',
             }}
           >
-            <TouchableOpacity
-              accessibilityLabel="LimitOrder/BuyTab"
-              onPress={() => setLTSelected(true)}
-            >
+            <TouchableOpacity {...tid('LimitOrder/BuyTab')} onPress={() => setLTSelected(true)}>
               <Text
                 style={{
                   color: leftTabSelected ? '#0f0' : '#888',
@@ -95,10 +93,7 @@ const AssetViewModal: React.FC<AssetViewSSP> = ({ navigation }) => {
               backgroundColor: !leftTabSelected ? '#330000' : '#1a0001',
             }}
           >
-            <TouchableOpacity
-              accessibilityLabel="LimitOrder/SellTab"
-              onPress={() => setLTSelected(false)}
-            >
+            <TouchableOpacity {...tid('LimitOrder/SellTab')} onPress={() => setLTSelected(false)}>
               <Text
                 style={{
                   color: !leftTabSelected ? '#f00' : '#888',

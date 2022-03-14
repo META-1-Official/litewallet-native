@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Easing, TouchableWithoutFeedback, View } from 'react-native';
 import { colors } from '../styles/colors';
-import { shadow } from '../utils/index';
+import { shadow, tid } from '../utils/index';
 
 interface Props {
   onChange?: (active: boolean) => void;
@@ -30,7 +30,7 @@ const MaterialToggle: React.FC<Props> = ({ onChange, defaultValue }) => {
     onoff ? off() : on();
   }, [onoff]);
   return (
-    <TouchableWithoutFeedback accessibilityLabel="MUI/Toggle" onPress={() => setOnOff(!onoff)}>
+    <TouchableWithoutFeedback {...tid('MUI/Toggle')} onPress={() => setOnOff(!onoff)}>
       <View
         style={{
           height: KNOB_SIZE,

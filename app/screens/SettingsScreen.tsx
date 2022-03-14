@@ -9,13 +9,14 @@ import { Platform, SafeAreaView, Text, TouchableOpacity, View } from 'react-nati
 import { ArrowLeft, ChevronRight } from 'react-native-feather';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
+import { tid } from '../utils';
 import CreatePaperWallet from './CreatePaperWallet';
 import Notifications from './Notifications';
 
 const AccountGroup = () => {
   const navigation = useNavigation<SNP>();
   const ListItem = ({ onPress, text }: { onPress: () => void; text: string }) => (
-    <TouchableOpacity accessibilityLabel={`Settings/ListItem/${text}`} onPress={onPress}>
+    <TouchableOpacity {...tid(`Settings/ListItem/${text}`)} onPress={onPress}>
       <View
         style={{
           flexDirection: 'row',
@@ -124,7 +125,7 @@ const SettingsScreen = () => {
         header: ({ navigation, route }) => {
           const BackButton = ({ color }: { color: string }) => (
             <TouchableOpacity
-              accessibilityLabel="Back"
+              {...tid('Back')}
               style={{ marginHorizontal: 12 }}
               activeOpacity={0.5}
               onPress={navigation.goBack}

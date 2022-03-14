@@ -22,7 +22,7 @@ import { useShowModal } from '../components/SuccessModal';
 import { Heading, TextSecondary } from '../components/typography';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
-import { catchError, ensure, promptPromise, shadow, style } from '../utils';
+import { catchError, ensure, promptPromise, shadow, style, tid } from '../utils';
 import {
   AssetBalanceT,
   refreshAssets,
@@ -95,7 +95,7 @@ const FloatingButton = ({ assets }: AssetsProp) => {
       }}
     >
       <TouchableOpacity
-        accessibilityLabel="TradeScreen/MAX"
+        {...tid('TradeScreen/MAX')}
         onPress={() => {
           const aMax = assets.A.asset.amount;
           assets.A.setAmount(aMax.toString());
@@ -121,7 +121,7 @@ const DarkFloatingButton = ({ assets }: AssetsProp) => {
       }}
     >
       <TouchableOpacity
-        accessibilityLabel="TradeScreen/MAX"
+        {...tid('TradeScreen/MAX')}
         onPress={() => {
           const aMax = assets.A.asset.amount;
           assets.A.setAmount(aMax.toString());
@@ -146,7 +146,7 @@ const AssetDisplay = ({ asset, darkMode }: DM<AssetProp>) => {
   const darkStyle = optStyleFactory(darkMode);
 
   return (
-    <TouchableOpacity accessibilityLabel="TradeScreen/SelectAsset" onPress={() => asset.open()}>
+    <TouchableOpacity {...tid('TradeScreen/SelectAsset')} onPress={() => asset.open()}>
       <View style={styles.rowCenter}>
         <Image style={styles.assetIcon} source={asset.asset._asset.icon /*Bruh wtf is dis */} />
         <View>
@@ -182,7 +182,7 @@ const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
   return (
     <View>
       <TextInput
-        accessibilityLabel="TradeScreen/AmountInput/amount"
+        {...tid('TradeScreen/AmountInput/amount')}
         style={darkStyle({ color: '#fff' }, styles.amountInput)}
         keyboardType="numeric"
         onChangeText={t => {
@@ -196,7 +196,7 @@ const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
       <View style={styles.rowEnd}>
         <TextSecondary style={darkStyle({ color: '#fff' }, styles.usdtLabel)}>US$</TextSecondary>
         <TextInput
-          accessibilityLabel="TradeScreen/AmountInput/amountUsd"
+          {...tid('TradeScreen/AmountInput/amountUsd')}
           onChangeText={t => {
             setUsd(t);
             throttled(t);
@@ -360,7 +360,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
       </View>
       <LightMode>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity accessibilityLabel="TradeScreen/Trade" onPress={fn}>
+          <TouchableOpacity {...tid('TradeScreen/Trade')} onPress={fn}>
             <View style={styles.button}>
               <Text style={styles.buttonText}>Exchange</Text>
             </View>
@@ -369,7 +369,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
       </LightMode>
       <DarkMode>
         <View style={[styles.center, styles.m12]} />
-        <TouchableOpacity accessibilityLabel="TradeScreen/Trade" onPress={fn}>
+        <TouchableOpacity {...tid('TradeScreen/Trade')} onPress={fn}>
           <View style={styles.darkBtnView}>
             <Text style={styles.font18x500}>Convert</Text>
           </View>

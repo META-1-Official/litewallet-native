@@ -9,7 +9,7 @@ import {
   GestureResponderEvent,
 } from 'react-native';
 import { ChevronRight } from 'react-native-feather';
-import { shadow } from '../utils';
+import { shadow, tid } from '../utils';
 
 const Img = (src: any) => {
   return (
@@ -37,7 +37,7 @@ export const ListItem: ListItemT = ({ title, icon, arrow, separator, onPress }) 
   let iconToRender = React.isValidElement(icon) ? icon : Img(icon);
   return (
     <TouchableOpacity
-      accessibilityLabel={`ListItem/${title}`}
+      {...tid(`ListItem/${title}`)}
       onPress={onPress}
       style={[styles.itemTouchable, { borderBottomWidth: separator ? 2 : 0 }]}
     >

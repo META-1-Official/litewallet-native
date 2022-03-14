@@ -4,7 +4,7 @@ import { AccountBalanceT } from '../utils/meta1Api';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { ArrowDown, ArrowUp } from 'react-native-feather';
-import { shadow } from '../utils';
+import { shadow, tid } from '../utils';
 import { useNavigation } from '@react-navigation/core';
 import { WalletNavigationProp } from '../screens/WalletScreen';
 
@@ -39,7 +39,7 @@ export const ProfitIndicator: React.FC<ProfitIndicatorProps> = ({ change }) => {
 const ButtonGroup = () => {
   const Button = ({ title, onPress }: { title: string; onPress: () => void }) => (
     <TouchableOpacity
-      accessibilityLabel={`ButtonGroup/Button/${title}`}
+      {...tid(`ButtonGroup/Button/${title}`)}
       activeOpacity={0.5}
       onPress={onPress}
     >

@@ -7,7 +7,7 @@ import RoundedButton from '../components/RoundedButton';
 import { Heading, TextSecondary } from '../components/typography';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
-import { catchError, getRadomByteArray } from '../utils';
+import { catchError, getRadomByteArray, tid } from '../utils';
 import createAccountWithPassword from '../utils/accountCreate';
 import useForm from '../utils/useForm';
 import {
@@ -112,7 +112,7 @@ const CreateWalletScreen: React.FC = () => {
                   //@ts-ignore
                   <TextInputMask
                     {...props}
-                    accessibilityLabel="CreateWallet/phoneNum"
+                    {...tid('CreateWallet/phoneNum')}
                     mask="+[099] ([000]) [000] [00] [00]"
                   />
                 )}
@@ -135,7 +135,7 @@ const CreateWalletScreen: React.FC = () => {
                   <View key={123} style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <TextInput
                       {...props}
-                      accessibilityLabel="CreateWallet/password"
+                      {...tid('CreateWallet/password')}
                       autoCapitalize={'none'}
                       autoCorrect={false}
                       onChangeText={() => {}}
@@ -144,7 +144,7 @@ const CreateWalletScreen: React.FC = () => {
                       secureTextEntry
                     />
                     <TouchableOpacity
-                      accessibilityLabel="CreateWallet/copyPassword"
+                      {...tid('CreateWallet/copyPassword')}
                       onPress={() => Clipboard.setString(formState.password)}
                     >
                       <View

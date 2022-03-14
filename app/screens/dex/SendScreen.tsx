@@ -3,6 +3,7 @@ import { Platform, SafeAreaView, Text, TouchableOpacity, View } from 'react-nati
 import { DexSSP } from '.';
 import { ArrowLeft } from 'react-native-feather';
 import { DexSend } from '../SendScreen';
+import { tid } from '../../utils';
 
 export type HeaderProps = {
   title: string;
@@ -11,7 +12,7 @@ export type HeaderProps = {
 const Header: React.FC<HeaderProps> = ({ title, navigation, titleSubscript }) => {
   const BackButton = ({ color }: { color: string }) => (
     <TouchableOpacity
-      accessibilityLabel="Back"
+      {...tid('Back')}
       style={{ marginHorizontal: 12 }}
       activeOpacity={0.5}
       onPress={() => navigation.navigate('__Tabs')}

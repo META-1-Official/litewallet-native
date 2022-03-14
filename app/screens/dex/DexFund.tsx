@@ -9,6 +9,7 @@ import { ProfitIndicator } from '../../components/PortfolioHeader';
 import PortfolioListing from '../../components/PortfolioListing';
 import { useStore } from '../../store';
 import { colors } from '../../styles/colors';
+import { tid } from '../../utils';
 import { useAssets } from '../../utils/meta1Api';
 import { getHistory } from '../../utils/miscApi';
 import { dexAssetView } from './AssetView/AssetViewStore';
@@ -119,7 +120,7 @@ const DexFund: React.FC<DexTSP> = ({ navigation }) => {
         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
           {(Object.keys(GRAPH_INTERVAL) as GRAPH_INTERVAL_KEYS[]).map(e => (
             <TouchableOpacity
-              accessibilityLabel={`DexFund/GraphInterval/${e}`}
+              {...tid(`DexFund/GraphInterval/${e}`)}
               onPress={() => setCurInterval(e)}
               key={e}
             >

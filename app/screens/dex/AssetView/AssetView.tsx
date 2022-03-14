@@ -13,6 +13,7 @@ import { logoAsset, SvgIcons } from '../../../../assets';
 import Loader from '../../../components/Loader';
 import { ProfitIndicator } from '../../../components/PortfolioHeader';
 import { colors } from '../../../styles/colors';
+import { tid } from '../../../utils';
 import meta1dex, { Ticker } from '../../../utils/meta1dexTypes';
 import { useAVStore } from './AssetViewStore';
 import Candle from './Chart';
@@ -114,10 +115,7 @@ const AssetViewHeader: React.FC<AssetViewTSP> = ({ navigation }) => {
         alignItems: 'center',
       }}
     >
-      <TouchableOpacity
-        accessibilityLabel="Back"
-        onPress={() => navigation.navigate<any>('__Tabs')}
-      >
+      <TouchableOpacity {...tid('Back')} onPress={() => navigation.navigate<any>('__Tabs')}>
         <ArrowLeft width={32} height={32} stroke={colors.BrandYellow} />
       </TouchableOpacity>
       <Text

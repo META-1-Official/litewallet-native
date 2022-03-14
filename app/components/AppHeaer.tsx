@@ -4,11 +4,12 @@ import { StackHeaderProps } from '@react-navigation/stack';
 import { ArrowLeft } from 'react-native-feather';
 import { getHeaderTitle } from '@react-navigation/elements';
 import { colors } from '../styles/colors';
+import { tid } from '../utils';
 
 export default function AppHeader({ navigation, route, options, back }: StackHeaderProps) {
   const BackButton = ({ color }: { color: string }) => (
     <TouchableOpacity
-      accessibilityLabel="AppHeader/Back"
+      {...tid('AppHeader/Back')}
       style={{ marginHorizontal: 12 }}
       activeOpacity={0.5}
       onPress={navigation.goBack}

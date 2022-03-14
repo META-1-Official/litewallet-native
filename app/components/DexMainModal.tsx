@@ -4,12 +4,13 @@ import { ArrowDownRight, ArrowUpLeft, Maximize2 } from 'react-native-feather';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { DexSSP } from '../screens/dex';
 import { colors } from '../styles/colors';
+import { tid } from '../utils';
 
 const DexModal: React.FC<DexSSP> = ({ navigation }) => {
   return (
     <View style={{ height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.35)' }}>
       <TouchableOpacity
-        accessibilityLabel="DexModal/Close"
+        {...tid('DexModal/Close')}
         style={{
           height: '55%',
         }}
@@ -26,7 +27,7 @@ const DexModal: React.FC<DexSSP> = ({ navigation }) => {
         }}
       >
         <TouchableOpacity
-          accessibilityLabel="DexModal/Convert"
+          {...tid('DexModal/Convert')}
           onPress={() => navigation.navigate('DEX__Convert')}
         >
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -54,7 +55,7 @@ const DexModal: React.FC<DexSSP> = ({ navigation }) => {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          accessibilityLabel="DexModal/Send"
+          {...tid('DexModal/Send')}
           onPress={() => navigation.navigate('DEX__Send')}
         >
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -82,7 +83,7 @@ const DexModal: React.FC<DexSSP> = ({ navigation }) => {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          accessibilityLabel="DexModal/Receive"
+          {...tid('DexModal/Receive')}
           onPress={() => navigation.navigate('DEX__Recive')}
         >
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>

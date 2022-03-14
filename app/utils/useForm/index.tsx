@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { DefaultTheme, HelperText } from 'react-native-paper';
 import TextInput, { TextInputProps } from 'react-native-paper/src/components/TextInput/TextInput';
-import { getObjectSetter } from '..';
+import { getObjectSetter, tid } from '..';
 import { colors } from '../../styles/colors';
 import { RuleFn } from './rules';
 import _get from 'lodash.get';
@@ -72,7 +72,7 @@ export default function useForm<T extends DefautlStateItem[]>(defautState: T) {
           defaultValue={formState[name]}
           underlineColor={theme.colors.text}
           theme={theme}
-          accessibilityLabel={`useFrom/Input/${name}`}
+          {...tid(`useFrom/Input/${name}`)}
           onChangeText={newText => {
             formState[name] = newText;
             validate();

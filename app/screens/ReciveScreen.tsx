@@ -15,7 +15,7 @@ import {
 import { useAssetPicker } from '../components/AssetSelectModal';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
-import { shadow } from '../utils';
+import { shadow, tid } from '../utils';
 import { AddrT, getAddressForAccountAsset } from '../utils/meta1Api';
 import { SvgXml } from 'react-native-svg';
 import { useNavigation } from '@react-navigation/core';
@@ -127,7 +127,7 @@ const ReciveScreen: React.FC<{}> = () => {
         </Text>
         {children}
         <TouchableOpacity
-          accessibilityLabel="Recive/CopyAddress"
+          {...tid('Recive/CopyAddress')}
           onPress={() => {
             if (shareMsg) {
               Share.share({ message: shareMsg });
@@ -227,7 +227,7 @@ const ReciveScreen: React.FC<{}> = () => {
         }}
       >
         <TouchableOpacity
-          accessibilityLabel="Recive/Pils/Address"
+          {...tid('Recive/Pils/Address')}
           onPress={() => {
             flatListRef.current?.scrollToOffset({
               animated: true,
@@ -255,7 +255,7 @@ const ReciveScreen: React.FC<{}> = () => {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          accessibilityLabel="Recive/Pils/Username"
+          {...tid('Recive/Pils/Username')}
           onPress={() => {
             flatListRef.current?.scrollToIndex({
               animated: true,

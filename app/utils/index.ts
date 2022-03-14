@@ -305,6 +305,9 @@ export const useScroll = () => {
   };
 };
 
+export const tid = (_s: string) =>
+  (s => ({ testID: s, accessibilityLabel: s }))(_s.replace(' ', '_'));
+
 export const shadow = {
   D3: {
     shadowColor: '#000',

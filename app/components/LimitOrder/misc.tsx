@@ -6,7 +6,7 @@ import { SvgIcons } from '../../../assets';
 import { useAVStore } from '../../screens/dex/AssetView/AssetViewStore';
 import { useStore } from '../../store';
 import { colors } from '../../styles/colors';
-import { catchError, promptPromise, Timeout } from '../../utils';
+import { catchError, promptPromise, tid, Timeout } from '../../utils';
 import { placeLimitOrder, useAssets, useAssetsStore } from '../../utils/meta1Api';
 import { useNewLoaderModal } from '../LoaderModal';
 import { useShowModal } from '../SuccessModal';
@@ -32,7 +32,7 @@ export const InputRow: React.FC<InputRowProps> = ({ title, value, onChange, onIn
 
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <TextInput
-          accessibilityLabel={`LimitOrder/InputRow/TextInput/${title}`}
+          {...tid(`LimitOrder/InputRow/TextInput/${title}`)}
           style={{
             color: '#fff',
             fontSize: 28,
@@ -47,7 +47,7 @@ export const InputRow: React.FC<InputRowProps> = ({ title, value, onChange, onIn
           {onChange ? (
             <>
               <TouchableOpacity
-                accessibilityLabel={`LimitOrder/InputRow/Minus/${title}`}
+                {...tid(`LimitOrder/InputRow/Minus/${title}`)}
                 onPress={() => onDec?.()}
                 style={{
                   backgroundColor: '#481400',
@@ -60,7 +60,7 @@ export const InputRow: React.FC<InputRowProps> = ({ title, value, onChange, onIn
                 <Minus width={28} height={28} color={colors.BrandYellow} />
               </TouchableOpacity>
               <TouchableOpacity
-                accessibilityLabel={`LimitOrder/InputRow/Plus/${title}`}
+                {...tid(`LimitOrder/InputRow/Plus/${title}`)}
                 onPress={() => onInc?.()}
                 style={{
                   backgroundColor: '#481400',
@@ -109,25 +109,25 @@ export const TotalRow: React.FC<{ symbol: string; set: (n: number) => void }> = 
         }}
       >
         <TouchableOpacity
-          accessibilityLabel="LimitOrder/TotalPercent/25"
+          {...tid('LimitOrder/TotalPercent/25')}
           onPress={() => set(found.amount * 0.25)}
         >
           <LeText>25%</LeText>
         </TouchableOpacity>
         <TouchableOpacity
-          accessibilityLabel="LimitOrder/TotalPercent/50"
+          {...tid('LimitOrder/TotalPercent/50')}
           onPress={() => set(found.amount * 0.5)}
         >
           <LeText>50%</LeText>
         </TouchableOpacity>
         <TouchableOpacity
-          accessibilityLabel="LimitOrder/TotalPercent/75"
+          {...tid('LimitOrder/TotalPercent/75')}
           onPress={() => set(found.amount * 0.75)}
         >
           <LeText>75%</LeText>
         </TouchableOpacity>
         <TouchableOpacity
-          accessibilityLabel="LimitOrder/TotalPercent/100"
+          {...tid('LimitOrder/TotalPercent/100')}
           onPress={() => set(found.amount * 1.0)}
         >
           <LeText>100%</LeText>

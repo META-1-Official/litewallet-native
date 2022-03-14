@@ -1,10 +1,11 @@
 import React from 'react';
 import { TouchableWithoutFeedback, Keyboard, View, SafeAreaView } from 'react-native';
+import { tid } from '../utils';
 
 const DismissKeyboardHOC = (Comp: any) => {
   return ({ children, ...props }: any) => (
     <TouchableWithoutFeedback
-      accessibilityLabel="DismissKeyboard"
+      {...tid('DismissKeyboard')}
       onPress={Keyboard.dismiss}
       accessible={false}
     >

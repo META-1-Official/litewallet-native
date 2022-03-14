@@ -16,7 +16,7 @@ import {
   View,
 } from 'react-native';
 import { X } from 'react-native-feather';
-import { useScroll } from '../utils';
+import { tid, useScroll } from '../utils';
 import { AssetBalanceT, useAssets } from '../utils/meta1Api';
 import { RootStackNP } from '../WalletNav';
 import { TextSecondary } from './typography';
@@ -45,7 +45,7 @@ const Search = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
       {found &&
         found.map(e => (
           <TouchableOpacity
-            accessibilityLabel={`AssetSelect/${e.symbol}`}
+            {...tid(`AssetSelect/${e.symbol}`)}
             key={`FoundCoin_${e.symbol}`}
             onPress={() => onSelect(e)}
           >
@@ -62,7 +62,7 @@ const Search = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
   return (
     <View>
       <TextInput
-        accessibilityLabel="AssetSelectModal/Search/Input"
+        {...tid('AssetSelectModal/Search/Input')}
         placeholder="Search for a coin..."
         // value={searchTerm}
         onChangeText={t => {
@@ -104,7 +104,7 @@ const PickerContent = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
         {suggested &&
           suggested.map(e => (
             <TouchableOpacity
-              accessibilityLabel={`AssetSelect/${e.symbol}`}
+              {...tid(`AssetSelect/${e.symbol}`)}
               key={`CoinBalance_${e.symbol}`}
               onPress={() => onSelect(e)}
             >
@@ -120,7 +120,7 @@ const PickerContent = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
         {rest &&
           rest.map(e => (
             <TouchableOpacity
-              accessibilityLabel={`AssetSelect/${e.symbol}`}
+              {...tid(`AssetSelect/${e.symbol}`)}
               key={`CoinBalance_${e.symbol}`}
               onPress={() => onSelect(e)}
             >
@@ -157,7 +157,7 @@ const AssetPicker: React.FC<AssetPickerProps> = ({ title, onClose, onSelect }) =
       }}
     >
       <TouchableOpacity
-        accessibilityLabel="AssetSelect/Close"
+        {...tid('AssetSelect/Close')}
         onPress={() => {
           onClose();
           navigation.goBack();

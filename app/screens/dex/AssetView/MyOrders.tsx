@@ -13,7 +13,7 @@ import {
 import { ProgressCircle } from 'react-native-svg-charts';
 import { useStore } from '../../../store';
 import { colors } from '../../../styles/colors';
-import { catchError, inFuture, promptPromise } from '../../../utils';
+import { catchError, inFuture, promptPromise, tid } from '../../../utils';
 import {
   AccountBalanceT,
   AmountT,
@@ -159,7 +159,7 @@ export const OpenOrdersPage = () => {
               !e[1].canceled &&
               !e[1].filled ? (
                 <TouchableOpacity
-                  accessibilityLabel="MyOrders/Cancel"
+                  {...tid('MyOrders/Cancel')}
                   onPress={() => {
                     setRefreshing(true);
                     account?.cancelOrder(k);
@@ -259,7 +259,7 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
     <SafeAreaView style={{ height: '100%', backgroundColor: '#000', padding: 12 }}>
       <View style={{ flexDirection: 'row', paddingVertical: 12 }}>
         <TouchableOpacity
-          accessibilityLabel="MyOrders/Open"
+          {...tid('MyOrders/Open')}
           onPress={lt}
           style={{
             flexGrow: 1,
@@ -269,7 +269,7 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
           <Text style={{ color: '#fff', fontSize: 18 }}>OPEN</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          accessibilityLabel="MyOrders/History"
+          {...tid('MyOrders/History')}
           onPress={rt}
           style={{
             flexGrow: 1,
@@ -296,7 +296,7 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
             [...history.entries()].map(
               RenderRow([assetA, assetB], amtToReadable, isOpen, (_, k) => (
                 <TouchableOpacity
-                  accessibilityLabel="MyOrders/Cancel"
+                  {...tid('MyOrders/Cancel')}
                   onPress={() => {
                     cancelOrder(k).then(() => setRefreshing(true));
                   }}

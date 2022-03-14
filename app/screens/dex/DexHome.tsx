@@ -14,6 +14,7 @@ import { getHistoryForAsset, useAssets } from '../../utils/meta1Api';
 import { LineChart, Grid } from 'react-native-svg-charts';
 import { DexTSP } from '.';
 import { dexAssetView } from './AssetView/AssetViewStore';
+import { tid } from '../../utils';
 
 const { width } = Dimensions.get('window');
 
@@ -75,7 +76,7 @@ const DexHome: React.FC<DexTSP> = ({ navigation }) => {
           {assets.map(e => {
             return e.symbol === 'USDT' ? null : (
               <TouchableOpacity
-                accessibilityLabel={`DexHome/Asset_${e.symbol}`}
+                {...tid(`DexHome/Asset_${e.symbol}`)}
                 onPress={() => dexAssetView(navigation, e.symbol)}
                 key={`Asset_${e.symbol}`}
               >

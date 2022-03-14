@@ -18,6 +18,7 @@ import { DexSSP } from '.';
 import Loader from '../../components/Loader';
 import { useStore } from '../../store';
 import { colors } from '../../styles/colors';
+import { tid } from '../../utils';
 import { AddrT, AssetBalanceT, getAddressForAccountAsset, useAssets } from '../../utils/meta1Api';
 
 type HeaderProps = {
@@ -27,7 +28,7 @@ type HeaderProps = {
 const Header: React.FC<HeaderProps> = ({ title, navigation, titleSubscript }) => {
   const BackButton = ({ color }: { color: string }) => (
     <TouchableOpacity
-      accessibilityLabel="Back"
+      {...tid('Back')}
       style={{ marginHorizontal: 12 }}
       activeOpacity={0.5}
       onPress={() => navigation.navigate('__Tabs')}
@@ -134,7 +135,7 @@ const AddressView: React.FC<AddressViewProps> = ({ asset }) => {
               </Text>
             </View>
             <TouchableOpacity
-              accessibilityLabel="DexReceive/CopyAddress"
+              {...tid('DexReceive/CopyAddress')}
               onPress={() => Clipboard.setString(compoundAddress.addr)}
             >
               <View
@@ -161,7 +162,7 @@ const AddressView: React.FC<AddressViewProps> = ({ asset }) => {
         </View>
       </View>
       <TouchableOpacity
-        accessibilityLabel="DexReceive/ShareAddress"
+        {...tid('DexReceive/ShareAddress')}
         onPress={() => Share.share({ message: compoundAddress.addr })}
       >
         <View
@@ -210,7 +211,7 @@ const AssetSelection: React.FC<AssetSelectionProps> = ({ select }) => {
       >
         <Search width={24} height={24} color="#fff" />
         <TextInput
-          accessibilityLabel="ReceiveScreen/AssetSelection/Search"
+          {...tid('ReceiveScreen/AssetSelection/Search')}
           style={{
             alignSelf: 'stretch',
             flexGrow: 1,
@@ -236,7 +237,7 @@ const AssetSelection: React.FC<AssetSelectionProps> = ({ select }) => {
           {assets.map(e => {
             return (
               <TouchableOpacity
-                accessibilityLabel={`DexReceive/Asset_${e.symbol}`}
+                {...tid(`DexReceive/Asset_${e.symbol}`)}
                 key={`Asset_${e.symbol}`}
                 onPress={() => select(e)}
               >

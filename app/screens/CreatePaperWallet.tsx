@@ -3,7 +3,7 @@ import { SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-nat
 import { InAppBrowser } from 'react-native-inappbrowser-reborn';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
-import { catchError } from '../utils';
+import { catchError, tid } from '../utils';
 import { getAccountKeys, paperWallet } from '../utils/meta1Api';
 
 export default function CreatePaperWallet() {
@@ -30,7 +30,7 @@ export default function CreatePaperWallet() {
       <View>
         <Text style={{ color: colors.BrandYellow }}>Account Name</Text>
         <TextInput
-          accessibilityLabel="CreatePaperWallet/accountName"
+          {...tid('CreatePaperWallet/accountName')}
           value={accountName}
           editable={false}
           style={{
@@ -45,7 +45,7 @@ export default function CreatePaperWallet() {
       <View style={{ marginTop: 24 }}>
         <Text style={{ color: colors.BrandYellow }}>Password</Text>
         <TextInput
-          accessibilityLabel="CreatePaperWallet/password"
+          {...tid('CreatePaperWallet/password')}
           value={password}
           onChangeText={t => setPassword(t)}
           style={{
@@ -58,7 +58,7 @@ export default function CreatePaperWallet() {
           secureTextEntry
         />
       </View>
-      <TouchableOpacity accessibilityLabel="CreatePaperWallet/Save" onPress={save}>
+      <TouchableOpacity {...tid('CreatePaperWallet/Save')} onPress={save}>
         <View
           style={{
             backgroundColor: colors.BrandYellow,

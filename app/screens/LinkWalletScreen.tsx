@@ -12,6 +12,7 @@ import { personAsset, personIconAsset } from '../../assets';
 import RoundedButton from '../components/RoundedButton';
 import { Heading, TextSecondary } from '../components/typography';
 import { useStore } from '../store';
+import { tid } from '../utils';
 import { getAccount } from '../utils/meta1Api';
 import useForm from '../utils/useForm';
 import { asyncRule, required, RuleFn } from '../utils/useForm/rules';
@@ -91,7 +92,7 @@ const LinkWalletScreen: React.FC = () => {
               />
               <TextInput
                 {...props}
-                accessibilityLabel="LinkWallet/AccountName"
+                {...tid('LinkWallet/AccountName')}
                 autoCapitalize={'none'}
                 autoCorrect={false}
                 keyboardType={'email-address'}

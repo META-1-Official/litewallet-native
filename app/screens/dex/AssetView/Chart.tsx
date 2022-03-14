@@ -8,6 +8,7 @@ import { useTicker } from '../../../utils/meta1Api';
 import Loader from '../../../components/Loader';
 import { ALL_BUCKETS } from '../../../utils/meta1dexTypes';
 import { colors } from '../../../styles/colors';
+import { tid } from '../../../utils';
 
 const mkInject = (s: any) =>
   `window.candleSeries.setData(JSON.parse('${JSON.stringify(s)}'));
@@ -42,7 +43,7 @@ const Candle: React.FC<{}> = () => {
       >
         {Object.keys(ALL_BUCKETS).map(e => (
           <TouchableOpacity
-            accessibilityLabel={`AssetView/CandleChartInterval/${e}`}
+            {...tid(`AssetView/CandleChartInterval/${e}`)}
             key={`IntervalSel_${e}`}
             onPress={() => setBucket(ALL_BUCKETS[e])}
           >
