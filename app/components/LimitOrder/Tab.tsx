@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { colors } from '../../styles/colors';
 import meta1dex from '../../utils/meta1dexTypes';
+import { DismissKeyboardView } from '../DismissKeyboard';
 import {
   useCreateOrder,
   InputRow,
@@ -37,7 +38,7 @@ export const Tab: React.FC<Props> = ({ type }) => {
 
   const { fn } = useCreateOrder(assetB, assetA, type);
   return (
-    <View style={{ flexGrow: 1, padding: 12 }}>
+    <DismissKeyboardView style={{ flexGrow: 1, padding: 12 }}>
       <InputRow
         title={`AT PRICE | ${assetB}`}
         value={state.price}
@@ -75,7 +76,7 @@ export const Tab: React.FC<Props> = ({ type }) => {
           <Text style={{ fontSize: 18, fontWeight: '500' }}>{type}</Text>
         </View>
       </TouchableOpacity>
-    </View>
+    </DismissKeyboardView>
   );
 };
 
