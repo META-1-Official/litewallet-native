@@ -39,6 +39,7 @@ export const InputRow: React.FC<InputRowProps> = ({ title, value, onChange, onIn
             fontWeight: 'bold',
           }}
           value={value}
+          keyboardType="numeric"
           editable={!!onChange}
           onChangeText={onChange}
         />
