@@ -267,6 +267,10 @@ export const useOrderState = (assetA: string, assetB: string, oType: OrderType) 
   const reducer = (state: State, action: Action): State => {
     const { type, payload } = action;
 
+    if (payload && payload.indexOf('-') !== -1) {
+      return { ...state };
+    }
+
     const produce = (s: Partial<State>): State => {
       const tmp = { ...state, ...s };
       return { ...tmp, total: calcTotal(tmp.amount, tmp.price) };
