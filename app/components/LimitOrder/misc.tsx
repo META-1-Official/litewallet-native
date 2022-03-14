@@ -290,13 +290,13 @@ export const useOrderState = (assetA: string, assetB: string, oType: OrderType) 
           return produce({ price: bStr(Num(state.price) + 1) });
 
         case Update.DEC_AMOUNT:
-          if (Num(state.amount) === 0) {
+          if (Num(state.amount) - 1 < 0) {
             break;
           }
           return produce({ amount: aStr(Num(state.amount) - 1) });
 
         case Update.DEC_PRICE:
-          if (Num(state.price) === 0) {
+          if (Num(state.price) - 1 < 0) {
             break;
           }
           return produce({ price: bStr(Num(state.price) - 1) });
