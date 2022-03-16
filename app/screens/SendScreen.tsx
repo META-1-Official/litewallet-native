@@ -495,8 +495,9 @@ const makeSendFn =
           },
         );
         await useAssetsStore.getState().fetchUserAssets(accountName);
+        setTimeout(() => useAssetsStore.getState().fetchUserAssets(accountName), 5000);
         modal(
-          `Successfully sent ${standalone.amount} ${standalone.asset.symbol}to ${toAccount}`,
+          `Successfully sent ${standalone.amount} ${standalone.asset.symbol} to ${toAccount}`,
           () => {},
         );
       },
