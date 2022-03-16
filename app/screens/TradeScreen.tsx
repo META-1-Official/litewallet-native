@@ -17,7 +17,7 @@ import { SvgIcons } from '../../assets';
 import { DKSAV } from '../components/DismissKeyboard';
 import { List } from '../components/List';
 import Loader from '../components/Loader';
-import { useLoaderModal } from '../components/LoaderModal';
+import { useNewLoaderModal } from '../components/LoaderModal';
 import { useShowModal } from '../components/SuccessModal';
 import { Heading, TextSecondary } from '../components/typography';
 import { useStore } from '../store';
@@ -297,7 +297,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
 
   const open = useShowModal();
 
-  const { LoaderModal, showLoader, hideLoader } = useLoaderModal();
+  const loader = useNewLoaderModal();
 
   if (allAssets === null || !availableAssets || !pair) {
     refresh();
@@ -307,13 +307,13 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
   const { assets } = pair;
   const fn = mkPerformSwap(
     assets,
-    () => showLoader(),
+    () => loader.open(),
     () => {
       console.log('Should hide');
-      hideLoader();
+      loader.close();
       open(makeMessage(assets), () => nav.goBack());
     },
-    () => hideLoader(),
+    () => loader.close(),
   );
 
   const DarkMode: React.FC = ({ children }) => <>{darkMode ? children : null}</>;
@@ -326,7 +326,6 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
       <LightMode>
         <Backdrop />
       </LightMode>
-      <LoaderModal />
       <View>
         <LightMode>
           <FloatingButton assets={assets} />
