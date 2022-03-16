@@ -97,7 +97,7 @@ const FloatingButton = ({ assets }: AssetsProp) => {
       <TouchableOpacity
         {...tid('TradeScreen/MAX')}
         onPress={() => {
-          const aMax = assets.A.asset.amount;
+          const aMax = assets.A.getMax();
           assets.A.setAmount(aMax.toString());
           assets.B.formUsdt(assets.A.toUsdt(aMax));
         }}
@@ -123,7 +123,7 @@ const DarkFloatingButton = ({ assets }: AssetsProp) => {
       <TouchableOpacity
         {...tid('TradeScreen/MAX')}
         onPress={() => {
-          const aMax = assets.A.asset.amount;
+          const aMax = assets.A.getMax();
           assets.A.setAmount(aMax.toString());
           assets.B.formUsdt(assets.A.toUsdt(aMax));
         }}
