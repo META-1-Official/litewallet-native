@@ -14,6 +14,7 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import prompt from 'react-native-prompt-android';
 import * as Sentry from '@sentry/react-native';
+import { ErrorParser, isError } from './errorUtils';
 
 export function getRadomByteArray(len: number) {
   return Array.from(new Uint8Array(len), () => Math.floor(Math.random() * 256));
@@ -193,36 +194,35 @@ export const catchError = async (fn: () => void, params?: params) => {
   try {
     await fn();
   } catch (e) {
-    if (onErr?.(e)) {
-      return anyway?.();
-    }
-    if (!e) {
+    const oErr = e;
+    console.log('oError', oErr);
+
+    if (isError(e)) {
+      if (onErr?.(e)) {
+        return anyway?.();
+      }
+
+      let err = ErrorParser(e);
+
+      if (errorMiddleware) {
+        err = errorMiddleware(e);
+      }
+
+      Sentry.setTag('isExpected', true);
+      Sentry.addBreadcrumb({
+        category: 'expected',
+        message: (e as any).message,
+        level: Sentry.Severity.Info,
+      });
+      Sentry.captureException(oErr);
+
+      console.error(err);
+      Alert.alert('Error', err.message);
+    } else {
       Alert.alert('Error', 'Something went wrong');
       Sentry.captureException(e);
       return anyway?.();
     }
-    const oErr = e;
-    console.log('oError', oErr);
-    // Try to format the errors
-    let err: any = e;
-    //@ts-ignore
-    if (err.message) {
-      err.message = err.message.split('bitshares-crypto')[0];
-    }
-    if (errorMiddleware) {
-      err = errorMiddleware(e);
-    }
-
-    Sentry.setTag('isExpected', true);
-    Sentry.addBreadcrumb({
-      category: 'expected',
-      message: (e as any).message,
-      level: Sentry.Severity.Info,
-    });
-    Sentry.captureException(oErr);
-
-    console.error(err);
-    Alert.alert('Error', (err as Error).message);
   }
   anyway?.();
 };
