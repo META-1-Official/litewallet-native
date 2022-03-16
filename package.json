@@ -9,7 +9,7 @@
     "start": "react-native start",
     "xcode": "xed -b ios",
     "test": "jest",
-    "build": "yarn clean && yarn build:android && yarn build:ios",
+    "build": "yarn build:android && yarn build:ios",
     "build:ios": "cd ios && xcodebuild -workspace nativeapp.xcworkspace -configuration Release -scheme nativeapp archive",
     "build:android": "./buildApkRelease.sh",
     "postinstall": "patch-package; yarn buildChart",
