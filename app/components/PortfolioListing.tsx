@@ -74,7 +74,9 @@ const PortfolioListing: React.FC<Props> = ({ showZeroBallance, colors, usdPrimar
       backgroundColor: i % 2 !== 0 ? curColor.stripe : curColor.background,
     };
     const _primaryString =
-      e.amount === 0 || e.amount.toString().length > 8 ? e.amount : e.amount.toFixed(6);
+      e.amount === 0 || e.amount.toString().length > 8
+        ? e.amount
+        : e.amount.toFixed(e._asset.precision);
     const primaryString = (
       <Text
         style={[
