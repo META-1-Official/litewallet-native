@@ -53,13 +53,13 @@ const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanc
   );
 
   useEffect(() => {
-    console.log('One of Assets Changed');
+    console.log('One of Assets symbol Changed');
     if (!A || !B) {
       return;
     }
-    const baseUsdt = A.toUsdt();
-    const _targetAmount = B.formUsdt(baseUsdt);
-  }, [A?.asset, B?.asset]);
+    A.setAmount('0.00');
+    B.setAmount('0.00');
+  }, [A?.asset.symbol, B?.asset.symbol]);
 
   if (!A || !B) {
     return null;
