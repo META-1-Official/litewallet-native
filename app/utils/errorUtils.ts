@@ -13,7 +13,9 @@ export function ErrorParser(e: Error) {
       if (fin) {
         break;
       }
-    } catch (_) {}
+    } catch (_) {
+      console.warn(_);
+    }
   }
   return e;
 }
