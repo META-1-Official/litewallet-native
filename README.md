@@ -1,6 +1,7 @@
 # META1 lite wallet mobile
 ![GitHub](https://img.shields.io/github/license/META-1-Official/litewallet-native)
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/META-1-Official/litewallet-native)
+
 `TODO: Project description`
 ### Running Locally
 
