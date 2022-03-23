@@ -85,7 +85,7 @@ export const useAsset = ({
   };
 
   const setMax = () => setAmount(asset.amount.toFixed(8));
-  const getMax = () => (asset.symbol === 'META1' ? asset.amount - 4e-4 : asset.amount);
+  const getMax = () => Math.max(0, asset.symbol === 'META1' ? asset.amount - 2e-5 : asset.amount);
 
   const canAfford = () => asset.amount >= Number(amount);
 
