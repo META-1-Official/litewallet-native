@@ -2,6 +2,11 @@
   "name": "nativeapp",
   "version": "1.0.11",
   "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/META-1-Official/litewallet-native"
+  },
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios --simulator=\"iPhone 11 Pro\"",
