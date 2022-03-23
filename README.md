@@ -1,5 +1,7 @@
-# nativeapp
-On hermes branch make shure to produce clean build if you are swithcing from master
+# META1 lite wallet mobile
+![GitHub](https://img.shields.io/github/license/META-1-Official/litewallet-native)
+![GitHub package.json version](https://img.shields.io/github/package-json/v/META-1-Official/litewallet-native)
+`TODO: Project description`
 ### Running Locally
 
 The code is built using React-Native and running code locally requires a Mac or Linux OS.
