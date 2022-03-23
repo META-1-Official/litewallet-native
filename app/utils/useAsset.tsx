@@ -99,8 +99,8 @@ export const useAsset = ({
       throw new Error('Failed to get META1 asset. Try again later.');
     }
 
-    if (meta1.amount - 35e-5 <= 0) {
-      throw new Error('Insufficient balance to pay transaction fees.');
+    if (meta1.amount - 2e-5 <= 0) {
+      throw new Error('Not enough META1 left to pay transaction fees.');
     }
     return;
   };
@@ -114,12 +114,12 @@ export const useAsset = ({
     if (!meta1) {
       throw new Error('Failed to get META1 asset. Try again later.');
     }
-    const totalCost = 35e-5 + Number(amount) * Number(asset.symbol === 'META1');
+    const totalCost = Number(amount) + 2e-5 * Number(asset.symbol === 'META1');
     if (meta1.amount - totalCost <= 0) {
       throw new Error(
-        `Insufficient balance to pay transaction fees. This transaction requires ${totalCost} ${
+        `Not enough META1 left to pay transaction fees. This transaction requires ${totalCost} ${
           asset.symbol
-        } (${35e-5} META1 fee)`,
+        } (${2e-5} META1 fee)`,
       );
     }
     return;
