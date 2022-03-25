@@ -84,14 +84,21 @@ export const useAsset = ({
     return usdt;
   };
 
-  const setMax = () => setAmount(asset.amount.toFixed(8));
-  const getMax = () => Math.max(0, asset.symbol === 'META1' ? asset.amount - 2e-5 : asset.amount);
+  const setMax = () => setAmount(asset.amount.toFixed(asset._asset.precision));
+  const getMax = () => asset.amount;
 
   const canAfford = () => asset.amount >= Number(amount);
 
   const isAffordableForSwap = () => {
     if (!canAfford()) {
       throw new Error('Insufficient balance');
+    }
+
+    if (asset.symbol === 'META1' && Number(amount) === getMax()) {
+      throw new Error(
+        `Insufficient balance: prevented the swap of Max amount of META1.
+        META1 coin is required to pay network fees, otherwise your account can become unusable`,
+      );
     }
 
     const meta1 = useAssetsStore.getState().userAssets.find('META1');
@@ -108,6 +115,13 @@ export const useAsset = ({
   const isAffordableForSend = () => {
     if (!canAfford()) {
       throw new Error('Insufficient balance');
+    }
+
+    if (asset.symbol === 'META1' && Number(amount) === getMax()) {
+      throw new Error(
+        `Insufficient balance: prevented the send of Max amount of META1. 
+        META1 coin is required to pay network fees, otherwise your account can become unusable`,
+      );
     }
 
     const meta1 = useAssetsStore.getState().userAssets.find('META1');
