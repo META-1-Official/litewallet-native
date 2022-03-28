@@ -8,5 +8,6 @@ module.exports = {
         envName: 'NETWORK',
       },
     ],
+    'react-native-reanimated/plugin',
   ],
 };
