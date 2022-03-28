@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
+  Animated,
   GestureResponderEvent,
   StyleProp,
   StyleSheet,
@@ -8,24 +9,49 @@ import {
   TouchableOpacity,
   ViewStyle,
 } from 'react-native';
-import { colors } from '../styles/colors';
 import { tid } from '../utils';
 
 interface Props {
   title: string;
   onPress: (e: GestureResponderEvent) => void;
   styles?: StyleProp<ViewStyle & TextStyle>;
+  disabled?: boolean;
 }
 
-const RoundedButton = ({ title, onPress, styles: propStyles }: Props) => {
+const RoundedButton = ({ title, onPress, styles: propStyles, disabled }: Props) => {
+  const colorRef = useRef(new Animated.Value(disabled ? 0 : 150));
+
+  useEffect(() => {
+    if (disabled) {
+      Animated.timing(colorRef.current, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: false,
+      }).start();
+    } else {
+      Animated.timing(colorRef.current, {
+        toValue: 150,
+        duration: 300,
+        useNativeDriver: false,
+      }).start();
+    }
+  }, [disabled]);
+
+  const color = colorRef.current.interpolate({
+    inputRange: [0, 150],
+    outputRange: ['rgb(150,172,183)', 'rgb(255, 192, 0)'],
+  });
+
   return (
     <TouchableOpacity
       {...tid(`RoundedButton/${title}`)}
-      style={[styles.SubmitButtonStyle, propStyles]}
       activeOpacity={0.5}
       onPress={onPress}
+      disabled={disabled}
     >
-      <Text style={[styles.TextStyle, propStyles]}> {title} </Text>
+      <Animated.View style={[styles.SubmitButtonStyle, { backgroundColor: color }, propStyles]}>
+        <Text style={[styles.TextStyle, propStyles]}> {title} </Text>
+      </Animated.View>
     </TouchableOpacity>
   );
 };
@@ -36,7 +62,6 @@ const styles = StyleSheet.create({
     padding: 12,
     marginHorizontal: 24,
     marginVertical: 8,
-    backgroundColor: colors.BrandYellow,
     borderRadius: 10000,
     borderWidth: 1,
     borderColor: '#fff',
