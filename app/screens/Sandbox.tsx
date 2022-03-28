@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {  useState } from 'react';
 import { Pressable, SafeAreaView, Text, View } from 'react-native';
 import { useNewLoaderModal } from '../components/LoaderModal';
 import { useStore } from '../store';
@@ -42,6 +42,15 @@ export const useCreateOrder = (exec: any) => {
   };
 };
 
+const DoDa = () => {
+  const [on, setOn] = useState(true);
+  return (
+    <>
+      <RoundedButton title="Set enabled" onPress={() => setOn(false)} />
+      <RoundedButton title="Set disabled" onPress={() => setOn(true)} disabled={on} />
+    </>
+  );
+};
 const Sandbox = () => {
   const nav = useNavigation<any>();
   const ok = useCreateOrder(resolves);
@@ -55,6 +64,7 @@ const Sandbox = () => {
         <RoundedButton title="Show modal" onPress={() => nav.navigate('SbxModal')} />
         <RoundedButton title="Show loader modal for 5 second (resolves)" onPress={() => ok.fn()} />
         <RoundedButton title="Show loader modal for 5 second (throws)" onPress={() => err.fn()} />
+        <DoDa />
       </SafeAreaView>
     </>
   );
