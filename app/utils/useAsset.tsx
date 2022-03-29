@@ -128,12 +128,12 @@ export const useAsset = ({
     if (!meta1) {
       throw new Error('Failed to get META1 asset. Try again later.');
     }
-    const totalCost = Number(amount) + 2e-5 * Number(asset.symbol === 'META1');
+    const totalCost = 35e-5 + Number(amount) * Number(asset.symbol === 'META1');
     if (meta1.amount - totalCost <= 0) {
       throw new Error(
         `Not enough META1 left to pay transaction fees. This transaction requires ${totalCost} ${
           asset.symbol
-        } (${2e-5} META1 fee)`,
+        } (${35e-5} META1 fee)`,
       );
     }
     return;
