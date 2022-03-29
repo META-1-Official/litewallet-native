@@ -52,6 +52,9 @@ const premiumName: RuleFn = t =>
     `This is a premium name which is not supported by this faucet. Please enter a regular name containing least one dash or a number
     `,
   );
+
+const slet: RuleFn = t => rule(/^[a-zA-Z]/m.test(t), 'Account name should start with a letter.');
+let once = false;
 const CreateWalletScreen: React.FC = () => {
   const authorize = useStore(state => state.authorize);
 
@@ -63,7 +66,7 @@ const CreateWalletScreen: React.FC = () => {
     {
       name: 'account_name',
       lable: 'Account name',
-      rules: [required, notDoubleDash, notDanglingDash, validName, premiumName, freeName],
+      rules: [required, notDoubleDash, notDanglingDash, validName, premiumName, freeName, slet],
     },
     {
       name: 'password',
@@ -173,7 +176,9 @@ const CreateWalletScreen: React.FC = () => {
             title="Submit"
             disabled={!validState}
             onPress={() => {
-              if (valid()) {
+              if (valid() && !once) {
+                console.log('PRESS');
+                once = true;
                 catchError(async () => {
                   const _apiRes = await createAccountWithPassword(
                     formState.account_name,
@@ -189,6 +194,7 @@ const CreateWalletScreen: React.FC = () => {
                     formState.last_name,
                     formState.first_name,
                   );
+                  once = false;
                   authorize(formState.account_name, formState.password);
                 });
               }
