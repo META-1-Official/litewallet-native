@@ -126,7 +126,7 @@ const DarkFloatingButton = ({ assets }: AssetsProp) => {
         {...tid('TradeScreen/MAX')}
         onPress={() => {
           const aMax = assets.A.getMax();
-          assets.A.setAmount(aMax.toString());
+          assets.A.setAmount(aMax.toFixed(assets.A.asset._asset.precision));
           assets.B.formUsdt(assets.A.toUsdt(aMax));
         }}
       >
