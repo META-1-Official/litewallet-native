@@ -415,7 +415,7 @@ const RenderRow =
     }
 
     const buyPrice = filled.length ? meanFilled : sellAmt / buyAmt;
-    const sellPrice = filled.length ? 1 / meanFilled : buyAmt / sellAmt;
+    const sellPrice = Math.max(buyAmt / sellAmt, sellAmt / buyAmt);
     return (
       <View
         style={{
