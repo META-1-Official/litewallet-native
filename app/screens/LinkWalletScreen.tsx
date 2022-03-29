@@ -25,12 +25,14 @@ const knownAccount: RuleFn = text =>
   }, 'Account not found');
 
 const LinkWalletScreen: React.FC = () => {
-  const { Input, formState, valid } = useForm([
-    { name: 'account_name', lable: 'Account Name', rules: [required, knownAccount] },
-  ]);
+  const { Input, formState, valid } = useForm(
+    [{ name: 'account_name', lable: 'Account Name', rules: [required, knownAccount] }],
+    false,
+  );
   const offsetY = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
+    console.log('re-render');
     const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
       Animated.timing(offsetY, {
         toValue: -300,
@@ -50,7 +52,7 @@ const LinkWalletScreen: React.FC = () => {
       showSubscription.remove();
       hideSubscription.remove();
     };
-  }, []);
+  });
 
   const authorzie = useStore(state => state.authorize);
   return (

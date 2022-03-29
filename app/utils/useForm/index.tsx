@@ -19,7 +19,7 @@ type DefautlStateItem = {
 interface InputProps extends Omit<TextInputProps, 'theme'> {
   name: string;
 }
-export default function useForm<T extends DefautlStateItem[]>(defautState: T) {
+export default function useForm<T extends DefautlStateItem[]>(defautState: T, updateValidState = true) {
   const lables = Object.fromEntries(defautState.map(e => [e.name, e.lable]));
   const ruleSets = Object.fromEntries(defautState.map(e => [e.name, e.rules]));
   // Gotta go fast
@@ -37,7 +37,7 @@ export default function useForm<T extends DefautlStateItem[]>(defautState: T) {
     setTimeout(() => {
       const isValid = Object.values(valid).reduce((acc, cv) => cv && acc, true);
       console.log('REVALIDATE', { isValid });
-      setValidState(isValid);
+      updateValidState && setValidState(isValid);
     }, 300);
   }, 750);
 
