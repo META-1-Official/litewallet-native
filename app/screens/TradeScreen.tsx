@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import throttle from 'lodash.throttle';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Dimensions,
   Image,
@@ -161,8 +161,10 @@ const AssetDisplay = ({ asset, darkMode }: DM<AssetProp>) => {
     </TouchableOpacity>
   );
 };
-
-const errors: { [k: number]: boolean } = {};
+const ErrorContext = React.createContext({
+  errors: [],
+  setErrors: (_: any) => {},
+});
 type InputProps = {
   validate: (value: string) => boolean;
   onChange: (value: string, valid: boolean) => void;
@@ -173,10 +175,9 @@ const Input = (props: InputProps) => {
   const [err, setErr] = useState(false);
 
   // This is surprisingly effective
-  const [id] = useState(Math.floor(Math.random() * 2 ** 32));
+  const { errors, setErrors } = useContext(ErrorContext);
   useEffect(() => {
-    errors[id] = err;
-    console.log(errors);
+    err ? setErrors([...errors, true]) : setErrors([...errors.slice(0, -1)]);
   }, [err]);
 
   useEffect(() => {
@@ -388,13 +389,8 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
 
   //FIXME: Bruh moment, just checking every half a second if we can proceed
   const [disabled, setDisabled] = useState(false);
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setDisabled(Object.values(errors).filter(e => !e).length !== 4);
-    }, 500);
-    return () => clearInterval(timer);
-  });
-
+  const [errors, setErrors] = useState([]);
+  useEffect(() => setDisabled(errors.length !== 0), [errors]);
   if (allAssets === null || !availableAssets || !pair) {
     refresh();
     return <Loader />;
@@ -419,57 +415,59 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
   const LightMode: React.FC = ({ children }) => <>{darkMode ? null : children}</>;
   return (
     <DKSAV style={darkStyle(styles.darkRoot)}>
-      <LightMode>
-        <Backdrop />
-      </LightMode>
-      <View>
+      <ErrorContext.Provider value={{ errors, setErrors }}>
         <LightMode>
-          <FloatingButton assets={assets} />
+          <Backdrop />
+        </LightMode>
+        <View>
+          <LightMode>
+            <FloatingButton assets={assets} />
+          </LightMode>
+          <DarkMode>
+            <View style={{ margin: 18 }} />
+          </DarkMode>
+          <List style={darkStyle(styles.darkList, styles.listStyle)}>
+            <View style={darkStyle(styles.darkListView, styles.listView)}>
+              <View style={[styles.rowJustifyBetween, styles.center, { paddingVertical: 8 }]}>
+                <Text style={darkStyle({ color: colors.BrandYellow }, styles.listHeading)}>
+                  Convert
+                </Text>
+                <DarkMode>
+                  <DarkFloatingButton assets={assets} />
+                </DarkMode>
+              </View>
+              <View style={styles.rowJustifyBetween}>
+                <AssetDisplay darkMode={darkMode} asset={assets.A} />
+                <AmountsInput darkMode={darkMode} asset={assets.A} />
+              </View>
+            </View>
+            <View style={{ padding: 16 }}>
+              <Text style={darkStyle({ color: colors.BrandYellow }, styles.listHeading)}>To</Text>
+              <View style={styles.rowJustifyBetween}>
+                <AssetDisplay darkMode={darkMode} asset={assets.B} />
+                <AmountsInput darkMode={darkMode} asset={assets.B} />
+              </View>
+            </View>
+          </List>
+        </View>
+        <LightMode>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity {...tid('TradeScreen/Trade')} onPress={fn} disabled={disabled}>
+              <View style={styles.button}>
+                <Text style={styles.buttonText}>Exchange</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         </LightMode>
         <DarkMode>
-          <View style={{ margin: 18 }} />
-        </DarkMode>
-        <List style={darkStyle(styles.darkList, styles.listStyle)}>
-          <View style={darkStyle(styles.darkListView, styles.listView)}>
-            <View style={[styles.rowJustifyBetween, styles.center, { paddingVertical: 8 }]}>
-              <Text style={darkStyle({ color: colors.BrandYellow }, styles.listHeading)}>
-                Convert
-              </Text>
-              <DarkMode>
-                <DarkFloatingButton assets={assets} />
-              </DarkMode>
-            </View>
-            <View style={styles.rowJustifyBetween}>
-              <AssetDisplay darkMode={darkMode} asset={assets.A} />
-              <AmountsInput darkMode={darkMode} asset={assets.A} />
-            </View>
-          </View>
-          <View style={{ padding: 16 }}>
-            <Text style={darkStyle({ color: colors.BrandYellow }, styles.listHeading)}>To</Text>
-            <View style={styles.rowJustifyBetween}>
-              <AssetDisplay darkMode={darkMode} asset={assets.B} />
-              <AmountsInput darkMode={darkMode} asset={assets.B} />
-            </View>
-          </View>
-        </List>
-      </View>
-      <LightMode>
-        <View style={styles.buttonContainer}>
+          <View style={[styles.center, styles.m12]} />
           <TouchableOpacity {...tid('TradeScreen/Trade')} onPress={fn} disabled={disabled}>
-            <View style={styles.button}>
-              <Text style={styles.buttonText}>Exchange</Text>
+            <View style={styles.darkBtnView}>
+              <Text style={styles.font18x500}>Convert</Text>
             </View>
           </TouchableOpacity>
-        </View>
-      </LightMode>
-      <DarkMode>
-        <View style={[styles.center, styles.m12]} />
-        <TouchableOpacity {...tid('TradeScreen/Trade')} onPress={fn} disabled={disabled}>
-          <View style={styles.darkBtnView}>
-            <Text style={styles.font18x500}>Convert</Text>
-          </View>
-        </TouchableOpacity>
-      </DarkMode>
+        </DarkMode>
+      </ErrorContext.Provider>
     </DKSAV>
   );
 };
