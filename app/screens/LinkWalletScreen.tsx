@@ -25,7 +25,7 @@ const knownAccount: RuleFn = text =>
   }, 'Account not found');
 
 const LinkWalletScreen: React.FC = () => {
-  const { Input, formState, valid, validState} = useForm([
+  const { Input, formState, valid } = useForm([
     { name: 'account_name', lable: 'Account Name', rules: [required, knownAccount] },
   ]);
   const offsetY = useRef(new Animated.Value(0)).current;
@@ -104,7 +104,6 @@ const LinkWalletScreen: React.FC = () => {
       </Animated.View>
       <View>
         <RoundedButton
-          disabled={!validState}
           title="Submit"
           onPress={() => {
             if (valid()) {
