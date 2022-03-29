@@ -302,7 +302,7 @@ export const useOrderState = (assetA: string, assetB: string, oType: OrderType) 
           return produce({ price: bStr(Num(state.price) - 1) });
 
         case Update.TOTAL:
-          const amt = Num(payload!) / price(Num(state.price));
+          const amt = Num(state.price) === 0 ? 0 : Num(payload!) / price(Num(state.price));
           return produce({ amount: aStr(amt) });
         default:
           break;
