@@ -30,21 +30,7 @@ const freeName: RuleFn = text =>
     return !acc;
   }, 'This account name is already taken');
 
-const DOUBLE_DASH_RE = /--+/m;
-const notDoubleDash: RuleFn = (t, l) =>
-  rule(!DOUBLE_DASH_RE.test(t), `${l} should have only one dash in a row.`);
-
-const DANGLING_DASH_RE = /-$/m;
-const notDanglingDash: RuleFn = (t, l) =>
-  rule(!DANGLING_DASH_RE.test(t), `${l} should end with a letter or digit.`);
-
-// eslint-disable-next-line no-useless-escape
-const GENERAL_RE = /[a-zA-Z0-9\-]{4,64}/gm;
-const validName: RuleFn = (t, l) =>
-  rule(
-    t.match(GENERAL_RE)?.at(0) === t,
-    `${l} must contain from 4 to 63 characters and must consist of latin letters, dashes, digits.`,
-  );
+const chainValidate: RuleFn = t => ChainValidation.is_account_name_error(t);
 
 const premiumName: RuleFn = t =>
   rule(
@@ -53,7 +39,6 @@ const premiumName: RuleFn = t =>
     `,
   );
 
-const slet: RuleFn = t => rule(/^[a-zA-Z]/m.test(t), 'Account name should start with a letter.');
 let once = false;
 const CreateWalletScreen: React.FC = () => {
   const authorize = useStore(state => state.authorize);
@@ -66,7 +51,7 @@ const CreateWalletScreen: React.FC = () => {
     {
       name: 'account_name',
       lable: 'Account name',
-      rules: [required, notDoubleDash, notDanglingDash, validName, premiumName, freeName, slet],
+      rules: [required, premiumName, freeName, chainValidate],
     },
     {
       name: 'password',
