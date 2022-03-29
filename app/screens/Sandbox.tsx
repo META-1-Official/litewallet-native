@@ -1,4 +1,4 @@
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 import { Pressable, SafeAreaView, Text, View } from 'react-native';
 import { useNewLoaderModal } from '../components/LoaderModal';
 import { useStore } from '../store';
@@ -8,6 +8,8 @@ import { useShowModal } from '../components/SuccessModal';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { NETWORK } from '@env';
+import RNRestart from 'react-native-restart';
+
 const resolves = (ms: number) => new Promise<void>(resolve => setTimeout(() => resolve(), ms));
 const rejects = (ms: number) => new Promise<void>((_, reject) => setTimeout(() => reject(), ms));
 
@@ -65,6 +67,7 @@ const Sandbox = () => {
         <RoundedButton title="Show loader modal for 5 second (resolves)" onPress={() => ok.fn()} />
         <RoundedButton title="Show loader modal for 5 second (throws)" onPress={() => err.fn()} />
         <DoDa />
+        <RoundedButton title="Restart app" onPress={() => RNRestart.Restart()} />
       </SafeAreaView>
     </>
   );
