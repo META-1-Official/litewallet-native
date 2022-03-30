@@ -85,13 +85,13 @@ export const useAsset = ({
   };
 
   const setMax = () => setAmount(asset.amount.toFixed(8));
-  const getMax = () => (asset.symbol === 'META1' ? asset.amount - 4e-4 : asset.amount);
+  const getMax = () => asset.amount;
 
   const canAfford = () => asset.amount >= Number(amount);
 
   const isAffordableForSwap = () => {
     if (!canAfford()) {
-      throw new Error('Insufficient balance');
+      throw new Error('Insufficient funds');
     }
 
     const meta1 = useAssetsStore.getState().userAssets.find('META1');
@@ -107,7 +107,7 @@ export const useAsset = ({
 
   const isAffordableForSend = () => {
     if (!canAfford()) {
-      throw new Error('Insufficient balance');
+      throw new Error('Insufficient funds');
     }
 
     const meta1 = useAssetsStore.getState().userAssets.find('META1');
