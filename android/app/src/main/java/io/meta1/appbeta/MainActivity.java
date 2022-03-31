@@ -1,4 +1,4 @@
-package com.nativeapp;
+package io.meta1.appbeta;
 
 import android.os.Bundle;
 import com.facebook.react.ReactActivity;
