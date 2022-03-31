@@ -8,7 +8,7 @@
 
     increment_version_name(
       gradle_file_path: "./android/app/build.gradle",
-      version_name: package['version'] + '+' + ENV['GIT_HEAD']
+      version_name: package['version'] + ENV['GIT_HEAD']
     )
   end
 
@@ -22,7 +22,7 @@
     )
     increment_version_number(
       xcodeproj: './ios/' + package['name'] + '.xcodeproj',
-      version_number: package['version'] + '+' + ENV['GIT_HEAD']
+      version_number: package['version'] + ENV['GIT_HEAD']
     )
   end
 
