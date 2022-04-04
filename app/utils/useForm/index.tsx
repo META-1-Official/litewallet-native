@@ -6,6 +6,7 @@ import { getObjectSetter, tid } from '..';
 import { colors } from '../../styles/colors';
 import { RuleFn } from './rules';
 import _get from 'lodash.get';
+import throttle from 'lodash.throttle';
 
 type DefautlStateItem = {
   name: string;
@@ -18,7 +19,6 @@ type DefautlStateItem = {
 interface InputProps extends Omit<TextInputProps, 'theme'> {
   name: string;
 }
-
 export default function useForm<T extends DefautlStateItem[]>(defautState: T) {
   const lables = Object.fromEntries(defautState.map(e => [e.name, e.lable]));
   const ruleSets = Object.fromEntries(defautState.map(e => [e.name, e.rules]));
@@ -31,6 +31,16 @@ export default function useForm<T extends DefautlStateItem[]>(defautState: T) {
   const valid = useRef(
     Object.fromEntries(defautState.map(e => [e.name, e.valid || false])),
   ).current;
+
+  const [validState, setValidState] = useState(false);
+  const willBeValid = throttle(() => {
+    setTimeout(() => {
+      const isValid = Object.values(valid).reduce((acc, cv) => cv && acc, true);
+      console.log('REVALIDATE', { isValid });
+      setValidState(isValid);
+    }, 300);
+  }, 750);
+
   const setValid = getObjectSetter<typeof valid>(valid);
 
   const Input: React.FC<InputProps> = ({ name, ...props }) => {
@@ -76,6 +86,7 @@ export default function useForm<T extends DefautlStateItem[]>(defautState: T) {
           onChangeText={newText => {
             formState[name] = newText;
             validate();
+            willBeValid();
           }}
         />
         <HelperText padding="none" type="error" visible={!!error}>
@@ -89,6 +100,7 @@ export default function useForm<T extends DefautlStateItem[]>(defautState: T) {
     Input,
     formState: formState,
     valid: () => Object.values(valid).reduce((acc, cv) => cv && acc, true),
+    validState,
   };
 }
 

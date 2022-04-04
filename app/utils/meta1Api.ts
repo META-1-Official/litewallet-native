@@ -21,13 +21,14 @@ import {
 } from './meta1dexTypes';
 import { setupOnStatusCallbackHook } from './meta1wsHook';
 import { createPaperWalletLink } from './miscApi';
+import RNRestart from 'react-native-restart';
 
 // Number of milliseconds in one year
 const YY = 3.154e10;
 
 const setLoading = useStore.getState().setLoading;
 const logout = useStore.getState().logout;
-
+let once = false;
 export const Connect = () => {
   Meta1.connect(config.META1_CONNECTION_URL);
   // A hack to patch into websocket status update callback
@@ -35,9 +36,12 @@ export const Connect = () => {
   // We probably will not recover
 
   setupOnStatusCallbackHook(s => {
-    if (s !== 'open') {
-      Alert.alert('Server connection lost, application restart is advised');
-      throw new Error(`Server connection lost, Websocket status: ${s}`);
+    if (s !== 'open' && !once) {
+      once = true;
+      Alert.alert('Server connection lost', '', [
+        { text: 'Restart', onPress: () => RNRestart.Restart() },
+      ]);
+      //RNRestart.Restart();
     }
   });
   // TRASH!

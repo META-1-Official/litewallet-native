@@ -84,7 +84,7 @@ export const useAsset = ({
     return usdt;
   };
 
-  const setMax = () => setAmount(asset.amount.toFixed(8));
+  const setMax = () => setAmount(asset.amount.toFixed(asset._asset.precision));
   const getMax = () => asset.amount;
 
   const canAfford = () => asset.amount >= Number(amount);
@@ -94,13 +94,20 @@ export const useAsset = ({
       throw new Error('Insufficient funds');
     }
 
+    if (asset.symbol === 'META1' && Number(amount) === getMax()) {
+      throw new Error(
+        `Insufficient balance: prevented the swap of Max amount of META1.
+        META1 coin is required to pay network fees, otherwise your account can become unusable`,
+      );
+    }
+
     const meta1 = useAssetsStore.getState().userAssets.find('META1');
     if (!meta1) {
       throw new Error('Failed to get META1 asset. Try again later.');
     }
 
-    if (meta1.amount - 35e-5 <= 0) {
-      throw new Error('Insufficient balance to pay transaction fees.');
+    if (meta1.amount - 2e-5 <= 0) {
+      throw new Error('Not enough META1 left to pay transaction fees.');
     }
     return;
   };
@@ -110,6 +117,13 @@ export const useAsset = ({
       throw new Error('Insufficient funds');
     }
 
+    if (asset.symbol === 'META1' && Number(amount) === getMax()) {
+      throw new Error(
+        `Insufficient balance: prevented the send of Max amount of META1. 
+        META1 coin is required to pay network fees, otherwise your account can become unusable`,
+      );
+    }
+
     const meta1 = useAssetsStore.getState().userAssets.find('META1');
     if (!meta1) {
       throw new Error('Failed to get META1 asset. Try again later.');
@@ -117,7 +131,7 @@ export const useAsset = ({
     const totalCost = 35e-5 + Number(amount) * Number(asset.symbol === 'META1');
     if (meta1.amount - totalCost <= 0) {
       throw new Error(
-        `Insufficient balance to pay transaction fees. This transaction requires ${totalCost} ${
+        `Not enough META1 left to pay transaction fees. This transaction requires ${totalCost} ${
           asset.symbol
         } (${35e-5} META1 fee)`,
       );

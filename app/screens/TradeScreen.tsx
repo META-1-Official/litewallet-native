@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import throttle from 'lodash.throttle';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Dimensions,
   Image,
@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TextInputProps,
   TextStyle,
   View,
   ViewStyle,
@@ -53,13 +54,13 @@ const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanc
   );
 
   useEffect(() => {
-    console.log('One of Assets Changed');
+    console.log('One of Assets symbol Changed');
     if (!A || !B) {
       return;
     }
-    const baseUsdt = A.toUsdt();
-    const _targetAmount = B.formUsdt(baseUsdt);
-  }, [A?.asset, B?.asset]);
+    A.setAmount('0.00');
+    B.setAmount('0.00');
+  }, [A?.asset.symbol, B?.asset.symbol]);
 
   if (!A || !B) {
     return null;
@@ -97,8 +98,9 @@ const FloatingButton = ({ assets }: AssetsProp) => {
       <TouchableOpacity
         {...tid('TradeScreen/MAX')}
         onPress={() => {
+          editing.current?.(false);
           const aMax = assets.A.getMax();
-          assets.A.setAmount(aMax.toString());
+          assets.A.setAmount(aMax.toFixed(assets.A.asset._asset.precision));
           assets.B.formUsdt(assets.A.toUsdt(aMax));
         }}
       >
@@ -160,51 +162,135 @@ const AssetDisplay = ({ asset, darkMode }: DM<AssetProp>) => {
   );
 };
 
-const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
-  const [amt, setAmt] = useState(asset.amount);
-  const [usd, setUsd] = useState(asset.toUsdt().toFixed(2));
+const errors: { [k: number]: boolean } = {};
+type InputProps = {
+  validate: (value: string) => boolean;
+  onChange: (value: string, valid: boolean) => void;
+} & Omit<TextInputProps, 'onChange'>;
 
-  const darkStyle = optStyleFactory(darkMode);
+const Input = (props: InputProps) => {
+  const { validate, onChange, ...inputProps } = props;
+  const [err, setErr] = useState(false);
+
+  // This is surprisingly effective
+  const [id] = useState(Math.floor(Math.random() * 2 ** 32));
+  useEffect(() => {
+    errors[id] = err;
+    console.log(errors);
+  }, [err]);
 
   useEffect(() => {
-    setAmt(asset.amount);
-    setUsd(asset.toUsdt().toFixed(2));
-  }, [asset]);
+    if (props.value) {
+      setErr(!validate(props.value));
+    }
+  }, [props.value]);
 
-  const throttled = useMemo(
-    () =>
-      throttle((tt: string) => {
-        asset.formUsdt(tt);
-        asset.opponent().formUsdt(tt);
-      }, 1500),
-    [asset],
+  const _onChange = (t: string, v: boolean) => {
+    console.log('valid', v);
+    setErr(!v);
+    onChange(t, v);
+  };
+
+  const errorHighlight = err ? { color: 'red' } : {};
+  inputProps.style = [inputProps.style || {}, errorHighlight];
+
+  return <TextInput {...inputProps} onChangeText={t => _onChange(t, validate(t))} />;
+};
+
+const editing: any = { current: null };
+// Basically do not update if meself is editing
+const useCause = () => {
+  const [isCause, setCause] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout>();
+  return {
+    isCause,
+    cause: () => {
+      if (!isCause) {
+        setCause(true);
+        editing.current = setCause;
+      }
+
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+
+      timerRef.current = setTimeout(() => {
+        setCause(false);
+        editing.current = null;
+      }, 5000);
+    },
+  };
+};
+
+const validateNumber = (t: string) => /^(\d+([.,]\d+)?)$/m.test(t);
+const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
+  const [amount, setAmount] = useState(asset.amount);
+  const { isCause, cause } = useCause();
+  useEffect(() => {
+    if (!isCause) {
+      setAmount(asset.amount);
+    }
+  }, [asset.amount, isCause]);
+
+  const darkStyle = optStyleFactory(darkMode);
+  return (
+    <Input
+      {...tid('TradeScreen/AmountInput/amount')}
+      style={darkStyle({ color: '#fff' }, styles.amountInput)}
+      value={amount}
+      validate={validateNumber}
+      keyboardType="numeric"
+      onChange={(txt, valid) => {
+        cause();
+        setAmount(txt);
+        if (valid) {
+          asset.setAmount(txt);
+          asset.opponent().formUsdt(asset.toUsdt(txt));
+        }
+      }}
+    />
   );
+};
+
+const UsdInput = ({ asset, darkMode }: DM<AssetProp>) => {
+  const [amount, setAmount] = useState(asset.toUsdt().toFixed());
+  const { isCause, cause } = useCause();
+
+  useEffect(() => {
+    if (!isCause) {
+      setAmount(asset.toUsdt().toFixed(2));
+    }
+  }, [asset.amount, isCause]);
+
+  const darkStyle = optStyleFactory(darkMode);
+  return (
+    <Input
+      {...tid('TradeScreen/AmountInput/amountUsd')}
+      style={darkStyle({ color: '#fff' }, styles.usdInput)}
+      value={amount}
+      validate={validateNumber}
+      keyboardType="numeric"
+      onChange={(txt, valid) => {
+        cause();
+        setAmount(txt);
+        if (valid) {
+          asset.formUsdt(txt);
+          asset.opponent().formUsdt(txt);
+        }
+      }}
+    />
+  );
+};
+
+const AmountsInput = ({ asset, darkMode }: DM<AssetProp>) => {
+  const darkStyle = optStyleFactory(darkMode);
+
   return (
     <View>
-      <TextInput
-        {...tid('TradeScreen/AmountInput/amount')}
-        style={darkStyle({ color: '#fff' }, styles.amountInput)}
-        keyboardType="numeric"
-        onChangeText={t => {
-          setAmt(t);
-          const opp = asset.opponent();
-          asset.setAmount(t);
-          opp.formUsdt(asset.toUsdt(t));
-        }}
-        value={amt}
-      />
+      <AmountInput asset={asset} darkMode={darkMode} />
       <View style={styles.rowEnd}>
         <TextSecondary style={darkStyle({ color: '#fff' }, styles.usdtLabel)}>US$</TextSecondary>
-        <TextInput
-          {...tid('TradeScreen/AmountInput/amountUsd')}
-          onChangeText={t => {
-            setUsd(t);
-            throttled(t);
-          }}
-          value={usd}
-          keyboardType="numeric"
-          style={darkStyle({ color: '#fff' }, styles.usdInput)}
-        />
+        <UsdInput asset={asset} darkMode={darkMode} />
       </View>
     </View>
   );
@@ -233,6 +319,7 @@ const mkPerformSwap = (
   });
 
   const fn = async () => {
+    console.log(assets.B.amount);
     const accountInfo = await getAccountInfo();
 
     onBeforeSwap();
@@ -299,6 +386,15 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
 
   const loader = useNewLoaderModal();
 
+  //FIXME: Bruh moment, just checking every half a second if we can proceed
+  const [disabled, setDisabled] = useState(false);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setDisabled(Object.values(errors).filter(e => !e).length !== 4);
+    }, 500);
+    return () => clearInterval(timer);
+  });
+
   if (allAssets === null || !availableAssets || !pair) {
     refresh();
     return <Loader />;
@@ -345,21 +441,21 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
             </View>
             <View style={styles.rowJustifyBetween}>
               <AssetDisplay darkMode={darkMode} asset={assets.A} />
-              <AmountInput darkMode={darkMode} asset={assets.A} />
+              <AmountsInput darkMode={darkMode} asset={assets.A} />
             </View>
           </View>
           <View style={{ padding: 16 }}>
             <Text style={darkStyle({ color: colors.BrandYellow }, styles.listHeading)}>To</Text>
             <View style={styles.rowJustifyBetween}>
               <AssetDisplay darkMode={darkMode} asset={assets.B} />
-              <AmountInput darkMode={darkMode} asset={assets.B} />
+              <AmountsInput darkMode={darkMode} asset={assets.B} />
             </View>
           </View>
         </List>
       </View>
       <LightMode>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity {...tid('TradeScreen/Trade')} onPress={fn}>
+          <TouchableOpacity {...tid('TradeScreen/Trade')} onPress={fn} disabled={disabled}>
             <View style={styles.button}>
               <Text style={styles.buttonText}>Exchange</Text>
             </View>
@@ -368,7 +464,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
       </LightMode>
       <DarkMode>
         <View style={[styles.center, styles.m12]} />
-        <TouchableOpacity {...tid('TradeScreen/Trade')} onPress={fn}>
+        <TouchableOpacity {...tid('TradeScreen/Trade')} onPress={fn} disabled={disabled}>
           <View style={styles.darkBtnView}>
             <Text style={styles.font18x500}>Convert</Text>
           </View>

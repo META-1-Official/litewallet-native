@@ -13,7 +13,9 @@ export function ErrorParser(e: Error) {
       if (fin) {
         break;
       }
-    } catch (_) {}
+    } catch (_) {
+      console.warn(_);
+    }
   }
   return e;
 }
@@ -35,8 +37,11 @@ const mkMutMsgFinal =
 
 const consumeTxInfo = mkMutMsg(m => m.split('bitshares-crypto')[0]);
 const InsufficientBalance = mkMutMsgFinal(m => {
-  if (m.indexOf('Insufficient Balance') !== -1) {
-    return 'Insufficient Balance' + m.split('Insufficient Balance')[1];
+  if (m.indexOf('Insufficient Balance:') !== -1) {
+    return 'Insufficient Balance:' + m.split('Insufficient Balance:')[1];
+  }
+  if (m.indexOf('Insufficient balance:') !== -1) {
+    return 'Insufficient Balance:' + m.split('Insufficient balance:')[1];
   }
   throw new Error('Token not found');
 });

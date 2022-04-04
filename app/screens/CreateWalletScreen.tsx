@@ -55,7 +55,7 @@ const premiumName: RuleFn = t =>
 const CreateWalletScreen: React.FC = () => {
   const authorize = useStore(state => state.authorize);
 
-  const { Input, formState, valid } = useForm([
+  const { Input, formState, valid, validState } = useForm([
     { name: 'first_name', lable: 'First name', rules: [required, lettersOnly] },
     { name: 'last_name', lable: 'Last name', rules: [required, lettersOnly] },
     { name: 'email', lable: 'Email', rules: [required, email] },
@@ -171,6 +171,7 @@ const CreateWalletScreen: React.FC = () => {
         <View>
           <RoundedButton
             title="Submit"
+            disabled={!validState}
             onPress={() => {
               if (valid()) {
                 catchError(async () => {

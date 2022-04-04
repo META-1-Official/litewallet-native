@@ -18,25 +18,26 @@ interface AppState {
 
 export const useStore = create<AppState>(
   persist(
-    set => ({
-      accountName: '',
-      password: '',
-      authorized: false,
-      authorize: (accountName, password) => {
-        set({
-          accountName: accountName,
-          authorized: true,
-          password: password ? password : '',
-        });
-        if (NETWORK !== 'TESTNET') {
-          signUp({ accountName }).catch(e => e);
-        }
-      },
-      logout: () => set({ accountName: '', authorized: false, password: '' }),
+    set =>
+      ({
+        accountName: '',
+        password: '',
+        authorized: false,
+        authorize: (accountName, password) => {
+          set({
+            accountName: accountName,
+            authorized: true,
+            password: password ? password : '',
+          });
+          if (NETWORK !== 'TESTNET') {
+            signUp({ accountName }).catch(e => e);
+          }
+        },
+        logout: () => set({ accountName: '', authorized: false, password: '' }),
 
-      loading: true,
-      setLoading: (loading: boolean) => set({ loading }),
-    }),
+        loading: true,
+        setLoading: (loading: boolean) => set({ loading }),
+      } as AppState),
     {
       name: 'app-storage',
       getStorage: () => EncryptedStorage,
