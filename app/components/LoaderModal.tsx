@@ -11,7 +11,7 @@ interface LoaderModalProps {
   onClose: (...args: any[]) => void;
 }
 
-const LoaderModalContent = () => {
+export const LoaderModalContent = () => {
   return (
     <SafeAreaView
       style={{

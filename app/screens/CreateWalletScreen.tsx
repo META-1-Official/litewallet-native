@@ -24,6 +24,8 @@ import { getAccount } from '../utils/meta1Api';
 import { ScrollView } from 'react-native-gesture-handler';
 //@ts-ignore
 import { ChainValidation } from 'meta1js';
+import { useNavigation } from '@react-navigation/native';
+import { RootNavigationProp } from '../App';
 const freeName: RuleFn = text =>
   asyncRule(async () => {
     const acc = await getAccount(text).catch(console.debug);
@@ -39,8 +41,8 @@ const premiumName: RuleFn = t =>
     `,
   );
 
-let once = false;
 const CreateWalletScreen: React.FC = () => {
+  const navigation = useNavigation<RootNavigationProp>();
   const authorize = useStore(state => state.authorize);
 
   const { Input, formState, valid, validState } = useForm([
@@ -161,27 +163,30 @@ const CreateWalletScreen: React.FC = () => {
             title="Submit"
             disabled={!validState}
             onPress={() => {
-              if (valid() && !once) {
-                console.log('PRESS');
-                once = true;
-                catchError(async () => {
-                  const _apiRes = await createAccountWithPassword(
-                    formState.account_name,
-                    formState.password,
-                    // --Who cares
-                    false,
-                    '',
-                    1,
-                    '',
-                    // --
-                    formState.phone,
-                    formState.email,
-                    formState.last_name,
-                    formState.first_name,
-                  );
-                  once = false;
-                  authorize(formState.account_name, formState.password);
-                });
+              if (valid()) {
+                navigation.navigate('Loader');
+                catchError(
+                  async () => {
+                    const _apiRes = await createAccountWithPassword(
+                      formState.account_name,
+                      formState.password,
+                      // --Who cares
+                      false,
+                      '',
+                      1,
+                      '',
+                      // --
+                      formState.phone,
+                      formState.email,
+                      formState.last_name,
+                      formState.first_name,
+                    );
+                    authorize(formState.account_name, formState.password);
+                  },
+                  {
+                    onErr: () => navigation.goBack(),
+                  },
+                );
               }
             }}
           />
