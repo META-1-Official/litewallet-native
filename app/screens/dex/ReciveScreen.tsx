@@ -192,9 +192,9 @@ const AssetSelection: React.FC<AssetSelectionProps> = ({ select }) => {
     return <Loader bgc="#000" />;
   }
 
-  const assets = accountAssets!.assetsWithBalance.filter(
-    e => !searchText || e.symbol.includes(searchText.toLocaleUpperCase()),
-  );
+  const assets = accountAssets!.assetsWithBalance
+    .filter(e => e.symbol !== 'BNB' && e.symbol !== 'XLM')
+    .filter(e => !searchText || e.symbol.includes(searchText.toLocaleUpperCase()));
 
   return (
     <SafeAreaView style={{ backgroundColor: '#000', height: '100%' }}>
