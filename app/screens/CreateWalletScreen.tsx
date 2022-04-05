@@ -165,23 +165,28 @@ const CreateWalletScreen: React.FC = () => {
             onPress={() => {
               if (valid()) {
                 navigation.navigate('Loader');
-                catchError(async () => {
-                  const _apiRes = await createAccountWithPassword(
-                    formState.account_name,
-                    formState.password,
-                    // --Who cares
-                    false,
-                    '',
-                    1,
-                    '',
-                    // --
-                    formState.phone,
-                    formState.email,
-                    formState.last_name,
-                    formState.first_name,
-                  );
-                  authorize(formState.account_name, formState.password);
-                });
+                catchError(
+                  async () => {
+                    const _apiRes = await createAccountWithPassword(
+                      formState.account_name,
+                      formState.password,
+                      // --Who cares
+                      false,
+                      '',
+                      1,
+                      '',
+                      // --
+                      formState.phone,
+                      formState.email,
+                      formState.last_name,
+                      formState.first_name,
+                    );
+                    authorize(formState.account_name, formState.password);
+                  },
+                  {
+                    onErr: () => navigation.goBack(),
+                  },
+                );
               }
             }}
           />
