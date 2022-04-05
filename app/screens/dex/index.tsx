@@ -26,6 +26,7 @@ import AssetViewStack from './AssetView/AssetView';
 import { DexDrawerParamList } from '../../WalletNav';
 import { OpenOrdersPage } from './AssetView/MyOrders';
 import Notifications from '../Notifications';
+import { tid } from '../../utils';
 
 const Black = () => <Loader bgc="#000" />;
 
@@ -125,7 +126,13 @@ const DexTabs = ({ navigation }: DexSSP) => {
         name="DEX__Modal"
         options={{
           tabBarButton: props => {
-            return <Pressable {...props} onPress={() => navigation.navigate('__Modal')} />;
+            return (
+              <Pressable
+                {...props}
+                {...tid('Dex/ModalButton')}
+                onPress={() => navigation.navigate('__Modal')}
+              />
+            );
           },
         }}
         component={Black}
