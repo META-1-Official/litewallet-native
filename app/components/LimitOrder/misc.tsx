@@ -32,7 +32,7 @@ export const InputRow: React.FC<InputRowProps> = ({ title, value, onChange, onIn
 
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <TextInput
-          {...tid(`LimitOrder/InputRow/TextInput/${title}`)}
+          {...tid('LimitOrder/InputRow/TextInput')}
           style={{
             color: '#fff',
             fontSize: 28,
@@ -47,7 +47,7 @@ export const InputRow: React.FC<InputRowProps> = ({ title, value, onChange, onIn
           {onChange ? (
             <>
               <TouchableOpacity
-                {...tid(`LimitOrder/InputRow/Minus/${title}`)}
+                {...tid('LimitOrder/InputRow/Minus')}
                 onPress={() => onDec?.()}
                 style={{
                   backgroundColor: '#481400',
@@ -60,7 +60,7 @@ export const InputRow: React.FC<InputRowProps> = ({ title, value, onChange, onIn
                 <Minus width={28} height={28} color={colors.BrandYellow} />
               </TouchableOpacity>
               <TouchableOpacity
-                {...tid(`LimitOrder/InputRow/Plus/${title}`)}
+                {...tid('LimitOrder/InputRow/Plus')}
                 onPress={() => onInc?.()}
                 style={{
                   backgroundColor: '#481400',
