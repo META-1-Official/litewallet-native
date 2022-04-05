@@ -195,7 +195,9 @@ const Input = (props: InputProps) => {
   const errorHighlight = err ? { color: 'red' } : {};
   inputProps.style = [inputProps.style || {}, errorHighlight];
 
-  return <TextInput {...inputProps} maxLength={12} onChangeText={t => _onChange(t, validate(t))} />;
+  return (
+    <TextInput maxLength={11} {...inputProps} onChangeText={t => _onChange(t, validate(t))} />
+  );
 };
 
 const editing: any = { current: null };
@@ -268,6 +270,7 @@ const UsdInput = ({ asset, darkMode }: DM<AssetProp>) => {
     <Input
       {...tid('TradeScreen/AmountInput/amountUsd')}
       style={darkStyle({ color: '#fff' }, styles.usdInput)}
+      maxLength={7}
       value={amount}
       validate={validateNumber}
       keyboardType="numeric"
