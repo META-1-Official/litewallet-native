@@ -24,6 +24,8 @@ import { getAccount } from '../utils/meta1Api';
 import { ScrollView } from 'react-native-gesture-handler';
 //@ts-ignore
 import { ChainValidation } from 'meta1js';
+import { useNavigation } from '@react-navigation/native';
+import { RootNavigationProp } from '../App';
 const freeName: RuleFn = text =>
   asyncRule(async () => {
     const acc = await getAccount(text).catch(console.debug);
@@ -41,6 +43,7 @@ const premiumName: RuleFn = t =>
 
 let once = false;
 const CreateWalletScreen: React.FC = () => {
+  const navigation = useNavigation<RootNavigationProp>();
   const authorize = useStore(state => state.authorize);
 
   const { Input, formState, valid, validState } = useForm([
@@ -162,8 +165,7 @@ const CreateWalletScreen: React.FC = () => {
             disabled={!validState}
             onPress={() => {
               if (valid() && !once) {
-                console.log('PRESS');
-                once = true;
+                navigation.navigate('Loader');
                 catchError(async () => {
                   const _apiRes = await createAccountWithPassword(
                     formState.account_name,
