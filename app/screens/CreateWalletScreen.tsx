@@ -30,21 +30,7 @@ const freeName: RuleFn = text =>
     return !acc;
   }, 'This account name is already taken');
 
-const DOUBLE_DASH_RE = /--+/m;
-const notDoubleDash: RuleFn = (t, l) =>
-  rule(!DOUBLE_DASH_RE.test(t), `${l} should have only one dash in a row.`);
-
-const DANGLING_DASH_RE = /-$/m;
-const notDanglingDash: RuleFn = (t, l) =>
-  rule(!DANGLING_DASH_RE.test(t), `${l} should end with a letter or digit.`);
-
-// eslint-disable-next-line no-useless-escape
-const GENERAL_RE = /[a-zA-Z0-9\-]{4,64}/gm;
-const validName: RuleFn = (t, l) =>
-  rule(
-    t.match(GENERAL_RE)?.at(0) === t,
-    `${l} must contain from 4 to 63 characters and must consist of latin letters, dashes, digits.`,
-  );
+const chainValidate: RuleFn = t => ChainValidation.is_account_name_error(t);
 
 const premiumName: RuleFn = t =>
   rule(
@@ -52,6 +38,8 @@ const premiumName: RuleFn = t =>
     `This is a premium name which is not supported by this faucet. Please enter a regular name containing least one dash or a number
     `,
   );
+
+let once = false;
 const CreateWalletScreen: React.FC = () => {
   const authorize = useStore(state => state.authorize);
 
@@ -63,7 +51,7 @@ const CreateWalletScreen: React.FC = () => {
     {
       name: 'account_name',
       lable: 'Account name',
-      rules: [required, notDoubleDash, notDanglingDash, validName, premiumName, freeName],
+      rules: [required, premiumName, freeName, chainValidate],
     },
     {
       name: 'password',
@@ -173,7 +161,9 @@ const CreateWalletScreen: React.FC = () => {
             title="Submit"
             disabled={!validState}
             onPress={() => {
-              if (valid()) {
+              if (valid() && !once) {
+                console.log('PRESS');
+                once = true;
                 catchError(async () => {
                   const _apiRes = await createAccountWithPassword(
                     formState.account_name,
@@ -189,6 +179,7 @@ const CreateWalletScreen: React.FC = () => {
                     formState.last_name,
                     formState.first_name,
                   );
+                  once = false;
                   authorize(formState.account_name, formState.password);
                 });
               }

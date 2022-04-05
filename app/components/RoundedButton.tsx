@@ -7,6 +7,7 @@ import {
   Text,
   TextStyle,
   TouchableOpacity,
+  View,
   ViewStyle,
 } from 'react-native';
 import { tid } from '../utils';
@@ -43,22 +44,26 @@ const RoundedButton = ({ title, onPress, styles: propStyles, disabled }: Props) 
   });
 
   return (
-    <TouchableOpacity
-      {...tid(`RoundedButton/${title}`)}
-      activeOpacity={0.5}
-      onPress={onPress}
-      disabled={disabled}
-    >
-      <Animated.View style={[styles.SubmitButtonStyle, { backgroundColor: color }, propStyles]}>
-        <Text style={[styles.TextStyle, propStyles]}> {title} </Text>
-      </Animated.View>
-    </TouchableOpacity>
+    <View style={[styles.container, propStyles]}>
+      <TouchableOpacity
+        {...tid(`RoundedButton/${title}`)}
+        activeOpacity={0.5}
+        onPress={onPress}
+        disabled={disabled}
+      >
+        <Animated.View style={[styles.SubmitButtonStyle, { backgroundColor: color }, propStyles]}>
+          <Text style={[styles.TextStyle, propStyles]}> {title} </Text>
+        </Animated.View>
+      </TouchableOpacity>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  SubmitButtonStyle: {
+  container: {
     alignSelf: 'stretch',
+  },
+  SubmitButtonStyle: {
     padding: 12,
     marginHorizontal: 24,
     marginVertical: 8,

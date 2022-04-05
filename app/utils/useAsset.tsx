@@ -68,7 +68,7 @@ export const useAsset = ({
     const newAmount = n / asset.usdt_value;
 
     if (updateAmount) {
-      setAmount(newAmount.toFixed(8));
+      setAmount(newAmount.toFixed(asset._asset.precision));
     }
 
     return newAmount;

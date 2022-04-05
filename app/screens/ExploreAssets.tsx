@@ -13,6 +13,7 @@ import { ArrowLeft } from 'react-native-feather';
 import { logoAsset } from '../../assets';
 import { colors } from '../styles/colors';
 import { tid } from '../utils';
+import { useAssets } from '../utils/meta1Api';
 
 const comm: ViewStyle = {
   borderRadius: 100,
@@ -169,7 +170,7 @@ function NotFound() {
 export default function ExploreAssets({ navigation }: any) {
   const [tab, setTab] = useState(0);
   const tabs = [<Approved />, <NotFound />, <NotFound />];
-
+  const price = useAssets().find('META1')?.usdt_value || 0;
   return (
     <>
       <Header navigation={navigation} />
@@ -187,7 +188,7 @@ export default function ExploreAssets({ navigation }: any) {
               Explore assets assigned to META1 coin on the META blockchain
             </Text>
             <Text style={{ fontSize: 18, color: colors.BrandYellow, marginTop: 18 }}>
-              META1 Coin Current Asset Value: $121.74
+              META1 Coin Current Asset Value: ${price.toFixed(2)}
             </Text>
           </View>
           <View>
