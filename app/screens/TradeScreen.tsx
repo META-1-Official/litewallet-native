@@ -487,9 +487,9 @@ const styles = StyleSheet.create({
   font14: { fontSize: 14 },
   amountInput: {
     fontSize: 18,
+    padding: 0,
     fontWeight: '500',
     textAlign: 'right',
-    width: 150,
     color: '#000',
   },
   rowEnd: {
