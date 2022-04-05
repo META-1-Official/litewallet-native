@@ -290,7 +290,7 @@ const AmountsInput = ({ asset, darkMode }: DM<AssetProp>) => {
   const darkStyle = optStyleFactory(darkMode);
 
   return (
-    <View>
+    <View style={{ width: 120 }}>
       <AmountInput asset={asset} darkMode={darkMode} />
       <View style={styles.rowEnd}>
         <TextSecondary style={darkStyle({ color: '#fff' }, styles.usdtLabel)}>US$</TextSecondary>
