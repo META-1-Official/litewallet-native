@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.nativeapp">
+  package="io.meta1.appbeta">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- FIXME: usesCleartextTraffic should be removed as soon as we setup a proper domain -->

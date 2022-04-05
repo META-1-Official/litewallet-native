@@ -91,7 +91,7 @@ export const useAsset = ({
 
   const isAffordableForSwap = () => {
     if (!canAfford()) {
-      throw new Error('Insufficient balance');
+      throw new Error('Insufficient funds');
     }
 
     if (asset.symbol === 'META1' && Number(amount) === getMax()) {
@@ -114,7 +114,7 @@ export const useAsset = ({
 
   const isAffordableForSend = () => {
     if (!canAfford()) {
-      throw new Error('Insufficient balance');
+      throw new Error('Insufficient funds');
     }
 
     if (asset.symbol === 'META1' && Number(amount) === getMax()) {

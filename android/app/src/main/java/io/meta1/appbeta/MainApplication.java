@@ -1,4 +1,4 @@
-package com.nativeapp;
+package io.meta1.appbeta;
 
 import android.app.Application;
 import android.content.Context;

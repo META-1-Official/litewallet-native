@@ -1,0 +1,49 @@
+diff --git a/node_modules/react-native-reanimated/android/build.gradle b/node_modules/react-native-reanimated/android/build.gradle
+index a09bbc4..263fd8e 100644
+--- a/node_modules/react-native-reanimated/android/build.gradle
++++ b/node_modules/react-native-reanimated/android/build.gradle
+@@ -569,25 +569,25 @@ task prepareGlog(dependsOn: dependenciesPath ? [] : [downloadGlog], type: Copy)
+     }
+ }
+ 
+-task prepareHermes() {
+-    def hermesPackagePath = findNodeModulePath(projectDir, "hermes-engine")
+-    if (!hermesPackagePath) {
+-        throw new GradleScriptException("Could not find the hermes-engine npm package", null)
+-    }
+-
+-    def hermesAAR = file("$hermesPackagePath/android/hermes-debug.aar")
+-    if (!hermesAAR.exists()) {
+-        throw new GradleScriptException("The hermes-engine npm package is missing \"android/hermes-debug.aar\"", null)
+-    }
+-
+-    def soFiles = zipTree(hermesAAR).matching({ it.include "**/*.so" })
+-
+-    copy {
+-        from soFiles
+-        from "$reactNative/ReactAndroid/src/main/jni/first-party/hermes/Android.mk"
+-        into "$thirdPartyNdkDir/hermes"
+-    }
+-}
++// task prepareHermes() {
++//     def hermesPackagePath = findNodeModulePath(projectDir, "hermes-engine")
++//     if (!hermesPackagePath) {
++//         throw new GradleScriptException("Could not find the hermes-engine npm package", null)
++//     }
++
++//     def hermesAAR = file("$hermesPackagePath/android/hermes-debug.aar")
++//     if (!hermesAAR.exists()) {
++//         throw new GradleScriptException("The hermes-engine npm package is missing \"android/hermes-debug.aar\"", null)
++//     }
++
++//     def soFiles = zipTree(hermesAAR).matching({ it.include "**/*.so" })
++
++//     copy {
++//         from soFiles
++//         from "$reactNative/ReactAndroid/src/main/jni/first-party/hermes/Android.mk"
++//         into "$thirdPartyNdkDir/hermes"
++//     }
++// }
+ 
+ task prepareJSC {
+     doLast {
