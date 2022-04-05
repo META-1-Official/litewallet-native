@@ -21,6 +21,7 @@ import { DexNav } from './WalletNav';
 import { PrivacyPolicy, TOSScreen } from './screens/PrivacyPolicy';
 import Loader from './components/Loader';
 import * as Sentry from '@sentry/react-native';
+import { LoaderModalContent } from './components/LoaderModal';
 
 const { useEffect } = React;
 
@@ -48,6 +49,7 @@ export type RootStackParamList = {
   CreateWallet: undefined;
   LinkWallet: undefined;
   TOS: undefined;
+  Loader: undefined;
 };
 
 export type RootNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
@@ -73,6 +75,11 @@ const AuthNav = () => {
       <Stack.Screen name="TOS" component={TOSScreen} />
       <Stack.Screen name="CreateWallet" component={CreateWalletScreen} />
       <Stack.Screen name="LinkWallet" component={LinkWalletScreen} />
+      <Stack.Screen
+        name="Loader"
+        options={{ presentation: 'transparentModal', headerShown: false }}
+        component={LoaderModalContent}
+      />
     </Stack.Navigator>
   );
 };
