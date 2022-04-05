@@ -26,6 +26,7 @@ interface AssetPickerProps {
   title: string;
   onClose: (...args: any[]) => void;
   onSelect: (asset: AssetBalanceT) => void;
+  exclude?: string[];
 }
 const { width, height } = Dimensions.get('screen');
 
@@ -84,16 +85,21 @@ const Search = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
   );
 };
 
-const PickerContent = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
+const PickerContent = ({
+  onSelect,
+  exclude,
+}: Pick<AssetPickerProps, 'onSelect'> & Pick<AssetPickerProps, 'exclude'>) => {
   const allAssets = useAssets();
   const scroll = useScroll();
   scroll.contentContainerStyle.paddingBottom = 350;
   const suggested = allAssets!.assetsWithBalance
-    .filter(ass => ass.symbol === 'BTC' || ass.symbol === 'ETH' || ass.symbol === 'META1')
+    .filter(a => a.symbol === 'BTC' || a.symbol === 'ETH' || a.symbol === 'META1')
+    .filter(a => !exclude || exclude.indexOf(a.symbol) === -1)
     .sort((a, b) => a.symbol.localeCompare(b.symbol));
 
   const rest = allAssets!.assetsWithBalance
-    .filter(ass => !suggested.includes(ass))
+    .filter(a => !suggested.includes(a))
+    .filter(a => !exclude || exclude.indexOf(a.symbol) === -1)
     .sort((a, b) => a.symbol.localeCompare(b.symbol));
 
   return (
@@ -137,7 +143,7 @@ const PickerContent = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
     </>
   );
 };
-const AssetPicker: React.FC<AssetPickerProps> = ({ title, onClose, onSelect }) => {
+const AssetPicker: React.FC<AssetPickerProps> = ({ title, onClose, onSelect, exclude }) => {
   const navigation = useNavigation();
   const { current } = useCardAnimation();
 
@@ -196,6 +202,7 @@ const AssetPicker: React.FC<AssetPickerProps> = ({ title, onClose, onSelect }) =
         >
           <Header />
           <PickerContent
+            exclude={exclude}
             onSelect={(...args) => {
               onSelect(...args);
               navigation.goBack();
@@ -211,10 +218,12 @@ export const useAssetPicker = ({
   defaultValue,
   title,
   onClose,
+  exclude,
 }: {
   defaultValue?: AssetBalanceT;
   title: string;
   onClose?: () => void;
+  exclude?: string[];
 }): [AssetBalanceT | null, () => void] => {
   const [selected, setSelected] = useState<AssetBalanceT | null>(defaultValue || null);
 
@@ -247,6 +256,7 @@ export const useAssetPicker = ({
           onSelect={e => {
             setSelected(e);
           }}
+          exclude={exclude}
         />
       ),
       props: {},
