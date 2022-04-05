@@ -41,7 +41,6 @@ const premiumName: RuleFn = t =>
     `,
   );
 
-let once = false;
 const CreateWalletScreen: React.FC = () => {
   const navigation = useNavigation<RootNavigationProp>();
   const authorize = useStore(state => state.authorize);
@@ -164,7 +163,7 @@ const CreateWalletScreen: React.FC = () => {
             title="Submit"
             disabled={!validState}
             onPress={() => {
-              if (valid() && !once) {
+              if (valid()) {
                 navigation.navigate('Loader');
                 catchError(async () => {
                   const _apiRes = await createAccountWithPassword(
@@ -181,7 +180,6 @@ const CreateWalletScreen: React.FC = () => {
                     formState.last_name,
                     formState.first_name,
                   );
-                  once = false;
                   authorize(formState.account_name, formState.password);
                 });
               }
