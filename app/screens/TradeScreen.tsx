@@ -195,7 +195,9 @@ const Input = (props: InputProps) => {
   const errorHighlight = err ? { color: 'red' } : {};
   inputProps.style = [inputProps.style || {}, errorHighlight];
 
-  return <TextInput {...inputProps} maxLength={12} onChangeText={t => _onChange(t, validate(t))} />;
+  return (
+    <TextInput maxLength={11} {...inputProps} onChangeText={t => _onChange(t, validate(t))} />
+  );
 };
 
 const editing: any = { current: null };
@@ -268,6 +270,7 @@ const UsdInput = ({ asset, darkMode }: DM<AssetProp>) => {
     <Input
       {...tid('TradeScreen/AmountInput/amountUsd')}
       style={darkStyle({ color: '#fff' }, styles.usdInput)}
+      maxLength={7}
       value={amount}
       validate={validateNumber}
       keyboardType="numeric"
@@ -287,7 +290,7 @@ const AmountsInput = ({ asset, darkMode }: DM<AssetProp>) => {
   const darkStyle = optStyleFactory(darkMode);
 
   return (
-    <View>
+    <View style={{ width: 120 }}>
       <AmountInput asset={asset} darkMode={darkMode} />
       <View style={styles.rowEnd}>
         <TextSecondary style={darkStyle({ color: '#fff' }, styles.usdtLabel)}>US$</TextSecondary>
@@ -484,9 +487,9 @@ const styles = StyleSheet.create({
   font14: { fontSize: 14 },
   amountInput: {
     fontSize: 18,
+    padding: 0,
     fontWeight: '500',
     textAlign: 'right',
-    width: 150,
     color: '#000',
   },
   rowEnd: {
