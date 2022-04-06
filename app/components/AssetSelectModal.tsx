@@ -30,12 +30,13 @@ interface AssetPickerProps {
 }
 const { width, height } = Dimensions.get('screen');
 
-const Search = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
+const Search = ({ onSelect, exclude }: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
   const allAssets = useAssets();
 
   const found = allAssets!.assetsWithBalance
-    .filter(ass => ass.symbol.includes(searchTerm.toUpperCase()))
+    .filter(a => a.symbol.includes(searchTerm.toUpperCase()))
+    .filter(a => !exclude || exclude.indexOf(a.symbol) === -1)
     .sort((a, b) => a.symbol.localeCompare(b.symbol));
   const pad = (
     <View
@@ -84,11 +85,8 @@ const Search = ({ onSelect }: Pick<AssetPickerProps, 'onSelect'>) => {
     </View>
   );
 };
-
-const PickerContent = ({
-  onSelect,
-  exclude,
-}: Pick<AssetPickerProps, 'onSelect'> & Pick<AssetPickerProps, 'exclude'>) => {
+type Props = Pick<AssetPickerProps, 'onSelect'> & Pick<AssetPickerProps, 'exclude'>;
+const PickerContent = ({ onSelect, exclude }: Props) => {
   const allAssets = useAssets();
   const scroll = useScroll();
   scroll.contentContainerStyle.paddingBottom = 350;
@@ -104,7 +102,7 @@ const PickerContent = ({
 
   return (
     <>
-      <Search onSelect={onSelect} />
+      <Search onSelect={onSelect} exclude={exclude} />
       <ScrollView {...scroll}>
         <TextSecondary style={{ fontSize: 14 }}> Suggested </TextSecondary>
         {suggested &&
