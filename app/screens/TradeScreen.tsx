@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/core';
 import throttle from 'lodash.throttle';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  Alert,
   Dimensions,
   Image,
   ImageStyle,
@@ -102,41 +103,19 @@ interface AssetsProp {
   assets: ScreenAssets;
 }
 
-function useMaxAmount(assets: ScreenAssets) {
-  const [ticker, setTicker] = useState<Ticker | null>(null);
-  useEffect(() => {
-    let ok = true;
-    const fn = async () => {
-      const symbolA = assets.A.asset.symbol;
-      const symbolB = assets.B.asset.symbol;
-      const t = await meta1dex.db.get_ticker(symbolA, symbolB);
-      ok && setTicker(t);
-      console.log(t);
-    };
-    fn();
-    return () => {
-      ok = false;
-    };
-  }, [assets.A.asset.symbol, assets.B.asset.symbol]);
-  const set = () => {
-    const { A, B } = assets;
-    if (ticker) {
-      const aMax = assets.A.getMax();
-      const bMax = aMax / Number(ticker.lowest_ask);
-      A.setAmount(aMax.toFixed(A.asset._asset.precision));
-      B.setAmount(bMax.toFixed(B.asset._asset.precision));
-    } else {
-      console.log('Old price matching');
-      const aMax = A.getMax();
-      A.setAmount(aMax.toFixed(A.asset._asset.precision));
-      B.formUsdt(A.toUsdt(aMax));
-    }
-  };
-  return set;
+function setMaxAmount(assets: ScreenAssets) {
+  const { A, B } = assets;
+  if (A.ticker && A.ticker.lowest_ask !== '0') {
+    const aMax = A.getMax();
+    const bMax = aMax / Number(A.ticker.lowest_ask);
+    A.setAmount(aMax.toFixed(A.asset._asset.precision));
+    B.setAmount(bMax.toFixed(B.asset._asset.precision));
+  } else {
+    Alert.alert('Failed to get exchange rate', 'No open orders found');
+  }
 }
 
 const FloatingButton = ({ assets }: AssetsProp) => {
-  const set = useMaxAmount(assets);
   return (
     <View
       style={{
@@ -156,7 +135,7 @@ const FloatingButton = ({ assets }: AssetsProp) => {
         {...tid('TradeScreen/MAX')}
         onPress={() => {
           editing.current?.(false);
-          set();
+          setMaxAmount(assets);
         }}
       >
         <Text style={{ textAlign: 'center', color: colors.BrandYellow, fontWeight: '700' }}>
@@ -168,7 +147,6 @@ const FloatingButton = ({ assets }: AssetsProp) => {
 };
 
 const DarkFloatingButton = ({ assets }: AssetsProp) => {
-  const set = useMaxAmount(assets);
   return (
     <View
       style={{
@@ -182,7 +160,7 @@ const DarkFloatingButton = ({ assets }: AssetsProp) => {
         {...tid('TradeScreen/MAX')}
         onPress={() => {
           editing.current?.(false);
-          set();
+          setMaxAmount(assets);
         }}
       >
         <View style={{ flexDirection: 'row' }}>
