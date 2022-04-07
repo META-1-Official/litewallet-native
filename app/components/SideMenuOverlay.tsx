@@ -26,12 +26,13 @@ const ListItem: React.FC<ListItemProps> = ({ title, icon, onPress, rawIcon }) =>
   );
 };
 
+const HOST = 'https://litewallet.cryptomailsvc.io';
 function useUserAvatar() {
   const accountName = useStore(state => state.accountName);
   const [uri, setUrl] = useState('');
   useEffect(() => {
     async function loadAvatar() {
-      const res = await fetch('https://litewallet.cryptomailsvc.io/getUserData', {
+      const res = await fetch(`${HOST}/getUserData`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -43,7 +44,7 @@ function useUserAvatar() {
       if (res.status === 200) {
         const { message } = await res.json();
         console.log(message);
-        setUrl(`https://litewallet.cryptomailsvc.io/public/${message.userAvatar}`);
+        setUrl(`${HOST}/public/${message.userAvatar}`);
         return;
       }
 
