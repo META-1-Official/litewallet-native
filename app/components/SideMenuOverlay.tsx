@@ -65,6 +65,9 @@ function useUserAvatar() {
 
       const photo = result.assets?.[0]!;
       console.log(result);
+      if (result.didCancel) {
+        return;
+      }
 
       const fd = new FormData();
       fd.append('login', accountName);
