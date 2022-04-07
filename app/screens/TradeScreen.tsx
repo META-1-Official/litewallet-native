@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/core';
 import throttle from 'lodash.throttle';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  Alert,
   Dimensions,
   Image,
   ImageStyle,
@@ -31,6 +32,7 @@ import {
   useAssets,
   useAssetsStore,
 } from '../utils/meta1Api';
+import meta1dex from '../utils/meta1dexTypes';
 import { createPair, theAsset, useAsset } from '../utils/useAsset';
 
 const { width, height } = Dimensions.get('screen');
@@ -62,6 +64,28 @@ const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanc
     B.setAmount('0.00');
   }, [A?.asset.symbol, B?.asset.symbol]);
 
+  useEffect(() => {
+    async function load() {
+      if (!A || !B) {
+        return;
+      }
+      console.log('Update ticker');
+      const tickerA = await meta1dex.db
+        .get_ticker(A.asset.symbol, B.asset.symbol)
+        .catch(console.log);
+      console.log({ tickerA });
+      A.setTicker(tickerA || undefined);
+
+      const tickerB = await meta1dex.db
+        .get_ticker(B.asset.symbol, A.asset.symbol)
+        .catch(console.log);
+      console.log({ tickerB });
+
+      B.setTicker(tickerB || undefined);
+    }
+    load();
+  }, [A?.asset.symbol, B?.asset.symbol]);
+
   if (!A || !B) {
     return null;
   }
@@ -77,6 +101,19 @@ type ScreenAssets = {
 };
 interface AssetsProp {
   assets: ScreenAssets;
+}
+
+function setMaxAmount(assets: ScreenAssets) {
+  const { A, B } = assets;
+  if (A.ticker && A.ticker.lowest_ask !== '0') {
+    const aMax = A.getMax();
+    // amount / price - (1 decimal place to be conservative)
+    const bMax = aMax / Number(A.ticker.lowest_ask) - 10 ** (-1 * B.asset._asset.precision);
+    A.setAmount(aMax.toFixed(A.asset._asset.precision));
+    B.setAmount(bMax.toFixed(B.asset._asset.precision));
+  } else {
+    Alert.alert('Failed to get exchange rate', 'No open orders found');
+  }
 }
 
 const FloatingButton = ({ assets }: AssetsProp) => {
@@ -99,9 +136,7 @@ const FloatingButton = ({ assets }: AssetsProp) => {
         {...tid('TradeScreen/MAX')}
         onPress={() => {
           editing.current?.(false);
-          const aMax = assets.A.getMax();
-          assets.A.setAmount(aMax.toFixed(assets.A.asset._asset.precision));
-          assets.B.formUsdt(assets.A.toUsdt(aMax));
+          setMaxAmount(assets);
         }}
       >
         <Text style={{ textAlign: 'center', color: colors.BrandYellow, fontWeight: '700' }}>
@@ -125,9 +160,8 @@ const DarkFloatingButton = ({ assets }: AssetsProp) => {
       <TouchableOpacity
         {...tid('TradeScreen/MAX')}
         onPress={() => {
-          const aMax = assets.A.getMax();
-          assets.A.setAmount(aMax.toFixed(assets.A.asset._asset.precision));
-          assets.B.formUsdt(assets.A.toUsdt(aMax));
+          editing.current?.(false);
+          setMaxAmount(assets);
         }}
       >
         <View style={{ flexDirection: 'row' }}>
@@ -248,7 +282,13 @@ const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
         setAmount(txt);
         if (valid) {
           asset.setAmount(txt);
-          asset.opponent().formUsdt(asset.toUsdt(txt));
+          const opponent = asset.opponent();
+          if (opponent.ticker && opponent.ticker.lowest_ask !== '0') {
+            const bAmt = Number(txt) / Number(opponent.ticker.lowest_ask);
+            opponent.setAmount(bAmt.toFixed(opponent.asset._asset.precision));
+          } else {
+            opponent.formUsdt(asset.toUsdt(txt));
+          }
         }
       }}
     />

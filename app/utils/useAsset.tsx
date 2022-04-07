@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAssetPicker } from '../components/AssetSelectModal';
 import { AssetBalanceT, useAssetsStore } from './meta1Api';
 import * as Sentry from '@sentry/react-native';
+import { Ticker } from './meta1dexTypes';
 
 export type theAsset = {
   asset: AssetBalanceT;
@@ -19,6 +20,8 @@ export type theAsset = {
   isAffordableForSwap: () => void;
   isAffordableForSend: () => void;
   opponent: () => theAsset;
+  ticker?: Ticker;
+  setTicker: (t?: Ticker) => void;
 };
 
 export type StandaloneAsset = Omit<theAsset, 'opponent'>;
@@ -49,7 +52,7 @@ export const useAsset = ({
     title,
     onClose,
   });
-
+  const [ticker, setTicker] = useState<Ticker | undefined>(undefined);
   if (!asset) {
     console.log('== DV', defaultValue);
     console.log('==========');
@@ -152,5 +155,7 @@ export const useAsset = ({
     canAfford,
     isAffordableForSwap,
     isAffordableForSend,
+    ticker,
+    setTicker,
   };
 };
