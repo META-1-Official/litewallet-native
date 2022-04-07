@@ -1,7 +1,7 @@
 import { NETWORK } from '@env';
 import { DrawerContentComponentProps } from '@react-navigation/drawer/src/types';
-import React from 'react';
-import { SafeAreaView, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Image, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import { Activity, Archive, ArrowLeft, HelpCircle, PieChart } from 'react-native-feather';
 import { Text } from 'react-native-paper';
 import { SvgIcons } from '../../assets';
@@ -26,9 +26,38 @@ const ListItem: React.FC<ListItemProps> = ({ title, icon, onPress, rawIcon }) =>
   );
 };
 
+function useUserAvatar() {
+  const accountName = useStore(state => state.accountName);
+  const [uri, setUrl] = useState('');
+  useEffect(() => {
+    async function loadAvatar() {
+      const res = await fetch('https://litewallet.cryptomailsvc.io/getUserData', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          login: accountName,
+        }),
+      });
+      if (res.status === 200) {
+        const { message } = await res.json();
+        console.log(message);
+        setUrl(`https://litewallet.cryptomailsvc.io/public/${message.userAvatar}`);
+        return;
+      }
+
+      console.log(await res.text());
+    }
+    loadAvatar().catch(console.warn);
+  }, [accountName]);
+  return { uri };
+}
+
 export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
   const accountName = useStore(state => state.accountName);
   const logout = useStore(state => state.logout);
+  const avatar = useUserAvatar();
   return (
     <SafeAreaView style={{ padding: 12 }}>
       <View>
@@ -42,7 +71,8 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
           alignItems: 'center',
         }}
       >
-        <View
+        <Image
+          source={avatar}
           style={{
             width: 80,
             height: 80,
