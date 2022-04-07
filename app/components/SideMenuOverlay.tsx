@@ -1,8 +1,9 @@
 import { NETWORK } from '@env';
 import { DrawerContentComponentProps } from '@react-navigation/drawer/src/types';
 import React, { useEffect, useState } from 'react';
-import { Image, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, Platform, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import { Activity, Archive, ArrowLeft, HelpCircle, PieChart } from 'react-native-feather';
+import { launchImageLibrary } from 'react-native-image-picker';
 import { Text } from 'react-native-paper';
 import { SvgIcons } from '../../assets';
 import { useStore } from '../store';
@@ -52,13 +53,47 @@ function useUserAvatar() {
     }
     loadAvatar().catch(console.warn);
   }, [accountName]);
-  return { uri };
+
+  const upload = async () => {
+    try {
+      const result = await launchImageLibrary({
+        mediaType: 'photo',
+        maxHeight: 500,
+        maxWidth: 500,
+        quality: 0.2,
+      });
+
+      const photo = result.assets?.[0]!;
+      console.log(result);
+
+      const fd = new FormData();
+      fd.append('login', accountName);
+      fd.append('file', {
+        name: photo.fileName,
+        type: photo.type,
+        uri: Platform.OS === 'ios' ? photo.uri!.replace('file://', '') : photo.uri!,
+      });
+
+      const res = await fetch(`${HOST}/saveAvatar`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        body: fd,
+      });
+      const { message } = await res.json();
+      setUrl(`${HOST}/public/${message}`);
+    } catch (e) {
+      Alert.alert('Failed to upload avatar');
+    }
+  };
+  return { uri, upload };
 }
 
 export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
   const accountName = useStore(state => state.accountName);
   const logout = useStore(state => state.logout);
-  const avatar = useUserAvatar();
+  const { uri, upload } = useUserAvatar();
   return (
     <SafeAreaView style={{ padding: 12 }}>
       <View>
@@ -72,16 +107,18 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
           alignItems: 'center',
         }}
       >
-        <Image
-          source={avatar}
-          style={{
-            width: 80,
-            height: 80,
-            backgroundColor: 'lightblue',
-            borderRadius: 100,
-            marginBottom: 20,
-          }}
-        />
+        <TouchableOpacity onPress={() => upload()}>
+          <Image
+            source={{ uri }}
+            style={{
+              width: 80,
+              height: 80,
+              backgroundColor: 'lightblue',
+              borderRadius: 100,
+              marginBottom: 20,
+            }}
+          />
+        </TouchableOpacity>
         <Text style={{ color: '#fff', fontSize: 22, fontWeight: '700' }}>{accountName}</Text>
       </View>
       <TouchableOpacity
