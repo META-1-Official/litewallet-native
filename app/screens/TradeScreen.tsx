@@ -281,7 +281,13 @@ const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
         setAmount(txt);
         if (valid) {
           asset.setAmount(txt);
-          asset.opponent().formUsdt(asset.toUsdt(txt));
+          const opponent = asset.opponent();
+          if (opponent.ticker && opponent.ticker.lowest_ask !== '0') {
+            const bAmt = Number(txt) / Number(opponent.ticker.lowest_ask);
+            opponent.setAmount(bAmt.toFixed(opponent.asset._asset.precision));
+          } else {
+            opponent.formUsdt(asset.toUsdt(txt));
+          }
         }
       }}
     />
