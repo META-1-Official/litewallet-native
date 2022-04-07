@@ -31,6 +31,7 @@ import {
   useAssets,
   useAssetsStore,
 } from '../utils/meta1Api';
+import meta1dex, { Ticker } from '../utils/meta1dexTypes';
 import { createPair, theAsset, useAsset } from '../utils/useAsset';
 
 const { width, height } = Dimensions.get('screen');
@@ -79,7 +80,41 @@ interface AssetsProp {
   assets: ScreenAssets;
 }
 
+function useMaxAmount(assets: ScreenAssets) {
+  const [ticker, setTicker] = useState<Ticker | null>(null);
+  useEffect(() => {
+    let ok = true;
+    const fn = async () => {
+      const symbolA = assets.A.asset.symbol;
+      const symbolB = assets.B.asset.symbol;
+      const t = await meta1dex.db.get_ticker(symbolA, symbolB);
+      ok && setTicker(t);
+      console.log(t);
+    };
+    fn();
+    return () => {
+      ok = false;
+    };
+  }, [assets.A.asset.symbol, assets.B.asset.symbol]);
+  const set = () => {
+    const { A, B } = assets;
+    if (ticker) {
+      const aMax = assets.A.getMax();
+      const bMax = aMax / Number(ticker.lowest_ask);
+      A.setAmount(aMax.toFixed(A.asset._asset.precision));
+      B.setAmount(bMax.toFixed(B.asset._asset.precision));
+    } else {
+      console.log('Old price matching');
+      const aMax = A.getMax();
+      A.setAmount(aMax.toFixed(A.asset._asset.precision));
+      B.formUsdt(A.toUsdt(aMax));
+    }
+  };
+  return set;
+}
+
 const FloatingButton = ({ assets }: AssetsProp) => {
+  const set = useMaxAmount(assets);
   return (
     <View
       style={{
@@ -99,9 +134,7 @@ const FloatingButton = ({ assets }: AssetsProp) => {
         {...tid('TradeScreen/MAX')}
         onPress={() => {
           editing.current?.(false);
-          const aMax = assets.A.getMax();
-          assets.A.setAmount(aMax.toFixed(assets.A.asset._asset.precision));
-          assets.B.formUsdt(assets.A.toUsdt(aMax));
+          set();
         }}
       >
         <Text style={{ textAlign: 'center', color: colors.BrandYellow, fontWeight: '700' }}>
@@ -113,6 +146,7 @@ const FloatingButton = ({ assets }: AssetsProp) => {
 };
 
 const DarkFloatingButton = ({ assets }: AssetsProp) => {
+  const set = useMaxAmount(assets);
   return (
     <View
       style={{
@@ -125,9 +159,8 @@ const DarkFloatingButton = ({ assets }: AssetsProp) => {
       <TouchableOpacity
         {...tid('TradeScreen/MAX')}
         onPress={() => {
-          const aMax = assets.A.getMax();
-          assets.A.setAmount(aMax.toFixed(assets.A.asset._asset.precision));
-          assets.B.formUsdt(assets.A.toUsdt(aMax));
+          editing.current?.(false);
+          set();
         }}
       >
         <View style={{ flexDirection: 'row' }}>
