@@ -21,6 +21,7 @@ export type theAsset = {
   isAffordableForSend: () => void;
   opponent: () => theAsset;
   ticker?: Ticker;
+  setTicker: (t?: Ticker) => void;
 };
 
 export type StandaloneAsset = Omit<theAsset, 'opponent'>;
@@ -51,7 +52,7 @@ export const useAsset = ({
     title,
     onClose,
   });
-
+  const [ticker, setTicker] = useState<Ticker | undefined>(undefined);
   if (!asset) {
     console.log('== DV', defaultValue);
     console.log('==========');
@@ -154,5 +155,7 @@ export const useAsset = ({
     canAfford,
     isAffordableForSwap,
     isAffordableForSend,
+    ticker,
+    setTicker,
   };
 };

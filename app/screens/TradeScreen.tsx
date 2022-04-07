@@ -74,14 +74,14 @@ const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanc
         .get_ticker(A.asset.symbol, B.asset.symbol)
         .catch(console.log);
       console.log({ tickerA });
-      A.ticker = tickerA || undefined;
+      A.setTicker(tickerA || undefined);
 
       const tickerB = await meta1dex.db
         .get_ticker(B.asset.symbol, A.asset.symbol)
         .catch(console.log);
       console.log({ tickerB });
 
-      B.ticker = tickerB || undefined;
+      B.setTicker(tickerB || undefined);
     }
     load();
   }, [A?.asset.symbol, B?.asset.symbol]);
