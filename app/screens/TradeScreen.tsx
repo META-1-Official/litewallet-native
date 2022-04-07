@@ -107,7 +107,8 @@ function setMaxAmount(assets: ScreenAssets) {
   const { A, B } = assets;
   if (A.ticker && A.ticker.lowest_ask !== '0') {
     const aMax = A.getMax();
-    const bMax = aMax / Number(A.ticker.lowest_ask);
+    // amount / price - (1 decimal place to be conservative)
+    const bMax = aMax / Number(A.ticker.lowest_ask) - 10 ** (-1 * B.asset._asset.precision);
     A.setAmount(aMax.toFixed(A.asset._asset.precision));
     B.setAmount(bMax.toFixed(B.asset._asset.precision));
   } else {
