@@ -31,7 +31,7 @@ import {
   useAssets,
   useAssetsStore,
 } from '../utils/meta1Api';
-import meta1dex, { Ticker } from '../utils/meta1dexTypes';
+import meta1dex from '../utils/meta1dexTypes';
 import { createPair, theAsset, useAsset } from '../utils/useAsset';
 
 const { width, height } = Dimensions.get('screen');
@@ -61,6 +61,28 @@ const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanc
     }
     A.setAmount('0.00');
     B.setAmount('0.00');
+  }, [A?.asset.symbol, B?.asset.symbol]);
+
+  useEffect(() => {
+    async function load() {
+      if (!A || !B) {
+        return;
+      }
+      console.log('Update ticker');
+      const tickerA = await meta1dex.db
+        .get_ticker(A.asset.symbol, B.asset.symbol)
+        .catch(console.log);
+      console.log({ tickerA });
+      A.ticker = tickerA || undefined;
+
+      const tickerB = await meta1dex.db
+        .get_ticker(B.asset.symbol, A.asset.symbol)
+        .catch(console.log);
+      console.log({ tickerB });
+
+      B.ticker = tickerB || undefined;
+    }
+    load();
   }, [A?.asset.symbol, B?.asset.symbol]);
 
   if (!A || !B) {
