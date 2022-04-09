@@ -190,7 +190,9 @@ const AssetDisplay = ({ asset, darkMode }: DM<AssetProp>) => {
           <Heading style={darkStyle({ color: '#fff' }, styles.font18x500)}>
             {asset.asset.symbol}
           </Heading>
-          <TextSecondary style={styles.font14}>Balance: {asset.asset.amount}</TextSecondary>
+          <TextSecondary style={styles.font14}>
+            Balance: {asset.asset.amount.toFixed(asset.asset._asset.precision)}
+          </TextSecondary>
         </View>
       </View>
     </TouchableOpacity>
