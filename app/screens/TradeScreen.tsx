@@ -107,8 +107,9 @@ function setMaxAmount(assets: ScreenAssets) {
   const { A, B } = assets;
   if (A.ticker && A.ticker.lowest_ask !== '0') {
     const aMax = A.getMax();
-    // amount / price - (1 decimal place to be conservative)
-    const bMax = aMax / Number(A.ticker.lowest_ask) - 10 ** (-1 * B.asset._asset.precision);
+    const pow = 10 ** B.asset._asset.precision;
+    const x = (aMax / Number(A.ticker.lowest_ask)) * pow;
+    const bMax = Math.floor(x) / pow;
     A.setAmount(aMax.toFixed(A.asset._asset.precision));
     B.setAmount(bMax.toFixed(B.asset._asset.precision));
   } else {
@@ -189,7 +190,9 @@ const AssetDisplay = ({ asset, darkMode }: DM<AssetProp>) => {
           <Heading style={darkStyle({ color: '#fff' }, styles.font18x500)}>
             {asset.asset.symbol}
           </Heading>
-          <TextSecondary style={styles.font14}>Balance: {asset.asset.amount}</TextSecondary>
+          <TextSecondary style={styles.font14}>
+            Balance: {asset.asset.amount.toFixed(asset.asset._asset.precision)}
+          </TextSecondary>
         </View>
       </View>
     </TouchableOpacity>
