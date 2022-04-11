@@ -27,9 +27,8 @@ const ListItem: React.FC<ListItemProps> = ({ title, icon, onPress, rawIcon }) =>
 };
 
 export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
-  const accountName = useStore(state => state.accountName);
+  const { accountName, avatarUrl } = useStore();
   const logout = useStore(state => state.logout);
-  const { uri, upload } = useUserAvatar();
   return (
     <SafeAreaView style={{ padding: 12 }}>
       <View>
@@ -43,18 +42,16 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
           alignItems: 'center',
         }}
       >
-        <TouchableOpacity onPress={() => upload()}>
-          <Image
-            source={{ uri }}
-            style={{
-              width: 80,
-              height: 80,
-              backgroundColor: 'lightblue',
-              borderRadius: 100,
-              marginBottom: 20,
-            }}
-          />
-        </TouchableOpacity>
+        <Image
+          source={{ uri: avatarUrl }}
+          style={{
+            width: 80,
+            height: 80,
+            backgroundColor: 'lightblue',
+            borderRadius: 100,
+            marginBottom: 20,
+          }}
+        />
         <Text style={{ color: '#fff', fontSize: 22, fontWeight: '700' }}>{accountName}</Text>
       </View>
       <TouchableOpacity
