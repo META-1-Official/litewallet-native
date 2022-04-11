@@ -13,23 +13,33 @@ import { tid } from '../utils';
 import CreatePaperWallet from './CreatePaperWallet';
 import Notifications from './Notifications';
 
+const ListItem = ({
+  onPress,
+  text,
+  color,
+}: {
+  onPress: () => void;
+  text: string;
+  color?: string;
+}) => (
+  <TouchableOpacity {...tid(`Settings/ListItem/${text}`)} onPress={onPress}>
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: 12,
+      }}
+    >
+      <Text style={{ color: color || '#fff', fontSize: 18 }}>{text}</Text>
+      <ChevronRight color={color || '#fff'} />
+    </View>
+  </TouchableOpacity>
+);
+
 const AccountGroup = () => {
   const navigation = useNavigation<SNP>();
-  const ListItem = ({ onPress, text }: { onPress: () => void; text: string }) => (
-    <TouchableOpacity {...tid(`Settings/ListItem/${text}`)} onPress={onPress}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          paddingVertical: 12,
-        }}
-      >
-        <Text style={{ color: '#fff', fontSize: 18 }}>{text}</Text>
-        <ChevronRight color={'#fff'} />
-      </View>
-    </TouchableOpacity>
-  );
+
   return (
     <View style={{ marginTop: 22 }}>
       <Text style={{ color: '#fff', fontSize: 26, fontWeight: '600', marginBottom: 8 }}>
