@@ -5,33 +5,45 @@ import {
   StackScreenProps,
 } from '@react-navigation/stack';
 import React from 'react';
-import { Platform, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, Platform, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import { ArrowLeft, ChevronRight } from 'react-native-feather';
+import { launchImageLibrary } from 'react-native-image-picker';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { tid } from '../utils';
+import { removeAvatar, uploadAvatar } from '../utils/avatarApi';
 import CreatePaperWallet from './CreatePaperWallet';
 import Notifications from './Notifications';
 
+const ListItem = ({
+  onPress,
+  text,
+  color,
+}: {
+  onPress: () => void;
+  text: string;
+  color?: string;
+}) => (
+  <TouchableOpacity {...tid(`Settings/ListItem/${text}`)} onPress={onPress}>
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: 12,
+      }}
+    >
+      <Text style={{ color: color || '#fff', fontSize: 18 }}>{text}</Text>
+      <ChevronRight color={color || '#fff'} />
+    </View>
+  </TouchableOpacity>
+);
+
 const AccountGroup = () => {
   const navigation = useNavigation<SNP>();
-  const ListItem = ({ onPress, text }: { onPress: () => void; text: string }) => (
-    <TouchableOpacity {...tid(`Settings/ListItem/${text}`)} onPress={onPress}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          paddingVertical: 12,
-        }}
-      >
-        <Text style={{ color: '#fff', fontSize: 18 }}>{text}</Text>
-        <ChevronRight color={'#fff'} />
-      </View>
-    </TouchableOpacity>
-  );
+
   return (
-    <View style={{ marginTop: 22 }}>
+    <View>
       <Text style={{ color: '#fff', fontSize: 26, fontWeight: '600', marginBottom: 8 }}>
         Account
       </Text>
@@ -84,19 +96,87 @@ const SwitchLanguage = () => {
     </SafeAreaView>
   );
 };
+
+const upload = async () => {
+  try {
+    const result = await launchImageLibrary({
+      mediaType: 'photo',
+      maxHeight: 500,
+      maxWidth: 500,
+      quality: 0.2,
+    });
+
+    const photo = result.assets?.[0]!;
+    console.log(result);
+    if (result.didCancel) {
+      return;
+    }
+
+    await uploadAvatar(photo);
+  } catch (e) {
+    console.warn(e);
+    Alert.alert('Failed to upload avatar');
+  }
+};
+
+const AvatarGroup = () => {
+  return (
+    <View>
+      <Text style={{ color: '#fff', fontSize: 26, fontWeight: '600', marginBottom: 8 }}>
+        Avatar
+      </Text>
+      <ListItem text="Upload" onPress={upload} />
+      <ListItem text="Remove" color="#E03616" onPress={removeAvatar} />
+    </View>
+  );
+};
+
+const Divider = () => {
+  return <View style={{ flex: 1, borderColor: '#444', height: 0, marginVertical: 12 }} />;
+};
+
 const MainSettingsScreen = () => {
-  const accountName = useStore(s => s.accountName);
+  const { accountName, avatarUrl } = useStore();
   return (
     <SafeAreaView style={{ margin: 18 }}>
-      <Text
+      <View
         style={{
-          color: colors.BrandYellow,
-          fontSize: 24,
-          fontWeight: '700',
+          justifyContent: 'space-between',
+          flexDirection: 'row',
+          alignItems: 'center',
         }}
       >
-        {accountName}
-      </Text>
+        <View>
+          <Text
+            style={{
+              color: colors.BrandYellow,
+              fontSize: 24,
+              fontWeight: '700',
+            }}
+          >
+            @{accountName}
+          </Text>
+          <Text style={{ fontSize: 16, color: '#aaa' }}>Current Account</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+          }}
+        >
+          <Image
+            source={{ uri: avatarUrl }}
+            style={{
+              width: 65,
+              height: 65,
+              backgroundColor: 'lightblue',
+              borderRadius: 100,
+            }}
+          />
+        </View>
+      </View>
+      <Divider />
+      <AvatarGroup />
+      <Divider />
       <AccountGroup />
       {/* <Button onPress={() => logout()} title="logout" /> */}
     </SafeAreaView>
