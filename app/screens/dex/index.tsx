@@ -120,8 +120,20 @@ const DexTabs = ({ navigation }: DexSSP) => {
         },
       })}
     >
-      <Tab.Screen name="DEX__Home" component={DexHome} />
-      <Tab.Screen name="DEX__Trade" component={DexTrade} />
+      <Tab.Screen
+        options={{
+          tabBarAccessibilityLabel: 'Tab/DexHome',
+        }}
+        name="DEX__Home"
+        component={DexHome}
+      />
+      <Tab.Screen
+        options={{
+          tabBarAccessibilityLabel: 'Tab/DexTrade',
+        }}
+        name="DEX__Trade"
+        component={DexTrade}
+      />
       <Tab.Screen
         name="DEX__Modal"
         options={{
@@ -137,8 +149,20 @@ const DexTabs = ({ navigation }: DexSSP) => {
         }}
         component={Black}
       />
-      <Tab.Screen name="DEX__Orders" component={OpenOrdersPage} />
-      <Tab.Screen name="DEX__Fund" component={DexFund} />
+      <Tab.Screen
+        options={{
+          tabBarAccessibilityLabel: 'Tab/DexOrders',
+        }}
+        name="DEX__Orders"
+        component={OpenOrdersPage}
+      />
+      <Tab.Screen
+        options={{
+          tabBarAccessibilityLabel: 'Tab/DexFund',
+        }}
+        name="DEX__Fund"
+        component={DexFund}
+      />
     </Tab.Navigator>
   );
 };
