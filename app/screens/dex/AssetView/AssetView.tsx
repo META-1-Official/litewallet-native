@@ -196,11 +196,17 @@ const DexAssetView: React.FC<StackScreenProps<AssetViewModalStackParamList>> = (
       })}
     >
       <Tab.Screen
+        options={{
+          tabBarAccessibilityLabel: 'Tab/Chart',
+        }}
         initialParams={params}
         name="ASSET__Chart"
         component={screenWithHeader(Candle)}
       />
       <Tab.Screen
+        options={{
+          tabBarAccessibilityLabel: 'Tab/Trades',
+        }}
         initialParams={params}
         name="ASSET__Trades"
         component={screenWithHeader(Trades)}
@@ -215,18 +221,22 @@ const DexAssetView: React.FC<StackScreenProps<AssetViewModalStackParamList>> = (
               <Pressable {...props} onPress={() => navigation.navigate('DEX__AssetView__Modal')} />
             );
           },
+          tabBarAccessibilityLabel: 'Tab/BuySell',
         }}
         component={Black}
       />
       <Tab.Screen
         initialParams={params}
         name="ASSET__Orders"
+        options={{
+          tabBarAccessibilityLabel: 'Tab/Orders',
+        }}
         component={screenWithHeader(Orders)}
       />
       <Tab.Screen
         initialParams={params}
         name="ASSET__MyOrders"
-        options={{ title: 'My Orders' }}
+        options={{ title: 'My Orders', tabBarAccessibilityLabel: 'Tab/MyOrders' }}
         component={screenWithHeader(MyOrders)}
       />
     </Tab.Navigator>
