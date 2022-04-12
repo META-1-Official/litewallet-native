@@ -53,14 +53,27 @@ export const WalletNav: React.FC<DrawerScreenProps<DexDrawerParamList>> = ({ nav
         },
       })}
     >
-      <Tab.Screen name="Wallet" component={WalletScreen} />
-      <Tab.Screen name="Fund Account" component={FundAccount} />
+      <Tab.Screen
+        options={{
+          tabBarAccessibilityLabel: 'Tab/Wallet',
+        }}
+        name="Wallet"
+        component={WalletScreen}
+      />
+      <Tab.Screen
+        options={{
+          tabBarAccessibilityLabel: 'Tab/FundAccount',
+        }}
+        name="Fund Account"
+        component={FundAccount}
+      />
       <Tab.Screen
         name="DEX"
         options={{
           tabBarButton: props => {
             return <Pressable {...props} onPress={() => navigation.jumpTo('DEX_HOME')} />;
           },
+          tabBarAccessibilityLabel: 'Tab/Dex',
         }}
         component={SettingsScreen}
       />
@@ -70,6 +83,7 @@ export const WalletNav: React.FC<DrawerScreenProps<DexDrawerParamList>> = ({ nav
           tabBarButton: props => {
             return <Pressable {...props} onPress={() => navigation.openDrawer()} />;
           },
+          tabBarAccessibilityLabel: 'Tab/Settings',
         }}
         component={SettingsScreen}
       />
