@@ -51,6 +51,7 @@ export default function useForm<T extends DefautlStateItem[]>(defautState: T, up
         primary: colors.BrandYellow,
         accent: colors.BrandYellow,
         text: colors.mutedGray,
+        placeholder: colors.mutedGray,
       },
     };
 
