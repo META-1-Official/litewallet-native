@@ -12,6 +12,7 @@ import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { tid } from '../utils';
 import { removeAvatar, uploadAvatar } from '../utils/avatarApi';
+import { isError } from '../utils/errorUtils';
 import CreatePaperWallet from './CreatePaperWallet';
 import Notifications from './Notifications';
 
@@ -114,7 +115,11 @@ const upload = async () => {
 
     await uploadAvatar(photo);
   } catch (e) {
-    console.warn(e);
+    if (isError(e)) {
+      console.warn(e.message);
+    } else {
+      console.warn(e);
+    }
     Alert.alert('Failed to upload avatar');
   }
 };
