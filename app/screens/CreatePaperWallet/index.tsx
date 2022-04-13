@@ -1,19 +1,35 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { InAppBrowser } from 'react-native-inappbrowser-reborn';
-import { useStore } from '../store';
-import { colors } from '../styles/colors';
-import { catchError, tid } from '../utils';
-import { getAccountKeys, paperWallet } from '../utils/meta1Api';
+import { useNewLoaderModal } from '../../components/LoaderModal';
+import { useStore } from '../../store';
+import { colors } from '../../styles/colors';
+import { catchError, tid } from '../../utils';
+import { AccountKeysT, getAccountKeys } from '../../utils/meta1Api';
+import RenderPdf from './RenderPdf';
+import { savePdf } from './SavePdf';
 
 export default function CreatePaperWallet() {
   const { accountName, password: pass } = useStore();
   const [password, setPassword] = useState(pass || '');
+  const [keys, setKeys] = useState<AccountKeysT | undefined>(undefined);
+  const [document, setDoc] = useState('');
+  const loader = useNewLoaderModal();
+
+  useEffect(() => {
+    if (document) {
+      savePdf(document);
+    }
+  }, [document]);
 
   const save = async () => {
     catchError(async () => {
-      const keys = await getAccountKeys({ accountName, password });
-      await InAppBrowser.open(paperWallet(keys), {});
+      const _keys = await getAccountKeys({ accountName, password });
+      setKeys(_keys);
+      if (document) {
+        savePdf(document);
+        return;
+      }
+      loader.open();
     });
   };
 
@@ -27,6 +43,7 @@ export default function CreatePaperWallet() {
           Unlock / login before creating the paper wallet to include private keys
         </Text>
       </View>
+
       <View>
         <Text style={{ color: colors.BrandYellow }}>Account Name</Text>
         <TextInput
@@ -58,6 +75,13 @@ export default function CreatePaperWallet() {
           secureTextEntry
         />
       </View>
+      <RenderPdf
+        keys={keys}
+        onReady={d => {
+          setDoc(d);
+          loader.close();
+        }}
+      />
       <TouchableOpacity {...tid('CreatePaperWallet/Save')} onPress={save}>
         <View
           style={{
