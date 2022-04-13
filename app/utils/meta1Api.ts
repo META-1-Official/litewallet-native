@@ -680,7 +680,7 @@ export const useTicker = (
   return x;
 };
 
-interface AccountKeysT {
+export interface AccountKeysT {
   account: string;
   ownerKey: string;
   memoKey: string;
