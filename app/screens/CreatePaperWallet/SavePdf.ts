@@ -16,7 +16,7 @@ export async function savePdf(dataUrl: string) {
   await fs.createFile(fullName, data, 'base64');
 
   if (Platform.OS === 'ios') {
-    ReactNativeBlobUtil.ios.previewDocument(fullName);
+    ReactNativeBlobUtil.ios.openDocument(fullName);
   } else if (Platform.OS === 'android') {
     ReactNativeBlobUtil.android.actionViewIntent(fullName, 'application/pdf');
   }
