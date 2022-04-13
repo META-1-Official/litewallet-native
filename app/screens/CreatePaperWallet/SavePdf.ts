@@ -1,5 +1,5 @@
-import { Platform } from "react-native";
-import ReactNativeBlobUtil from "react-native-blob-util";
+import { Platform } from 'react-native';
+import ReactNativeBlobUtil from 'react-native-blob-util';
 
 const fs = ReactNativeBlobUtil.fs;
 const { CacheDir, DownloadDir } = fs.dirs;
