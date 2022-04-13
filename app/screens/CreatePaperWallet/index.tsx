@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { InAppBrowser } from 'react-native-inappbrowser-reborn';
-import { useStore } from '../store';
-import { colors } from '../styles/colors';
-import { catchError, tid } from '../utils';
-import { getAccountKeys, paperWallet } from '../utils/meta1Api';
+import { useStore } from '../../store';
+import { colors } from '../../styles/colors';
+import { catchError, tid } from '../../utils';
+import { getAccountKeys, paperWallet } from '../../utils/meta1Api';
 
 export default function CreatePaperWallet() {
   const { accountName, password: pass } = useStore();
