@@ -17,5 +17,7 @@ export async function savePdf(dataUrl: string) {
 
   if (Platform.OS === 'ios') {
     ReactNativeBlobUtil.ios.previewDocument(fullName);
+  } else if (Platform.OS === 'android') {
+    ReactNativeBlobUtil.android.actionViewIntent(fullName, 'application/pdf');
   }
 }
