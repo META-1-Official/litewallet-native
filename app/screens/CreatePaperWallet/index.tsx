@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useNewLoaderModal } from '../../components/LoaderModal';
 import { useStore } from '../../store';
 import { colors } from '../../styles/colors';
 import { catchError, tid } from '../../utils';
@@ -12,6 +13,7 @@ export default function CreatePaperWallet() {
   const [password, setPassword] = useState(pass || '');
   const [keys, setKeys] = useState<AccountKeysT | undefined>(undefined);
   const [document, setDoc] = useState('');
+  const loader = useNewLoaderModal();
 
   useEffect(() => {
     if (document) {
@@ -25,7 +27,9 @@ export default function CreatePaperWallet() {
       setKeys(_keys);
       if (document) {
         savePdf(document);
+        return;
       }
+      loader.open();
     });
   };
 
@@ -71,7 +75,13 @@ export default function CreatePaperWallet() {
           secureTextEntry
         />
       </View>
-      <RenderPdf keys={keys} onReady={d => setDoc(d)} />
+      <RenderPdf
+        keys={keys}
+        onReady={d => {
+          setDoc(d);
+          loader.close();
+        }}
+      />
       <TouchableOpacity {...tid('CreatePaperWallet/Save')} onPress={save}>
         <View
           style={{
