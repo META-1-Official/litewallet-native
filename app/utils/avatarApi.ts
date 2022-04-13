@@ -29,13 +29,26 @@ type CallDataT =
   | iEndpoint<Method.saveAvatar, FormData>;
 
 async function Call<T = any>(args: CallDataT) {
-  return fetch(`${HOST}${args.method}`, {
+  const isFormData = (x: unknown): x is FormData => x instanceof FormData;
+
+  const options: RequestInit = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: args.args instanceof FormData ? args.args : JSON.stringify(args.args),
-  }).then(r => r.json() as Promise<T>);
+    body: JSON.stringify(args.args),
+  };
+
+  if (isFormData(args.args)) {
+    options.headers = {
+      'Content-Type': 'multipart/form-data',
+    };
+    options.body = args.args;
+  }
+
+  // prettier-ignore
+  return fetch(`${HOST}${args.method}`, options)
+          .then(r => r.json() as Promise<T>);
 }
 
 /**
