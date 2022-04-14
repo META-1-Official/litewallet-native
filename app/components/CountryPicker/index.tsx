@@ -45,10 +45,11 @@ function SearchRow({ navigation, value, onChangeText }: SearchRowProps) {
         style={{
           backgroundColor: '#dfe0e1',
           padding: 8,
-          margin: 16,
+          margin: Platform.OS === 'ios' ? 16 : 8,
           borderRadius: 8,
           flex: 1,
           flexDirection: 'row',
+          alignItems: 'center',
         }}
       >
         <Search color="#908f95" width={15} height={21} />
@@ -57,7 +58,7 @@ function SearchRow({ navigation, value, onChangeText }: SearchRowProps) {
           onChangeText={onChangeText}
           placeholder="Search"
           placeholderTextColor="#908f95"
-          style={{ fontSize: 15, marginLeft: 2, flex: 1 }}
+          style={{ fontSize: 15, margin: 0, padding: 0, marginLeft: 2, flex: 1 }}
         />
       </View>
       <HeaderBackButton
