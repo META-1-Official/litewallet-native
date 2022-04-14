@@ -3,6 +3,10 @@ import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import Data from './list.json';
 
+// index 226: is USA (countryCode +1)
+export const CountryUS = Data[226];
+export const CountryData = Data;
+
 interface Props {
   filter: string;
   select: (s: CountryOption) => void;
@@ -34,13 +38,17 @@ interface OptionPros {
   select: (opt: CountryOption) => void;
 }
 
+export function isoToEmoji(str: string) {
+  const code = str
+    .toUpperCase()
+    .split('')
+    .map(e => 127397 + e.charCodeAt(0));
+
+  return String.fromCodePoint(...code);
+}
+
 function Option({ data, select }: OptionPros) {
-  const emoji = String.fromCodePoint(
-    ...data.iso2
-      .toUpperCase()
-      .split('')
-      .map(e => 127397 + e.charCodeAt(0)),
-  );
+  const emoji = isoToEmoji(data.iso2);
 
   return (
     <TouchableOpacity onPress={() => select(data)}>
