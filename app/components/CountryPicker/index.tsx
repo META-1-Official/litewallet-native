@@ -1,9 +1,9 @@
 import { HeaderBackButton } from '@react-navigation/elements';
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, TextInputProps } from 'react-native';
+import { View, TextInput, TextInputProps, SafeAreaView, Platform } from 'react-native';
 import { Search } from 'react-native-feather';
-import { ScrollView } from 'react-native-gesture-handler';
+import { CountryList } from './CountryList';
 
 type CountryPickerParams = {
   CountryPickerModal: {
@@ -27,20 +27,10 @@ export function CountryPicker({ navigation, route }: Props) {
   };
 
   return (
-    <View style={{ backgroundColor: '#fff', flex: 1 }}>
+    <SafeAreaView style={{ backgroundColor: '#fff', flex: 1 }}>
       <SearchRow navigation={navigation} value={filterText} onChangeText={t => setFilterText(t)} />
-      <ScrollView>
-        <TouchableOpacity onPress={choose}>
-          <Text>Close</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={choose}>
-          <Text>Close</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={choose}>
-          <Text>Close</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </View>
+      <CountryList select={choose} filter={filterText} />
+    </SafeAreaView>
   );
 }
 
