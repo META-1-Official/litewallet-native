@@ -1,6 +1,7 @@
+import { HeaderBackButton } from '@react-navigation/elements';
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { useEffect } from 'react';
-import { Animated, SafeAreaView, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 
 type CountryPickerParams = {
   CountryPickerModal: {
@@ -11,20 +12,36 @@ type Props = StackScreenProps<CountryPickerParams, 'CountryPickerModal'>;
 
 export function CountryPicker({ navigation, route }: Props) {
   const { callback } = route.params;
+  const choose = () => {
+    callback?.('asdfsadf');
+    navigation.goBack();
+  };
 
   useEffect(() => {
-    navigation.setOptions({ title: 'Choose a Country' });
+    navigation.setOptions({
+      title: 'Choose a Country',
+      headerLeft: () => null,
+      headerRight: () => {
+        return (
+          <HeaderBackButton
+            onPress={() => navigation.goBack()}
+            backImage={() => null}
+            label="Close"
+            labelVisible={true}
+            labelStyle={{ marginRight: 16 }}
+          />
+        );
+      },
+    });
   });
 
   return (
-    <Animated.View>
-      <SafeAreaView>
-        <Text>Choose a Country</Text>
+    <View>
+      <Text>Choose a Country</Text>
 
-        <TouchableOpacity onPress={() => callback?.('asdfafsd')}>
-          <Text>Close</Text>
-        </TouchableOpacity>
-      </SafeAreaView>
-    </Animated.View>
+      <TouchableOpacity onPress={choose}>
+        <Text>Close</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
