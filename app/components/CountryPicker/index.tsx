@@ -3,11 +3,11 @@ import { StackScreenProps } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import { View, TextInput, TextInputProps, SafeAreaView, Platform } from 'react-native';
 import { Search } from 'react-native-feather';
-import { CountryList } from './CountryList';
+import { CountryList, CountryOption } from './CountryList';
 
-type CountryPickerParams = {
+export type CountryPickerParams = {
   CountryPickerModal: {
-    callback?: (res: any) => void;
+    callback?: (c: CountryOption) => void;
   };
 };
 type Props = StackScreenProps<CountryPickerParams, 'CountryPickerModal'>;
@@ -21,8 +21,8 @@ export function CountryPicker({ navigation, route }: Props) {
     });
   });
 
-  const choose = () => {
-    callback?.('asdfsadf');
+  const choose = (c: CountryOption) => {
+    callback?.(c);
     navigation.goBack();
   };
 
