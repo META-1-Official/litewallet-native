@@ -240,7 +240,7 @@ function PhoneInput({ component }: { component: React.FC<InputProps> }) {
         style={{ marginRight: 8 }}
       >
         <View style={{ flex: 0.35, marginTop: 28, flexDirection: 'row' }}>
-          <Text style={{ fontSize: 18, borderBottomWidth: 1, marginRight: 2 }}>
+          <Text style={{ fontSize: 18, marginRight: 2 }}>
             {isoToEmoji(country.iso2)} +{country.countryCode}
           </Text>
           <ChevronDown color={'#000'} width={12} height={24} />
