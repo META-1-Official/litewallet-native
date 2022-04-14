@@ -22,6 +22,7 @@ import { PrivacyPolicy, TOSScreen } from './screens/PrivacyPolicy';
 import Loader from './components/Loader';
 import * as Sentry from '@sentry/react-native';
 import { LoaderModalContent } from './components/LoaderModal';
+import { CountryPicker, CountryPickerParams } from './components/CountryPicker';
 
 const { useEffect } = React;
 
@@ -50,7 +51,7 @@ export type RootStackParamList = {
   LinkWallet: undefined;
   TOS: undefined;
   Loader: undefined;
-};
+} & CountryPickerParams;
 
 export type RootNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
@@ -79,6 +80,11 @@ const AuthNav = () => {
         name="Loader"
         options={{ presentation: 'transparentModal', headerShown: false }}
         component={LoaderModalContent}
+      />
+      <Stack.Screen
+        name="CountryPickerModal"
+        component={CountryPicker}
+        options={{ presentation: 'modal' }}
       />
     </Stack.Navigator>
   );

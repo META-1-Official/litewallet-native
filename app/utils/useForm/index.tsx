@@ -16,7 +16,7 @@ type DefautlStateItem = {
   rules?: RuleFn[];
 };
 
-interface InputProps extends Omit<TextInputProps, 'theme'> {
+export interface InputProps extends Omit<TextInputProps, 'theme'> {
   name: string;
 }
 export default function useForm<T extends DefautlStateItem[]>(defautState: T, updateValidState = true) {

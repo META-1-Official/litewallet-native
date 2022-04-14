@@ -1,6 +1,6 @@
-import React from 'react';
-import { Platform, SafeAreaView, TextInput, View, TouchableOpacity } from 'react-native';
-import { Copy } from 'react-native-feather';
+import React, { useEffect, useRef, useState } from 'react';
+import { Platform, SafeAreaView, TextInput, View, TouchableOpacity, Text } from 'react-native';
+import { ChevronDown, Copy } from 'react-native-feather';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import TextInputMask from 'react-native-text-input-mask';
 import RoundedButton from '../components/RoundedButton';
@@ -9,7 +9,7 @@ import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { catchError, getRadomByteArray, tid } from '../utils';
 import createAccountWithPassword from '../utils/accountCreate';
-import useForm from '../utils/useForm';
+import useForm, { InputProps } from '../utils/useForm';
 import {
   asyncRule,
   email,
@@ -26,6 +26,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { ChainValidation } from 'meta1js';
 import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from '../App';
+import { CountryData, CountryUS, isoToEmoji } from '../components/CountryPicker/CountryList';
+
 const freeName: RuleFn = text =>
   asyncRule(async () => {
     const acc = await getAccount(text).catch(console.debug);
@@ -96,17 +98,7 @@ const CreateWalletScreen: React.FC = () => {
                 autoCorrect={false}
                 autoCompleteType="email"
               />
-              <Input
-                name="mobile"
-                render={props => (
-                  //@ts-ignore
-                  <TextInputMask
-                    {...props}
-                    {...tid('CreateWallet/phoneNum')}
-                    mask="+[099] ([000]) [000] [00] [00]"
-                  />
-                )}
-              />
+              <PhoneInput component={Input} />
               <Input
                 name="account_name"
                 keyboardType="email-address"
@@ -195,5 +187,86 @@ const CreateWalletScreen: React.FC = () => {
     </SafeAreaView>
   );
 };
+
+function PhoneInput({ component }: { component: React.FC<InputProps> }) {
+  const navigation = useNavigation<RootNavigationProp>();
+  const [country, setCountry] = useState(CountryUS);
+  const [internalValue, setInternal] = useState('');
+
+  let mask = '';
+  if (country.patterns) {
+    const zeros = country.patterns[0].replace(/X/g, '0');
+    const brackets = zeros.replace(/ /g, '] [');
+    mask = `[${brackets}]`;
+  }
+
+  const Input = component;
+  const onChangeRef = useRef<(s: string) => void | undefined>();
+  const onChangeText = (s: string) => {
+    setInternal(s);
+    if (onChangeRef.current) {
+      onChangeRef.current(`+${country.countryCode} ${s}`);
+    }
+  };
+
+  useEffect(() => {
+    onChangeText('');
+  }, [country.countryCode]);
+
+  useEffect(() => {
+    if (country.prefixes) {
+      // If phone number not starts with prefix.
+      // If internal value is shorter than prefix 
+      //    make sure they are start the same.
+      const prefix = country.prefixes.find(e =>
+        internalValue.startsWith(e.slice(0, internalValue.length)),
+      );
+
+      if (!prefix) {
+        // Find and select fallback
+        const fallback = CountryData.find(
+          e => e.countryCode === country.countryCode && !e.prefixes,
+        );
+        // Set US if no fallback
+        setCountry(fallback || CountryUS);
+      }
+    }
+  }, [internalValue]);
+
+  return (
+    <View style={{ flexDirection: 'row' }}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('CountryPickerModal', { callback: c => setCountry(c) })}
+        style={{ marginRight: 8 }}
+      >
+        <View style={{ flex: 0.35, marginTop: 28, flexDirection: 'row' }}>
+          <Text style={{ fontSize: 18, marginRight: 2 }}>
+            {isoToEmoji(country.iso2)} +{country.countryCode}
+          </Text>
+          <ChevronDown color={'#000'} width={12} height={24} />
+        </View>
+      </TouchableOpacity>
+      <View style={{ flex: 1 }}>
+        <Input
+          name="mobile"
+          style={{ width: '100%' }}
+          render={props => {
+            onChangeRef.current = props.onChangeText;
+            return (
+              //@ts-ignore
+              <TextInputMask
+                {...props}
+                {...tid('CreateWallet/phoneNum')}
+                onChangeText={onChangeText}
+                value={props.value?.replace(`+${country.countryCode}`, '')}
+                mask={mask}
+              />
+            );
+          }}
+        />
+      </View>
+    </View>
+  );
+}
 
 export default CreateWalletScreen;
