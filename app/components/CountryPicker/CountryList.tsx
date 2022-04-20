@@ -61,10 +61,10 @@ function Option({ data, select }: OptionPros) {
           borderBottomWidth: 1,
         }}
       >
-        <Text style={{ fontSize: 18 }}>
+        <Text style={{ fontSize: 18, color: '#000' }}>
           {emoji} {data.defaultName}
         </Text>
-        <Text style={{ fontSize: 18, fontWeight: '500' }}>+{data.countryCode}</Text>
+        <Text style={{ fontSize: 18, fontWeight: '500', color: '#000' }}>+{data.countryCode}</Text>
       </View>
     </TouchableOpacity>
   );
