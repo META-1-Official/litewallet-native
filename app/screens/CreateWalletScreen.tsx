@@ -1,25 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Platform, SafeAreaView, TextInput, View, TouchableOpacity, Text } from 'react-native';
-import { ChevronDown, Copy } from 'react-native-feather';
+import { ChevronDown, Eye, EyeOff } from 'react-native-feather';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import TextInputMask from 'react-native-text-input-mask';
 import RoundedButton from '../components/RoundedButton';
 import { Heading, TextSecondary } from '../components/typography';
 import { useStore } from '../store';
-import { colors } from '../styles/colors';
-import { catchError, getRadomByteArray, tid } from '../utils';
+import { catchError, tid } from '../utils';
 import createAccountWithPassword from '../utils/accountCreate';
 import useForm, { InputProps } from '../utils/useForm';
 import {
   asyncRule,
   email,
+  hasSpecialChars,
   lettersOnly,
+  minLen,
   required,
   rule,
   RuleFn,
   same,
 } from '../utils/useForm/rules';
-import Clipboard from '@react-native-clipboard/clipboard';
 import { getAccount } from '../utils/meta1Api';
 import { ScrollView } from 'react-native-gesture-handler';
 //@ts-ignore
@@ -27,6 +27,8 @@ import { ChainValidation } from 'meta1js';
 import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from '../App';
 import { CountryData, CountryUS, isoToEmoji } from '../components/CountryPicker/CountryList';
+import { colors } from '../styles/colors';
+import { RenderProps } from 'react-native-paper/src/components/TextInput/types';
 
 const freeName: RuleFn = text =>
   asyncRule(async () => {
@@ -43,6 +45,38 @@ const premiumName: RuleFn = t =>
     `,
   );
 
+const UPPERCASE_RE = /[A-Z]/;
+const LOWERCASE_RE = /[a-z]/;
+const upperAndLowerCase: RuleFn = (t, n) =>
+  rule(
+    UPPERCASE_RE.test(t) && LOWERCASE_RE.test(t),
+    `${n} should have both upper and lower case letters`,
+  );
+
+function noRepeatImpl(t: string) {
+  const { substrs } = [...t].reduce(
+    (acc, cv) => {
+      if (acc.prev === cv) {
+        acc.substrs[acc.substrs.length - 1] += cv;
+      } else {
+        acc.substrs.push(cv);
+      }
+      acc.prev = cv;
+      return acc;
+    },
+    {
+      prev: '',
+      substrs: [] as string[],
+    },
+  );
+
+  const aboveThreshold = substrs.filter(e => e.length > 2);
+
+  return aboveThreshold.length !== 1;
+}
+
+const noRepeat: RuleFn = (t, n) =>
+  rule(noRepeatImpl(t), `${n} should not have repeating characters`);
 const CreateWalletScreen: React.FC = () => {
   const navigation = useNavigation<RootNavigationProp>();
   const authorize = useStore(state => state.authorize);
@@ -60,8 +94,7 @@ const CreateWalletScreen: React.FC = () => {
     {
       name: 'password',
       lable: 'Password',
-      value: Buffer.from(getRadomByteArray(24)).toString('base64').replace(/\W/g, ''),
-      valid: true,
+      rules: [required, minLen(8), hasSpecialChars, upperAndLowerCase, noRepeat],
     },
     {
       name: 'password_repeat',
@@ -111,37 +144,7 @@ const CreateWalletScreen: React.FC = () => {
                   />
                 )}
               />
-              <Input
-                name="password"
-                render={props => (
-                  <View key={123} style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <TextInput
-                      {...props}
-                      {...tid('CreateWallet/password')}
-                      autoCapitalize={'none'}
-                      autoCorrect={false}
-                      onChangeText={() => {}}
-                      style={[props.style, { maxWidth: '88%', paddingRight: 8 }]}
-                      editable={false}
-                      secureTextEntry
-                    />
-                    <TouchableOpacity
-                      {...tid('CreateWallet/copyPassword')}
-                      onPress={() => Clipboard.setString(formState.password)}
-                    >
-                      <View
-                        style={{
-                          backgroundColor: colors.BrandYellow,
-                          padding: 6,
-                          borderRadius: 5,
-                        }}
-                      >
-                        <Copy width={24} height={24} color="#000" />
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                )}
-              />
+              <Input name="password" render={PasswordInput} />
               <TextSecondary style={{ fontSize: 14 }}>
                 Please keep your password in a safe place. Don’t share it with any third-parties or
                 send it online.
@@ -188,6 +191,38 @@ const CreateWalletScreen: React.FC = () => {
   );
 };
 
+function PasswordInput(props: RenderProps) {
+  const [visible, setVisible] = useState(true);
+  return (
+    <View key={123} style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <TextInput
+        {...props}
+        {...tid('CreateWallet/password')}
+        autoCapitalize={'none'}
+        autoCorrect={false}
+        style={[props.style, { maxWidth: '88%', paddingRight: 8 }]}
+        secureTextEntry={visible}
+      />
+      <TouchableOpacity {...tid('CreateWallet/copyPassword')} onPress={() => setVisible(!visible)}>
+        <View
+          style={{
+            backgroundColor: colors.BrandYellow,
+            marginTop: 14,
+            padding: 6,
+            borderRadius: 5,
+          }}
+        >
+          {visible ? (
+            <EyeOff width={20} height={20} color="#000" />
+          ) : (
+            <Eye width={20} height={20} color="#000" />
+          )}
+        </View>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
 function PhoneInput({ component }: { component: React.FC<InputProps> }) {
   const navigation = useNavigation<RootNavigationProp>();
   const [country, setCountry] = useState(CountryUS);
@@ -216,7 +251,7 @@ function PhoneInput({ component }: { component: React.FC<InputProps> }) {
   useEffect(() => {
     if (country.prefixes) {
       // If phone number not starts with prefix.
-      // If internal value is shorter than prefix 
+      // If internal value is shorter than prefix
       //    make sure they are start the same.
       const prefix = country.prefixes.find(e =>
         internalValue.startsWith(e.slice(0, internalValue.length)),
