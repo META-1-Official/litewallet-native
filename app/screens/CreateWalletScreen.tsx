@@ -92,8 +92,7 @@ const CreateWalletScreen: React.FC = () => {
     {
       name: 'password',
       lable: 'Password',
-      value: Buffer.from(getRadomByteArray(24)).toString('base64').replace(/\W/g, ''),
-      valid: true,
+      rules: [required, minLen(8), hasSpecialChars, upperAndLowerCase, noRepeat],
     },
     {
       name: 'password_repeat',
