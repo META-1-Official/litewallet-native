@@ -43,6 +43,38 @@ const premiumName: RuleFn = t =>
     `,
   );
 
+const UPPERCASE_RE = /[A-Z]/;
+const LOWERCASE_RE = /[a-z]/;
+const upperAndLowerCase: RuleFn = (t, n) =>
+  rule(
+    UPPERCASE_RE.test(t) && LOWERCASE_RE.test(t),
+    `${n} should have both upper and lower case letters`,
+  );
+
+function noRepeatImpl(t: string) {
+  const { substrs } = [...t].reduce(
+    (acc, cv) => {
+      if (acc.prev === cv) {
+        acc.substrs[acc.substrs.length - 1] += cv;
+      } else {
+        acc.substrs.push(cv);
+      }
+      acc.prev = cv;
+      return acc;
+    },
+    {
+      prev: '',
+      substrs: [] as string[],
+    },
+  );
+
+  const aboveThreshold = substrs.filter(e => e.length > 2);
+
+  return aboveThreshold.length !== 1;
+}
+
+const noRepeat: RuleFn = (t, n) =>
+  rule(noRepeatImpl(t), `${n} should not have repeating characters`);
 const CreateWalletScreen: React.FC = () => {
   const navigation = useNavigation<RootNavigationProp>();
   const authorize = useStore(state => state.authorize);
