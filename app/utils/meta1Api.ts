@@ -29,8 +29,15 @@ const YY = 3.154e10;
 const setLoading = useStore.getState().setLoading;
 const logout = useStore.getState().logout;
 let once = false;
-export const Connect = () => {
-  Meta1.connect(config.META1_CONNECTION_URL);
+
+export const Connect = async () => {
+  try {
+    console.log('URL:', config.META1_CONNECTION_URL);
+    await Meta1.connect(config.META1_CONNECTION_URL);
+    setLoading(false);
+  } catch (e) {
+    console.log(e);
+  }
   // A hack to patch into websocket status update callback
   // Show loader, if connection is closed
   // We probably will not recover
@@ -54,10 +61,6 @@ export const Connect = () => {
   //   }
   // });
 };
-
-Meta1.subscribe('connected', () => {
-  setLoading(false);
-});
 
 export async function fetchAssetWithIcon(asset_name: string) {
   // Using imgur as a fallback image host is sub optimal
