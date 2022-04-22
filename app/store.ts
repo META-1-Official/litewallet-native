@@ -4,7 +4,6 @@ import { persist } from 'zustand/middleware';
 import Omit from 'lodash.omit';
 import { signUp } from './utils/miscApi';
 import { NETWORK } from '@env';
-import { loadAvatar } from './utils/avatarApi';
 
 interface AppState {
   accountName: string;
@@ -35,7 +34,6 @@ export const useStore = create<AppState>(
           });
           if (NETWORK !== 'TESTNET') {
             signUp({ accountName }).catch(e => e);
-            setTimeout(() => loadAvatar().then(url => set({ avatarUrl: url })), 100);
           }
         },
         setAvatar: (url: string) => set({ avatarUrl: url }),

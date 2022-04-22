@@ -5,7 +5,7 @@ import {
   StackNavigationProp,
   StackScreenProps,
 } from '@react-navigation/stack';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Pressable, View } from 'react-native';
 import { SvgIcons } from '../assets';
 import { DexStackHeader } from './components/DexHeader';
@@ -21,6 +21,7 @@ import SettingsScreen from './screens/SettingsScreen';
 import WalletScreen from './screens/WalletScreen';
 import { useStore } from './store';
 import { colors } from './styles/colors';
+import { loadAvatar } from './utils/avatarApi';
 
 const Tab = createBottomTabNavigator();
 
@@ -127,6 +128,10 @@ const RenderOnTop = ({ route, navigation }: ROTProps) => {
 };
 
 export const DexNav: React.FC = () => {
+  useEffect(() => {
+    loadAvatar().then(url => useStore.getState().setAvatar(url));
+  });
+
   const DrawerNav = () => (
     <View style={{ flex: 1 }}>
       <Drawer.Navigator

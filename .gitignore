@@ -67,3 +67,5 @@ dist/*
 .parcel-cache
 dist
 crash
+
+.env
