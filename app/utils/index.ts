@@ -220,8 +220,8 @@ export const catchError = async (fn: () => void, params?: params) => {
       Alert.alert('Error', err.message);
     } else {
       Alert.alert('Error', 'Something went wrong');
+      onErr?.({ message: 'Unknown error', originalError: e });
       Sentry.captureException(e);
-      return anyway?.();
     }
   }
   anyway?.();
