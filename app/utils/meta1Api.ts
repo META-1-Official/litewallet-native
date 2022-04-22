@@ -285,7 +285,7 @@ export const placeLimitOrder = async (accountInfo: AccountWithPassword, orderInf
 };
 
 export const depositAddress = async (accountName: string, asset: string) => {
-  const res = await fetch(`https://gateway.api.meta1.io/api/wallet/init/${asset}`, {
+  const res = await fetch(`${config.GatewayUrl}/${asset}`, {
     credentials: 'omit',
     headers: {
       'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:84.0) Gecko/20100101 Firefox/84.0',
