@@ -1,5 +1,7 @@
 //@ts-ignore
 import { ChainValidation, FetchChain, PrivateKey, TransactionBuilder } from 'meta1js';
+import { NETWORK } from '@env';
+import config from '../config';
 
 export function generateKeyFromPassword(accountName: any, role: string, password: any) {
   let seed = accountName + role + password;
@@ -67,9 +69,9 @@ export default async function createAccountWithPassword(
   firstName: any,
 ) {
   const milkFaucet = async () => {
-    let faucetAddress = 'https://faucet.meta1.io/faucet';
+    const PREFIX = NETWORK === 'TESTNET' ? 'DEV11' : 'META1';
 
-    let rawRes = await fetch(faucetAddress + '/api/v1/accounts', {
+    let rawRes = await fetch(config.faucetAddress + '/api/v1/accounts', {
       method: 'post',
       mode: 'cors',
       headers: {
@@ -84,9 +86,9 @@ export default async function createAccountWithPassword(
           refcode: '',
           first_name: firstName,
           phone_number: phoneNumber,
-          owner_key: 'META1' + owner_private.toPublicKey().toPublicKeyString().substring(5),
-          active_key: 'META1' + active_private.toPublicKey().toPublicKeyString().substring(5),
-          memo_key: 'META1' + memo_private.toPublicKey().toPublicKeyString().substring(5),
+          owner_key: PREFIX + owner_private.toPublicKey().toPublicKeyString().substring(5),
+          active_key: PREFIX + active_private.toPublicKey().toPublicKeyString().substring(5),
+          memo_key: PREFIX + memo_private.toPublicKey().toPublicKeyString().substring(5),
         },
       }),
     });

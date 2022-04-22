@@ -1,8 +1,9 @@
 import { Alert, Platform } from 'react-native';
 import { Asset } from 'react-native-image-picker';
+import config from '../config';
 import { useStore } from '../store';
 
-const HOST = 'https://litewallet.cryptomailsvc.io';
+const HOST = config.avatarApiHost;
 
 enum Method {
   getUserData = '/getUserData',

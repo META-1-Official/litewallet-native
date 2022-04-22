@@ -1,4 +1,6 @@
-const BASEURL = 'http://65.21.242.70:3333';
+import config from '../config';
+
+const BASEURL = config.AppBackendUrl;
 
 enum ENDPOINT {
   _signUp = '/api/signUp',
