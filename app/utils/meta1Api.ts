@@ -148,7 +148,12 @@ const emptyBalance = (assetId: string): iBalance => ({
 export async function getAccount(accountName: string) {
   const accounts = await Meta1.db
     .get_full_accounts([accountName], false)
-    .then(res => new Map(res));
+    .then(res => new Map(res))
+    .catch(_ => null);
+
+  if (accounts === null) {
+    return undefined;
+  }
 
   const account = accounts.get(accountName);
   return account;
