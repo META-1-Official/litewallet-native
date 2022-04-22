@@ -53,6 +53,8 @@ const upperAndLowerCase: RuleFn = (t, n) =>
     `${n} should have both upper and lower case letters`,
   );
 
+const noSpace: RuleFn = (t, n) => rule(t.indexOf(' ') === -1, `${n} should not have any spaces`);
+
 function noRepeatImpl(t: string) {
   const { substrs } = [...t].reduce(
     (acc, cv) => {
@@ -94,7 +96,7 @@ const CreateWalletScreen: React.FC = () => {
     {
       name: 'password',
       lable: 'Password',
-      rules: [required, minLen(8), hasSpecialChars, upperAndLowerCase, noRepeat],
+      rules: [required, minLen(8), hasSpecialChars, upperAndLowerCase, noRepeat, noSpace],
     },
     {
       name: 'password_repeat',
