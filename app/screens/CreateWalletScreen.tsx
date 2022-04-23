@@ -132,17 +132,20 @@ const CreateWalletScreen: React.FC = () => {
                 autoCapitalize="none"
                 autoCorrect={false}
                 autoCompleteType="email"
+                textContentType="emailAddress"
+                keyboardType="email-address"
               />
               <PhoneInput component={Input} />
               <Input
                 name="account_name"
-                keyboardType="email-address"
                 autoCapitalize="none"
                 autoCorrect={false}
                 render={props => (
                   <TextInput
                     {...props}
                     onChangeText={t => props.onChangeText?.(t.toLowerCase())}
+                    autoCompleteType="username"
+                    textContentType="username"
                   />
                 )}
               />
@@ -151,7 +154,7 @@ const CreateWalletScreen: React.FC = () => {
                 Please keep your password in a safe place. Don’t share it with any third-parties or
                 send it online.
               </TextSecondary>
-              <Input name="password_repeat" secureTextEntry={true} />
+              <Input name="password_repeat" secureTextEntry={true} textContentType="newPassword" />
             </View>
           </KeyboardAwareScrollView>
         </View>
@@ -204,6 +207,8 @@ function PasswordInput(props: RenderProps) {
         autoCorrect={false}
         style={[props.style, { maxWidth: '88%', paddingRight: 8 }]}
         secureTextEntry={visible}
+        textContentType="newPassword"
+        autoCompleteType="password"
       />
       <TouchableOpacity {...tid('CreateWallet/copyPassword')} onPress={() => setVisible(!visible)}>
         <View
