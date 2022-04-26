@@ -23,6 +23,8 @@ import Loader from './components/Loader';
 import * as Sentry from '@sentry/react-native';
 import { LoaderModalContent } from './components/LoaderModal';
 import { CountryPicker, CountryPickerParams } from './components/CountryPicker';
+import { setJSExceptionHandler } from 'react-native-exception-handler';
+import RNRestart from 'react-native-restart';
 
 const { useEffect } = React;
 
@@ -42,6 +44,11 @@ Sentry.init({
     }),
   ],
 });
+
+setJSExceptionHandler((e, fatal) => {
+  Sentry.captureException(e);
+  RNRestart.Restart();
+}, false);
 
 export type RootStackParamList = {
   Home: undefined;
