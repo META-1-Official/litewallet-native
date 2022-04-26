@@ -45,9 +45,12 @@ Sentry.init({
   ],
 });
 
-setJSExceptionHandler((e, fatal) => {
+setJSExceptionHandler((e, _fatal) => {
   Sentry.captureException(e);
-  RNRestart.Restart();
+  console.log(e);
+  if (e.message === 'ACCOUNT_NOT_FOUND') {
+    RNRestart.Restart();
+  }
 }, false);
 
 export type RootStackParamList = {

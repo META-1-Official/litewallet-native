@@ -21,13 +21,12 @@ import {
 } from './meta1dexTypes';
 import { setupOnStatusCallbackHook } from './meta1wsHook';
 import { createPaperWalletLink } from './miscApi';
-import RNRestart from 'react-native-restart';
 
 // Number of milliseconds in one year
 const YY = 3.154e10;
 
 const setLoading = useStore.getState().setLoading;
-const logout = useStore.getState().logout;
+//const logout = useStore.getState().logout;
 let once = false;
 
 export const Connect = async () => {
@@ -45,9 +44,10 @@ export const Connect = async () => {
   setupOnStatusCallbackHook(s => {
     if (s !== 'open' && !once) {
       once = true;
-      Alert.alert('Server connection lost', '', [
-        { text: 'Restart', onPress: () => RNRestart.Restart() },
-      ]);
+      throw new Error('ACCOUNT_NOT_FOUND');
+      // Alert.alert('Server connection lost', '', [
+      //   { text: 'Restart', onPress: () => RNRestart.Restart() },
+      // ]);
       //RNRestart.Restart();
     }
   });
@@ -164,7 +164,7 @@ export async function fetchAccountBalances(accountName: string): Promise<Account
 
   if (!account) {
     console.warn('Api did not return requested account', accountName);
-    return; //logout();
+    throw new Error('ACCOUNT_NOT_FOUND');
   }
 
   const assets = await fetchAllAssets();
