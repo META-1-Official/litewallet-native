@@ -164,7 +164,7 @@ export async function fetchAccountBalances(accountName: string): Promise<Account
 
   if (!account) {
     console.warn('Api did not return requested account', accountName);
-    return logout();
+    return; //logout();
   }
 
   const assets = await fetchAllAssets();
