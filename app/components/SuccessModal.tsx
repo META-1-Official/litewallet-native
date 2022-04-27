@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useCardAnimation } from '@react-navigation/stack';
 
 import React from 'react';
@@ -7,7 +7,7 @@ import { CheckCircle } from 'react-native-feather';
 import { RootStackNP } from '../WalletNav';
 import RoundedButton from './RoundedButton';
 
-type Props = { text: string; onClose: () => void };
+type Props = { text: string; onClose: (navigation: NavigationProp<any>) => void };
 
 const SuccessModal: React.FC<Props> = ({ text, onClose }) => {
   const navigation = useNavigation();
@@ -59,7 +59,7 @@ const SuccessModal: React.FC<Props> = ({ text, onClose }) => {
             title="Close"
             onPress={() => {
               navigation.goBack();
-              onClose();
+              onClose(navigation);
             }}
           />
         </Animated.View>
@@ -67,10 +67,10 @@ const SuccessModal: React.FC<Props> = ({ text, onClose }) => {
     </View>
   );
 };
-
+export type ShowModalFn = ReturnType<typeof useShowModal>;
 export const useShowModal = () => {
   const navigation = useNavigation<RootStackNP>();
-  return (text: string, onClose: () => void) => {
+  return (text: string, onClose: Props['onClose']) => {
     navigation.navigate('modal', {
       component: SuccessModal,
       props: {
