@@ -29,7 +29,8 @@ import { HeaderProps } from './dex/SendScreen';
 import { SvgIcons } from '../../assets';
 import { StandaloneAsset, useAsset } from '../utils/useAsset';
 import throttle from 'lodash.throttle';
-import { useShowModal } from '../components/SuccessModal';
+import { ShowModalFn, useShowModal } from '../components/SuccessModal';
+import { useNavigation } from '@react-navigation/native';
 
 const refresh = throttle(() => {
   console.log('BEGIN Refresh');
@@ -464,7 +465,7 @@ type DexProps = DexSSP & {
 };
 
 const makeSendFn =
-  (modal: any, onStart: () => void, onEnd: () => void) =>
+  (modal: ShowModalFn, onStart: () => void, onEnd: () => void) =>
   (password: string, standalone: StandaloneAsset, toAccount: string) => {
     const accountName = useStore.getState().accountName;
     onStart();
@@ -498,7 +499,7 @@ const makeSendFn =
         setTimeout(() => useAssetsStore.getState().fetchUserAssets(accountName), 5000);
         modal(
           `Successfully sent ${standalone.amount} ${standalone.asset.symbol} to ${toAccount}`,
-          () => {},
+          nav => nav.goBack(),
         );
       },
       { onErr: () => onEnd() },
@@ -506,6 +507,7 @@ const makeSendFn =
   };
 
 export const DexSend: React.FC<DexProps> = props => {
+  const nav = useNavigation();
   const [toAccount, setToAccount] = useState('');
   const accountName = useStore(state => state.accountName);
   const { password, setPassword } = usePasswordView();
@@ -518,7 +520,11 @@ export const DexSend: React.FC<DexProps> = props => {
   const scroll = useScroll();
   scroll.contentContainerStyle.paddingBottom = 420; // Nice.
   const sendFn = makeSendFn(
-    suc,
+    (text, _onClose) =>
+      suc(text, () => {
+        nav.goBack();
+        nav.goBack();
+      }),
     () => loader.open(),
     () => loader.close(),
   );
