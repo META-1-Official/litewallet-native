@@ -471,11 +471,6 @@ const makeSendFn =
     onStart();
     catchError(
       async () => {
-        modal(
-          `Successfully sent ${standalone.amount} ${standalone.asset.symbol} to ${toAccount}`,
-          nav => nav.goBack(),
-        );
-        return;
         if (accountName === toAccount) {
           throw new Error('Field "To" must be different form field "From"');
         }
