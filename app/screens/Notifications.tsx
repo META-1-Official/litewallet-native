@@ -1,6 +1,6 @@
 import { NETWORK } from '@env';
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, Text, TextStyle, View } from 'react-native';
+import { RefreshControl, SafeAreaView, ScrollView, Text, TextStyle, View } from 'react-native';
 import { Circle, TrendingUp } from 'react-native-feather';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
@@ -10,16 +10,36 @@ import { getNotifications, Notification } from '../utils/miscApi';
 export default function Notifications() {
   const [notifData, setNotifData] = useState<Notification[]>([]);
   const accountName = useStore(e => e.accountName);
-  const accoutnAssets = useAssets();
+  const accountAssets = useAssets();
+
+  const update = (alive: boolean) =>
+    getNotifications({ accountName })
+      .then(e => alive && setNotifData(e.reverse()))
+      .then(() => alive && setRefreshing(false))
+      .catch(err => console.error(err));
 
   useEffect(() => {
+    let alive = true;
+
     if (NETWORK === 'TESTNET') {
       return;
     }
-    getNotifications({ accountName })
-      .then(e => setNotifData(e.reverse()))
-      .catch(err => console.error(err));
-  }, [accountName]);
+
+    update(alive);
+    const timer = setInterval(() => update(alive), 15000);
+
+    return () => {
+      alive = false;
+      clearInterval(timer);
+    };
+  });
+
+  const [refreshing, setRefreshing] = React.useState(true);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    update(true);
+  }, []);
 
   if (!notifData.length) {
     return (
@@ -40,10 +60,18 @@ export default function Notifications() {
 
   return (
     <SafeAreaView style={{ backgroundColor: '#000' }}>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={colors.BrandYellow}
+          />
+        }
+      >
         {notifData.map(e => {
           const [symbol] = e.content.split(' ');
-          const asAsset = accoutnAssets?.assetsWithBalance.find(a => a.symbol === symbol) || null;
+          const asAsset = accountAssets?.assetsWithBalance.find(a => a.symbol === symbol) || null;
           return (
             <View key={e.id} style={{ margin: 12 }}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>

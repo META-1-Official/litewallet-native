@@ -449,7 +449,10 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
     () => {
       console.log('Should hide');
       loader.close();
-      open(makeMessage(assets), () => nav.goBack());
+      open(makeMessage(assets), () => {
+        nav.goBack();
+        darkMode && nav.goBack();
+      });
     },
     () => loader.close(),
   );
