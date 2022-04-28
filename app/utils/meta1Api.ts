@@ -2,7 +2,6 @@ import assert from 'assert';
 import { zip, zipObject } from 'lodash';
 import QRCode from 'qrcode';
 import { useEffect, useState } from 'react';
-import { Alert } from 'react-native';
 import create from 'zustand';
 import { excludeIndex } from '.';
 import config from '../config';
