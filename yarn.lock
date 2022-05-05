@@ -6093,16 +6093,6 @@ merge2@^1.3.0:
   resolved "https://registry.yarnpkg.com/merge2/-/merge2-1.4.1.tgz#4368892f885e907455a6fd7dc55c0c9d404990ae"
   integrity sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==
 
-meta1dex-testnet@^0.6.14:
-  version "0.6.14"
-  resolved "https://registry.yarnpkg.com/meta1dex-testnet/-/meta1dex-testnet-0.6.14.tgz#090f31d2ed4d5f2e1dbdc3ae553ed8dcbb882029"
-  integrity sha512-EizI7NtRvOYCD7sEU/HmDFk1mdghRDccurPGO2Lj6xBC22oGLleW6H02mNsFZ8uc12jNNlRuuEk3kUPG11zE1A==
-  dependencies:
-    "@babel/runtime" "^7.1.2"
-    bignumber.js "^7.2.1"
-    lzma "^2.3.2"
-    meta1js-testnet "3.2.7-rc1"
-
 meta1dex@^0.6.13:
   version "0.6.13"
   resolved "https://registry.yarnpkg.com/meta1dex/-/meta1dex-0.6.13.tgz#89a24828f666679ce3228f11d78dcc322a41e6da"
@@ -6112,33 +6102,6 @@ meta1dex@^0.6.13:
     bignumber.js "^7.2.1"
     lzma "^2.3.2"
     meta1js "3.2.7-rc1"
-
-meta1js-testnet@3.2.7-rc1:
-  version "3.2.7-rc1"
-  resolved "https://registry.yarnpkg.com/meta1js-testnet/-/meta1js-testnet-3.2.7-rc1.tgz#a084359bb74ed356183616b85a0e0d1573fb106e"
-  integrity sha512-a84blMRFLYNdI4l95yT8lAuT56zhHvPQkxHiycELrBRGtFBF0idpCj4e+fwDiwCW+vgG5wYy3cWjYPkz3kED9g==
-  dependencies:
-    bigi "1.4.2"
-    bs58 "4.0.1"
-    bytebuffer "5.0.1"
-    create-hash "1.2.0"
-    create-hmac "1.1.7"
-    crypto-js "3.1.9-1"
-    deep-equal "1.0.1"
-    ecurve "1.0.6"
-    event-emitter "0.3.5"
-    immutable "3.8.2"
-    meta1js-ws-testnet "^3.1.5"
-    safe-buffer "^5.1.2"
-    secure-random "1.1.1"
-
-meta1js-ws-testnet@^3.1.5:
-  version "3.1.5"
-  resolved "https://registry.yarnpkg.com/meta1js-ws-testnet/-/meta1js-ws-testnet-3.1.5.tgz#483c362c275c47c42f0dbc787b68d04e76f4518c"
-  integrity sha512-XTZSgXgvpJW+3+5ydnIAMs8MmdAiGdXgagsOatY3GXm1ad1pB3AZF6ZJ/H5FIcEWGNg1v1h/tMUWs83V3pRTCQ==
-  dependencies:
-    isomorphic-ws "^4.0.1"
-    ws "^4.1.0"
 
 meta1js-ws@^3.1.5:
   version "3.1.5"
