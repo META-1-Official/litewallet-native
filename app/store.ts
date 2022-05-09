@@ -10,10 +10,11 @@ interface AppState {
   password: string;
   authorized: boolean;
   avatarUrl: string;
+  token: string;
   authorize: (accountName: string, password?: string) => void;
   logout: () => void;
+  setToken: (token: string) => void;
   setAvatar: (url: string) => void;
-
   loading: boolean;
   setLoading: (v: boolean) => void;
 }
@@ -36,6 +37,8 @@ export const useStore = create<AppState>(
             signUp({ accountName }).catch(e => e);
           }
         },
+        token: '',
+        setToken: (token: string) => set({ token }),
         setAvatar: (url: string) => set({ avatarUrl: url }),
         logout: () => set({ accountName: '', authorized: false, password: '', avatarUrl: '' }),
         loading: true,
