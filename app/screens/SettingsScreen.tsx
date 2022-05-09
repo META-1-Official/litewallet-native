@@ -11,7 +11,7 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { tid } from '../utils';
-import { removeAvatar, uploadAvatar } from '../utils/avatarApi';
+import { removeAvatar, uploadAvatar } from '../utils/litewalletApi';
 import { isError } from '../utils/errorUtils';
 import CreatePaperWallet from './CreatePaperWallet';
 import Notifications from './Notifications';

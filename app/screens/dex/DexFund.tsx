@@ -11,7 +11,7 @@ import { useStore } from '../../store';
 import { colors } from '../../styles/colors';
 import { tid } from '../../utils';
 import { useAssets } from '../../utils/meta1Api';
-import { getHistory } from '../../utils/miscApi';
+import { getHistory } from '../../utils/litewalletApi';
 import { dexAssetView } from './AssetView/AssetViewStore';
 
 const GRAPH_INTERVAL = {

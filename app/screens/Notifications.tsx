@@ -5,7 +5,7 @@ import { Circle, TrendingUp } from 'react-native-feather';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { useAssets } from '../utils/meta1Api';
-import { getNotifications, Notification } from '../utils/miscApi';
+import { getNotifications, Notification } from '../utils/litewalletApi';
 
 export default function Notifications() {
   const [notifData, setNotifData] = useState<Notification[]>([]);
