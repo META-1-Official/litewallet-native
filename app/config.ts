@@ -7,7 +7,7 @@ export default {
     NETWORK === 'TESTNET'
       ? 'https://faucet.dev.meta1.io/faucet'
       : 'https://faucet.meta1.io/faucet',
-  avatarApiHost:
+  litewalletApiHost:
     NETWORK === 'TESTNET'
       ? 'https://litewallet.dev.cryptomailsvc.io'
       : 'https://litewallet.cryptomailsvc.io',

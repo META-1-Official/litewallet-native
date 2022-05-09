@@ -3,7 +3,7 @@ import { Asset } from 'react-native-image-picker';
 import config from '../config';
 import { useStore } from '../store';
 
-const HOST = config.avatarApiHost;
+const HOST = config.litewalletApiHost;
 
 enum Method {
   _getUserData = '/getUserData',
