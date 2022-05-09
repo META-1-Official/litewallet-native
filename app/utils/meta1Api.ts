@@ -19,7 +19,6 @@ import {
   TypeIdPrefixed,
 } from './meta1dexTypes';
 import { setupOnStatusCallbackHook } from './meta1wsHook';
-import { createPaperWalletLink } from './miscApi';
 
 // Number of milliseconds in one year
 const YY = 3.154e10;
@@ -706,12 +705,3 @@ export const getAccountKeys = async (acc: AccountWithPassword): Promise<AccountK
   return { account: acc.accountName, ownerKey, memoKey, activeKey, privateKey };
 };
 
-export const paperWallet = (keys: AccountKeysT) => {
-  return createPaperWalletLink(
-    keys.ownerKey,
-    keys.activeKey,
-    keys.memoKey,
-    keys.account,
-    keys.privateKey,
-  );
-};
