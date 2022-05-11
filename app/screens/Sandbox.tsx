@@ -10,6 +10,8 @@ import { useNavigation } from '@react-navigation/native';
 import { NETWORK } from '@env';
 import RNRestart from 'react-native-restart';
 import { CountryPicker } from '../components/CountryPicker';
+import { ScrollView } from 'react-native-gesture-handler';
+import { getToken } from '../utils/litewalletApi';
 
 const resolves = (ms: number) => new Promise<void>(resolve => setTimeout(() => resolve(), ms));
 const rejects = (ms: number) => new Promise<void>((_, reject) => setTimeout(() => reject(), ms));
@@ -59,26 +61,46 @@ const Sandbox = () => {
   const ok = useCreateOrder(resolves);
   const err = useCreateOrder(rejects);
   const [country, setCountry] = useState('none');
+  const { accountName, password } = useStore();
   return (
     <>
       <SafeAreaView>
         <Text style={{ fontSize: 24, fontWeight: 'bold' }}> Sandbox </Text>
         <Text> Node env: {process.env.NODE_ENV}</Text>
         <Text> isTestnet: {(NETWORK === 'TESTNET').toString()}</Text>
-        <RoundedButton title="Show modal" onPress={() => nav.navigate('SbxModal')} />
-        <RoundedButton title="Show loader modal for 5 second (resolves)" onPress={() => ok.fn()} />
-        <RoundedButton title="Show loader modal for 5 second (throws)" onPress={() => err.fn()} />
-        <DoDa />
-        <RoundedButton title="Restart app" onPress={() => RNRestart.Restart()} />
-        <Text> Country Picker Res: {country}</Text>
-        <RoundedButton
-          title="Show Country picker"
-          onPress={() =>
-            nav.navigate('CountryPickerModal', {
-              callback: (s: any) => setCountry(s),
-            })
-          }
-        />
+        <ScrollView>
+          <RoundedButton title="Show modal" onPress={() => nav.navigate('SbxModal')} />
+          <RoundedButton
+            title="Show loader modal for 5 second (resolves)"
+            onPress={() => ok.fn()}
+          />
+          <RoundedButton
+            title="Show loader modal for 5 second (throws)"
+            onPress={() => err.fn()}
+          />
+          <DoDa />
+          <RoundedButton title="Restart app" onPress={() => RNRestart.Restart()} />
+          <Text> Country Picker Res: {country}</Text>
+          <RoundedButton
+            title="Show Country picker"
+            onPress={() =>
+              nav.navigate('CountryPickerModal', {
+                callback: (s: any) => setCountry(s),
+              })
+            }
+          />
+          <RoundedButton
+            title="Login"
+            onPress={() =>
+              getToken({
+                accountName,
+                password,
+              })
+                .then(e => console.log(e))
+                .catch(e => console.log(e))
+            }
+          />
+        </ScrollView>
       </SafeAreaView>
     </>
   );
