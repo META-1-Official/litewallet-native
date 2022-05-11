@@ -1,5 +1,6 @@
 import { Alert, Platform } from 'react-native';
 import { Asset } from 'react-native-image-picker';
+import { promptPromise } from '.';
 import config from '../config';
 import { useStore } from '../store';
 
@@ -40,12 +41,55 @@ type CallDataT =
   | iEndpoint<Method._saveAvatar, FormData>
   | iEndpoint<Method._signUp, forAccount>
   | iEndpoint<Method._getNotifications, forAccount>
-  | iEndpoint<Method._getHistory, getHistoryArgs>;
+  | iEndpoint<Method._getHistory, getHistoryArgs>
+  | iEndpoint<Method._login, AuthArgs>;
 
-const getAuthHeader = () => {
-  const token = useStore.getState().token;
+async function refreshToken() {
+  const { accountName, password: storedPass, setToken } = useStore.getState();
+
+  const password = storedPass
+    ? storedPass
+    : await promptPromise(
+        'Enter password',
+        'Password is required for this operation',
+        'secure-text',
+      ).then(e => e || '');
+
+  const token = await getToken({ accountName, password });
+  setToken(token);
+
+  return token;
+}
+
+interface JWTTimed {
+  iat: number;
+  exp: number;
+}
+
+const unixtime = (n: number) => new Date(n * 1000);
+
+function expired(token: string) {
+  const [header, payload, sig] = token.split('.');
+
+  if (!header || !payload || !sig) {
+    // Not even a valid token
+    return true;
+  }
+
+  const data: JWTTimed = JSON.parse(Buffer.from(payload, 'base64').toString());
+
+  return unixtime(data.exp) < new Date();
+}
+
+const getAuthHeader = async () => {
+  let token = useStore.getState().token;
   if (!token) {
-    // TODO: Refresh token
+    // TODO: Refresh token for real, like if the password is wrong
+    token = await refreshToken();
+  }
+
+  if (expired(token)) {
+    token = await refreshToken();
   }
 
   return { Authorization: `Bearer ${token}` };
@@ -54,7 +98,7 @@ const getAuthHeader = () => {
 async function Call<T = any>(args: CallDataT, auth = true) {
   const isFormData = (x: unknown): x is FormData => x instanceof FormData;
 
-  const authHeader = auth ? getAuthHeader() : {};
+  const authHeader = auth ? await getAuthHeader() : {};
   const options: RequestInit = {
     method: 'POST',
     headers: {
@@ -67,6 +111,7 @@ async function Call<T = any>(args: CallDataT, auth = true) {
   if (isFormData(args.args)) {
     options.headers = {
       'Content-Type': 'multipart/form-data',
+      ...authHeader,
     };
     options.body = args.args;
   }
@@ -106,10 +151,14 @@ export async function uploadAvatar(photo: Asset) {
     uri: Platform.OS === 'ios' ? photo.uri!.replace('file://', '') : photo.uri!,
   });
 
-  const { message } = await Call<Ret<string>>({
+  const { message, error } = await Call<Ret<string>>({
     method: Method._saveAvatar,
     args: fd,
   });
+
+  if (error) {
+    return console.error(`${error}: ${message}`);
+  }
 
   setAvatar(`${HOST}/public/${message}`);
 }

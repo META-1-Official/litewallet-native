@@ -10,6 +10,7 @@
         "OHLC",
         "Pressable",
         "qrcode",
+        "unixtime",
         "zustand"
     ]
 }
