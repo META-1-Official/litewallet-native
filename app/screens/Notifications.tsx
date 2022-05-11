@@ -8,6 +8,7 @@ import { useAssets } from '../utils/meta1Api';
 import { getNotifications, Notification } from '../utils/litewalletApi';
 
 export default function Notifications() {
+  const [refreshing, setRefreshing] = React.useState(false);
   const [notifData, setNotifData] = useState<Notification[]>([]);
   const accountName = useStore(e => e.accountName);
   const accountAssets = useAssets();
@@ -32,9 +33,7 @@ export default function Notifications() {
       alive = false;
       clearInterval(timer);
     };
-  });
-
-  const [refreshing, setRefreshing] = React.useState(true);
+  }, []);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
