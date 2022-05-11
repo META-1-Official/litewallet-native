@@ -704,4 +704,3 @@ export const getAccountKeys = async (acc: AccountWithPassword): Promise<AccountK
   const privateKey: string = account.activeKey.constructor.fromSeed(acc.password).toWif();
   return { account: acc.accountName, ownerKey, memoKey, activeKey, privateKey };
 };
-

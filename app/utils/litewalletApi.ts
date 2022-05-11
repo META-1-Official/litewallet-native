@@ -9,12 +9,13 @@ enum Method {
   _getUserData = '/getUserData',
   _saveAvatar = '/saveAvatar',
   _deleteAvatar = '/deleteAvatar',
-  _signUp = '/api/signUp',
-  _getHistory = '/api/getHistory',
-  _getNotifications = '/api/getNotifications',
+  _signUp = '/signUp',
+  _getHistory = '/getHistory',
+  _getNotifications = '/getNotifications',
+  _login = '/login',
 }
 
-type Ret<T> = { message: T };
+type Ret<T> = { message: T; error?: string };
 type login = { login: string };
 type getUserDataResponse = Ret<{
   id: number;
@@ -28,7 +29,7 @@ interface forAccount {
 }
 
 type getHistoryArgs = forAccount & { skip_size: number };
-
+type AuthArgs = forAccount & { password: string };
 interface iEndpoint<T extends Method, X> {
   method: T;
   args: X;
@@ -182,4 +183,25 @@ export async function getNotifications(args: forAccount) {
     method: Method._getNotifications,
     args,
   });
+}
+
+type LoginRes = {
+  success: 'success' | 'fail';
+  token: string;
+  accountName: string;
+};
+
+export async function getToken(args: AuthArgs) {
+  const res = await Call<LoginRes>(
+    {
+      method: Method._login,
+      args,
+    },
+    false,
+  ).catch(e => {
+    console.error(e);
+    Alert.alert('Authentication error');
+  });
+
+  return res?.token || '';
 }
