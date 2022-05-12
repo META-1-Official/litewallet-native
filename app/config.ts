@@ -15,5 +15,4 @@ export default {
     NETWORK === 'TESTNET'
       ? 'https://gateway.dev.meta1.io/api/wallet/init'
       : 'https://gateway.api.meta1.io/api/wallet/init',
-  AppBackendUrl: 'http://65.21.242.70:3333',
 };
