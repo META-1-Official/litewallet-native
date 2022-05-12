@@ -229,10 +229,11 @@ export interface Notification {
 }
 
 export async function getNotifications(args: forAccount) {
-  return await Call<Notification[]>({
+  const ret = await Call<Notification[]>({
     method: Method._getNotifications,
     args,
   });
+  return Array.isArray(ret) ? ret : [];
 }
 
 type LoginRes = {
