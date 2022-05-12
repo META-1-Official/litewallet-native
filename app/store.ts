@@ -3,7 +3,6 @@ import create from 'zustand';
 import { persist } from 'zustand/middleware';
 import Omit from 'lodash.omit';
 import { signUp } from './utils/litewalletApi';
-import { NETWORK } from '@env';
 
 interface AppState {
   accountName: string;
@@ -33,9 +32,7 @@ export const useStore = create<AppState>(
             authorized: true,
             password: password ? password : '',
           });
-          if (NETWORK !== 'TESTNET') {
-            signUp({ accountName }).catch(e => e);
-          }
+          signUp({ accountName }).catch(e => console.warn(e));
         },
         token: '',
         setToken: (token: string) => set({ token }),

@@ -1,4 +1,3 @@
-import { NETWORK } from '@env';
 import React, { useEffect, useState } from 'react';
 import { RefreshControl, SafeAreaView, ScrollView, Text, TextStyle, View } from 'react-native';
 import { Circle, TrendingUp } from 'react-native-feather';
@@ -21,10 +20,6 @@ export default function Notifications() {
 
   useEffect(() => {
     let alive = true;
-
-    if (NETWORK === 'TESTNET') {
-      return;
-    }
 
     update(alive);
     const timer = setInterval(() => update(alive), 15000);
@@ -50,9 +45,7 @@ export default function Notifications() {
           alignItems: 'center',
         }}
       >
-        <Text style={{ fontSize: 24, color: '#888' }}>
-          No notifications {NETWORK === 'TESTNET' ? '(Disabled for testnet builds)' : ''}
-        </Text>
+        <Text style={{ fontSize: 24, color: '#888' }}>No notifications</Text>
       </SafeAreaView>
     );
   }
