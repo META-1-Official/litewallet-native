@@ -11,7 +11,7 @@ import { NETWORK } from '@env';
 import RNRestart from 'react-native-restart';
 import { CountryPicker } from '../components/CountryPicker';
 import { ScrollView } from 'react-native-gesture-handler';
-import { getToken } from '../utils/litewalletApi';
+import { getToken, signUp } from '../utils/litewalletApi';
 
 const resolves = (ms: number) => new Promise<void>(resolve => setTimeout(() => resolve(), ms));
 const rejects = (ms: number) => new Promise<void>((_, reject) => setTimeout(() => reject(), ms));
@@ -68,7 +68,7 @@ const Sandbox = () => {
         <Text style={{ fontSize: 24, fontWeight: 'bold' }}> Sandbox </Text>
         <Text> Node env: {process.env.NODE_ENV}</Text>
         <Text> isTestnet: {(NETWORK === 'TESTNET').toString()}</Text>
-        <ScrollView>
+        <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
           <RoundedButton title="Show modal" onPress={() => nav.navigate('SbxModal')} />
           <RoundedButton
             title="Show loader modal for 5 second (resolves)"
@@ -95,6 +95,16 @@ const Sandbox = () => {
               getToken({
                 accountName,
                 password,
+              })
+                .then(e => console.log(e))
+                .catch(e => console.log(e))
+            }
+          />
+          <RoundedButton
+            title="SignuUp"
+            onPress={() =>
+              signUp({
+                accountName,
               })
                 .then(e => console.log(e))
                 .catch(e => console.log(e))
