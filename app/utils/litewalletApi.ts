@@ -1,3 +1,4 @@
+import throttle from 'lodash.throttle';
 import { Alert, Platform } from 'react-native';
 import { Asset } from 'react-native-image-picker';
 import { promptPromise } from '.';
@@ -240,6 +241,8 @@ type LoginRes = {
   accountName: string;
 };
 
+const err = throttle(() => Alert.alert('Authentication error'), 3e5); // Only one in five mins
+const authError = (e: any) => [console.log(e), err()] && null;
 export async function getToken(args: AuthArgs) {
   const res = await Call<LoginRes>(
     {
@@ -247,10 +250,7 @@ export async function getToken(args: AuthArgs) {
       args,
     },
     false,
-  ).catch(e => {
-    console.error(e);
-    Alert.alert('Authentication error');
-  });
+  ).catch(authError);
 
   return res?.token || '';
 }
