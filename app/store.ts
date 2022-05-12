@@ -2,18 +2,18 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
 import Omit from 'lodash.omit';
-import { signUp } from './utils/miscApi';
-import { NETWORK } from '@env';
+import { signUp } from './utils/litewalletApi';
 
 interface AppState {
   accountName: string;
   password: string;
   authorized: boolean;
   avatarUrl: string;
+  token: string;
   authorize: (accountName: string, password?: string) => void;
   logout: () => void;
+  setToken: (token: string) => void;
   setAvatar: (url: string) => void;
-
   loading: boolean;
   setLoading: (v: boolean) => void;
 }
@@ -32,10 +32,10 @@ export const useStore = create<AppState>(
             authorized: true,
             password: password ? password : '',
           });
-          if (NETWORK !== 'TESTNET') {
-            signUp({ accountName }).catch(e => e);
-          }
+          signUp({ accountName }).catch(e => console.warn(e));
         },
+        token: '',
+        setToken: (token: string) => set({ token }),
         setAvatar: (url: string) => set({ avatarUrl: url }),
         logout: () => set({ accountName: '', authorized: false, password: '', avatarUrl: '' }),
         loading: true,

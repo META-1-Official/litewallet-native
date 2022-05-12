@@ -6,9 +6,11 @@
         "htlc",
         "imgur",
         "Jank",
+        "litewallet",
         "OHLC",
         "Pressable",
         "qrcode",
+        "unixtime",
         "zustand"
     ]
 }

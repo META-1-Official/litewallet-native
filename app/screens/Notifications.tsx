@@ -1,13 +1,13 @@
-import { NETWORK } from '@env';
 import React, { useEffect, useState } from 'react';
 import { RefreshControl, SafeAreaView, ScrollView, Text, TextStyle, View } from 'react-native';
 import { Circle, TrendingUp } from 'react-native-feather';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { useAssets } from '../utils/meta1Api';
-import { getNotifications, Notification } from '../utils/miscApi';
+import { getNotifications, Notification } from '../utils/litewalletApi';
 
 export default function Notifications() {
+  const [refreshing, setRefreshing] = React.useState(false);
   const [notifData, setNotifData] = useState<Notification[]>([]);
   const accountName = useStore(e => e.accountName);
   const accountAssets = useAssets();
@@ -21,10 +21,6 @@ export default function Notifications() {
   useEffect(() => {
     let alive = true;
 
-    if (NETWORK === 'TESTNET') {
-      return;
-    }
-
     update(alive);
     const timer = setInterval(() => update(alive), 15000);
 
@@ -32,9 +28,7 @@ export default function Notifications() {
       alive = false;
       clearInterval(timer);
     };
-  });
-
-  const [refreshing, setRefreshing] = React.useState(true);
+  }, []);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -51,9 +45,7 @@ export default function Notifications() {
           alignItems: 'center',
         }}
       >
-        <Text style={{ fontSize: 24, color: '#888' }}>
-          No notifications {NETWORK === 'TESTNET' ? '(Disabled for testnet builds)' : ''}
-        </Text>
+        <Text style={{ fontSize: 24, color: '#888' }}>No notifications</Text>
       </SafeAreaView>
     );
   }

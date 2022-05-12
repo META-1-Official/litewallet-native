@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   SafeAreaView,
   View,
@@ -7,13 +7,19 @@ import {
   TextInput,
   Animated,
   Keyboard,
+  Alert,
+  TouchableOpacity,
 } from 'react-native';
+import { Eye, EyeOff, Key } from 'react-native-feather';
+import { RenderProps } from 'react-native-paper/src/components/TextInput/types';
 import { personAsset, personIconAsset } from '../../assets';
 import RoundedButton from '../components/RoundedButton';
 import { Heading, TextSecondary } from '../components/typography';
 import { useStore } from '../store';
+import { colors } from '../styles/colors';
 import { tid } from '../utils';
 import { getAccount } from '../utils/meta1Api';
+import meta1dex from '../utils/meta1dexTypes';
 import useForm from '../utils/useForm';
 import { asyncRule, required, RuleFn } from '../utils/useForm/rules';
 
@@ -23,10 +29,21 @@ const knownAccount: RuleFn = text =>
     const acc = await getAccount(text).catch(console.debug);
     return Boolean(acc);
   }, 'Account not found');
-
+const validatePassword = async (login: string, password: string) => {
+  try {
+    await meta1dex.login(login, password);
+    return true;
+  } catch (e: any) {
+    Alert.alert(e.message);
+    return false;
+  }
+};
 const LinkWalletScreen: React.FC = () => {
   const { Input, formState, valid } = useForm(
-    [{ name: 'account_name', lable: 'Account Name', rules: [required, knownAccount] }],
+    [
+      { name: 'account_name', lable: 'Account Name', rules: [required, knownAccount] },
+      { name: 'password', lable: 'Password', rules: [required] },
+    ],
     false,
   );
   const offsetY = useRef(new Animated.Value(0)).current;
@@ -103,13 +120,21 @@ const LinkWalletScreen: React.FC = () => {
             </View>
           )}
         />
+        <Input
+          name="password"
+          style={{
+            paddingHorizontal: 32,
+          }}
+          render={PasswordInput}
+        />
       </Animated.View>
       <View>
         <RoundedButton
           title="Submit"
-          onPress={() => {
-            if (valid()) {
-              authorzie(formState.account_name);
+          onPress={async () => {
+            const { account_name, password } = formState;
+            if (valid() && (await validatePassword(account_name, password))) {
+              authorzie(account_name, password);
             }
           }}
         />
@@ -117,5 +142,38 @@ const LinkWalletScreen: React.FC = () => {
     </SafeAreaView>
   );
 };
+
+function PasswordInput(props: RenderProps) {
+  const [visible, setVisible] = useState(true);
+  return (
+    <View key={123} style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <Key width={24} height={32} color="#333" strokeWidth={1.5} />
+      <TextInput
+        {...props}
+        {...tid('CreateWallet/password')}
+        autoCapitalize={'none'}
+        autoCorrect={false}
+        style={[props.style, { maxWidth: '88%', paddingRight: 8, paddingLeft: 8 }]}
+        secureTextEntry={visible}
+      />
+      <TouchableOpacity {...tid('CreateWallet/copyPassword')} onPress={() => setVisible(!visible)}>
+        <View
+          style={{
+            backgroundColor: colors.BrandYellow,
+            marginTop: 14,
+            padding: 6,
+            borderRadius: 5,
+          }}
+        >
+          {visible ? (
+            <EyeOff width={20} height={20} color="#000" />
+          ) : (
+            <Eye width={20} height={20} color="#000" />
+          )}
+        </View>
+      </TouchableOpacity>
+    </View>
+  );
+}
 
 export default LinkWalletScreen;
