@@ -454,8 +454,7 @@ const PasswordView = ({ darkMode, password, setPassword }: PVProps) => (
 );
 
 const usePasswordView = () => {
-  const saved = useStore(s => s.password);
-  const [password, setPassword] = useState(saved || '');
+  const [password, setPassword] = useState('');
 
   return { password, setPassword };
 };

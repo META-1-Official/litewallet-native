@@ -6,7 +6,7 @@ import { SvgIcons } from '../../../assets';
 import { useAVStore } from '../../screens/dex/AssetView/AssetViewStore';
 import { useStore } from '../../store';
 import { colors } from '../../styles/colors';
-import { catchError, promptPromise, tid, Timeout } from '../../utils';
+import { catchError, getPassword, tid, Timeout } from '../../utils';
 import { placeLimitOrder, useAssets, useAssetsStore } from '../../utils/meta1Api';
 import { useNewLoaderModal } from '../LoaderModal';
 import { useShowModal } from '../SuccessModal';
@@ -44,7 +44,7 @@ export const InputRow: React.FC<InputRowProps> = ({ title, value, onChange, onIn
           onChangeText={onChange}
         />
         <View style={{ flexDirection: 'row' }}>
-          {onChange ? (
+          {onInc && onDec ? (
             <>
               <TouchableOpacity
                 {...tid('LimitOrder/InputRow/Minus')}
@@ -176,17 +176,8 @@ export enum OrderType {
 
 export const useCreateOrder = (toGive: any, toGet: any, type: OrderType) => {
   const loaderModal = useNewLoaderModal();
-  const { accountName, password } = useStore();
+  const { accountName } = useStore();
   const successModal = useShowModal();
-
-  const getPassword = async () =>
-    password
-      ? password
-      : await promptPromise(
-          'Enter password',
-          'Password is required for this operation',
-          'secure-text',
-        );
 
   const getAccountInfo = async () => ({
     accountName,
@@ -237,6 +228,7 @@ export enum Update {
   INC_AMOUNT = 'INC_AMOUNT',
   DEC_PRICE = 'DEC_PRICE',
   DEC_AMOUNT = 'DEC_AMOUNT',
+  FROM_TOTAL = 'FROM_TOTAL',
 }
 
 interface Action {
@@ -304,6 +296,11 @@ export const useOrderState = (assetA: string, assetB: string, oType: OrderType) 
         case Update.TOTAL:
           const amt = Num(state.price) === 0 ? 0 : Num(payload!) / price(Num(state.price));
           return produce({ amount: aStr(amt) });
+
+        case Update.FROM_TOTAL:
+          const newAmt = Num(state.price) === 0 ? 0 : Num(payload!) / price(Num(state.price));
+          // Not producing here because `produce` updates total internally
+          return { ...state, total: payload!, amount: aStr(newAmt) };
         default:
           break;
       }

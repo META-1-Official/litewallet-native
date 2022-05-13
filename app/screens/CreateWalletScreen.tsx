@@ -87,7 +87,7 @@ const CreateWalletScreen: React.FC = () => {
     { name: 'first_name', lable: 'First name', rules: [required, lettersOnly] },
     { name: 'last_name', lable: 'Last name', rules: [required, lettersOnly] },
     { name: 'email', lable: 'Email', rules: [required, email] },
-    { name: 'mobile', lable: 'Mobile number', rules: [required] },
+    { name: 'mobile', lable: 'Mobile number' },
     {
       name: 'account_name',
       lable: 'Account name',
@@ -229,6 +229,7 @@ function PhoneInput({ component }: { component: React.FC<InputProps> }) {
   const navigation = useNavigation<RootNavigationProp>();
   const [country, setCountry] = useState(CountryUS);
   const [internalValue, setInternal] = useState('');
+  const [error, setError] = useState('');
 
   let mask = '';
   if (country.patterns) {
@@ -239,15 +240,28 @@ function PhoneInput({ component }: { component: React.FC<InputProps> }) {
 
   const Input = component;
   const onChangeRef = useRef<(s: string) => void | undefined>();
-  const onChangeText = (s: string) => {
+
+  // TextInputMaskProps.onChangeText?: (formatted: string, extracted?: string | undefined)
+  // _pad -> fills the extracted arg to allow ass to add prog argument
+  // prog: bool -> is the event rased programmatically, if so don't set the error
+  const onChangeText = (s: string, _pad: any, prog = false) => {
     setInternal(s);
+
+    if (error) {
+      setError('');
+    }
+
+    if (!s.length && !prog) {
+      setError('Mobile number is required');
+    }
+
     if (onChangeRef.current) {
       onChangeRef.current(`+${country.countryCode} ${s}`);
     }
   };
 
   useEffect(() => {
-    onChangeText('');
+    onChangeText('', null, true);
   }, [country.countryCode]);
 
   useEffect(() => {
@@ -287,6 +301,7 @@ function PhoneInput({ component }: { component: React.FC<InputProps> }) {
         <Input
           name="mobile"
           style={{ width: '100%' }}
+          displayError={error}
           render={props => {
             onChangeRef.current = props.onChangeText;
             return (

@@ -308,6 +308,9 @@ export const useScroll = () => {
 export const tid = (_s: string) =>
   (s => ({ testID: s, accessibilityLabel: s }))(_s.replace(/\s+/gm, '_'));
 
+export const getPassword = async () =>
+  await promptPromise('Enter password', 'Password is required for this operation', 'secure-text');
+
 export const shadow = {
   D3: {
     shadowColor: '#000',

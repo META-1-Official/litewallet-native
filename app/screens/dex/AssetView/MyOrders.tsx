@@ -13,7 +13,7 @@ import {
 import { ProgressCircle } from 'react-native-svg-charts';
 import { useStore } from '../../../store';
 import { colors } from '../../../styles/colors';
-import { catchError, inFuture, promptPromise, tid } from '../../../utils';
+import { catchError, getPassword, inFuture, promptPromise, tid } from '../../../utils';
 import {
   AccountBalanceT,
   AmountT,
@@ -232,18 +232,9 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
   const cancelOrder = async (orderId: string) =>
     catchError(async () => {
       console.log('canceling');
-      if (account) {
-        return await account.cancelOrder(orderId);
-      }
-
-      const getPassword = async () =>
-        password
-          ? password
-          : await promptPromise(
-              'Enter password',
-              'Password is required for this operation',
-              'secure-text',
-            );
+      // if (account) {
+      //   return await account.cancelOrder(orderId);
+      // }
 
       const passwd = await getPassword();
       if (passwd === null) {
@@ -254,6 +245,18 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
       loader.open();
       return await authorized.cancelOrder(orderId);
     });
+
+  const count = (reject: RejectFn) => {
+    let n = 0;
+    history?.forEach(v => {
+      const { canceled, filled } = v;
+      const order = v.order.limit_order_create_operation;
+      if (!reject(canceled, filled, order)) {
+        n++;
+      }
+    });
+    return n;
+  };
 
   return (
     <SafeAreaView style={{ height: '100%', backgroundColor: '#000', padding: 12 }}>
@@ -300,7 +303,7 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
                   onPress={() => {
                     cancelOrder(k).then(() => setRefreshing(true));
                   }}
-                >
+                >˝
                   <Text
                     style={{
                       color: colors.BrandYellow,
@@ -312,9 +315,19 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
                 </TouchableOpacity>
               )),
             )}
-          <Text style={{ color: '#888', textAlign: 'center' }}>
-            If you are not logged in some orders may not be shown
-          </Text>
+          {count(isOpen) === 0 && (
+            <Text
+              style={{
+                color: '#888',
+                textAlign: 'center',
+                fontSize: 22,
+                fontWeight: '300',
+                paddingTop: '30%',
+              }}
+            >
+              No open orders
+            </Text>
+          )}
         </ScrollView>
       ) : (
         <ScrollView contentContainerStyle={{ paddingBottom: 200 }}>
