@@ -6,7 +6,7 @@ import { SvgIcons } from '../../../assets';
 import { useAVStore } from '../../screens/dex/AssetView/AssetViewStore';
 import { useStore } from '../../store';
 import { colors } from '../../styles/colors';
-import { catchError, promptPromise, tid, Timeout } from '../../utils';
+import { catchError, getPassword, promptPromise, tid, Timeout } from '../../utils';
 import { placeLimitOrder, useAssets, useAssetsStore } from '../../utils/meta1Api';
 import { useNewLoaderModal } from '../LoaderModal';
 import { useShowModal } from '../SuccessModal';
@@ -176,17 +176,8 @@ export enum OrderType {
 
 export const useCreateOrder = (toGive: any, toGet: any, type: OrderType) => {
   const loaderModal = useNewLoaderModal();
-  const { accountName, password } = useStore();
+  const { accountName } = useStore();
   const successModal = useShowModal();
-
-  const getPassword = async () =>
-    password
-      ? password
-      : await promptPromise(
-          'Enter password',
-          'Password is required for this operation',
-          'secure-text',
-        );
 
   const getAccountInfo = async () => ({
     accountName,

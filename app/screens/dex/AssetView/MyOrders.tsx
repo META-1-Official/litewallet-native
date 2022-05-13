@@ -13,7 +13,7 @@ import {
 import { ProgressCircle } from 'react-native-svg-charts';
 import { useStore } from '../../../store';
 import { colors } from '../../../styles/colors';
-import { catchError, inFuture, promptPromise, tid } from '../../../utils';
+import { catchError, getPassword, inFuture, promptPromise, tid } from '../../../utils';
 import {
   AccountBalanceT,
   AmountT,
@@ -235,15 +235,6 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
       if (account) {
         return await account.cancelOrder(orderId);
       }
-
-      const getPassword = async () =>
-        password
-          ? password
-          : await promptPromise(
-              'Enter password',
-              'Password is required for this operation',
-              'secure-text',
-            );
 
       const passwd = await getPassword();
       if (passwd === null) {

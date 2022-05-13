@@ -24,7 +24,7 @@ import { useShowModal } from '../components/SuccessModal';
 import { Heading, TextSecondary } from '../components/typography';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
-import { catchError, ensure, promptPromise, shadow, style, tid } from '../utils';
+import { catchError, ensure, getPassword, promptPromise, shadow, style, tid } from '../utils';
 import {
   AssetBalanceT,
   refreshAssets,
@@ -349,16 +349,8 @@ const mkPerformSwap = (
   onAfterSwap: () => void,
   onFail: () => void,
 ) => {
-  const { accountName, password } = useStore.getState();
+  const { accountName } = useStore.getState();
   const update = useAssetsStore.getState().fetchUserAssets;
-  const getPassword = async () =>
-    password
-      ? password
-      : await promptPromise(
-          'Enter password',
-          'Password is required for this operation',
-          'secure-text',
-        );
 
   const getAccountInfo = async () => ({
     accountName,
