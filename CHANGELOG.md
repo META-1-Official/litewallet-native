@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file. Dates are d
   - Changed the message when no open orders found in `MyOrders`
   - Fixed amount calaulation on `TradeScreen` when amount is typed in by hand
   - Total field in the `CreateLimitOrder` modal is now editable
+  - Fixed Submit button paritialy off screen on small devices
 
 #### [v1.1.0](https://github.com/META-1-Official/litewallet-native/compare/v1.0.14...v1.1.0)
 

@@ -11,13 +11,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Eye, EyeOff, Key } from 'react-native-feather';
+import { ScrollView } from 'react-native-gesture-handler';
 import { RenderProps } from 'react-native-paper/src/components/TextInput/types';
 import { personAsset, personIconAsset } from '../../assets';
 import RoundedButton from '../components/RoundedButton';
 import { Heading, TextSecondary } from '../components/typography';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
-import { tid } from '../utils';
+import { tid, useScroll } from '../utils';
 import { getAccount } from '../utils/meta1Api';
 import meta1dex from '../utils/meta1dexTypes';
 import useForm from '../utils/useForm';
@@ -47,7 +48,7 @@ const LinkWalletScreen: React.FC = () => {
     false,
   );
   const offsetY = useRef(new Animated.Value(0)).current;
-
+  const scroll = useScroll();
   useEffect(() => {
     console.log('re-render');
     const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
@@ -80,65 +81,68 @@ const LinkWalletScreen: React.FC = () => {
         backgroundColor: '#fff',
       }}
     >
-      <Animated.View style={{ marginHorizontal: 24, top: offsetY }}>
-        <Image
-          source={personAsset}
-          style={{
-            width: width - 48,
-            height: height / 3,
-            resizeMode: 'contain',
-            marginBottom: 50,
-          }}
-        />
-        <Heading style={{ marginBottom: 8 }}>META Lite Wallet</Heading>
-        <TextSecondary style={{ marginBottom: 18, fontSize: 15 }}>
-          Type your wallet 'Account Name' in the box below and click the 'Link META Wallet' button
-        </TextSecondary>
-        <Input
-          style={{
-            paddingHorizontal: 32,
-          }}
-          name="account_name"
-          render={props => (
-            <View key={123} style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Image
-                source={personIconAsset}
-                style={{
-                  width: 24,
-                  height: 32,
-                  resizeMode: 'contain',
-                }}
-              />
-              <TextInput
-                {...props}
-                {...tid('LinkWallet/AccountName')}
-                autoCapitalize={'none'}
-                autoCorrect={false}
-                keyboardType={'email-address'}
-                style={[props.style, { paddingLeft: 8 }]}
-              />
-            </View>
-          )}
-        />
-        <Input
-          name="password"
-          style={{
-            paddingHorizontal: 32,
-          }}
-          render={PasswordInput}
-        />
-      </Animated.View>
-      <View>
-        <RoundedButton
-          title="Submit"
-          onPress={async () => {
-            const { account_name, password } = formState;
-            if (valid() && (await validatePassword(account_name, password))) {
-              authorzie(account_name, password);
-            }
-          }}
-        />
-      </View>
+      <ScrollView {...scroll} contentContainerStyle={{ paddingBottom: 75 }}>
+        <Animated.View style={{ marginHorizontal: 24, top: offsetY }}>
+          <Image
+            source={personAsset}
+            style={{
+              width: width - 48,
+              height: height / 3,
+              resizeMode: 'contain',
+              marginBottom: 50,
+            }}
+          />
+          <Heading style={{ marginBottom: 8 }}>META Lite Wallet</Heading>
+          <TextSecondary style={{ marginBottom: 18, fontSize: 15 }}>
+            Type your wallet 'Account Name' in the box below and click the 'Link META Wallet'
+            button
+          </TextSecondary>
+          <Input
+            style={{
+              paddingHorizontal: 32,
+            }}
+            name="account_name"
+            render={props => (
+              <View key={123} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Image
+                  source={personIconAsset}
+                  style={{
+                    width: 24,
+                    height: 32,
+                    resizeMode: 'contain',
+                  }}
+                />
+                <TextInput
+                  {...props}
+                  {...tid('LinkWallet/AccountName')}
+                  autoCapitalize={'none'}
+                  autoCorrect={false}
+                  keyboardType={'email-address'}
+                  style={[props.style, { paddingLeft: 8 }]}
+                />
+              </View>
+            )}
+          />
+          <Input
+            name="password"
+            style={{
+              paddingHorizontal: 32,
+            }}
+            render={PasswordInput}
+          />
+        </Animated.View>
+        <View>
+          <RoundedButton
+            title="Submit"
+            onPress={async () => {
+              const { account_name, password } = formState;
+              if (valid() && (await validatePassword(account_name, password))) {
+                authorzie(account_name, password);
+              }
+            }}
+          />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
