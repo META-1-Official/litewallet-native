@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
-#### [v1.1.0](https://github.com/META-1-Official/litewallet-native/compare/v1.0.14...v1.1.0)
+#### [INDEV](https://github.com/META-1-Official/litewallet-native/)
 > 13 May 2022
 - QA Fixes [`#28`](https://github.com/META-1-Official/litewallet-native/pull/28)
   - Fixed the issue when passowrd comes pre-filled
@@ -12,6 +12,8 @@ All notable changes to this project will be documented in this file. Dates are d
   - Changed the message when no open orders found in `MyOrders`
   - Fixed amount calaulation on `TradeScreen` when amount is typed in by hand
   - Total field in the `CreateLimitOrder` modal is now editable
+
+#### [v1.1.0](https://github.com/META-1-Official/litewallet-native/compare/v1.0.14...v1.1.0)
 
 > 12 May 2022 (Some changes have been shiped as a part of 1.0.14 for QA)
 - New Backend integration [`#27`](https://github.com/META-1-Official/litewallet-native/pull/27)
