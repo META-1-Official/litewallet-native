@@ -6,7 +6,7 @@ import { SvgIcons } from '../../../assets';
 import { useAVStore } from '../../screens/dex/AssetView/AssetViewStore';
 import { useStore } from '../../store';
 import { colors } from '../../styles/colors';
-import { catchError, getPassword, promptPromise, tid, Timeout } from '../../utils';
+import { catchError, getPassword, tid, Timeout } from '../../utils';
 import { placeLimitOrder, useAssets, useAssetsStore } from '../../utils/meta1Api';
 import { useNewLoaderModal } from '../LoaderModal';
 import { useShowModal } from '../SuccessModal';
@@ -44,7 +44,7 @@ export const InputRow: React.FC<InputRowProps> = ({ title, value, onChange, onIn
           onChangeText={onChange}
         />
         <View style={{ flexDirection: 'row' }}>
-          {onChange ? (
+          {onInc && onDec ? (
             <>
               <TouchableOpacity
                 {...tid('LimitOrder/InputRow/Minus')}
