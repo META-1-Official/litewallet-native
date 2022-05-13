@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { DefaultTheme, HelperText } from 'react-native-paper';
 import TextInput, { TextInputProps } from 'react-native-paper/src/components/TextInput/TextInput';
@@ -18,8 +18,12 @@ type DefautlStateItem = {
 
 export interface InputProps extends Omit<TextInputProps, 'theme'> {
   name: string;
+  displayError?: string;
 }
-export default function useForm<T extends DefautlStateItem[]>(defautState: T, updateValidState = true) {
+export default function useForm<T extends DefautlStateItem[]>(
+  defautState: T,
+  updateValidState = true,
+) {
   const lables = Object.fromEntries(defautState.map(e => [e.name, e.lable]));
   const ruleSets = Object.fromEntries(defautState.map(e => [e.name, e.rules]));
   // Gotta go fast
@@ -43,7 +47,7 @@ export default function useForm<T extends DefautlStateItem[]>(defautState: T, up
 
   const setValid = getObjectSetter<typeof valid>(valid);
 
-  const Input: React.FC<InputProps> = ({ name, ...props }) => {
+  const Input: React.FC<InputProps> = ({ name, displayError, ...props }) => {
     const theme: typeof DefaultTheme = {
       ...DefaultTheme,
       //@ts-ignore
@@ -56,6 +60,25 @@ export default function useForm<T extends DefautlStateItem[]>(defautState: T, up
     };
 
     const [error, setError] = useState<string | null>();
+
+    useEffect(() => {
+      if (ruleSets[name] && displayError) {
+        console.warn(`Overriding validate behavior for field ${name} with rules`);
+      }
+
+      if (ruleSets[name]) {
+        return;
+      }
+
+      if (displayError) {
+        setValid(name, false);
+        setError(displayError);
+      } else {
+        setValid(name, true);
+        setError(null);
+      }
+    }, [displayError]);
+
     const validate = async () => {
       const rules = ruleSets[name];
       if (!rules) {
