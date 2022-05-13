@@ -24,7 +24,7 @@ import { useShowModal } from '../components/SuccessModal';
 import { Heading, TextSecondary } from '../components/typography';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
-import { catchError, ensure, getPassword, promptPromise, shadow, style, tid } from '../utils';
+import { catchError, ensure, getPassword, shadow, style, tid } from '../utils';
 import {
   AssetBalanceT,
   refreshAssets,
@@ -286,8 +286,9 @@ const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
         if (valid) {
           asset.setAmount(txt);
           const opponent = asset.opponent();
-          if (opponent.ticker && opponent.ticker.lowest_ask !== '0') {
-            const bAmt = Number(txt) / Number(opponent.ticker.lowest_ask);
+          const ticker = asset.ticker;
+          if (ticker && ticker.lowest_ask !== '0') {
+            const bAmt = Number(txt) / Number(ticker.lowest_ask);
             opponent.setAmount(bAmt.toFixed(opponent.asset._asset.precision));
           } else {
             opponent.formUsdt(asset.toUsdt(txt));
