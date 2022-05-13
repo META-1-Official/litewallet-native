@@ -54,7 +54,11 @@ export const Tab: React.FC<Props> = ({ type }) => {
         onDec={() => dispatch({ type: Update.DEC_AMOUNT })}
         onInc={() => dispatch({ type: Update.INC_AMOUNT })}
       />
-      <InputRow title={`TOTAL | ${assetB}`} value={state.total} />
+      <InputRow
+        title={`TOTAL | ${assetB}`}
+        value={state.total}
+        onChange={payload => dispatch({ type: Update.FROM_TOTAL, payload })}
+      />
       <TotalRow
         symbol={assetB.toString()}
         set={n => {
