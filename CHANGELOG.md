@@ -3,9 +3,17 @@
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
 #### [INDEV](https://github.com/META-1-Official/litewallet-native/)
+> 14 May 2022
+- QA Fixes 2 [`#29`](https://github.com/META-1-Official/litewallet-native/pull/29)
+  - Fixed keyboard hiding on Link wallet screen on android
+  - Changed `password_repeat`'s label to `Confirm Password`
+  - Changed validation error for the `same` rule
+  - Removed links leading to `CreatePaperWallet`
+  - Added a way to opt-out of keyboard events in useScroll
+
 > 13 May 2022
 - QA Fixes [`#28`](https://github.com/META-1-Official/litewallet-native/pull/28)
-  - Fixed the issue when passowrd comes pre-filled
+  - Fixed the issue when password comes pre-filled
   - Added a way to override validation message and state
   - Fixed a typo in the `same` rule
   - Fixed mobile number validation

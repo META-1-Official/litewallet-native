@@ -107,11 +107,11 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
           icon={PieChart}
           onPress={() => navigation.jumpTo('__ExploreAssets')}
         />
-        <ListItem
+        {/* <ListItem
           title="Create Paper Wallet"
           icon={Archive}
           onPress={() => navigation.jumpTo('_CreatePaperWallet')}
-        />
+        /> */}
         <ListItem title="Help" icon={HelpCircle} onPress={() => navigation.navigate('__Help')} />
         {process.env.NODE_ENV === 'production' && NETWORK !== 'TESTNET' ? null : (
           <ListItem

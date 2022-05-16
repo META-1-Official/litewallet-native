@@ -100,7 +100,7 @@ const CreateWalletScreen: React.FC = () => {
     },
     {
       name: 'password_repeat',
-      lable: 'Password Confirmation',
+      lable: 'Confirm Password',
       rules: [required, same('password')],
     },
   ]);
