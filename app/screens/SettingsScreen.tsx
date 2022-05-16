@@ -195,7 +195,7 @@ type Screens = {
   Settings_Notifications: undefined;
 };
 
-const Names = ['Switch Language', 'Notifications', 'View Keys'];
+const Names = ['Switch Language', 'Notifications'];
 
 const name2id = (s: string) => `Settings_${s.replace(/\s+/, '')}` as keyof Screens;
 const id2name = (k: string | keyof Screens) => Names.find(e => name2id(e) === k);
