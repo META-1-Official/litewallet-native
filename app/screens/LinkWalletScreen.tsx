@@ -48,7 +48,7 @@ const LinkWalletScreen: React.FC = () => {
     false,
   );
   const offsetY = useRef(new Animated.Value(0)).current;
-  const scroll = useScroll();
+  const scroll = useScroll(true);
   useEffect(() => {
     console.log('re-render');
     const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
