@@ -261,7 +261,7 @@ export const style = (common: AllStyles, specific: PlatformSpecific) => {
 export const excludeIndex = <T>(arr: T[], idx: number) =>
   arr.reduce<T[]>((r, v, i) => (i === idx ? r : [...r, v]), []);
 
-export const useScroll = () => {
+export const useScroll = (noKeyboardEvents = false) => {
   const onLayout: (_: LayoutChangeEvent) => void = _layout => {
     const h = Dimensions.get('window').height;
     if (h < 700) {
@@ -275,6 +275,10 @@ export const useScroll = () => {
   const [old, setOld] = useState(false);
 
   useEffect(() => {
+    if (noKeyboardEvents) {
+      return;
+    }
+
     const listeners = [
       Keyboard.addListener('keyboardDidShow', () => {
         setOld(scrollEnabled);
@@ -295,6 +299,7 @@ export const useScroll = () => {
 
     return () => listeners.forEach(e => e.remove());
   }, [old, scrollEnabled]);
+
   return {
     onLayout,
     scrollEnabled,
