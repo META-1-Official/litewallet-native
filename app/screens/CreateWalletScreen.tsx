@@ -79,6 +79,13 @@ function noRepeatImpl(t: string) {
 
 const noRepeat: RuleFn = (t, n) =>
   rule(noRepeatImpl(t), `${n} should not have repeating characters`);
+
+const mobileValid = (t: string): boolean => {
+  const [_prefix, ...rest] = t.split(' ');
+  return rest.filter(e => e).length > 0;
+};
+const mobile: RuleFn = (t, n) => rule(mobileValid(t), `${n} is required`);
+
 const CreateWalletScreen: React.FC = () => {
   const navigation = useNavigation<RootNavigationProp>();
   const authorize = useStore(state => state.authorize);
@@ -87,7 +94,7 @@ const CreateWalletScreen: React.FC = () => {
     { name: 'first_name', lable: 'First name', rules: [required, lettersOnly] },
     { name: 'last_name', lable: 'Last name', rules: [required, lettersOnly] },
     { name: 'email', lable: 'Email', rules: [required, email] },
-    { name: 'mobile', lable: 'Mobile number' },
+    { name: 'mobile', lable: 'Mobile number', rules: [mobile] },
     {
       name: 'account_name',
       lable: 'Account name',
@@ -240,6 +247,7 @@ function PhoneInput({ component }: { component: React.FC<InputProps> }) {
 
   const Input = component;
   const onChangeRef = useRef<(s: string) => void | undefined>();
+  const valRef = useRef<string | undefined>();
 
   // TextInputMaskProps.onChangeText?: (formatted: string, extracted?: string | undefined)
   // _pad -> fills the extracted arg to allow ass to add prog argument
@@ -261,7 +269,7 @@ function PhoneInput({ component }: { component: React.FC<InputProps> }) {
   };
 
   useEffect(() => {
-    onChangeText('', null, true);
+    valRef.current && onChangeText('', null, true);
   }, [country.countryCode]);
 
   useEffect(() => {
@@ -301,9 +309,9 @@ function PhoneInput({ component }: { component: React.FC<InputProps> }) {
         <Input
           name="mobile"
           style={{ width: '100%' }}
-          displayError={error}
           render={props => {
             onChangeRef.current = props.onChangeText;
+            valRef.current = props.value;
             return (
               //@ts-ignore
               <TextInputMask
