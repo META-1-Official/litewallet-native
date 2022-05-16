@@ -20,7 +20,7 @@ export const lettersOnly: RuleFn = (text, name) =>
 export const same: (cmp: string) => RuleFn = cmp => (text, name, state) =>
   text === state[cmp]
     ? null
-    : `${name} should match ${cmp.charAt(0).toUpperCase() + cmp.slice(1)}`;
+    : `${name} should be the same as ${cmp.charAt(0).toUpperCase() + cmp.slice(1)}`;
 
 export const includes =
   (str: string): RuleFn =>
