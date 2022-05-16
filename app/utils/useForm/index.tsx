@@ -73,7 +73,7 @@ export default function useForm<T extends DefautlStateItem[]>(
       if (displayError) {
         setValid(name, false);
         setError(displayError);
-      } else {
+      } else if (error) {
         setValid(name, true);
         setError(null);
       }
@@ -81,7 +81,7 @@ export default function useForm<T extends DefautlStateItem[]>(
 
     const validate = async () => {
       const rules = ruleSets[name];
-      if (!rules) {
+      if (!rules || !rules.length) {
         return;
       }
       for (const rule of rules) {
