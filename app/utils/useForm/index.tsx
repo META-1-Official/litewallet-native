@@ -87,7 +87,7 @@ export default function useForm<T extends DefautlStateItem[]>(
       }
       // For some reason `rules` object doesn't get destroy on return
       const _rules = [...rules, ...(getRules?.() || [])];
-      console.log('alo', _rules);
+
       for (const rule of _rules) {
         const maybeError = await rule(formState[name], lables[name], formState);
         if (maybeError) {
