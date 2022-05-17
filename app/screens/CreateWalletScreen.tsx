@@ -231,19 +231,41 @@ function PasswordInput(props: RenderProps) {
     </View>
   );
 }
+const defRule: RuleFn = (_t, _n) => rule(true, 'UNREACHED');
 
 function PhoneInput({ component }: { component: React.FC<InputProps> }) {
   const navigation = useNavigation<RootNavigationProp>();
   const [country, setCountry] = useState(CountryUS);
   const [internalValue, setInternal] = useState('');
-  const [error, setError] = useState('');
+  const [mask, setMask] = useState('');
+  const ruleRef = useRef<RuleFn>(() => null);
 
-  let mask = '';
-  if (country.patterns) {
-    const zeros = country.patterns[0].replace(/X/g, '0');
-    const brackets = zeros.replace(/ /g, '] [');
-    mask = `[${brackets}]`;
-  }
+  useEffect(() => {
+    const prefix = '\\+' + country.countryCode;
+    if (country.patterns) {
+      const zeros = country.patterns[0].replace(/X/g, '0');
+      const brackets = zeros.replace(/ /g, '] [');
+      setMask(`[${brackets}]`);
+
+      // Convert from XXXX XXXX pattern to regex compatible string
+      // like (\d\d\d\d \d\d\d\d)
+      const patterns = country.patterns
+        .map(e => e.replace(/X/gm, '\\d'))
+        .map(e => `(${e})`)
+        .join('|');
+
+      const re = new RegExp(`${prefix} (${patterns})$`);
+
+      //  prettier-ignore
+      const newRule: RuleFn = (t, n) =>
+       rule(re.test(t), `${n} should be a valid phone number`);
+
+      ruleRef.current = newRule;
+    } else {
+      ruleRef.current = defRule;
+      setMask(`[${'0'.repeat(12)}]`);
+    }
+  }, [country]);
 
   const Input = component;
   const onChangeRef = useRef<(s: string) => void | undefined>();
@@ -309,6 +331,7 @@ function PhoneInput({ component }: { component: React.FC<InputProps> }) {
         <Input
           name="mobile"
           style={{ width: '100%' }}
+          getRules={() => [ruleRef.current]}
           render={props => {
             onChangeRef.current = props.onChangeText;
             valRef.current = props.value;
@@ -318,8 +341,10 @@ function PhoneInput({ component }: { component: React.FC<InputProps> }) {
                 {...props}
                 {...tid('CreateWallet/phoneNum')}
                 onChangeText={onChangeText}
-                value={props.value?.replace(`+${country.countryCode}`, '')}
+                value={props.value?.replace(`+${country.countryCode}`, '').trim()}
                 mask={mask}
+                keyboardType="phone-pad"
+                maxLength={12}
               />
             );
           }}
