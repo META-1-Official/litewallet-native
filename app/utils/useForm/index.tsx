@@ -19,6 +19,7 @@ type DefautlStateItem = {
 export interface InputProps extends Omit<TextInputProps, 'theme'> {
   name: string;
   displayError?: string;
+  getRules?: () => RuleFn[];
 }
 export default function useForm<T extends DefautlStateItem[]>(
   defautState: T,
@@ -47,7 +48,7 @@ export default function useForm<T extends DefautlStateItem[]>(
 
   const setValid = getObjectSetter<typeof valid>(valid);
 
-  const Input: React.FC<InputProps> = ({ name, displayError, ...props }) => {
+  const Input: React.FC<InputProps> = ({ name, displayError, getRules, ...props }) => {
     const theme: typeof DefaultTheme = {
       ...DefaultTheme,
       //@ts-ignore
@@ -81,10 +82,13 @@ export default function useForm<T extends DefautlStateItem[]>(
 
     const validate = async () => {
       const rules = ruleSets[name];
-      if (!rules || !rules.length) {
+      if ((!rules || !rules.length) && !getRules) {
         return;
       }
-      for (const rule of rules) {
+      // For some reason `rules` object doesn't get destroy on return
+      const _rules = [...rules, ...(getRules?.() || [])];
+      console.log('alo', _rules);
+      for (const rule of _rules) {
         const maybeError = await rule(formState[name], lables[name], formState);
         if (maybeError) {
           setError(maybeError);
