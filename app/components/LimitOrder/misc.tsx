@@ -37,6 +37,7 @@ export const InputRow: React.FC<InputRowProps> = ({ title, value, onChange, onIn
             color: '#fff',
             fontSize: 28,
             fontWeight: 'bold',
+            flex: 1,
           }}
           value={value}
           keyboardType="numeric"
