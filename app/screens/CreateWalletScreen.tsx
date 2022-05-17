@@ -274,16 +274,8 @@ function PhoneInput({ component }: { component: React.FC<InputProps> }) {
   // TextInputMaskProps.onChangeText?: (formatted: string, extracted?: string | undefined)
   // _pad -> fills the extracted arg to allow ass to add prog argument
   // prog: bool -> is the event rased programmatically, if so don't set the error
-  const onChangeText = (s: string, _pad: any, prog = false) => {
+  const onChangeText = (s: string) => {
     setInternal(s);
-
-    if (error) {
-      setError('');
-    }
-
-    if (!s.length && !prog) {
-      setError('Mobile number is required');
-    }
 
     if (onChangeRef.current) {
       onChangeRef.current(`+${country.countryCode} ${s}`);
@@ -291,7 +283,8 @@ function PhoneInput({ component }: { component: React.FC<InputProps> }) {
   };
 
   useEffect(() => {
-    valRef.current && onChangeText('', null, true);
+    // Wait for a bit, do the on change when all refs will be updated
+    setTimeout(() => valRef.current && onChangeText(''), 50);
   }, [country.countryCode]);
 
   useEffect(() => {
