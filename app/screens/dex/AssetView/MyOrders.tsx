@@ -13,7 +13,7 @@ import {
 import { ProgressCircle } from 'react-native-svg-charts';
 import { useStore } from '../../../store';
 import { colors } from '../../../styles/colors';
-import { catchError, getPassword, inFuture, promptPromise, tid } from '../../../utils';
+import { catchError, getPassword, inFuture, tid } from '../../../utils';
 import {
   AccountBalanceT,
   AmountT,
@@ -303,7 +303,7 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
                   onPress={() => {
                     cancelOrder(k).then(() => setRefreshing(true));
                   }}
-                >˝
+                >
                   <Text
                     style={{
                       color: colors.BrandYellow,
