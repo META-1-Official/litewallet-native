@@ -515,6 +515,22 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
               </View>
             </View>
           </List>
+          <Text style={{ textAlign: 'right', alignSelf: 'center', color: '#888' }}>
+            Current Price:{' '}
+            {Number(assets.A.ticker?.lowest_ask).toFixed(assets.A.asset._asset.precision)}{' '}
+            {assets.A.asset.symbol}/{assets.B.asset.symbol} {'\n'}(
+            {
+              // Math bs
+              (() => {
+                const la = Number(assets.A.ticker?.lowest_ask);
+                if (!la) {
+                  return 0;
+                }
+                return assets.B.toUsdt(1 / la);
+              })().toFixed(2)
+            }{' '}
+            USDT/{assets.A.asset.symbol})
+          </Text>
         </View>
         <LightMode>
           <View style={styles.buttonContainer}>
