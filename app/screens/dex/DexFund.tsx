@@ -77,7 +77,7 @@ const DexFund: React.FC<DexTSP> = ({ navigation }) => {
       skip_size: GRAPH_INTERVAL[curInterval],
     })
       .then(e => {
-        if (!e.data) {
+        if (!e.data || !e.data.length) {
           setChartData([0, accountTotal]);
           return;
         }
