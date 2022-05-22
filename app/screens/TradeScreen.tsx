@@ -177,6 +177,7 @@ const DarkFloatingButton = ({ assets }: AssetsProp) => {
 type DM<T> = { darkMode?: boolean } & T;
 interface AssetProp {
   asset: theAsset;
+  slave?: boolean;
 }
 
 const AssetDisplay = ({ asset, darkMode }: DM<AssetProp>) => {
@@ -299,13 +300,13 @@ const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
   );
 };
 
-const UsdInput = ({ asset, darkMode }: DM<AssetProp>) => {
+const UsdInput = ({ asset, darkMode, slave }: DM<AssetProp>) => {
   const [amount, setAmount] = useState(asset.toUsdt().toFixed());
   const { isCause, cause } = useCause();
 
   useEffect(() => {
     if (!isCause) {
-      setAmount(asset.toUsdt().toFixed(2));
+      setAmount((slave ? asset.opponent().toUsdt() : asset.toUsdt()).toFixed(2));
     }
   }, [asset.amount, isCause]);
 
@@ -330,7 +331,7 @@ const UsdInput = ({ asset, darkMode }: DM<AssetProp>) => {
   );
 };
 
-const AmountsInput = ({ asset, darkMode }: DM<AssetProp>) => {
+const AmountsInput = ({ asset, darkMode, slave }: DM<AssetProp>) => {
   const darkStyle = optStyleFactory(darkMode);
 
   return (
@@ -338,7 +339,7 @@ const AmountsInput = ({ asset, darkMode }: DM<AssetProp>) => {
       <AmountInput asset={asset} darkMode={darkMode} />
       <View style={styles.rowEnd}>
         <TextSecondary style={darkStyle({ color: '#fff' }, styles.usdtLabel)}>US$</TextSecondary>
-        <UsdInput asset={asset} darkMode={darkMode} />
+        <UsdInput asset={asset} darkMode={darkMode} slave={slave} />
       </View>
     </View>
   );
@@ -510,7 +511,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
               <Text style={darkStyle({ color: colors.BrandYellow }, styles.listHeading)}>To</Text>
               <View style={styles.rowJustifyBetween}>
                 <AssetDisplay darkMode={darkMode} asset={assets.B} />
-                <AmountsInput darkMode={darkMode} asset={assets.B} />
+                <AmountsInput darkMode={darkMode} asset={assets.B} slave />
               </View>
             </View>
           </List>
