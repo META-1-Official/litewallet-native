@@ -353,7 +353,7 @@ const crossCheckPrice = async ({ A, B }: ScreenAssets) => {
     const price = Number(A.amount) / Number(B.amount);
     const tickerPrice = Number(ticker.lowest_ask);
     const mesq = (1 / 2) * (price - tickerPrice) ** 2;
-    console.log(mesq);
+    console.log('mesq', mesq);
     return mesq < 1e-10;
   } catch (e: any) {
     console.warn(e);
@@ -384,11 +384,7 @@ const mkPerformSwap = (
       throw new Error("Can't swap the same assets");
     }
 
-    if (!(await crossCheckPrice(assets))) {
-      throw new Error(
-        'Price deviation too high, enter the exact amount to swap or try again later',
-      );
-    }
+    await crossCheckPrice(assets);
 
     await swapWithPassword(
       accountInfo,
