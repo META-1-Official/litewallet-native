@@ -12,7 +12,7 @@ cd android
 ./gradlew build -x lint
 cd ..
 
-NOW=$NETWORK_$(date +"%m_%d_%YT%H-%M")
+NOW="$NETWORK-$(date +"%m_%d_%YT%H-%M")"
 cp ./android/app/build/outputs/apk/release/app-release.apk ./dist/android_$NOW.apk
 
 osx_copy(){ 
