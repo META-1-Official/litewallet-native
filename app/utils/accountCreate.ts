@@ -3,12 +3,17 @@ import { ChainValidation, FetchChain, PrivateKey, TransactionBuilder } from 'met
 import { NETWORK } from '@env';
 import config from '../config';
 
-export function generateKeyFromPassword(accountName: any, role: string, password: any) {
+export function generateKeyFromPassword(
+  accountName: any,
+  role: string,
+  password: any,
+  toWif = false,
+) {
   let seed = accountName + role + password;
   let privKey = PrivateKey.fromSeed(seed);
   let pubKey = privKey.toPublicKey().toString();
 
-  return { privKey, pubKey };
+  return { privKey: toWif ? privKey.toWif() : privKey, pubKey };
 }
 
 async function createAccFunc(
