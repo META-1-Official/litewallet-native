@@ -385,9 +385,7 @@ const mkPerformSwap = (
     }
 
     if (!(await crossCheckPrice(assets))) {
-      throw new Error(
-        'Price deviation too high, enter the exact amount to swap or try again later',
-      );
+      // Noop
     }
 
     await swapWithPassword(
