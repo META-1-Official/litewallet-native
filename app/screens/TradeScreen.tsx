@@ -177,6 +177,7 @@ const DarkFloatingButton = ({ assets }: AssetsProp) => {
 type DM<T> = { darkMode?: boolean } & T;
 interface AssetProp {
   asset: theAsset;
+  slave?: boolean;
 }
 
 const AssetDisplay = ({ asset, darkMode }: DM<AssetProp>) => {
@@ -299,13 +300,13 @@ const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
   );
 };
 
-const UsdInput = ({ asset, darkMode }: DM<AssetProp>) => {
+const UsdInput = ({ asset, darkMode, slave }: DM<AssetProp>) => {
   const [amount, setAmount] = useState(asset.toUsdt().toFixed());
   const { isCause, cause } = useCause();
 
   useEffect(() => {
     if (!isCause) {
-      setAmount(asset.toUsdt().toFixed(2));
+      setAmount((slave ? asset.opponent().toUsdt() : asset.toUsdt()).toFixed(2));
     }
   }, [asset.amount, isCause]);
 
@@ -330,7 +331,7 @@ const UsdInput = ({ asset, darkMode }: DM<AssetProp>) => {
   );
 };
 
-const AmountsInput = ({ asset, darkMode }: DM<AssetProp>) => {
+const AmountsInput = ({ asset, darkMode, slave }: DM<AssetProp>) => {
   const darkStyle = optStyleFactory(darkMode);
 
   return (
@@ -338,7 +339,7 @@ const AmountsInput = ({ asset, darkMode }: DM<AssetProp>) => {
       <AmountInput asset={asset} darkMode={darkMode} />
       <View style={styles.rowEnd}>
         <TextSecondary style={darkStyle({ color: '#fff' }, styles.usdtLabel)}>US$</TextSecondary>
-        <UsdInput asset={asset} darkMode={darkMode} />
+        <UsdInput asset={asset} darkMode={darkMode} slave={slave} />
       </View>
     </View>
   );
@@ -353,7 +354,7 @@ const crossCheckPrice = async ({ A, B }: ScreenAssets) => {
     const price = Number(A.amount) / Number(B.amount);
     const tickerPrice = Number(ticker.lowest_ask);
     const mesq = (1 / 2) * (price - tickerPrice) ** 2;
-    console.log(mesq);
+    console.log('mesq', mesq);
     return mesq < 1e-10;
   } catch (e: any) {
     console.warn(e);
@@ -508,10 +509,26 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
               <Text style={darkStyle({ color: colors.BrandYellow }, styles.listHeading)}>To</Text>
               <View style={styles.rowJustifyBetween}>
                 <AssetDisplay darkMode={darkMode} asset={assets.B} />
-                <AmountsInput darkMode={darkMode} asset={assets.B} />
+                <AmountsInput darkMode={darkMode} asset={assets.B} slave />
               </View>
             </View>
           </List>
+          <Text style={{ textAlign: 'right', alignSelf: 'center', color: '#888' }}>
+            Current Price:{' '}
+            {Number(assets.A.ticker?.lowest_ask).toFixed(assets.A.asset._asset.precision)}{' '}
+            {assets.A.asset.symbol}/{assets.B.asset.symbol} {'\n'}(
+            {
+              // Math bs
+              (() => {
+                const la = Number(assets.A.ticker?.lowest_ask);
+                if (!la) {
+                  return 0;
+                }
+                return assets.B.toUsdt(1 / la);
+              })().toFixed(2)
+            }{' '}
+            USDT/{assets.A.asset.symbol})
+          </Text>
         </View>
         <LightMode>
           <View style={styles.buttonContainer}>
