@@ -25,6 +25,7 @@ import { LoaderModalContent } from './components/LoaderModal';
 import { CountryPicker, CountryPickerParams } from './components/CountryPicker';
 import { setJSExceptionHandler } from 'react-native-exception-handler';
 import RNRestart from 'react-native-restart';
+import { SENTRY_DSN } from '@env';
 
 const { useEffect } = React;
 
@@ -32,7 +33,7 @@ const { useEffect } = React;
 const routingInstrumentation = new Sentry.ReactNavigationInstrumentation();
 
 Sentry.init({
-  dsn: 'https://a887e58f15314fac8350e83e5f28468e@o1150526.ingest.sentry.io/6223480',
+  dsn: SENTRY_DSN,
   // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
   // We recommend adjusting this value in production.
   tracesSampleRate: 1.0,
