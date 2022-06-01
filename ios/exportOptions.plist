@@ -5,12 +5,12 @@
 <key>method</key>
 <string>ad-hoc</string>
 <key>teamID</key>
-<string>5WRZF5M2BC</string>
+<string>BL96N576T8</string>
 <key>compileBitcode</key>
 <true/>
 <key>provisioningProfiles</key>
 <dict>
-    <key>5WRZF5M2BC.io.meta1.appbeta</key>
+    <key>io.meta1.appbeta</key>
     <string>Ad Hoc Distribution</string>
 </dict>
 </dict>
