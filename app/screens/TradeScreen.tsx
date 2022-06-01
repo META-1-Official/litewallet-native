@@ -385,7 +385,9 @@ const mkPerformSwap = (
       throw new Error("Can't swap the same assets");
     }
 
-    await crossCheckPrice(assets);
+    if (!(await crossCheckPrice(assets))) {
+      // Noop
+    }
 
     await swapWithPassword(
       accountInfo,
