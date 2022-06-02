@@ -25,7 +25,7 @@ export default function useForm<T extends DefautlStateItem[]>(
   defautState: T,
   updateValidState = true,
 ) {
-  const lables = Object.fromEntries(defautState.map(e => [e.name, e.lable]));
+  const labels = Object.fromEntries(defautState.map(e => [e.name, e.lable]));
   const ruleSets = Object.fromEntries(defautState.map(e => [e.name, e.rules]));
   // Gotta go fast
 
@@ -88,16 +88,19 @@ export default function useForm<T extends DefautlStateItem[]>(
       // For some reason `rules` object doesn't get destroy on return
       const _rules = [...rules, ...(getRules?.() || [])];
 
-      for (const rule of _rules) {
-        const maybeError = await rule(formState[name], lables[name], formState);
-        if (maybeError) {
-          setError(maybeError);
-          setValid(name, false);
-          return;
-        }
+      const promises = _rules.map((rule) => rule(formState[name], labels[name], formState));
+      const errors = await Promise.all(promises);
+      if (errors.every(element => element === null)) {
+        setError(null);
+        setValid(name, true);
+      } else {
+        errors.map(err => {
+          if (err) {
+            setError(err);
+            setValid(name, false);
+          }
+        });
       }
-      setError(null);
-      setValid(name, true);
     };
 
     return (
@@ -105,15 +108,15 @@ export default function useForm<T extends DefautlStateItem[]>(
         <TextInput
           {...props}
           placeholderTextColor={colors.mutedGray}
-          label={lables[name]}
+          label={labels[name]}
           style={[styles.input, props.style, { width: 'auto' }]}
           defaultValue={formState[name]}
           underlineColor={theme.colors.text}
           theme={theme}
           {...tid(`useFrom/Input/${name}`)}
-          onChangeText={newText => {
+          onChangeText={async newText => {
             formState[name] = newText;
-            validate();
+            await validate();
             willBeValid();
           }}
         />
