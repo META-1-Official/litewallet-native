@@ -9,6 +9,12 @@ jobs:
       - name: Install npm dependencies
         run: |
           yarn install
+      - name: Setup apk signning
+        run: |
+          echo "MYAPP_UPLOAD_STORE_FILE=debug.keystore" >> android/gradle.properties
+          echo "MYAPP_UPLOAD_KEY_ALIAS=androiddebugkey" >> android/gradle.properties
+          echo "MYAPP_UPLOAD_STORE_PASSWORD=android" >> android/gradle.properties
+          echo "MYAPP_UPLOAD_KEYPASSWORD=android" >> android/gradle.properties
       - name: Build Android Release
         run: |
           cd android && ./gradlew assembleRelease
