@@ -1,15 +1,14 @@
-name: react-native-android-build-apk
+name: BuildApkAndroid
 on: [push]
 
 jobs:
-  build-android:
-    needs: install-and-test
+  build:
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - uses: actions/checkout@v2
       - name: Install npm dependencies
         run: |
-          yarn install 
+          yarn install
       - name: Build Android Release
         run: |
           cd android && ./gradlew assembleRelease
@@ -18,4 +17,3 @@ jobs:
         with:
           name: app-release.apk
           path: android/app/build/outputs/apk/release/
-
