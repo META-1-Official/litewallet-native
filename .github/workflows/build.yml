@@ -15,6 +15,7 @@ jobs:
           bundle install
       - name: Bump version
         run: |
+          export ANDROID_ONLY=1
           yarn bump
       - name: Setup apk signning
         run: |
