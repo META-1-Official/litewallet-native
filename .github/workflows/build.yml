@@ -9,6 +9,13 @@ jobs:
       - name: Install npm dependencies
         run: |
           yarn install
+      - name: Install bundler and fastlane
+        run: |
+          sudo gem install bundler
+          bundle install
+      - name: Bump version
+        run: |
+          yarn bump
       - name: Setup apk signning
         run: |
           echo "MYAPP_UPLOAD_STORE_FILE=debug.keystore" >> android/gradle.properties
