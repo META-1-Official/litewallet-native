@@ -9,6 +9,7 @@ interface Props {
 }
 
 const KNOB_SIZE = 24;
+const MOVE_MAX = KNOB_SIZE * 0.7;
 const MaterialToggle: React.FC<Props> = ({ onChange, defaultValue }) => {
   const [onoff, setOnOff] = useState(defaultValue || false);
   const anim = useRef(new Animated.Value(0)).current;
@@ -20,7 +21,7 @@ const MaterialToggle: React.FC<Props> = ({ onChange, defaultValue }) => {
       easing: Easing.inOut(Easing.quad),
     }).start();
 
-  const on = () => move(KNOB_SIZE * 0.7);
+  const on = () => move(MOVE_MAX);
 
   const off = () => move(0);
 
@@ -37,12 +38,15 @@ const MaterialToggle: React.FC<Props> = ({ onChange, defaultValue }) => {
           paddingTop: 1,
         }}
       >
-        <View
+        <Animated.View
           style={{
             width: KNOB_SIZE * 1.7,
             height: Math.ceil(KNOB_SIZE * 0.7),
             // + 88 Makes #RRGGBBAA form #RRGGBB
-            backgroundColor: colors.BrandYellow + '88',
+            backgroundColor: anim.interpolate({
+              inputRange: [0, MOVE_MAX],
+              outputRange: ['rgba(255, 192, 0, 0.25)', 'rgba(255, 192, 0, .55)'],
+            }),
             borderRadius: KNOB_SIZE,
           }}
         />
