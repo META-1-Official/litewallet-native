@@ -59,7 +59,7 @@ type OptionsState = {
   [key in SetterNameT]: (arg: boolean) => void;
 } & OptionsValues;
 
-export const useOptions = create<OptionsState>(
+export const useOptions = create(
   persist(
     set =>
       ({

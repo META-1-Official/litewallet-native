@@ -15,7 +15,7 @@ import AppHeader from './components/AppHeaer';
 import CreateWalletScreen from './screens/CreateWalletScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import LinkWalletScreen from './screens/LinkWalletScreen';
-import { Options, useStore } from './store';
+import { Options, useOptions, useStore } from './store';
 import { Connect } from './utils/meta1Api';
 import { DexNav } from './WalletNav';
 import { PrivacyPolicy, TOSScreen } from './screens/PrivacyPolicy';
@@ -32,23 +32,25 @@ const { useEffect } = React;
 
 // Construct a new instrumentation instance. This is needed to communicate between the integration and React
 const routingInstrumentation = new Sentry.ReactNavigationInstrumentation();
-console.log(SENTRY_DSN, Options.get('sentryEnabled'));
-if (SENTRY_DSN && Options.get('sentryEnabled')) {
-  console.log('--- SENTRY INIT ---');
-  Sentry.init({
-    dsn: SENTRY_DSN,
-    // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
-    // We recommend adjusting this value in production.
-    tracesSampleRate: 1.0,
-    integrations: [
-      new Sentry.ReactNativeTracing({
-        // Pass instrumentation to be used as `routingInstrumentation`
-        routingInstrumentation,
-        // ...
-      }),
-    ],
-  });
-}
+
+useOptions.persist.rehydrate().then(() => {
+  if (SENTRY_DSN && Options.get('sentryEnabled')) {
+    console.log('--- SENTRY INIT ---');
+    Sentry.init({
+      dsn: SENTRY_DSN,
+      // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+      // We recommend adjusting this value in production.
+      tracesSampleRate: 1.0,
+      integrations: [
+        new Sentry.ReactNativeTracing({
+          // Pass instrumentation to be used as `routingInstrumentation`
+          routingInstrumentation,
+          // ...
+        }),
+      ],
+    });
+  }
+});
 
 setJSExceptionHandler((e, _fatal) => {
   Sentry.captureException(e);
