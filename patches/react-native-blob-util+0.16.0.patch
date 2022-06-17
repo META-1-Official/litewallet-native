@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native-blob-util/android/src/main/AndroidManifest.xml b/node_modules/react-native-blob-util/android/src/main/AndroidManifest.xml
+index 143dc4d..705f2ff 100644
+--- a/node_modules/react-native-blob-util/android/src/main/AndroidManifest.xml
++++ b/node_modules/react-native-blob-util/android/src/main/AndroidManifest.xml
+@@ -22,7 +22,7 @@
+     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+ 
+     <!-- Required to to download files without a notification-->
+-    <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION"/>
++    <!-- NOPE <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION"/> -->
+ 
+     <application android:label="@string/app_name">
+ 
