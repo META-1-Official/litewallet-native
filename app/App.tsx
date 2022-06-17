@@ -26,7 +26,7 @@ import { CountryPicker, CountryPickerParams } from './components/CountryPicker';
 import { setJSExceptionHandler } from 'react-native-exception-handler';
 import RNRestart from 'react-native-restart';
 import { SENTRY_DSN } from '@env';
-import { promptPromise } from './utils';
+import { Alert } from 'react-native';
 
 const { useEffect } = React;
 
@@ -112,16 +112,20 @@ async function EnableSentryPrompt() {
     return;
   }
 
-  const result = await promptPromise(
-    'Enable Crash Reporting',
-    'Enable crash reporting to help us make the app more stable?',
-    'default',
-  )
-    .then(_ => true)
-    .catch(_ => false);
+  const result = await new Promise<boolean>(resolve =>
+    Alert.alert(
+      'Enable Crash Reporting',
+      'Enable crash reporting to help us make the app more stable?',
+      [
+        { text: 'No', onPress: () => resolve(false) },
+        { text: 'Yes', onPress: () => resolve(true) },
+      ],
+    ),
+  );
 
-  Options().sentryEnabledSet(result);
   Options().firstTimeSet(false);
+  Options().sentryEnabledSet(result);
+
   if (result) {
     RNRestart.Restart();
   }
