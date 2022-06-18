@@ -108,6 +108,8 @@ const AuthNav = () => {
 };
 
 async function EnableSentryPrompt() {
+  await useOptions.persist.rehydrate();
+
   if (!Options.get('firstTime')) {
     return;
   }
@@ -137,7 +139,7 @@ function App() {
     SplashScreen.hide();
     Connect();
     EnableSentryPrompt();
-  });
+  }, []);
 
   const navigationRef = useNavigationContainerRef();
   const routePrefixRef = React.useRef<string | undefined>();
