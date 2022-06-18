@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pressable, SafeAreaView, Text, View } from 'react-native';
+import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { useNewLoaderModal } from '../components/LoaderModal';
 import { Options, useOptions, useStore } from '../store';
 import { catchError, Timeout } from '../utils';
@@ -10,7 +10,6 @@ import { useNavigation } from '@react-navigation/native';
 import { NETWORK } from '@env';
 import RNRestart from 'react-native-restart';
 import { CountryPicker } from '../components/CountryPicker';
-import { ScrollView } from 'react-native-gesture-handler';
 import { getToken, signUp } from '../utils/litewalletApi';
 
 const resolves = (ms: number) => new Promise<void>(resolve => setTimeout(() => resolve(), ms));
