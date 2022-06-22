@@ -1,0 +1,33 @@
+diff --git a/node_modules/react-native/Libraries/Text/Text.js b/node_modules/react-native/Libraries/Text/Text.js
+index f2dc306..d5e729b 100644
+--- a/node_modules/react-native/Libraries/Text/Text.js
++++ b/node_modules/react-native/Libraries/Text/Text.js
+@@ -140,7 +140,19 @@ const Text: React.AbstractComponent<
+       ? null
+       : processColor(restProps.selectionColor);
+ 
++  const hasTextAncestor = useContext(TextAncestor);
++
+   let style = restProps.style;
++
++  const _hasColor = (x) => x && Object.keys(x).includes('color') && x.color;
++  const hasColor = (x) => Array.isArray(x) ? x.some(e => _hasColor(e)) : _hasColor(x);
++
++  if (!hasTextAncestor && (!style || !hasColor(style))) {
++      style = StyleSheet.compose(restProps.style, {
++        color: '#000',
++      });
++  }
++
+   if (__DEV__) {
+     if (PressabilityDebug.isEnabled() && onPress != null) {
+       style = StyleSheet.compose(restProps.style, {
+@@ -157,8 +169,6 @@ const Text: React.AbstractComponent<
+     numberOfLines = 0;
+   }
+ 
+-  const hasTextAncestor = useContext(TextAncestor);
+-
+   return hasTextAncestor ? (
+     <NativeVirtualText
+       {...restProps}
