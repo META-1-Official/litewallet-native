@@ -8,13 +8,15 @@ import React from 'react';
 import { Alert, Image, Platform, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import { ArrowLeft, ChevronRight } from 'react-native-feather';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { useStore } from '../store';
+import { useOptions, useStore } from '../store';
 import { colors } from '../styles/colors';
 import { tid } from '../utils';
 import { removeAvatar, uploadAvatar } from '../utils/litewalletApi';
 import { isError } from '../utils/errorUtils';
 import CreatePaperWallet from './CreatePaperWallet';
 import Notifications from './Notifications';
+import RNRestart from 'react-native-restart';
+import { MaterialToggleNew } from '../components/MaterialToggle';
 
 const ListItem = ({
   onPress,
@@ -136,6 +138,43 @@ const AvatarGroup = () => {
   );
 };
 
+const OtherGroup = () => {
+  const { sentryEnabled, sentryEnabledSet } = useOptions();
+  const showAlert = () => {
+    Alert.alert('Restart', 'Application restart is required to apply changes', [
+      {
+        text: 'Ok',
+        onPress: () => RNRestart.Restart(),
+      },
+    ]);
+  };
+
+  return (
+    <View>
+      <Text style={{ color: '#fff', fontSize: 26, fontWeight: '600', marginBottom: 8 }}>
+        Other
+      </Text>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          paddingVertical: 12,
+        }}
+      >
+        <Text style={{ color: '#fff', fontSize: 18 }}>Crash Reporting</Text>
+        <MaterialToggleNew
+          value={sentryEnabled}
+          onPress={() => {
+            sentryEnabledSet(!sentryEnabled);
+            showAlert();
+          }}
+        />
+      </View>
+    </View>
+  );
+};
+
 const Divider = () => {
   return <View style={{ flex: 1, borderColor: '#444', height: 0, marginVertical: 12 }} />;
 };
@@ -183,6 +222,8 @@ const MainSettingsScreen = () => {
       <AvatarGroup />
       <Divider />
       <AccountGroup />
+      <Divider />
+      <OtherGroup />
       {/* <Button onPress={() => logout()} title="logout" /> */}
     </SafeAreaView>
   );

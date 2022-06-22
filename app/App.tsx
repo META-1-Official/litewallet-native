@@ -15,7 +15,7 @@ import AppHeader from './components/AppHeaer';
 import CreateWalletScreen from './screens/CreateWalletScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import LinkWalletScreen from './screens/LinkWalletScreen';
-import { useStore } from './store';
+import { Options, useOptions, useStore } from './store';
 import { Connect } from './utils/meta1Api';
 import { DexNav } from './WalletNav';
 import { PrivacyPolicy, TOSScreen } from './screens/PrivacyPolicy';
@@ -25,24 +25,31 @@ import { LoaderModalContent } from './components/LoaderModal';
 import { CountryPicker, CountryPickerParams } from './components/CountryPicker';
 import { setJSExceptionHandler } from 'react-native-exception-handler';
 import RNRestart from 'react-native-restart';
+import { SENTRY_DSN } from '@env';
+import { Alert } from 'react-native';
 
 const { useEffect } = React;
 
 // Construct a new instrumentation instance. This is needed to communicate between the integration and React
 const routingInstrumentation = new Sentry.ReactNavigationInstrumentation();
 
-Sentry.init({
-  dsn: 'https://a887e58f15314fac8350e83e5f28468e@o1150526.ingest.sentry.io/6223480',
-  // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
-  // We recommend adjusting this value in production.
-  tracesSampleRate: 1.0,
-  integrations: [
-    new Sentry.ReactNativeTracing({
-      // Pass instrumentation to be used as `routingInstrumentation`
-      routingInstrumentation,
-      // ...
-    }),
-  ],
+useOptions.persist.rehydrate().then(() => {
+  if (SENTRY_DSN && Options.get('sentryEnabled')) {
+    console.log('--- SENTRY INIT ---');
+    Sentry.init({
+      dsn: SENTRY_DSN,
+      // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+      // We recommend adjusting this value in production.
+      tracesSampleRate: 1.0,
+      integrations: [
+        new Sentry.ReactNativeTracing({
+          // Pass instrumentation to be used as `routingInstrumentation`
+          routingInstrumentation,
+          // ...
+        }),
+      ],
+    });
+  }
 });
 
 setJSExceptionHandler((e, _fatal) => {
@@ -100,11 +107,36 @@ const AuthNav = () => {
   );
 };
 
+async function EnableSentryPrompt() {
+  if (!Options.get('firstTime')) {
+    return;
+  }
+
+  const result = await new Promise<boolean>(resolve =>
+    Alert.alert(
+      'Enable Crash Reporting',
+      'Enable crash reporting to help us make the app more stable?',
+      [
+        { text: 'No', onPress: () => resolve(false) },
+        { text: 'Yes', onPress: () => resolve(true) },
+      ],
+    ),
+  );
+
+  Options().firstTimeSet(false);
+  Options().sentryEnabledSet(result);
+
+  if (result) {
+    RNRestart.Restart();
+  }
+}
+
 function App() {
   const [dark, setDark] = React.useState(false);
   useEffect(() => {
     SplashScreen.hide();
     Connect();
+    EnableSentryPrompt();
   });
 
   const navigationRef = useNavigationContainerRef();

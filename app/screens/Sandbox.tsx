@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Pressable, SafeAreaView, Text, View } from 'react-native';
 import { useNewLoaderModal } from '../components/LoaderModal';
-import { useStore } from '../store';
+import { Options, useOptions, useStore } from '../store';
 import { catchError, Timeout } from '../utils';
 import RoundedButton from '../components/RoundedButton';
 import { useShowModal } from '../components/SuccessModal';
@@ -62,12 +62,14 @@ const Sandbox = () => {
   const err = useCreateOrder(rejects);
   const [country, setCountry] = useState('none');
   const { accountName, password } = useStore();
+  const { firstTimeSet } = useOptions();
   return (
     <>
       <SafeAreaView>
         <Text style={{ fontSize: 24, fontWeight: 'bold' }}> Sandbox </Text>
         <Text> Node env: {process.env.NODE_ENV}</Text>
         <Text> isTestnet: {(NETWORK === 'TESTNET').toString()}</Text>
+        <Text> Options: {JSON.stringify(Options(), null, 4)}</Text>
         <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
           <RoundedButton title="Show modal" onPress={() => nav.navigate('SbxModal')} />
           <RoundedButton
@@ -89,6 +91,7 @@ const Sandbox = () => {
               })
             }
           />
+          <RoundedButton title="Set first time true" onPress={() => firstTimeSet(true)} />
           <RoundedButton
             title="Login"
             onPress={() =>

@@ -48,3 +48,51 @@ export const useStore = create<AppState>(
     },
   ),
 );
+
+interface OptionsValues {
+  sentryEnabled: boolean;
+  firstTime: boolean;
+}
+
+type SetterNameT = `${keyof OptionsValues}Set`;
+type OptionsState = {
+  [key in SetterNameT]: (arg: boolean) => void;
+} & OptionsValues;
+
+export const useOptions = create(
+  persist(
+    set =>
+      ({
+        sentryEnabled: false,
+        firstTime: true,
+        //---------------
+        sentryEnabledSet: sentryEnabled => set({ sentryEnabled }),
+        firstTimeSet: firstTime => set({ firstTime }),
+      } as OptionsState),
+    {
+      name: 'options-storage',
+      getStorage: () => EncryptedStorage,
+    },
+  ),
+);
+
+type OptionsT = (() => OptionsState) & {
+  get: (key: keyof OptionsValues) => boolean;
+};
+// Just a Callable object nothing to special
+class OptionsImpl extends Function {
+  constructor() {
+    super();
+    return new Proxy(this, {
+      apply: (target, thisArg, args): OptionsState => target._call(...args),
+    });
+  }
+  get(key: keyof OptionsValues) {
+    return useOptions.getState()[key];
+  }
+  _call(..._args: any): OptionsState {
+    return useOptions.getState();
+  }
+}
+
+export const Options: OptionsT = new OptionsImpl() as any;
