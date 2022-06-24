@@ -56,7 +56,7 @@ const DATA: Content[] = [
       />
     ),
     heading: 'All your digital assets\nin one place',
-    body: 'Take control of your tokens and collectibles\nby storing them on your own device',
+    body: 'Take control of your digital assets with ease from anywhere in the world',
   },
   {
     visual: (
@@ -67,8 +67,8 @@ const DATA: Content[] = [
           marginBottom: 24,
         }}
       >
-        <MockCard text="Sent from" username="Abobous" address={getRandomAddress()} />
-        <MockCard text="Received by" username="Amogus" address={getRandomAddress()} />
+        <MockCard text="Sent from" username="Alice" address={getRandomAddress()} />
+        <MockCard text="Received by" username="Bob" address={getRandomAddress()} />
       </View>
     ),
     heading: 'Easily send and receive\ncryptocurrency',
@@ -90,7 +90,7 @@ const DATA: Content[] = [
       );
     })(),
     heading: 'Decentralized Apps to Explore the Universe',
-    body: 'Decentralized exchanges, digital\ncollectibles and more!',
+    body: 'Decentralized Universe for all, explore the world of META 1 and the METANOMICS Ecosystem',
   },
 ];
 
