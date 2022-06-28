@@ -273,7 +273,7 @@ PODS:
   - React-jsinspector (0.66.0)
   - React-logger (0.66.0):
     - glog
-  - react-native-blob-util (0.16.0):
+  - react-native-blob-util (0.15.0):
     - React-Core
   - react-native-encrypted-storage (4.0.2):
     - React-Core
@@ -628,7 +628,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 6a05173dc0142abc582bd4edd2d23146b8cc218a
   React-jsinspector: be95ad424ba9f7b817aff22732eb9b1b810a000a
   React-logger: 9a9cd87d4ea681ae929b32ef580638ff1b50fb24
-  react-native-blob-util: 2d49d135d6fe1410c019fb5bff241dac7f12d73d
+  react-native-blob-util: a5d3561045ed98cfb2fb80cbbff600fae0e8edee
   react-native-encrypted-storage: e78d848ce0fb663c2ce306e37921d026809322e6
   react-native-image-picker: 4e6008ad8c2321622affa2c85432a5ebd02d480c
   react-native-restart: 45c8dca02491980f2958595333cbccd6877cb57e
@@ -663,4 +663,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 6b0d55d74c3b9c4fef1da75863736a1387137b70
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3
