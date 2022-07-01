@@ -13,7 +13,16 @@ jobs:
           sudo gem install cocoapods
           sudo gem install bundler
           bundle install
+      - uses: actions/cache@v3
+        id: cache-pods
+        with:
+          path: ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+              ${{ runner.os }}-pods-
+
       - name: Install pod dependencies
+        if: steps.cache-pods.outputs.cache-hit != 'true'
         run: |
           cd ios
           pod install
