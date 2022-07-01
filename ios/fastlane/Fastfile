@@ -15,6 +15,12 @@
 
 default_platform(:ios)
 
+
+match(type: "development")
+
+match(type: "adhoc",
+      app_identifier: "io.meta1.appbeta")
+
 platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
