@@ -16,10 +16,6 @@
 default_platform(:ios)
 
 
-match(type: "development")
-
-match(type: "adhoc",
-      app_identifier: "io.meta1.appbeta")
 
 platform :ios do
   desc "Push a new beta build to TestFlight"
@@ -37,6 +33,11 @@ lane :nightly do
   throw :MISSING_SENTRY_TOKEN if not ENV['SENTRY_AUTH_TOKEN']
   
   setup_ci if ENV['CI']
+  
+  match(type: "development")
+
+  match(type: "adhoc",
+      app_identifier: "io.meta1.appbeta")
   
   build_app(
     export_method: "ad-hoc",
