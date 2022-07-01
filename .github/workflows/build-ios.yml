@@ -35,3 +35,18 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           DIAWI_TOKEN: ${{ secrets.DIAWI_TOKEN }}
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT }}
+      - name: Get Diawi URL and QR Code
+        run: |
+          echo ============================
+          echo "Diawi Url: "
+          cat /tmp/url
+          echo "Qr code Url:"
+          echo "https://www.diawi.com/qrcode/link/$(cat /tmp/url | awk -F/ '{print $4}')"
+          echo ============================
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ios-build 
+          path: |
+            dist/**/*.ipa
+            dist/**/*.zip

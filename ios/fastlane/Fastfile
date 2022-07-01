@@ -57,4 +57,6 @@ lane :nightly do
   
   url = lane_context[SharedValues::UPLOADED_FILE_LINK_TO_DIAWI]
   sh("curl", "-s", "https://qrenco.de/" + url)
+
+  sh("echo " + url + " > /tmp/url") if ENV['CI']
 end
