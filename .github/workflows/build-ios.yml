@@ -1,0 +1,22 @@
+name: build-ios-app
+on: [push]
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install npm dependencies
+        run: |
+          yarn install
+      - name: Install bundler and fastlane
+        run: |
+          sudo gem install bundler
+          bundle install
+      - name: Build and upload to Diawi
+        run: |
+          cd ios
+          fastlane nightly
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          DIAWI_TOKEN: ${{ secrets.DIAWI_TOKEN }}
