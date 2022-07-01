@@ -10,7 +10,7 @@ jobs:
           yarn install
       - name: Install ruby dependencies
         run: |
-          sudo get install cocoapods
+          sudo gem install cocoapods
           sudo gem install bundler
           bundle install
       - name: Install pod dependencies
