@@ -2,17 +2,17 @@ import { NETWORK } from '@env';
 
 export default {
   META1_CONNECTION_URL:
-    NETWORK === 'TESTNET' ? 'wss://maia.dev.meta1.io/ws' : 'wss://maia.meta1.io/ws',
+    NETWORK === 'TESTNET' ? 'https://api.test.meta-exchange.vision/ws' : 'https://api.meta-exchange.vision/ws',
   faucetAddress:
     NETWORK === 'TESTNET'
-      ? 'https://faucet.dev.meta1.io/faucet'
-      : 'https://faucet.meta1.io/faucet',
+      ? 'https://faucet.dev.meta-exchange.vision/faucet'
+      : 'https://faucet.meta-exchange.vision/faucet',
   litewalletApiHost:
     NETWORK === 'TESTNET'
       ? 'https://litewallet.dev.cryptomailsvc.io'
       : 'https://litewallet.cryptomailsvc.io',
   GatewayUrl:
     NETWORK === 'TESTNET'
-      ? 'https://gateway.dev.meta1.io/api/wallet/init'
-      : 'https://gateway.api.meta1.io/api/wallet/init',
+      ? 'https://gateway.dev.meta-exchange.vision/api/wallet/init'
+      : 'https://gateway.api.meta-exchange.vision/api/wallet/init',
 };
