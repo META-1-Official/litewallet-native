@@ -26,7 +26,12 @@ end
 
 lane :nightly do
   name = "META1_" + Time.new.to_i.to_s + ".ipa"
+
+  throw :MISSING_DIAWI_TOKEN if not ENV['DIAWI_TOKEN']
+  throw :MISSING_SENTRY_TOKEN if not ENV['SENTRY_AUTH_TOKEN']
+  
   setup_ci if ENV['CI']
+  
   build_app(
     export_method: "ad-hoc",
     export_options: {
@@ -37,10 +42,12 @@ lane :nightly do
     output_directory: "../dist/",
     output_name: name
   )
+  
   diawi(
     token: ENV["DIAWI_TOKEN"],
     file: "../dist/" + name
   )
+  
   url = lane_context[SharedValues::UPLOADED_FILE_LINK_TO_DIAWI]
   sh("curl", "-s", "https://qrenco.de/" + url)
 end
