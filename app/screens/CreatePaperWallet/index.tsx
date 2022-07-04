@@ -4,14 +4,44 @@ import { useNewLoaderModal } from '../../components/LoaderModal';
 import { useStore } from '../../store';
 import { colors } from '../../styles/colors';
 import { catchError, tid } from '../../utils';
-import { AccountKeysT, getAccountKeys } from '../../utils/meta1Api';
-import RenderPdf from './RenderPdf';
+import { generateKeyFromPassword } from '../../utils/accountCreate';
+import { AccountWithPassword } from '../../utils/meta1Api';
+import meta1dex from '../../utils/meta1dexTypes';
+import RenderPdf, { KeysT } from './RenderPdf';
 import { savePdf } from './SavePdf';
+//@ts-ignore
+import { PrivateKey } from 'meta1js';
+
+function isPassPk(password: string): boolean {
+  try {
+    const _ = PrivateKey.fromWif(password);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+async function getAccountKeys({
+  accountName: account,
+  password,
+}: AccountWithPassword): Promise<KeysT | undefined> {
+  await meta1dex.login(account, password);
+
+  if (isPassPk(password)) {
+    throw new Error('Creating paper wallet from private key is not allowed');
+  }
+
+  return {
+    ownerKeys: generateKeyFromPassword(account, 'owner', password, true),
+    activeKeys: generateKeyFromPassword(account, 'active', password, true),
+    memoKeys: generateKeyFromPassword(account, 'memo', password, true),
+    accountName: account,
+  };
+}
 
 export default function CreatePaperWallet() {
-  const { accountName, password: pass } = useStore();
-  const [password, setPassword] = useState(pass || '');
-  const [keys, setKeys] = useState<AccountKeysT | undefined>(undefined);
+  const { accountName } = useStore();
+  const [password, setPassword] = useState('');
+  const [keys, setKeys] = useState<KeysT | undefined>(undefined);
   const [document, setDoc] = useState('');
   const loader = useNewLoaderModal();
 

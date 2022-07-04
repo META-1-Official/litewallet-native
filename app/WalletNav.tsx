@@ -6,7 +6,7 @@ import {
   StackScreenProps,
 } from '@react-navigation/stack';
 import React, { useEffect } from 'react';
-import { Pressable, View } from 'react-native';
+import { Platform, Pressable, View } from 'react-native';
 import { SvgIcons } from '../assets';
 import { DexStackHeader } from './components/DexHeader';
 import Loader from './components/Loader';
@@ -61,13 +61,15 @@ export const WalletNav: React.FC<DrawerScreenProps<DexDrawerParamList>> = ({ nav
         name="Wallet"
         component={WalletScreen}
       />
-      <Tab.Screen
-        options={{
-          tabBarAccessibilityLabel: 'Tab/FundAccount',
-        }}
-        name="Fund Account"
-        component={FundAccount}
-      />
+      {Platform.OS !== 'ios' && (
+        <Tab.Screen
+          options={{
+            tabBarAccessibilityLabel: 'Tab/FundAccount',
+          }}
+          name="Fund Account"
+          component={FundAccount}
+        />
+      )}
       <Tab.Screen
         name="DEX"
         options={{

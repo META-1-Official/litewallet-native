@@ -29,6 +29,6 @@
 
   desc 'Bump build numbers, and set the version to match the pacakage.json version.'
   lane :bump do
-    inc_ver_ios
-    inc_ver_and
+    inc_ver_ios if not ENV['ANDROID_ONLY']
+    inc_ver_and if not ENV['IOS_ONLY']
   end
