@@ -122,6 +122,9 @@
       "jsx",
       "json",
       "node"
-    ]
+    ],
+    "moduleNameMapper": {
+      "@sentry/react-native": "<rootDir>/__mocks__/sentry-react-native.ts"
+    }
   }
 }

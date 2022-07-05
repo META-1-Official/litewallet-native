@@ -1,5 +1,5 @@
 import { FullHistoryOrder, getHistoricalOrders } from '../app/utils/meta1Api';
-import Meta1 from '../app/utils/meta1dexTypes';
+import Meta1, { iLimitOrder } from '../app/utils/meta1dexTypes';
 import config from '../app/config';
 import { isOpen, isResolved } from '../app/utils/historyUtils';
 import { canceledFrozen, expired, filledFake, filledFrozen, openFrozen } from './frozenData';
@@ -12,14 +12,21 @@ const consoleLogHook = async (fn: () => any) => {
   console.log = oConsoleLog;
 };
 
-let open: any;
-let openAsHistory: FullHistoryOrder;
+let open: iLimitOrder[];
+let openAsHistory: FullHistoryOrder = new Map();
 describe('Correctly Reject orders', () => {
   beforeAll(async () => {
     await consoleLogHook(async () => await Meta1.connect(config.META1_CONNECTION_URL));
     open = await Meta1.db.get_limit_orders('META1', 'USDT', 1);
-    const seller: string = open[0].seller;
-    openAsHistory = await getHistoricalOrders(seller);
+
+    while (openAsHistory.size === 0) {
+      const seller: string = open.pop()!.seller;
+      openAsHistory = await getHistoricalOrders(seller);
+    }
+
+    const first = [...openAsHistory.values()][0];
+    const id = first.order.limit_order_create_operation.result.object_id_type;
+    open = [{ id } as any];
   });
 
   afterAll(async () => {

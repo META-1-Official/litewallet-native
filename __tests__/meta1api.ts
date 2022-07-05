@@ -146,7 +146,7 @@ describe('Meta1 api tests', () => {
   });
 
   it('Gets OCHL data', async () => {
-    const ticks = await meta1dex.history.get_market_history(
+    const _ticks = await meta1dex.history.get_market_history(
       'META1',
       'USDT',
       60,
@@ -154,6 +154,5 @@ describe('Meta1 api tests', () => {
       new fcTime(),
     );
 
-    console.log(ticks);
   });
 });
