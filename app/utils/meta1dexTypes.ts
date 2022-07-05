@@ -438,7 +438,7 @@ export interface Meta1Module {
       limit: number,
     ) => Promise<iTradeHistorical[]>;
     get_order_book: (assetA: string, assetB: string, limit: number) => Promise<OrderBook>;
-    get_limit_orders: (assetA: string, assetB: string, limit: number) => any;
+    get_limit_orders: (assetA: string, assetB: string, limit: number) => Promise<iLimitOrder[]>;
   };
   history: {
     get_account_history: (account: string, bleh: string, limit: number, blah: string) => any;
@@ -483,6 +483,6 @@ export class fcTime extends String {
   }
 }
 
-const meta1dex = require('meta1dex');
+const meta1dex = require('meta1-vision-dex');
 
 export default meta1dex as Meta1Module;
