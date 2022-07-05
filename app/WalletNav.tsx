@@ -163,7 +163,7 @@ export const DexNav: React.FC = () => {
           }}
           component={DexStack}
         />
-        <Drawer.Screen name="_CreatePaperWallet" component={CreatePaperWallet} />
+        {/* <Drawer.Screen name="_CreatePaperWallet" component={CreatePaperWallet} /> */}
         <Drawer.Screen
           name="__Settings"
           options={{ headerShown: false }}
