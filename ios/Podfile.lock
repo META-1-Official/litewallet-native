@@ -364,8 +364,6 @@ PODS:
     - React-Core
   - RNGestureHandler (2.3.2):
     - React-Core
-  - RNInAppBrowser (3.6.3):
-    - React-Core
   - RNReanimated (2.5.0):
     - DoubleConversion
     - FBLazyVector
@@ -476,7 +474,6 @@ DEPENDENCIES:
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
-  - RNInAppBrowser (from `../node_modules/react-native-inappbrowser-reborn`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - "RNSentry (from `../node_modules/@sentry/react-native`)"
@@ -586,8 +583,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-masked-view/masked-view"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
-  RNInAppBrowser:
-    :path: "../node_modules/react-native-inappbrowser-reborn"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -657,7 +652,6 @@ SPEC CHECKSUMS:
   RNCClipboard: 99fc8ad669a376b756fbc8098ae2fd05c0ed0668
   RNCMaskedView: c298b644a10c0c142055b3ae24d83879ecb13ccd
   RNGestureHandler: 6e757e487a4834e7280e98e9bac66d2d9c575e9c
-  RNInAppBrowser: 3ff3a3b8f458aaf25aaee879d057352862edf357
   RNReanimated: ee33ab40fa252332a36aeed9d936801ed9700b24
   RNScreens: 6e1ea5787989f92b0671049b808aef64fa1ef98c
   RNSentry: 3e7f2504006c19fa07027a7c4fbe83d88e69125a

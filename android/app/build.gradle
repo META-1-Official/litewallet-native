@@ -138,8 +138,8 @@ android {
         applicationId 'io.meta1.appbeta'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 23
-        versionName "1.1.0"
+        versionCode 25
+        versionName "1.1.1"
     }
     splits {
         abi {
