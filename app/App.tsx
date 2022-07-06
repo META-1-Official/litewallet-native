@@ -26,7 +26,7 @@ import { CountryPicker, CountryPickerParams } from './components/CountryPicker';
 import { setJSExceptionHandler } from 'react-native-exception-handler';
 import RNRestart from 'react-native-restart';
 import { SENTRY_DSN } from '@env';
-import { Alert } from 'react-native';
+import { Alert, LogBox } from 'react-native';
 
 const { useEffect } = React;
 
@@ -134,6 +134,7 @@ async function EnableSentryPrompt() {
 }
 
 function App() {
+  LogBox.ignoreAllLogs();
   const [dark, setDark] = React.useState(false);
   useEffect(() => {
     SplashScreen.hide();
