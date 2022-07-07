@@ -306,7 +306,9 @@ const UsdInput = ({ asset, darkMode, slave }: DM<AssetProp>) => {
 
   useEffect(() => {
     if (!isCause) {
-      setAmount((slave ? asset.opponent().toUsdt() : asset.toUsdt()).toFixed(2));
+      // Maybe it's stupid fix todo: review it
+      // setAmount((slave ? asset.opponent().toUsdt() : asset.toUsdt()).toFixed(2));
+      setAmount((asset.toUsdt()).toFixed(2));
     }
   }, [asset.amount, isCause]);
 
