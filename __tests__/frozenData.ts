@@ -1,3 +1,5 @@
+it('noop', () => {});
+
 export const openFrozen = {
   order: {
     raw: {

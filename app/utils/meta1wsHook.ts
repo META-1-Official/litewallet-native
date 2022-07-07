@@ -1,6 +1,6 @@
 import throttle from 'lodash.throttle';
 //@ts-ignore
-import Api from 'meta1dex/dist/api';
+import Api from 'meta1-vision-dex/dist/api';
 type WSState = 'open' | 'closed' | 'error';
 type CallbackT = (s: WSState) => void;
 const handler = (callback: CallbackT, oCallback: any) =>
