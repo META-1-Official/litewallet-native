@@ -35,7 +35,8 @@ const validatePassword = async (login: string, password: string) => {
     await meta1dex.login(login, password);
     return true;
   } catch (e: any) {
-    Alert.alert(e.message);
+    console.error(e, e.stack);
+    Alert.alert('The pair of login and password do not match!');
     return false;
   }
 };
