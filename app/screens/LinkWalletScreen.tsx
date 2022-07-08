@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import {
   SafeAreaView,
   View,
@@ -21,15 +22,15 @@ import { colors } from '../styles/colors';
 import { tid, useScroll } from '../utils';
 import { getAccount } from '../utils/meta1Api';
 import meta1dex from '../utils/meta1dexTypes';
-import useForm from '../utils/useForm';
-import { asyncRule, required, RuleFn } from '../utils/useForm/rules';
+import { required, RuleFn } from '../utils/useFormHelper/rules';
+import { Input } from '../utils/useFormHelper/useFormHelper';
 
 const { width, height } = Dimensions.get('screen');
-const knownAccount: RuleFn = text =>
-  asyncRule(async () => {
-    const acc = await getAccount(text).catch(console.debug);
-    return Boolean(acc);
-  }, 'Account not found');
+const knownAccount: RuleFn = async text => {
+  const acc = await getAccount(text).catch(console.debug);
+  return acc ? true : 'Account not found';
+};
+
 const validatePassword = async (login: string, password: string) => {
   try {
     await meta1dex.login(login, password);
@@ -41,13 +42,13 @@ const validatePassword = async (login: string, password: string) => {
   }
 };
 const LinkWalletScreen: React.FC = () => {
-  const { Input, formState, valid } = useForm(
-    [
-      { name: 'account_name', lable: 'Account Name', rules: [required, knownAccount] },
-      { name: 'password', lable: 'Password', rules: [required] },
-    ],
-    false,
-  );
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      account_name: '',
+      password: '',
+    },
+  });
+
   const offsetY = useRef(new Animated.Value(0)).current;
   const scroll = useScroll(true);
   useEffect(() => {
@@ -99,10 +100,13 @@ const LinkWalletScreen: React.FC = () => {
             button
           </TextSecondary>
           <Input
+            control={control}
             style={{
               paddingHorizontal: 32,
             }}
+            rules={{ required, validate: { knownAccount } }}
             name="account_name"
+            label="Account Name"
             render={props => (
               <View key={123} style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Image
@@ -125,7 +129,10 @@ const LinkWalletScreen: React.FC = () => {
             )}
           />
           <Input
+            control={control}
+            rules={{ required }}
             name="password"
+            label="Password"
             style={{
               paddingHorizontal: 32,
             }}
@@ -135,12 +142,12 @@ const LinkWalletScreen: React.FC = () => {
         <View>
           <RoundedButton
             title="Submit"
-            onPress={async () => {
+            onPress={handleSubmit(async formState => {
               const { account_name, password } = formState;
-              if (valid() && (await validatePassword(account_name, password))) {
+              if (await validatePassword(account_name, password)) {
                 authorzie(account_name, password);
               }
-            }}
+            })}
           />
         </View>
       </ScrollView>
