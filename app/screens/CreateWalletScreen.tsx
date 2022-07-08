@@ -1,116 +1,78 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Platform, SafeAreaView, TextInput, View, TouchableOpacity, Text } from 'react-native';
-import { ChevronDown, Eye, EyeOff } from 'react-native-feather';
+import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import { Platform, SafeAreaView, TextInput, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import TextInputMask from 'react-native-text-input-mask';
 import RoundedButton from '../components/RoundedButton';
 import { Heading, TextSecondary } from '../components/typography';
 import { useStore } from '../store';
-import { catchError, tid } from '../utils';
+import { catchError } from '../utils';
 import createAccountWithPassword from '../utils/accountCreate';
-import useForm, { InputProps } from '../utils/useForm';
+import { getAccount } from '../utils/meta1Api';
 import {
-  asyncRule,
   email,
   hasSpecialChars,
   lettersOnly,
   minLen,
+  noRepeat,
+  noSpace,
   required,
-  rule,
-  RuleFn,
-  same,
-} from '../utils/useForm/rules';
-import { getAccount } from '../utils/meta1Api';
-import { ScrollView } from 'react-native-gesture-handler';
+  upperAndLowerCase,
+} from '../utils/useFormHelper/rules';
 //@ts-ignore
 import { ChainValidation } from 'meta1-vision-js';
-import { useNavigation } from '@react-navigation/native';
+import { useForm } from 'react-hook-form';
 import { RootNavigationProp } from '../App';
-import { CountryData, CountryUS, isoToEmoji } from '../components/CountryPicker/CountryList';
-import { colors } from '../styles/colors';
-import { RenderProps } from 'react-native-paper/src/components/TextInput/types';
+import { Input, PasswordInput, PhoneInput } from '../utils/useFormHelper/useFormHelper';
 
-const freeName: RuleFn = text =>
-  asyncRule(async () => {
-    const acc = await getAccount(text).catch(console.debug);
-    return !acc;
-  }, 'This account name is already taken');
-
-const chainValidate: RuleFn = t => ChainValidation.is_account_name_error(t);
-
-const premiumName: RuleFn = t =>
-  rule(
-    ChainValidation.is_cheap_name(t),
-    `This is a premium name which is not supported by this faucet. Please enter a regular name containing least one dash or a number
-    `,
-  );
-
-const UPPERCASE_RE = /[A-Z]/;
-const LOWERCASE_RE = /[a-z]/;
-const upperAndLowerCase: RuleFn = (t, n) =>
-  rule(
-    UPPERCASE_RE.test(t) && LOWERCASE_RE.test(t),
-    `${n} should have both upper and lower case letters`,
-  );
-
-const noSpace: RuleFn = (t, n) => rule(t.indexOf(' ') === -1, `${n} should not have any spaces`);
-
-function noRepeatImpl(t: string) {
-  const { substrs } = [...t].reduce(
-    (acc, cv) => {
-      if (acc.prev === cv) {
-        acc.substrs[acc.substrs.length - 1] += cv;
-      } else {
-        acc.substrs.push(cv);
-      }
-      acc.prev = cv;
-      return acc;
-    },
-    {
-      prev: '',
-      substrs: [] as string[],
-    },
-  );
-
-  const aboveThreshold = substrs.filter(e => e.length > 2);
-
-  return aboveThreshold.length !== 1;
-}
-
-const noRepeat: RuleFn = (t, n) =>
-  rule(noRepeatImpl(t), `${n} should not have repeating characters`);
-
-const mobileValid = (t: string): boolean => {
-  const [_prefix, ...rest] = t.split(' ');
-  return rest.filter(e => e).length > 0;
+const freeName = async (text: string) => {
+  const acc = await getAccount(text).catch(console.debug);
+  return !acc ? false : 'This account name is already taken';
 };
-const mobile: RuleFn = (t, n) => rule(mobileValid(t), `${n} is required`);
+
+const premiumName = (t: string) =>
+  ChainValidation.is_cheap_name(t) ||
+  'This is a premium name which is not supported by this faucet. Please enter a regular name containing least one dash or a number';
+
+const chainValidate = (t: string) => ChainValidation.is_account_name_error(t);
 
 const CreateWalletScreen: React.FC = () => {
   const navigation = useNavigation<RootNavigationProp>();
   const authorize = useStore(state => state.authorize);
+  const { control, handleSubmit, getValues } = useForm({
+    mode: 'onChange',
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      mobile: '',
+      accountName: '',
+      password: '',
+      passwordRepeat: '',
+    },
+  });
 
-  const { Input, formState, valid, validState } = useForm([
-    { name: 'first_name', lable: 'First name', rules: [required, lettersOnly] },
-    { name: 'last_name', lable: 'Last name', rules: [required, lettersOnly] },
-    { name: 'email', lable: 'Email', rules: [required, email] },
-    { name: 'mobile', lable: 'Mobile number', rules: [mobile] },
-    {
-      name: 'account_name',
-      lable: 'Account name',
-      rules: [required, premiumName, freeName, chainValidate],
-    },
-    {
-      name: 'password',
-      lable: 'Password',
-      rules: [required, minLen(8), hasSpecialChars, upperAndLowerCase, noRepeat, noSpace],
-    },
-    {
-      name: 'password_repeat',
-      lable: 'Confirm Password',
-      rules: [required, same('password', 'Password')],
-    },
-  ]);
+  // const { Input, formState, valid, validState } = useForm([
+  //   { name: 'first_name', lable: 'First name', rules: [required, lettersOnly] },
+  //   { name: 'last_name', lable: 'Last name', rules: [required, lettersOnly] },
+  //   { name: 'email', lable: 'Email', rules: [required, email] },
+  //   { name: 'mobile', lable: 'Mobile number', rules: [mobile] },
+  //   {
+  //     name: 'account_name',
+  //     lable: 'Account name',
+  //     rules: [required, premiumName, freeName, chainValidate],
+  //   },
+  //   {
+  //     name: 'password',
+  //     lable: 'Password',
+  //     rules: [required, minLen(8), hasSpecialChars, upperAndLowerCase, noRepeat, noSpace],
+  //   },
+  //   {
+  //     name: 'password_repeat',
+  //     lable: 'Confirm Password',
+  //     rules: [required, same('password')],
+  //   },
+  // ]);
 
   return (
     <SafeAreaView
@@ -130,22 +92,57 @@ const CreateWalletScreen: React.FC = () => {
           <KeyboardAwareScrollView extraHeight={Platform.OS === 'ios' ? 1 : 120}>
             <View>
               <View style={{ flexDirection: 'row' }}>
-                <Input style={{ width: '48%' }} name="first_name" />
+                <Input
+                  control={control}
+                  style={{ width: '48%' }}
+                  name="firstName"
+                  label="First Name"
+                  rules={{
+                    required,
+                    validate: {
+                      lettersOnly,
+                    },
+                  }}
+                />
                 <View style={{ width: '4%' }} />
-                <Input style={{ width: '48%' }} name="last_name" />
+                <Input
+                  control={control}
+                  style={{ width: '48%' }}
+                  name="lastName"
+                  label="Last Name"
+                  rules={{ required, validate: { lettersOnly } }}
+                />
               </View>
               <Input
+                control={control}
                 name="email"
+                label="Email"
                 autoCapitalize="none"
                 autoCorrect={false}
                 autoCompleteType="email"
+                rules={{
+                  required,
+                  validate: {
+                    email,
+                  },
+                }}
               />
-              <PhoneInput component={Input} />
+              <PhoneInput control={control} name="mobile" />
               <Input
-                name="account_name"
+                control={control}
+                name="accountName"
+                label="Account Name"
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoCorrect={false}
+                rules={{
+                  required,
+                  validate: {
+                    premiumName,
+                    chainValidate,
+                    freeName,
+                  },
+                }}
                 render={props => (
                   <TextInput
                     {...props}
@@ -153,198 +150,76 @@ const CreateWalletScreen: React.FC = () => {
                   />
                 )}
               />
-              <Input name="password" render={PasswordInput} />
+              <Input
+                control={control}
+                name="password"
+                label="Password"
+                rules={{
+                  required,
+                  validate: {
+                    _minLen: minLen(8),
+                    hasSpecialChars,
+                    upperAndLowerCase,
+                    noRepeat,
+                    noSpace,
+                  },
+                }}
+                render={PasswordInput}
+              />
               <TextSecondary style={{ fontSize: 14 }}>
                 Please keep your password in a safe place. Don’t share it with any third-parties or
                 send it online.
               </TextSecondary>
-              <Input name="password_repeat" secureTextEntry={true} />
+              <Input
+                control={control}
+                name="passwordRepeat"
+                label="Confirm Password"
+                secureTextEntry={true}
+                rules={{
+                  required,
+                  validate: {
+                    same: t =>
+                      t === getValues('password') ||
+                      'Confirm password should be the same as Password',
+                  },
+                }}
+              />
             </View>
           </KeyboardAwareScrollView>
         </View>
         <View>
           <RoundedButton
             title="Submit"
-            disabled={!validState}
-            onPress={() => {
-              if (valid()) {
-                navigation.navigate('Loader');
-                catchError(
-                  async () => {
-                    const _apiRes = await createAccountWithPassword(
-                      formState.account_name,
-                      formState.password,
-                      // --Who cares
-                      false,
-                      '',
-                      1,
-                      '',
-                      // --
-                      formState.phone,
-                      formState.email,
-                      formState.last_name,
-                      formState.first_name,
-                    );
-                    authorize(formState.account_name, formState.password);
-                  },
-                  {
-                    onErr: () => navigation.goBack(),
-                  },
-                );
-              }
-            }}
+            // disabled={!Object(errors.values)}
+            onPress={handleSubmit(fs => {
+              navigation.navigate('Loader');
+              catchError(
+                async () => {
+                  const _apiRes = await createAccountWithPassword(
+                    fs.accountName,
+                    fs.password,
+                    // --Who cares
+                    false,
+                    '',
+                    1,
+                    '',
+                    // --
+                    fs.mobile,
+                    fs.email,
+                    fs.lastName,
+                    fs.firstName,
+                  );
+                  authorize(fs.accountName, fs.password);
+                },
+                {
+                  onErr: () => navigation.goBack(),
+                },
+              );
+            })}
           />
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
-
-function PasswordInput(props: RenderProps) {
-  const [visible, setVisible] = useState(true);
-  return (
-    <View key={123} style={{ flexDirection: 'row', alignItems: 'center' }}>
-      <TextInput
-        {...props}
-        {...tid('CreateWallet/password')}
-        autoCapitalize={'none'}
-        autoCorrect={false}
-        style={[props.style, { maxWidth: '88%', paddingRight: 8 }]}
-        secureTextEntry={visible}
-      />
-      <TouchableOpacity {...tid('CreateWallet/copyPassword')} onPress={() => setVisible(!visible)}>
-        <View
-          style={{
-            backgroundColor: colors.BrandYellow,
-            marginTop: 14,
-            padding: 6,
-            borderRadius: 5,
-          }}
-        >
-          {visible ? (
-            <EyeOff width={20} height={20} color="#000" />
-          ) : (
-            <Eye width={20} height={20} color="#000" />
-          )}
-        </View>
-      </TouchableOpacity>
-    </View>
-  );
-}
-const defRule: RuleFn = (_t, _n) => rule(true, 'UNREACHED');
-
-function PhoneInput({ component }: { component: React.FC<InputProps> }) {
-  const navigation = useNavigation<RootNavigationProp>();
-  const [country, setCountry] = useState(CountryUS);
-  const [internalValue, setInternal] = useState('');
-  const [mask, setMask] = useState('');
-  const ruleRef = useRef<RuleFn>(() => null);
-
-  useEffect(() => {
-    const prefix = '\\+' + country.countryCode;
-    if (country.patterns) {
-      const zeros = country.patterns[0].replace(/X/g, '0');
-      const brackets = zeros.replace(/ /g, '] [');
-      setMask(`[${brackets}]`);
-
-      // Convert from XXXX XXXX pattern to regex compatible string
-      // like (\d\d\d\d \d\d\d\d)
-      const patterns = country.patterns
-        .map(e => e.replace(/X/gm, '\\d'))
-        .map(e => `(${e})`)
-        .join('|');
-
-      const re = new RegExp(`${prefix} (${patterns})$`);
-
-      //  prettier-ignore
-      const newRule: RuleFn = (t, n) =>
-       rule(re.test(t), `${n} should be a valid phone number`);
-
-      ruleRef.current = newRule;
-    } else {
-      ruleRef.current = defRule;
-      setMask(`[${'0'.repeat(12)}]`);
-    }
-  }, [country]);
-
-  const Input = component;
-  const onChangeRef = useRef<(s: string) => void | undefined>();
-  const valRef = useRef<string | undefined>();
-
-  // TextInputMaskProps.onChangeText?: (formatted: string, extracted?: string | undefined)
-  // _pad -> fills the extracted arg to allow ass to add prog argument
-  // prog: bool -> is the event rased programmatically, if so don't set the error
-  const onChangeText = (s: string) => {
-    setInternal(s);
-
-    if (onChangeRef.current) {
-      onChangeRef.current(`+${country.countryCode} ${s}`);
-    }
-  };
-
-  useEffect(() => {
-    // Wait for a bit, do the on change when all refs will be updated
-    setTimeout(() => valRef.current && onChangeText(''), 50);
-  }, [country.countryCode]);
-
-  useEffect(() => {
-    if (country.prefixes) {
-      // If phone number not starts with prefix.
-      // If internal value is shorter than prefix
-      //    make sure they are start the same.
-      const prefix = country.prefixes.find(e =>
-        internalValue.startsWith(e.slice(0, internalValue.length)),
-      );
-
-      if (!prefix) {
-        // Find and select fallback
-        const fallback = CountryData.find(
-          e => e.countryCode === country.countryCode && !e.prefixes,
-        );
-        // Set US if no fallback
-        setCountry(fallback || CountryUS);
-      }
-    }
-  }, [internalValue]);
-
-  return (
-    <View style={{ flexDirection: 'row' }}>
-      <TouchableOpacity
-        onPress={() => navigation.navigate('CountryPickerModal', { callback: c => setCountry(c) })}
-        style={{ marginRight: 8 }}
-      >
-        <View style={{ flex: 0.35, marginTop: 28, flexDirection: 'row' }}>
-          <Text style={{ fontSize: 18, marginRight: 2 }}>
-            {isoToEmoji(country.iso2)} +{country.countryCode}
-          </Text>
-          <ChevronDown color={'#000'} width={12} height={24} />
-        </View>
-      </TouchableOpacity>
-      <View style={{ flex: 1 }}>
-        <Input
-          name="mobile"
-          style={{ width: '100%' }}
-          getRules={() => [ruleRef.current]}
-          render={props => {
-            onChangeRef.current = props.onChangeText;
-            valRef.current = props.value;
-            return (
-              //@ts-ignore
-              <TextInputMask
-                {...props}
-                {...tid('CreateWallet/phoneNum')}
-                onChangeText={onChangeText}
-                value={props.value?.replace(`+${country.countryCode}`, '').trim()}
-                mask={mask}
-                keyboardType="phone-pad"
-                maxLength={12}
-              />
-            );
-          }}
-        />
-      </View>
-    </View>
-  );
-}
-
 export default CreateWalletScreen;
