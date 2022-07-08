@@ -23,7 +23,7 @@ import {
 import { getAccount } from '../utils/meta1Api';
 import { ScrollView } from 'react-native-gesture-handler';
 //@ts-ignore
-import { ChainValidation } from 'meta1js';
+import { ChainValidation } from 'meta1-vision-js';
 import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from '../App';
 import { CountryData, CountryUS, isoToEmoji } from '../components/CountryPicker/CountryList';

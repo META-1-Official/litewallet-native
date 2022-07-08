@@ -2,7 +2,7 @@ import { NETWORK } from '@env';
 import { DrawerContentComponentProps } from '@react-navigation/drawer/src/types';
 import React from 'react';
 import { Image, SafeAreaView, TouchableOpacity, View } from 'react-native';
-import { Activity, Archive, ArrowLeft, HelpCircle, PieChart } from 'react-native-feather';
+import { Activity, ArrowLeft, HelpCircle, PieChart } from 'react-native-feather';
 import { Text } from 'react-native-paper';
 import { SvgIcons } from '../../assets';
 import { useStore } from '../store';
@@ -106,11 +106,6 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
           title="Backing Assets"
           icon={PieChart}
           onPress={() => navigation.jumpTo('__ExploreAssets')}
-        />
-        <ListItem
-          title="Create Paper Wallet"
-          icon={Archive}
-          onPress={() => navigation.jumpTo('_CreatePaperWallet')}
         />
         <ListItem title="Help" icon={HelpCircle} onPress={() => navigation.navigate('__Help')} />
         {process.env.NODE_ENV === 'production' && NETWORK !== 'TESTNET' ? null : (

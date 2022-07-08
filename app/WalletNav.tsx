@@ -11,7 +11,6 @@ import { SvgIcons } from '../assets';
 import { DexStackHeader } from './components/DexHeader';
 import Loader from './components/Loader';
 import { OverlayContent } from './components/SideMenuOverlay';
-import CreatePaperWallet from './screens/CreatePaperWallet';
 import { DexStack } from './screens/dex';
 import ExploreAssets from './screens/ExploreAssets';
 import FundAccount from './screens/FundAccountScreen';
@@ -163,7 +162,6 @@ export const DexNav: React.FC = () => {
           }}
           component={DexStack}
         />
-        {/* <Drawer.Screen name="_CreatePaperWallet" component={CreatePaperWallet} /> */}
         <Drawer.Screen
           name="__Settings"
           options={{ headerShown: false }}

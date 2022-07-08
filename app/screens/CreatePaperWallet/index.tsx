@@ -10,7 +10,7 @@ import meta1dex from '../../utils/meta1dexTypes';
 import RenderPdf, { KeysT } from './RenderPdf';
 import { savePdf } from './SavePdf';
 //@ts-ignore
-import { PrivateKey } from 'meta1js';
+import { PrivateKey } from 'meta1-vision-js';
 
 function isPassPk(password: string): boolean {
   try {

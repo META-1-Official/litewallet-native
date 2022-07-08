@@ -700,7 +700,7 @@ export const getAccountKeys = async (acc: AccountWithPassword): Promise<AccountK
   //@ts-ignore
   const activeKey: string = account.account.active.key_auths[0][0];
   const memoKey: string = account.account.options.memo_key;
-  // Jank, but enables us to not import PrivateKey from meta1js (not to be confused with meta1dex)
+  // Jank, but enables us to not import PrivateKey from meta1-vision-js (not to be confused with meta1dex)
   const privateKey: string = account.activeKey.constructor.fromSeed(acc.password).toWif();
   return { account: acc.accountName, ownerKey, memoKey, activeKey, privateKey };
 };

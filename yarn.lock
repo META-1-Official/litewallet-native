@@ -6219,43 +6219,6 @@ meta1-vision-ws@3.1.7-p:
     isomorphic-ws "^4.0.1"
     ws "^4.1.0"
 
-meta1dex@^0.6.13:
-  version "0.6.13"
-  resolved "https://registry.yarnpkg.com/meta1dex/-/meta1dex-0.6.13.tgz#89a24828f666679ce3228f11d78dcc322a41e6da"
-  integrity sha512-hD4yh6W57oajN8R5Qn+HURY6SKwKjSWnpiGRuc8ElhKE0hvVOXD4JRIv1mSuTZIFiL5FFsVWV8MGhXW3amT4xA==
-  dependencies:
-    "@babel/runtime" "^7.1.2"
-    bignumber.js "^7.2.1"
-    lzma "^2.3.2"
-    meta1js "3.2.7-rc1"
-
-meta1js-ws@^3.1.5:
-  version "3.1.5"
-  resolved "https://registry.yarnpkg.com/meta1js-ws/-/meta1js-ws-3.1.5.tgz#73e4e4250bbf6191c5ad96117f57193a3edef537"
-  integrity sha512-yaj4+MR8ijua5XhAkx9Cxuj2OpcEPJmsh4WHBp1Z9/HM0pqFE7BYnwwhyhFbb7CklMHKU2AxrvreEWPp7B3U8Q==
-  dependencies:
-    isomorphic-ws "^4.0.1"
-    ws "^4.1.0"
-
-meta1js@3.2.7-rc1:
-  version "3.2.7-rc1"
-  resolved "https://registry.yarnpkg.com/meta1js/-/meta1js-3.2.7-rc1.tgz#a25b886568e125306e62f6b730066ebbe728f0ae"
-  integrity sha512-2y65jsRHoor1Gshhj19H5r4oZsrKYrm/WONG7guf75Av+QRodZQptyH6VxjMJqyu20k++ow7SywpahV9KUmmvg==
-  dependencies:
-    bigi "1.4.2"
-    bs58 "4.0.1"
-    bytebuffer "5.0.1"
-    create-hash "1.2.0"
-    create-hmac "1.1.7"
-    crypto-js "3.1.9-1"
-    deep-equal "1.0.1"
-    ecurve "1.0.6"
-    event-emitter "0.3.5"
-    immutable "3.8.2"
-    meta1js-ws "^3.1.5"
-    safe-buffer "^5.1.2"
-    secure-random "1.1.1"
-
 metro-babel-register@0.66.2:
   version "0.66.2"
   resolved "https://registry.yarnpkg.com/metro-babel-register/-/metro-babel-register-0.66.2.tgz#c6bbe36c7a77590687ccd74b425dc020d17d05af"
