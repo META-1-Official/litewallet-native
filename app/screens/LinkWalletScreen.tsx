@@ -28,7 +28,7 @@ import { Input } from '../utils/useFormHelper/useFormHelper';
 const { width, height } = Dimensions.get('screen');
 const knownAccount: RuleFn = async text => {
   const acc = await getAccount(text).catch(console.debug);
-  return acc ? true : 'Account not found';
+  return !!acc || 'Account not found';
 };
 
 const validatePassword = async (login: string, password: string) => {
@@ -43,6 +43,7 @@ const validatePassword = async (login: string, password: string) => {
 };
 const LinkWalletScreen: React.FC = () => {
   const { control, handleSubmit } = useForm({
+    mode: 'onChange',
     defaultValues: {
       account_name: '',
       password: '',

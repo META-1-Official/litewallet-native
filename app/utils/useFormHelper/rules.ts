@@ -23,7 +23,7 @@ export const includeOr =
   text =>
     rule(text.includes(a) || text.includes(b), `This field should include '${a}' or '${b}'`);
 
-export const email = (val: string) => (!is.email(val) ? 'This is not a valid email' : false);
+export const email = (val: string) => rule(is.email(val), 'This is not a valid email');
 
 const SPECIAL_CHARS_RE = /_|[^.,'"\d\w]/;
 export const hasSpecialChars: RuleFn = text =>

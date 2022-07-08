@@ -27,7 +27,7 @@ import { Input, PasswordInput, PhoneInput } from '../utils/useFormHelper/useForm
 
 const freeName = async (text: string) => {
   const acc = await getAccount(text).catch(console.debug);
-  return !acc ? false : 'This account name is already taken';
+  return !acc || 'This account name is already taken';
 };
 
 const premiumName = (t: string) =>
