@@ -5,8 +5,7 @@ import { useStore } from '../../store';
 import { colors } from '../../styles/colors';
 import { catchError, tid } from '../../utils';
 import { generateKeyFromPassword } from '../../utils/accountCreate';
-import { AccountWithPassword } from '../../utils/meta1Api';
-import meta1dex from '../../utils/meta1dexTypes';
+import { AccountWithPassword, _login } from '../../utils/meta1Api';
 import RenderPdf, { KeysT } from './RenderPdf';
 import { savePdf } from './SavePdf';
 //@ts-ignore
@@ -24,7 +23,7 @@ async function getAccountKeys({
   accountName: account,
   password,
 }: AccountWithPassword): Promise<KeysT | undefined> {
-  await meta1dex.login(account, password);
+  await _login(account, password);
 
   if (isPassPk(password)) {
     throw new Error('Creating paper wallet from private key is not allowed');
