@@ -1,5 +1,5 @@
 //@ts-ignore
-import { ChainValidation, FetchChain, PrivateKey, TransactionBuilder } from 'meta1js';
+import { ChainValidation, FetchChain, PrivateKey, TransactionBuilder } from 'meta1-vision-js';
 import { NETWORK } from '@env';
 import config from '../config';
 
@@ -75,7 +75,6 @@ export default async function createAccountWithPassword(
 ) {
   const milkFaucet = async () => {
     const PREFIX = NETWORK === 'TESTNET' ? 'DEV11' : 'META1';
-
     let rawRes = await fetch(config.faucetAddress + '/api/v1/accounts', {
       method: 'post',
       mode: 'cors',
@@ -99,6 +98,7 @@ export default async function createAccountWithPassword(
     });
     const json = await rawRes.json();
     console.log('Register Called');
+    console.log(config.faucetAddress + '/api/v1/accounts');
     console.log(json);
     return json;
   };
