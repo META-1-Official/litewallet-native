@@ -60,6 +60,15 @@ export const Connect = async () => {
   // });
 };
 
+// FIXME: Temporary solution until meta1-vision-dex.login gets it's error messages straight
+export async function _login(accountName: string, password: string) {
+  try {
+    return await Meta1.login(accountName, password);
+  } catch (e) {
+    throw new Error('The pair of login and password do not match!');
+  }
+}
+
 export async function fetchAssetWithIcon(asset_name: string) {
   // Using imgur as a fallback image host is sub optimal
   // Or maybe its ok https://webapps.stackexchange.com/a/75994
@@ -218,7 +227,7 @@ export const swapWithPassword: swapWPassSig = async (accountInfo, from, to, amou
     throw new Error(`Pair ${from}:${to} doesn't exist`);
   }
 
-  const account = await Meta1.login(accountInfo.accountName, accountInfo.password);
+  const account = await _login(accountInfo.accountName, accountInfo.password);
   console.log('Buy params');
   console.log({
     to,
@@ -254,7 +263,7 @@ type sendWithPasswordSig = (
 ) => Promise<any>;
 
 export const sendWithPassword: sendWithPasswordSig = async (accountInfo, sendInfo) => {
-  const account = await Meta1.login(accountInfo.accountName, accountInfo.password);
+  const account = await _login(accountInfo.accountName, accountInfo.password);
 
   const sendResult = await account.transfer(
     sendInfo.toAccount,
@@ -274,7 +283,7 @@ type OrderInfoT = {
 };
 
 export const placeLimitOrder = async (accountInfo: AccountWithPassword, orderInfo: OrderInfoT) => {
-  const account = await Meta1.login(accountInfo.accountName, accountInfo.password);
+  const account = await _login(accountInfo.accountName, accountInfo.password);
   console.log({ orderInfo });
   const sellResult = await account.sell(
     orderInfo.toGive,
@@ -694,7 +703,7 @@ export interface AccountKeysT {
   privateKey: string;
 }
 export const getAccountKeys = async (acc: AccountWithPassword): Promise<AccountKeysT> => {
-  const account = await Meta1.login(acc.accountName, acc.password);
+  const account = await _login(acc.accountName, acc.password);
   //@ts-ignore
   const ownerKey: string = account.account.owner.key_auths[0][0];
   //@ts-ignore

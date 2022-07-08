@@ -22,10 +22,11 @@ import {
   getHistoricalOrders,
   HistoryRetT,
   useAssetsStore,
+  _login,
 } from '../../../utils/meta1Api';
 import { AssetViewTSP } from './AssetView';
 import { useAVStore } from './AssetViewStore';
-import meta1dex, { LoginRetT } from '../../../utils/meta1dexTypes';
+import { LoginRetT } from '../../../utils/meta1dexTypes';
 import { isOpen, isResolved, preprocessOrder, RejectFn } from '../../../utils/historyUtils';
 import { useNewLoaderModal } from '../../../components/LoaderModal';
 const { width } = Dimensions.get('screen');
@@ -61,7 +62,7 @@ const useAccount = (accountName: string, password: string) => {
         return;
       }
 
-      setAcc(await meta1dex.login(accountName, password));
+      setAcc(await _login(accountName, password));
     };
     fn();
   }, [accountName, password]);
@@ -241,7 +242,7 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
         return;
       }
 
-      const authorized = await meta1dex.login(accountName, passwd);
+      const authorized = await _login(accountName, passwd);
       loader.open();
       return await authorized.cancelOrder(orderId);
     });
