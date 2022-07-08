@@ -17,10 +17,10 @@ export const required: RuleFn = (text, name) => rule(text.length > 0, `${name} i
 export const lettersOnly: RuleFn = (text, name) =>
   rule(/^[a-zA-Z]+$/.test(text), `${name} could contain only english letters`);
 
-export const same: (cmp: string) => RuleFn = cmp => (text, name, state) =>
+export const same: (cmp: string, label: string) => RuleFn = (cmp, label) => (text, name, state) =>
   text === state[cmp]
     ? null
-    : `${name} should be the same as ${cmp.charAt(0).toUpperCase() + cmp.slice(1)}`;
+    : `${name} should be the same as ${label}`;
 
 export const includes =
   (str: string): RuleFn =>

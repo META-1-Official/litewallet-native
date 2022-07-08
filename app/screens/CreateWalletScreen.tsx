@@ -103,12 +103,12 @@ const CreateWalletScreen: React.FC = () => {
     {
       name: 'password',
       lable: 'Password',
-      rules: [required, minLen(8), hasSpecialChars, upperAndLowerCase, noRepeat, noSpace],
+      rules: [required, minLen(8), hasSpecialChars, upperAndLowerCase, noRepeat, noSpace, same('password_repeat', 'Confirm Password')],
     },
     {
       name: 'password_repeat',
       lable: 'Confirm Password',
-      rules: [required, same('password')],
+      rules: [required, same('password', 'Password')],
     },
   ]);
 
