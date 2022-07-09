@@ -53,8 +53,7 @@ useOptions.persist.rehydrate().then(() => {
 });
 
 setJSExceptionHandler((e, _fatal) => {
-  Sentry.captureException(e);
-  console.log(e);
+  console.log('GEH', e);
   if (e.message === 'ACCOUNT_NOT_FOUND') {
     RNRestart.Restart();
   }

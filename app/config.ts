@@ -2,7 +2,9 @@ import { NETWORK } from '@env';
 
 export default {
   META1_CONNECTION_URL:
-    NETWORK === 'TESTNET' ? 'https://api.test.meta-exchange.vision/ws' : 'https://api.meta-exchange.vision/ws',
+    NETWORK === 'TESTNET'
+      ? 'wss://api.test.meta-exchange.vision/ws'
+      : 'wss://api.meta-exchange.vision/ws',
   faucetAddress:
     NETWORK === 'TESTNET'
       ? 'https://faucet.dev.meta-exchange.vision/faucet'
