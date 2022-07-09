@@ -11,7 +11,7 @@ index f2dc306..d5e729b 100644
    let style = restProps.style;
 +
 +  const _hasColor = (x) => x && Object.keys(x).includes('color') && x.color;
-+  const hasColor = (x) => Array.isArray(x) ? x.some(e => _hasColor(e)) : _hasColor(x);
++  const hasColor = (x) => Array.isArray(x) ? x.flat().some(e => _hasColor(e)) : _hasColor(x);
 +
 +  if (!hasTextAncestor && (!style || !hasColor(style))) {
 +      style = StyleSheet.compose(restProps.style, {
