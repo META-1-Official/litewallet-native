@@ -1,6 +1,6 @@
-import { useNavigation } from '@react-navigation/core';
-import throttle from 'lodash.throttle';
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigation } from "@react-navigation/core";
+import throttle from "lodash.throttle";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import {
   Alert,
   Dimensions,
@@ -12,30 +12,30 @@ import {
   TextInputProps,
   TextStyle,
   View,
-  ViewStyle,
-} from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { SvgIcons } from '../../assets';
-import { DKSAV } from '../components/DismissKeyboard';
-import { List } from '../components/List';
-import Loader from '../components/Loader';
-import { useNewLoaderModal } from '../components/LoaderModal';
-import { useShowModal } from '../components/SuccessModal';
-import { Heading, TextSecondary } from '../components/typography';
-import { useStore } from '../store';
-import { colors } from '../styles/colors';
-import { catchError, ensure, getPassword, shadow, style, tid } from '../utils';
+  ViewStyle
+} from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { SvgIcons } from "../../assets";
+import { DKSAV } from "../components/DismissKeyboard";
+import { List } from "../components/List";
+import Loader from "../components/Loader";
+import { useNewLoaderModal } from "../components/LoaderModal";
+import { useShowModal } from "../components/SuccessModal";
+import { Heading, TextSecondary } from "../components/typography";
+import { useStore } from "../store";
+import { colors } from "../styles/colors";
+import { catchError, ensure, getPassword, shadow, style, tid } from "../utils";
 import {
   AssetBalanceT,
   refreshAssets,
   swapWithPassword,
   useAssets,
-  useAssetsStore,
-} from '../utils/meta1Api';
-import meta1dex from '../utils/meta1dexTypes';
-import { createPair, theAsset, useAsset } from '../utils/useAsset';
+  useAssetsStore
+} from "../utils/meta1Api";
+import meta1dex from "../utils/meta1dexTypes";
+import { createPair, theAsset, useAsset } from "../utils/useAsset";
 
-const { width, height } = Dimensions.get('screen');
+const { width, height } = Dimensions.get("screen");
 
 const Backdrop = () => (
   <View
@@ -44,24 +44,24 @@ const Backdrop = () => (
       height: height / 6 + 18,
       backgroundColor: colors.BrandYellow,
       zIndex: 0,
-      position: 'absolute',
+      position: "absolute"
     }}
   />
 );
 
 const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanceT) => {
   const [A, B] = createPair(
-    useAsset({ defaultValue: defaultAssetA, title: 'Trade' }),
-    useAsset({ defaultValue: defaultAssetB, title: 'Trade' }),
+    useAsset({ defaultValue: defaultAssetA, title: "Trade" }),
+    useAsset({ defaultValue: defaultAssetB, title: "Trade" })
   );
 
   useEffect(() => {
-    console.log('One of Assets symbol Changed');
+    console.log("One of Assets symbol Changed");
     if (!A || !B) {
       return;
     }
-    A.setAmount('0.00');
-    B.setAmount('0.00');
+    A.setAmount("0.00");
+    B.setAmount("0.00");
   }, [A?.asset.symbol, B?.asset.symbol]);
 
   useEffect(() => {
@@ -69,7 +69,7 @@ const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanc
       if (!A || !B) {
         return;
       }
-      console.log('Update ticker');
+      console.log("Update ticker");
       const tickerA = await meta1dex.db
         .get_ticker(A.asset.symbol, B.asset.symbol)
         .catch(console.log);
@@ -83,6 +83,7 @@ const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanc
 
       B.setTicker(tickerB || undefined);
     }
+
     load();
   }, [A?.asset.symbol, B?.asset.symbol]);
 
@@ -91,7 +92,7 @@ const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanc
   }
 
   return {
-    assets: { A, B },
+    assets: { A, B }
   };
 };
 
@@ -99,13 +100,14 @@ type ScreenAssets = {
   A: theAsset;
   B: theAsset;
 };
+
 interface AssetsProp {
   assets: ScreenAssets;
 }
 
 function setMaxAmount(assets: ScreenAssets) {
   const { A, B } = assets;
-  if (A.ticker && A.ticker.lowest_ask !== '0') {
+  if (A.ticker && A.ticker.lowest_ask !== "0") {
     const aMax = A.getMax();
     const pow = 10 ** B.asset._asset.precision;
     const x = (aMax / Number(A.ticker.lowest_ask)) * pow;
@@ -113,7 +115,7 @@ function setMaxAmount(assets: ScreenAssets) {
     A.setAmount(aMax.toFixed(A.asset._asset.precision));
     B.setAmount(bMax.toFixed(B.asset._asset.precision));
   } else {
-    Alert.alert('Failed to get exchange rate', 'No open orders found');
+    Alert.alert("Failed to get exchange rate", "No open orders found");
   }
 }
 
@@ -121,26 +123,26 @@ const FloatingButton = ({ assets }: AssetsProp) => {
   return (
     <View
       style={{
-        alignSelf: 'flex-end',
-        position: 'relative',
+        alignSelf: "flex-end",
+        position: "relative",
         left: -48,
         top: 32,
         zIndex: 1000,
         elevation: 3,
-        backgroundColor: '#330000',
+        backgroundColor: "#330000",
         borderRadius: 4,
         padding: 8,
-        paddingHorizontal: 12,
+        paddingHorizontal: 12
       }}
     >
       <TouchableOpacity
-        {...tid('TradeScreen/MAX')}
+        {...tid("TradeScreen/MAX")}
         onPress={() => {
           editing.current?.(false);
           setMaxAmount(assets);
         }}
       >
-        <Text style={{ textAlign: 'center', color: colors.BrandYellow, fontWeight: '700' }}>
+        <Text style={{ textAlign: "center", color: colors.BrandYellow, fontWeight: "700" }}>
           MAX
         </Text>
       </TouchableOpacity>
@@ -152,22 +154,22 @@ const DarkFloatingButton = ({ assets }: AssetsProp) => {
   return (
     <View
       style={{
-        backgroundColor: '#fff',
+        backgroundColor: "#fff",
         borderRadius: 4,
         padding: 8,
-        paddingHorizontal: 12,
+        paddingHorizontal: 12
       }}
     >
       <TouchableOpacity
-        {...tid('TradeScreen/MAX')}
+        {...tid("TradeScreen/MAX")}
         onPress={() => {
           editing.current?.(false);
           setMaxAmount(assets);
         }}
       >
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: "row" }}>
           <SvgIcons.Wallet width={18} height={18} fill={colors.BrandYellow} />
-          <Text style={{ textAlign: 'center', fontWeight: '700', marginLeft: 8 }}>MAX</Text>
+          <Text style={{ textAlign: "center", fontWeight: "700", marginLeft: 8 }}>MAX</Text>
         </View>
       </TouchableOpacity>
     </View>
@@ -175,20 +177,21 @@ const DarkFloatingButton = ({ assets }: AssetsProp) => {
 };
 
 type DM<T> = { darkMode?: boolean } & T;
+
 interface AssetProp {
   asset: theAsset;
   slave?: boolean;
 }
 
 const AssetDisplay = ({ asset, darkMode }: DM<AssetProp>) => {
-  const darkStyle = optStyleFactory(darkMode);
+  // const darkStyle = optStyleFactory(darkMode);
 
   return (
-    <TouchableOpacity {...tid('TradeScreen/SelectAsset')} onPress={() => asset.open()}>
+    <TouchableOpacity {...tid("TradeScreen/SelectAsset")} onPress={() => asset.open()}>
       <View style={styles.rowCenter}>
         <Image style={styles.assetIcon} source={asset.asset._asset.icon /*Bruh wtf is dis */} />
         <View>
-          <Heading style={darkStyle({ color: '#fff' }, styles.font18x500)}>
+          <Heading style={{ ...styles.font18x500, ...styles.whiteText }}>
             {asset.asset.symbol}
           </Heading>
           <TextSecondary style={styles.font14}>
@@ -201,12 +204,13 @@ const AssetDisplay = ({ asset, darkMode }: DM<AssetProp>) => {
 };
 const ErrorContext = React.createContext({
   errors: [],
-  setErrors: (_: any) => {},
+  setErrors: (_: any) => {
+  }
 });
 type InputProps = {
   validate: (value: string) => boolean;
   onChange: (value: string, valid: boolean) => void;
-} & Omit<TextInputProps, 'onChange'>;
+} & Omit<TextInputProps, "onChange">;
 
 const Input = (props: InputProps) => {
   const { validate, onChange, ...inputProps } = props;
@@ -225,12 +229,12 @@ const Input = (props: InputProps) => {
   }, [props.value]);
 
   const _onChange = (t: string, v: boolean) => {
-    console.log('valid', v);
+    console.log("valid", v);
     setErr(!v);
     onChange(t, v);
   };
 
-  const errorHighlight = err ? { color: 'red' } : {};
+  const errorHighlight = err ? { color: "red" } : {};
   inputProps.style = [inputProps.style || {}, errorHighlight];
 
   return (
@@ -259,7 +263,7 @@ const useCause = () => {
         setCause(false);
         editing.current = null;
       }, 5000);
-    },
+    }
   };
 };
 
@@ -276,8 +280,8 @@ const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
   const darkStyle = optStyleFactory(darkMode);
   return (
     <Input
-      {...tid('TradeScreen/AmountInput/amount')}
-      style={darkStyle({ color: '#fff' }, styles.amountInput)}
+      {...tid("TradeScreen/AmountInput/amount")}
+      style={darkStyle({ color: "#fff" }, styles.amountInput)}
       value={amount}
       validate={validateNumber}
       keyboardType="numeric"
@@ -288,7 +292,7 @@ const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
           asset.setAmount(txt);
           const opponent = asset.opponent();
           const ticker = asset.ticker;
-          if (ticker && ticker.lowest_ask !== '0') {
+          if (ticker && ticker.lowest_ask !== "0") {
             const bAmt = Number(txt) / Number(ticker.lowest_ask);
             opponent.setAmount(bAmt.toFixed(opponent.asset._asset.precision));
           } else {
@@ -315,8 +319,8 @@ const UsdInput = ({ asset, darkMode, slave }: DM<AssetProp>) => {
   const darkStyle = optStyleFactory(darkMode);
   return (
     <Input
-      {...tid('TradeScreen/AmountInput/amountUsd')}
-      style={darkStyle({ color: '#fff' }, styles.usdInput)}
+      {...tid("TradeScreen/AmountInput/amountUsd")}
+      style={darkStyle({ color: "#fff" }, styles.usdInput)}
       maxLength={7}
       value={amount}
       validate={validateNumber}
@@ -340,7 +344,7 @@ const AmountsInput = ({ asset, darkMode, slave }: DM<AssetProp>) => {
     <View style={{ width: 120 }}>
       <AmountInput asset={asset} darkMode={darkMode} />
       <View style={styles.rowEnd}>
-        <TextSecondary style={darkStyle({ color: '#fff' }, styles.usdtLabel)}>US$</TextSecondary>
+        <TextSecondary style={darkStyle({ color: "#fff" }, styles.usdtLabel)}>US$</TextSecondary>
         <UsdInput asset={asset} darkMode={darkMode} slave={slave} />
       </View>
     </View>
@@ -350,13 +354,13 @@ const AmountsInput = ({ asset, darkMode, slave }: DM<AssetProp>) => {
 const crossCheckPrice = async ({ A, B }: ScreenAssets) => {
   try {
     const ticker = await meta1dex.db.get_ticker(A.asset.symbol, B.asset.symbol);
-    if (!ticker || !ticker.lowest_ask || ticker.lowest_ask === '0') {
+    if (!ticker || !ticker.lowest_ask || ticker.lowest_ask === "0") {
       return;
     }
     const price = Number(A.amount) / Number(B.amount);
     const tickerPrice = Number(ticker.lowest_ask);
     const mesq = (1 / 2) * (price - tickerPrice) ** 2;
-    console.log('mesq', mesq);
+    console.log("mesq", mesq);
     return mesq < 1e-10;
   } catch (e: any) {
     console.warn(e);
@@ -367,14 +371,14 @@ const mkPerformSwap = (
   assets: ScreenAssets,
   onBeforeSwap: () => void,
   onAfterSwap: () => void,
-  onFail: () => void,
+  onFail: () => void
 ) => {
   const { accountName } = useStore.getState();
   const update = useAssetsStore.getState().fetchUserAssets;
 
   const getAccountInfo = async () => ({
     accountName,
-    password: ensure(await getPassword()),
+    password: ensure(await getPassword())
   });
 
   const fn = async () => {
@@ -395,7 +399,7 @@ const mkPerformSwap = (
       accountInfo,
       assets.A.asset.symbol,
       assets.B.asset.symbol,
-      Number(assets.B.amount),
+      Number(assets.B.amount)
     );
 
     onAfterSwap();
@@ -406,35 +410,36 @@ const mkPerformSwap = (
       anyway: () => setTimeout(() => update(accountName), 100),
       onErr: e => {
         onFail();
-        if ((e as Error).message === 'Expected value, got null') {
+        if ((e as Error).message === "Expected value, got null") {
           return true; // Swallow this exception
         }
-      },
+      }
     });
 };
 
 const makeMessage = (assets: ScreenAssets) =>
   `Successfully traded ${assets.A.amount} ${assets.A.asset.symbol}` +
-  ' to ' +
+  " to " +
   `${assets.B.amount} ${assets.B.asset.symbol}`;
 
 interface Props {
   darkMode?: boolean;
 }
+
 type kindaStyle = Partial<typeof styles> | ViewStyle | TextStyle | ImageStyle;
 
 const optStyleFactory =
   (darkMode?: boolean) =>
-  (x: kindaStyle, defaults?: kindaStyle): any => {
-    if (darkMode) {
-      return [defaults, x];
-    }
-    return [defaults];
-  };
+    (x: kindaStyle, defaults?: kindaStyle): any => {
+      if (darkMode) {
+        return [defaults, x];
+      }
+      return [defaults];
+    };
 
 const refresh = throttle(() => {
-  console.log('BEGIN Refresh');
-  refreshAssets().then(() => console.log('END Refresh'));
+  console.log("BEGIN Refresh");
+  refreshAssets().then(() => console.log("END Refresh"));
 }, 30000);
 
 const TradeScreen: React.FC<Props> = ({ darkMode }) => {
@@ -442,7 +447,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
   const allAssets = useAssets();
   const availableAssets = useMemo(
     () => allAssets?.assetsWithBalance.sort((a, b) => a.symbol.localeCompare(b.symbol)),
-    [allAssets],
+    [allAssets]
   );
   const pair = useAssetPair(availableAssets.at(0), availableAssets.at(3));
 
@@ -464,14 +469,14 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
     assets,
     () => loader.open(),
     () => {
-      console.log('Should hide');
+      console.log("Should hide");
       loader.close();
       open(makeMessage(assets), () => {
         nav.goBack();
         darkMode && nav.goBack();
       });
     },
-    () => loader.close(),
+    () => loader.close()
   );
 
   const DarkMode: React.FC = ({ children }) => <>{darkMode ? children : null}</>;
@@ -515,10 +520,10 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
               </View>
             </View>
           </List>
-          <Text style={{ textAlign: 'right', alignSelf: 'center', color: '#888' }}>
-            Current Price:{' '}
-            {Number(assets.A.ticker?.lowest_ask).toFixed(assets.A.asset._asset.precision)}{' '}
-            {assets.A.asset.symbol}/{assets.B.asset.symbol} {'\n'}(
+          <Text style={{ textAlign: "right", alignSelf: "center", color: "#888" }}>
+            Current Price:{" "}
+            {Number(assets.A.ticker?.lowest_ask).toFixed(assets.A.asset._asset.precision)}{" "}
+            {assets.A.asset.symbol}/{assets.B.asset.symbol} {"\n"}(
             {
               // Math bs
               (() => {
@@ -528,13 +533,13 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
                 }
                 return assets.B.toUsdt(1 / la);
               })().toFixed(2)
-            }{' '}
+            }{" "}
             USDT/{assets.A.asset.symbol})
           </Text>
         </View>
         <LightMode>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity {...tid('TradeScreen/Trade')} onPress={fn} disabled={disabled}>
+            <TouchableOpacity {...tid("TradeScreen/Trade")} onPress={fn} disabled={disabled}>
               <View style={styles.button}>
                 <Text style={styles.buttonText}>Exchange</Text>
               </View>
@@ -543,7 +548,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
         </LightMode>
         <DarkMode>
           <View style={[styles.center, styles.m12]} />
-          <TouchableOpacity {...tid('TradeScreen/Trade')} onPress={fn} disabled={disabled}>
+          <TouchableOpacity {...tid("TradeScreen/Trade")} onPress={fn} disabled={disabled}>
             <View style={styles.darkBtnView}>
               <Text style={styles.font18x500}>Convert</Text>
             </View>
@@ -558,40 +563,41 @@ export default TradeScreen;
 
 const styles = StyleSheet.create({
   rowCenter: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center"
   },
-  assetIcon: { width: 42, height: 42, resizeMode: 'contain', marginRight: 8 },
-  font18x500: { fontSize: 18, fontWeight: '500' },
+  assetIcon: { width: 42, height: 42, resizeMode: "contain", marginRight: 8 },
+  font18x500: { fontSize: 18, fontWeight: "500" },
+  whiteText: { color: "#fff" },
   font14: { fontSize: 14 },
   amountInput: {
     fontSize: 18,
     padding: 0,
-    fontWeight: '500',
-    textAlign: 'right',
-    color: '#000',
+    fontWeight: "500",
+    textAlign: "right",
+    color: "#000"
   },
   rowEnd: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    flexDirection: "row",
+    justifyContent: "flex-end"
   },
 
-  usdtLabel: { fontSize: 14, textAlign: 'right', padding: 0 },
-  listStyle: { backgroundColor: '#fff', borderRadius: 8, margin: 18 },
-  listView: { padding: 16, borderBottomWidth: 2, borderBottomColor: '#eceef0' },
+  usdtLabel: { fontSize: 14, textAlign: "right", padding: 0 },
+  listStyle: { backgroundColor: "#fff", borderRadius: 8, margin: 18 },
+  listView: { padding: 16, borderBottomWidth: 2, borderBottomColor: "#eceef0" },
   rowJustifyBetween: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between"
   },
   listHeading: {
     fontSize: 16,
-    fontWeight: '500',
-    marginBottom: 8,
+    fontWeight: "500",
+    marginBottom: 8
   },
   buttonContainer: {
     margin: 32,
     marginTop: 128,
-    alignItems: 'center',
+    alignItems: "center"
   },
   button: {
     ...shadow.D3,
@@ -599,35 +605,35 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 5,
     marginBottom: 24,
-    backgroundColor: colors.BrandYellow,
+    backgroundColor: colors.BrandYellow
   },
   buttonText: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600"
   },
   usdInput: style(
     {
       marginLeft: 8,
       fontSize: 14,
       color: colors.mutedGray,
-      textAlign: 'right',
+      textAlign: "right"
     },
     {
       android: {
         height: 18,
         padding: 0,
-        marginTop: 1,
-      },
-    },
+        marginTop: 1
+      }
+    }
   ),
   // Dark mode
-  darkRoot: { backgroundColor: '#320001', height: '100%' },
+  darkRoot: { backgroundColor: "#320001", height: "100%" },
   darkBtnView: {
     backgroundColor: colors.BrandYellow,
-    alignItems: 'center',
+    alignItems: "center",
     padding: 18,
     margin: 24,
-    borderRadius: 8,
+    borderRadius: 8
   },
   darkListView: {
     padding: 0,
@@ -635,16 +641,16 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     marginBottom: 0,
     borderBottomWidth: 1,
-    borderBottomColor: colors.BrandYellow,
+    borderBottomColor: colors.BrandYellow
   },
   darkList: {
-    backgroundColor: '#3f0000',
-    borderRadius: 18,
+    backgroundColor: "#3f0000",
+    borderRadius: 18
   },
   center: {
-    alignItems: 'center',
+    alignItems: "center"
   },
   m12: {
-    margin: 12,
-  },
+    margin: 12
+  }
 });
