@@ -184,14 +184,14 @@ interface AssetProp {
 }
 
 const AssetDisplay = ({ asset, darkMode }: DM<AssetProp>) => {
-  // const darkStyle = optStyleFactory(darkMode);
+  const darkStyle = optStyleFactory(darkMode);
 
   return (
     <TouchableOpacity {...tid("TradeScreen/SelectAsset")} onPress={() => asset.open()}>
       <View style={styles.rowCenter}>
         <Image style={styles.assetIcon} source={asset.asset._asset.icon /*Bruh wtf is dis */} />
         <View>
-          <Heading style={{ ...styles.font18x500, ...styles.whiteText }}>
+          <Heading style={darkStyle(styles.whiteText, styles.font18x500)}>
             {asset.asset.symbol}
           </Heading>
           <TextSecondary style={styles.font14}>
@@ -281,7 +281,7 @@ const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
   return (
     <Input
       {...tid("TradeScreen/AmountInput/amount")}
-      style={darkStyle({ color: "#fff" }, styles.amountInput)}
+      style={darkStyle(styles.whiteText, styles.amountInput)}
       value={amount}
       validate={validateNumber}
       keyboardType="numeric"
@@ -304,7 +304,7 @@ const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
   );
 };
 
-const UsdInput = ({ asset, darkMode, slave }: DM<AssetProp>) => {
+const UsdInput = ({ asset, darkMode }: DM<AssetProp>) => {
   const [amount, setAmount] = useState(asset.toUsdt().toFixed());
   const { isCause, cause } = useCause();
 
