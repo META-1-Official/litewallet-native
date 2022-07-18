@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   },
   SubmitButtonStyle: {
     padding: 12,
-    // marginHorizontal: 24,
+    marginHorizontal: 24,
     marginVertical: 8,
     borderRadius: 10000,
     borderWidth: 1,

@@ -139,18 +139,18 @@ const LinkWalletScreen: React.FC = () => {
             }}
             render={PasswordInput}
           />
-          <View>
-            <RoundedButton
-              title="Submit"
-              onPress={handleSubmit(async formState => {
-                const { account_name, password } = formState;
-                if (await validatePassword(account_name, password)) {
-                  authorzie(account_name, password);
-                }
-              })}
-            />
-          </View>
         </Animated.View>
+        <View>
+          <RoundedButton
+            title="Submit"
+            onPress={handleSubmit(async formState => {
+              const { account_name, password } = formState;
+              if (await validatePassword(account_name, password)) {
+                authorzie(account_name, password);
+              }
+            })}
+          />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
