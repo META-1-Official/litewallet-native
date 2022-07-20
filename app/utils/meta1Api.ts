@@ -296,8 +296,31 @@ export const placeLimitOrder = async (accountInfo: AccountWithPassword, orderInf
   return sellResult;
 };
 
+const checkAvailabilityOfAddress = async (asset: string) => {
+  const res = await fetch(`${config.GatewayUrl}/api-gateways/${asset}`, {
+    credentials: 'omit',
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:84.0) Gecko/20100101 Firefox/84.0',
+      Accept: 'application/json, text/plain, */*',
+      'Accept-Language': 'en-US,en;q=0.5',
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+    },
+    method: 'GET',
+    mode: 'cors',
+  });
+  console.log('getAvailabilityOfAddress status:', res.status, res.statusText);
+  const response: boolean = await res.json();
+
+  if (!response) {
+    throw new Error(`Asset ${asset} is not available`);
+  }
+
+  return response;
+};
+
 export const depositAddress = async (accountName: string, asset: string) => {
-  const res = await fetch(`${config.GatewayUrl}/${asset}`, {
+  const res = await fetch(`${config.GatewayUrl}/api/wallet/init/${asset}`, {
     credentials: 'omit',
     headers: {
       'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:84.0) Gecko/20100101 Firefox/84.0',
@@ -359,9 +382,14 @@ export interface AddrT {
 
 export async function getAddressForAccountAsset(accountName: string, symbol: string) {
   try {
-    const addr = await depositAddress(accountName, symbol);
-    const qr = await QRCode.toString(addr);
-    return { qr, addr };
+    const asset = symbol.toLowerCase() === 'usdt' ? 'eth' : symbol.toLowerCase();
+    const isAvailable = await checkAvailabilityOfAddress(asset);
+    if (isAvailable) {
+      const addr = await depositAddress(accountName, asset);
+      const qr = await QRCode.toString(addr);
+      return { qr, addr };
+    }
+    return null;
   } catch (e) {
     console.log('-ERROR-', e);
     return null;

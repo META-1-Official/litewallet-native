@@ -44,9 +44,10 @@ const ReciveScreen: React.FC<{}> = () => {
   const [selected, open] = useAssetPicker({
     title: 'Receive',
     onClose: () => nav.goBack(),
-    exclude: ['BNB', 'XLM'],
+    exclude: ['BNB', 'XLM', 'META1', 'EOS'],
   });
   const [realAddress, setRealAddress] = useState<AddrT | null>(null);
+
   useEffect(() => {
     const fn = async () => {
       if (selected) {

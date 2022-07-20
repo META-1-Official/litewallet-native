@@ -15,6 +15,6 @@ export default {
       : 'https://litewallet.cryptomailsvc.io',
   GatewayUrl:
     NETWORK === 'TESTNET'
-      ? 'https://gateway.dev.meta-exchange.vision/api/wallet/init'
-      : 'https://gateway.api.meta-exchange.vision/api/wallet/init',
+      ? 'https://gateway.dev.meta-exchange.vision'
+      : 'https://gateway.api.meta-exchange.vision',
 };
