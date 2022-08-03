@@ -38,6 +38,7 @@ export const Tab: React.FC<Props> = ({ type }) => {
   }, [assetA, assetB]);
 
   const { fn } = useCreateOrder(assetB, assetA, type);
+
   return (
     <DismissKeyboardView style={{ flexGrow: 1, padding: 12 }}>
       <InputRow

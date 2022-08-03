@@ -407,7 +407,7 @@ const RenderRow =
       }
 
       if (canceled) {
-        return 'Canceled';
+        return 'Cancelled';
       }
 
       if (!inFuture(order.expiration)) {

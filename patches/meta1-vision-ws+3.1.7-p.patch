@@ -1,0 +1,353 @@
+diff --git a/node_modules/meta1-vision-ws/lib/ChainWebSocket.js b/node_modules/meta1-vision-ws/lib/ChainWebSocket.js
+index 7553811..0b9330e 100644
+--- a/node_modules/meta1-vision-ws/lib/ChainWebSocket.js
++++ b/node_modules/meta1-vision-ws/lib/ChainWebSocket.js
+@@ -1,3 +1,344 @@
+-"use strict";var _isomorphicWs=_interopRequireDefault(require("isomorphic-ws"));Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;function _interopRequireDefault(b){return b&&b.__esModule?b:{default:b}}function _defineProperty(d,a,b){return a in d?Object.defineProperty(d,a,{value:b,enumerable:!0,configurable:!0,writable:!0}):d[a]=b,d}const SOCKET_DEBUG=!1,MAX_SEND_LIFE=5,MAX_RECV_LIFE=10;class ChainWebSocket{constructor(f,a){let b=2<arguments.length&&arguments[2]!==void 0?arguments[2]:5e3,c=!(3<arguments.length&&arguments[3]!==void 0)||arguments[3],d=4<arguments.length&&arguments[4]!==void 0?arguments[4]:null;_defineProperty(this,"connect",(c,a)=>new Promise((b,e)=>{this.current_reject=e,this.current_resolve=b;try{this.ws=new _isomorphicWs.default(c)}catch(a){// DISCONNECTED
+-this.ws={readyState:3,close:()=>{}},e(new Error("Invalid url",c," closed"))}this.ws.onopen=this.onOpen,this.ws.onerror=this.onError,this.ws.onmessage=this.onMessage,this.ws.onclose=this.onClose,this.connectionTimeout=setTimeout(()=>{this.current_reject&&(this.current_reject=null,this.close(),e(new Error("Connection attempt timed out after "+a/1e3+"s")))},a)})),_defineProperty(this,"onOpen",()=>{clearTimeout(this.connectionTimeout),this.statusCb&&this.statusCb("open"),this.on_reconnect&&this.on_reconnect(),this.keepalive_timer=setInterval(()=>(this.recv_life--,0==this.recv_life?(console.error(this.url+" connection is dead, terminating ws"),void this.close()):void(this.send_life--,0==this.send_life&&(this.keepAliveCb&&this.keepAliveCb(this.closed),this.send_life=MAX_SEND_LIFE))),5e3),this.current_reject=null,this.current_resolve()}),_defineProperty(this,"onError",b=>{this.keepalive_timer&&(clearInterval(this.keepalive_timer),this.keepalive_timer=void 0),clearTimeout(this.connectionTimeout),this.statusCb&&this.statusCb("error"),this.current_reject&&this.current_reject(b)}),_defineProperty(this,"onMessage",b=>{this.recv_life=MAX_RECV_LIFE,this.listener(JSON.parse(b.data))}),_defineProperty(this,"onClose",()=>{this.closed=!0,this.keepalive_timer&&(clearInterval(this.keepalive_timer),this.keepalive_timer=void 0);for(var b=this.responseCbId+1;b<=this.cbId;b+=1)this.cbs[b].reject(new Error("connection closed"));this.statusCb&&this.statusCb("closed"),this._closeCb&&this._closeCb(),this.on_close&&this.on_close()}),_defineProperty(this,"call",d=>{if(1!==this.ws.readyState)return Promise.reject(new Error("websocket state error:"+this.ws.readyState));let a=d[1];if(SOCKET_DEBUG&&console.log("[ChainWebSocket] >---- call ----->  \"id\":"+(this.cbId+1),JSON.stringify(d)),this.cbId+=1,["set_subscribe_callback","subscribe_to_market","broadcast_transaction_with_callback","set_pending_transaction_callback","set_block_applied_callback"].includes(a)&&(this.subs[this.cbId]={callback:d[2][0]},d[2][0]=this.cbId),["unsubscribe_from_market","unsubscribe_from_accounts"].includes(a)){if("function"!=typeof d[2][0])throw new Error("First parameter of unsub must be the original callback");let c=d[2].splice(0,1)[0];// Find the corresponding subscription
+-for(let b in this.subs)if(this.subs[b].callback===c){this.unsub[this.cbId]=b;break}}var e={method:"call",params:d};return e.id=this.cbId,this.send_life=MAX_SEND_LIFE,new Promise((c,a)=>{this.cbs[this.cbId]={time:new Date,resolve:c,reject:a},this.ws.send(JSON.stringify(e))})}),_defineProperty(this,"listener",d=>{SOCKET_DEBUG&&console.log("[ChainWebSocket] <---- reply ----<",JSON.stringify(d));let a=!1,e=null;"notice"===d.method&&(a=!0,d.id=d.params[0]),a?e=this.subs[d.id].callback:(e=this.cbs[d.id],this.responseCbId=d.id),e&&!a?(d.error?e.reject(d.error):e.resolve(d.result),delete this.cbs[d.id],this.unsub[d.id]&&(delete this.subs[this.unsub[d.id]],delete this.unsub[d.id])):e&&a?e(d.params[1]):console.log("Warning: unknown websocket response: ",d)}),_defineProperty(this,"login",(c,a)=>this.connect_promise.then(()=>this.call([1,"login",[c,a]]))),_defineProperty(this,"close",()=>new Promise(b=>(clearInterval(this.keepalive_timer),this.keepalive_timer=void 0,this._closeCb=()=>{b(),this._closeCb=null},this.ws?void(this.ws.terminate?this.ws.terminate():this.ws.close(),3===this.ws.readyState&&b()):(console.log("Websocket already cleared",this),b())))),this.url=f,this.statusCb=a,this.current_reject=null,this.on_reconnect=null,this.closed=!1,this.send_life=MAX_SEND_LIFE,this.recv_life=MAX_RECV_LIFE,this.keepAliveCb=d,this.cbId=0,this.responseCbId=0,this.cbs={},this.subs={},this.unsub={},this.connect_promise=this.connect(f,b)}}var _default=ChainWebSocket;exports.default=_default;
+\ No newline at end of file
++"use strict";
++
++Object.defineProperty(exports, "__esModule", {
++  value: true
++});
++exports.default = void 0;
++
++var _isomorphicWs = _interopRequireDefault(require("isomorphic-ws"));
++
++function _interopRequireDefault(obj) {
++  return obj && obj.__esModule ? obj : { default: obj };
++}
++
++function _defineProperties(target, props) {
++  for (var i = 0; i < props.length; i++) {
++    var descriptor = props[i];
++    descriptor.enumerable = descriptor.enumerable || false;
++    descriptor.configurable = true;
++    if ("value" in descriptor) descriptor.writable = true;
++    Object.defineProperty(target, descriptor.key, descriptor);
++  }
++}
++
++function _createClass(Constructor, protoProps, staticProps) {
++  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
++  if (staticProps) _defineProperties(Constructor, staticProps);
++  Object.defineProperty(Constructor, "prototype", { writable: false });
++  return Constructor;
++}
++
++function _classCallCheck(instance, Constructor) {
++  if (!(instance instanceof Constructor)) {
++    throw new TypeError("Cannot call a class as a function");
++  }
++}
++
++function _defineProperty(obj, key, value) {
++  if (key in obj) {
++    Object.defineProperty(obj, key, {
++      value: value,
++      enumerable: true,
++      configurable: true,
++      writable: true
++    });
++  } else {
++    obj[key] = value;
++  }
++  return obj;
++}
++
++var SOCKET_DEBUG = false;
++var MAX_SEND_LIFE = 5;
++var MAX_RECV_LIFE = MAX_SEND_LIFE * 2;
++
++var ChainWebSocket = /*#__PURE__*/ _createClass(function ChainWebSocket(
++  ws_server,
++  statusCb
++) {
++  var _this = this;
++
++  var _connectTimeout =
++    arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 5000;
++
++  var autoReconnect =
++    arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
++  var keepAliveCb =
++    arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
++
++  _classCallCheck(this, ChainWebSocket);
++
++  _defineProperty(this, "connect", function (server, connectTimeout) {
++    return new Promise(function (resolve, reject) {
++      _this.current_reject = reject;
++      _this.current_resolve = resolve;
++
++      try {
++        _this.ws = new _isomorphicWs.default(server);
++      } catch (error) {
++        _this.ws = {
++          readyState: 3,
++          close: function close() {}
++        }; // DISCONNECTED
++
++        reject(new Error("Invalid url", server, " closed")); // return this.close().then(() => {
++        //     console.log("Invalid url", ws_server, " closed");
++        //     // throw new Error("Invalid url", ws_server, " closed")
++        //     // return this.current_reject(Error("Invalid websocket url: " + ws_server));
++        // })
++      }
++
++      _this.ws.onopen = _this.onOpen;
++      _this.ws.onerror = _this.onError;
++      _this.ws.onmessage = _this.onMessage;
++      _this.ws.onclose = _this.onClose;
++      _this.connectionTimeout = setTimeout(function () {
++        if (_this.current_reject) {
++          _this.current_reject = null;
++
++          _this.close();
++
++          reject(
++            new Error(
++              "Connection attempt timed out after " +
++              connectTimeout / 1000 +
++              "s"
++            )
++          );
++        }
++      }, connectTimeout);
++    });
++  });
++
++  _defineProperty(this, "onOpen", function () {
++    clearTimeout(_this.connectionTimeout);
++    if (_this.statusCb) _this.statusCb("open");
++    if (_this.on_reconnect) _this.on_reconnect();
++    _this.keepalive_timer = setInterval(function () {
++      _this.recv_life--;
++
++      if (_this.recv_life == 0) {
++        console.error(_this.url + " connection is dead, terminating ws");
++
++        _this.close(); // clearInterval(this.keepalive_timer);
++        // this.keepalive_timer = undefined;
++
++        return;
++      }
++
++      _this.send_life--;
++
++      if (_this.send_life == 0) {
++        // this.ws.ping('', false, true);
++        if (_this.keepAliveCb) {
++          _this.keepAliveCb(_this.closed);
++        }
++
++        _this.send_life = MAX_SEND_LIFE;
++      }
++    }, 5000);
++    _this.current_reject = null;
++
++    _this.current_resolve();
++  });
++
++  _defineProperty(this, "onError", function (error) {
++    if (_this.keepalive_timer) {
++      clearInterval(_this.keepalive_timer);
++      _this.keepalive_timer = undefined;
++    }
++
++    clearTimeout(_this.connectionTimeout);
++    if (_this.statusCb) _this.statusCb("error");
++
++    if (_this.current_reject) {
++      _this.current_reject(error);
++    }
++  });
++
++  _defineProperty(this, "onMessage", function (message) {
++    _this.recv_life = MAX_RECV_LIFE;
++
++    _this.listener(JSON.parse(message.data));
++  });
++
++  _defineProperty(this, "onClose", function () {
++    _this.closed = true;
++
++    if (_this.keepalive_timer) {
++      clearInterval(_this.keepalive_timer);
++      _this.keepalive_timer = undefined;
++    }
++
++    for (var cbId = _this.responseCbId + 1; cbId <= _this.cbId; cbId += 1) {
++      _this.cbs[cbId].reject(new Error("connection closed"));
++    }
++
++    _this.statusCb && _this.statusCb("closed");
++    _this._closeCb && _this._closeCb();
++    _this.close && _this.close();
++  });
++
++  _defineProperty(this, "call", function (params) {
++    if (_this.ws.readyState !== 1) {
++      return _this.close().then(function () {
++        return Promise.reject(
++          new Error(`websocket state error:${_this.ws.readyState}`)
++        );
++      });
++    }
++
++    var method = params[1];
++    if (SOCKET_DEBUG)
++      console.log(
++        '[ChainWebSocket] >---- call ----->  "id":' + (_this.cbId + 1),
++        JSON.stringify(params)
++      );
++    _this.cbId += 1;
++
++    if (
++      [
++        "set_subscribe_callback",
++        "subscribe_to_market",
++        "broadcast_transaction_with_callback",
++        "set_pending_transaction_callback",
++        "set_block_applied_callback"
++      ].includes(method)
++    ) {
++      // Store callback in subs map
++      _this.subs[_this.cbId] = {
++        callback: params[2][0]
++      }; // Replace callback with the callback id
++
++      params[2][0] = _this.cbId;
++    }
++
++    if (
++      ["unsubscribe_from_market", "unsubscribe_from_accounts"].includes(method)
++    ) {
++      if (typeof params[2][0] !== "function") {
++        throw new Error(
++          "First parameter of unsub must be the original callback"
++        );
++      }
++
++      var unSubCb = params[2].splice(0, 1)[0]; // Find the corresponding subscription
++
++      for (var id in _this.subs) {
++        if (_this.subs[id].callback === unSubCb) {
++          _this.unsub[_this.cbId] = id;
++          break;
++        }
++      }
++    }
++
++    var request = {
++      method: "call",
++      params: params
++    };
++    request.id = _this.cbId;
++    _this.send_life = MAX_SEND_LIFE;
++    return new Promise(function (resolve, reject) {
++      _this.cbs[_this.cbId] = {
++        time: new Date(),
++        resolve: resolve,
++        reject: reject
++      };
++
++      _this.ws.send(JSON.stringify(request));
++    });
++  });
++
++  _defineProperty(this, "listener", function (response) {
++    if (SOCKET_DEBUG)
++      console.log(
++        "[ChainWebSocket] <---- reply ----<",
++        JSON.stringify(response)
++      );
++    var sub = false,
++      callback = null;
++
++    if (response.method === "notice") {
++      sub = true;
++      response.id = response.params[0];
++    }
++
++    if (!sub) {
++      callback = _this.cbs[response.id];
++      _this.responseCbId = response.id;
++    } else {
++      callback = _this.subs[response.id].callback;
++    }
++
++    if (callback && !sub) {
++      if (response.error) {
++        callback.reject(response.error);
++      } else {
++        callback.resolve(response.result);
++      }
++
++      delete _this.cbs[response.id];
++
++      if (_this.unsub[response.id]) {
++        delete _this.subs[_this.unsub[response.id]];
++        delete _this.unsub[response.id];
++      }
++    } else if (callback && sub) {
++      callback(response.params[1]);
++    } else {
++      console.log("Warning: unknown websocket response: ", response);
++    }
++  });
++
++  _defineProperty(this, "login", function (user, password) {
++    return _this.connect_promise.then(function () {
++      return _this.call([1, "login", [user, password]]);
++    });
++  });
++
++  _defineProperty(this, "close", function () {
++    return new Promise(function (res) {
++      clearInterval(_this.keepalive_timer);
++      _this.keepalive_timer = undefined;
++
++      _this._closeCb = function () {
++        res();
++        _this._closeCb = null;
++      };
++
++      if (!_this.ws) {
++        console.log("Websocket already cleared", _this);
++        return res();
++      }
++
++      if (_this.ws.terminate) {
++        _this.ws.terminate();
++      } else {
++        _this.ws.close();
++      }
++
++      if (_this.ws.readyState === 3) {
++        _this.connect && _this.connect(_this.url, 5000);
++        res();
++      }
++    });
++  });
++
++  this.url = ws_server;
++  this.statusCb = statusCb;
++  this.current_reject = null;
++  this.on_reconnect = null;
++  this.closed = false;
++  this.send_life = MAX_SEND_LIFE;
++  this.recv_life = MAX_RECV_LIFE;
++  this.keepAliveCb = keepAliveCb;
++  this.cbId = 0;
++  this.responseCbId = 0;
++  this.cbs = {};
++  this.subs = {};
++  this.unsub = {};
++  this.connect_promise = this.connect(ws_server, _connectTimeout);
++});
++
++var _default = ChainWebSocket;
++exports.default = _default;

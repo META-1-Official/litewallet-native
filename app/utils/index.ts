@@ -263,8 +263,11 @@ export const excludeIndex = <T>(arr: T[], idx: number) =>
 
 export const useScroll = (noKeyboardEvents = false) => {
   const onLayout: (_: LayoutChangeEvent) => void = _layout => {
-    const h = Dimensions.get('window').height;
-    if (h < 700) {
+    const { height, fontScale } = Dimensions.get('window');
+    if (height < 700) {
+      setScrollEnabled(true);
+      setOld(true);
+    } else if (Platform.OS === 'android' && fontScale > 1) {
       setScrollEnabled(true);
       setOld(true);
     }
