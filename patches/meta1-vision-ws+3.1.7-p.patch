@@ -1,3 +1,838 @@
+diff --git a/node_modules/meta1-vision-ws/lib/ApiInstances.js b/node_modules/meta1-vision-ws/lib/ApiInstances.js
+index 3d13f47..f74482c 100644
+--- a/node_modules/meta1-vision-ws/lib/ApiInstances.js
++++ b/node_modules/meta1-vision-ws/lib/ApiInstances.js
+@@ -1,2 +1,827 @@
+-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.orders=exports.crypto=exports.history=exports.network=exports.db=exports.close=exports.chainId=exports.instance=exports.reset=exports.setAutoReconnect=exports.setRpcConnectionStatusCallback=void 0;var _ChainWebSocket=_interopRequireDefault(require("./ChainWebSocket")),_GrapheneApi=_interopRequireDefault(require("./GrapheneApi")),_ChainConfig=_interopRequireDefault(require("./ChainConfig"));function _interopRequireDefault(b){return b&&b.__esModule?b:{default:b}}var autoReconnect=!1,Apis=null,statusCb=null;// by default don't use reconnecting-websocket
+-const setRpcConnectionStatusCallback=b=>{statusCb=b,Apis&&Apis.setRpcConnectionStatusCallback(b)};exports.setRpcConnectionStatusCallback=setRpcConnectionStatusCallback;const setAutoReconnect=b=>{autoReconnect=b};exports.setAutoReconnect=setAutoReconnect;const reset=function(){let f=0<arguments.length&&arguments[0]!==void 0?arguments[0]:"ws://localhost:8090",a=1<arguments.length?arguments[1]:void 0,b=2<arguments.length&&arguments[2]!==void 0?arguments[2]:4e3,c=3<arguments.length?arguments[3]:void 0,d=4<arguments.length?arguments[4]:void 0;return close().then(()=>(Apis=newApis(),Apis.setRpcConnectionStatusCallback(statusCb),Apis&&a&&Apis.connect(f,b,c,d),Apis))};exports.reset=reset;const instance=function(){let f=0<arguments.length&&arguments[0]!==void 0?arguments[0]:"ws://localhost:8090",a=1<arguments.length?arguments[1]:void 0,b=2<arguments.length&&arguments[2]!==void 0?arguments[2]:4e3,c=3<arguments.length?arguments[3]:void 0,d=4<arguments.length?arguments[4]:void 0;return Apis||(Apis=newApis(),Apis.setRpcConnectionStatusCallback(statusCb)),Apis&&a&&Apis.connect(f,b,c),d&&(Apis.closeCb=d),Apis};exports.instance=instance;const chainId=()=>instance().chain_id;exports.chainId=chainId;const close=async()=>{Apis&&(await Apis.close(),Apis=null)};exports.close=close;const get=d=>new Proxy([],{get:(a,e)=>function(){for(var a=arguments.length,c=Array(a),b=0;b<a;b++)c[b]=arguments[b];return Apis[d].exec(e,[...c])}}),db=get("_db");exports.db=db;const network=get("_net");exports.network=network;const history=get("_hist");exports.history=history;const crypto=get("_crypt");exports.crypto=crypto;const orders=get("_orders");exports.orders=orders;const newApis=()=>({connect:function(d,a){let e=2<arguments.length&&void 0!==arguments[2]?arguments[2]:{enableCrypto:!1,enableOrders:!1};if(Apis.url=d,"undefined"!=typeof window&&window.location&&"https:"===window.location.protocol&&0>d.indexOf("wss://"))throw new Error("Secure domains require wss connection");Apis.ws_rpc&&(Apis.ws_rpc.statusCb=null,Apis.ws_rpc.keepAliveCb=null,Apis.ws_rpc.on_close=null,Apis.ws_rpc.on_reconnect=null),Apis.ws_rpc=new _ChainWebSocket.default(d,Apis.statusCb,a,autoReconnect,b=>{Apis._db&&!b&&Apis._db.exec("get_objects",[["2.1.0"]]).catch(()=>{})}),Apis.init_promise=Apis.ws_rpc.login("","").then(()=>{Apis._db=new _GrapheneApi.default(Apis.ws_rpc,"database"),Apis._net=new _GrapheneApi.default(Apis.ws_rpc,"network_broadcast"),Apis._hist=new _GrapheneApi.default(Apis.ws_rpc,"history"),e.enableOrders&&(Apis._orders=new _GrapheneApi.default(Apis.ws_rpc,"orders")),e.enableCrypto&&(Apis._crypt=new _GrapheneApi.default(Apis.ws_rpc,"crypto"));var c=Apis._db.init().then(()=>Apis._db.exec("get_chain_id",[]).then(b=>(Apis.chain_id=b,_ChainConfig.default.setChainId(b))));Apis.ws_rpc.on_reconnect=()=>{Apis.ws_rpc&&Apis.ws_rpc.login("","").then(()=>{Apis._db.init().then(()=>{Apis.statusCb&&Apis.statusCb("reconnect")}),Apis._net.init(),Apis._hist.init(),e.enableOrders&&Apis._orders.init(),e.enableCrypto&&Apis._crypt.init()})},Apis.ws_rpc.on_close=()=>{Apis.close().then(()=>{Apis.closeCb&&Apis.closeCb()})};let a=[c,Apis._net.init(),Apis._hist.init()];return e.enableOrders&&a.push(Apis._orders.init()),e.enableCrypto&&a.push(Apis._crypt.init()),Promise.all(a)}).catch(a=>(console.error(d,"Failed to initialize with error",a&&a.message),Apis.close().then(()=>{throw a})))},close:async()=>{Apis.ws_rpc&&1===Apis.ws_rpc.ws.readyState&&(await Apis.ws_rpc.close()),Apis.ws_rpc=null},db_api:()=>Apis._db,network_api:()=>Apis._net,history_api:()=>Apis._hist,crypto_api:()=>Apis._crypt,orders_api:()=>Apis._orders,setRpcConnectionStatusCallback:b=>Apis.statusCb=b});
+\ No newline at end of file
++"use strict";
++
++Object.defineProperty(exports, "__esModule", {
++  value: true
++});
++exports.setRpcConnectionStatusCallback =
++  exports.setAutoReconnect =
++    exports.reset =
++      exports.orders =
++        exports.network =
++          exports.instance =
++            exports.history =
++              exports.db =
++                exports.crypto =
++                  exports.close =
++                    exports.chainId =
++                      void 0;
++
++var _ChainWebSocket = _interopRequireDefault(require("./ChainWebSocket"));
++
++var _GrapheneApi = _interopRequireDefault(require("./GrapheneApi"));
++
++var _ChainConfig = _interopRequireDefault(require("./ChainConfig"));
++
++function _interopRequireDefault(obj) {
++  return obj && obj.__esModule ? obj : { default: obj };
++}
++
++function _regeneratorRuntime() {
++  "use strict";
++  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime =
++    function _regeneratorRuntime() {
++      return exports;
++    };
++  var exports = {},
++    Op = Object.prototype,
++    hasOwn = Op.hasOwnProperty,
++    $Symbol = "function" == typeof Symbol ? Symbol : {},
++    iteratorSymbol = $Symbol.iterator || "@@iterator",
++    asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator",
++    toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
++  function define(obj, key, value) {
++    return (
++      Object.defineProperty(obj, key, {
++        value: value,
++        enumerable: !0,
++        configurable: !0,
++        writable: !0
++      }),
++        obj[key]
++    );
++  }
++  try {
++    define({}, "");
++  } catch (err) {
++    define = function define(obj, key, value) {
++      return (obj[key] = value);
++    };
++  }
++  function wrap(innerFn, outerFn, self, tryLocsList) {
++    var protoGenerator =
++        outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator,
++      generator = Object.create(protoGenerator.prototype),
++      context = new Context(tryLocsList || []);
++    return (
++      (generator._invoke = (function (innerFn, self, context) {
++        var state = "suspendedStart";
++        return function (method, arg) {
++          if ("executing" === state)
++            throw new Error("Generator is already running");
++          if ("completed" === state) {
++            if ("throw" === method) throw arg;
++            return doneResult();
++          }
++          for (context.method = method, context.arg = arg; ; ) {
++            var delegate = context.delegate;
++            if (delegate) {
++              var delegateResult = maybeInvokeDelegate(delegate, context);
++              if (delegateResult) {
++                if (delegateResult === ContinueSentinel) continue;
++                return delegateResult;
++              }
++            }
++            if ("next" === context.method)
++              context.sent = context._sent = context.arg;
++            else if ("throw" === context.method) {
++              if ("suspendedStart" === state)
++                throw ((state = "completed"), context.arg);
++              context.dispatchException(context.arg);
++            } else
++              "return" === context.method &&
++              context.abrupt("return", context.arg);
++            state = "executing";
++            var record = tryCatch(innerFn, self, context);
++            if ("normal" === record.type) {
++              if (
++                ((state = context.done ? "completed" : "suspendedYield"),
++                record.arg === ContinueSentinel)
++              )
++                continue;
++              return { value: record.arg, done: context.done };
++            }
++            "throw" === record.type &&
++            ((state = "completed"),
++              (context.method = "throw"),
++              (context.arg = record.arg));
++          }
++        };
++      })(innerFn, self, context)),
++        generator
++    );
++  }
++  function tryCatch(fn, obj, arg) {
++    try {
++      return { type: "normal", arg: fn.call(obj, arg) };
++    } catch (err) {
++      return { type: "throw", arg: err };
++    }
++  }
++  exports.wrap = wrap;
++  var ContinueSentinel = {};
++  function Generator() {}
++  function GeneratorFunction() {}
++  function GeneratorFunctionPrototype() {}
++  var IteratorPrototype = {};
++  define(IteratorPrototype, iteratorSymbol, function () {
++    return this;
++  });
++  var getProto = Object.getPrototypeOf,
++    NativeIteratorPrototype = getProto && getProto(getProto(values([])));
++  NativeIteratorPrototype &&
++  NativeIteratorPrototype !== Op &&
++  hasOwn.call(NativeIteratorPrototype, iteratorSymbol) &&
++  (IteratorPrototype = NativeIteratorPrototype);
++  var Gp =
++    (GeneratorFunctionPrototype.prototype =
++      Generator.prototype =
++        Object.create(IteratorPrototype));
++  function defineIteratorMethods(prototype) {
++    ["next", "throw", "return"].forEach(function (method) {
++      define(prototype, method, function (arg) {
++        return this._invoke(method, arg);
++      });
++    });
++  }
++  function AsyncIterator(generator, PromiseImpl) {
++    function invoke(method, arg, resolve, reject) {
++      var record = tryCatch(generator[method], generator, arg);
++      if ("throw" !== record.type) {
++        var result = record.arg,
++          value = result.value;
++        return value &&
++        "object" == typeof value &&
++        hasOwn.call(value, "__await")
++          ? PromiseImpl.resolve(value.__await).then(
++            function (value) {
++              invoke("next", value, resolve, reject);
++            },
++            function (err) {
++              invoke("throw", err, resolve, reject);
++            }
++          )
++          : PromiseImpl.resolve(value).then(
++            function (unwrapped) {
++              (result.value = unwrapped), resolve(result);
++            },
++            function (error) {
++              return invoke("throw", error, resolve, reject);
++            }
++          );
++      }
++      reject(record.arg);
++    }
++    var previousPromise;
++    this._invoke = function (method, arg) {
++      function callInvokeWithMethodAndArg() {
++        return new PromiseImpl(function (resolve, reject) {
++          invoke(method, arg, resolve, reject);
++        });
++      }
++      return (previousPromise = previousPromise
++        ? previousPromise.then(
++          callInvokeWithMethodAndArg,
++          callInvokeWithMethodAndArg
++        )
++        : callInvokeWithMethodAndArg());
++    };
++  }
++  function maybeInvokeDelegate(delegate, context) {
++    var method = delegate.iterator[context.method];
++    if (undefined === method) {
++      if (((context.delegate = null), "throw" === context.method)) {
++        if (
++          delegate.iterator.return &&
++          ((context.method = "return"),
++            (context.arg = undefined),
++            maybeInvokeDelegate(delegate, context),
++          "throw" === context.method)
++        )
++          return ContinueSentinel;
++        (context.method = "throw"),
++          (context.arg = new TypeError(
++            "The iterator does not provide a 'throw' method"
++          ));
++      }
++      return ContinueSentinel;
++    }
++    var record = tryCatch(method, delegate.iterator, context.arg);
++    if ("throw" === record.type)
++      return (
++        (context.method = "throw"),
++          (context.arg = record.arg),
++          (context.delegate = null),
++          ContinueSentinel
++      );
++    var info = record.arg;
++    return info
++      ? info.done
++        ? ((context[delegate.resultName] = info.value),
++          (context.next = delegate.nextLoc),
++        "return" !== context.method &&
++        ((context.method = "next"), (context.arg = undefined)),
++          (context.delegate = null),
++          ContinueSentinel)
++        : info
++      : ((context.method = "throw"),
++        (context.arg = new TypeError("iterator result is not an object")),
++        (context.delegate = null),
++        ContinueSentinel);
++  }
++  function pushTryEntry(locs) {
++    var entry = { tryLoc: locs[0] };
++    1 in locs && (entry.catchLoc = locs[1]),
++    2 in locs && ((entry.finallyLoc = locs[2]), (entry.afterLoc = locs[3])),
++      this.tryEntries.push(entry);
++  }
++  function resetTryEntry(entry) {
++    var record = entry.completion || {};
++    (record.type = "normal"), delete record.arg, (entry.completion = record);
++  }
++  function Context(tryLocsList) {
++    (this.tryEntries = [{ tryLoc: "root" }]),
++      tryLocsList.forEach(pushTryEntry, this),
++      this.reset(!0);
++  }
++  function values(iterable) {
++    if (iterable) {
++      var iteratorMethod = iterable[iteratorSymbol];
++      if (iteratorMethod) return iteratorMethod.call(iterable);
++      if ("function" == typeof iterable.next) return iterable;
++      if (!isNaN(iterable.length)) {
++        var i = -1,
++          next = function next() {
++            for (; ++i < iterable.length; ) {
++              if (hasOwn.call(iterable, i))
++                return (next.value = iterable[i]), (next.done = !1), next;
++            }
++            return (next.value = undefined), (next.done = !0), next;
++          };
++        return (next.next = next);
++      }
++    }
++    return { next: doneResult };
++  }
++  function doneResult() {
++    return { value: undefined, done: !0 };
++  }
++  return (
++    (GeneratorFunction.prototype = GeneratorFunctionPrototype),
++      define(Gp, "constructor", GeneratorFunctionPrototype),
++      define(GeneratorFunctionPrototype, "constructor", GeneratorFunction),
++      (GeneratorFunction.displayName = define(
++        GeneratorFunctionPrototype,
++        toStringTagSymbol,
++        "GeneratorFunction"
++      )),
++      (exports.isGeneratorFunction = function (genFun) {
++        var ctor = "function" == typeof genFun && genFun.constructor;
++        return (
++          !!ctor &&
++          (ctor === GeneratorFunction ||
++            "GeneratorFunction" === (ctor.displayName || ctor.name))
++        );
++      }),
++      (exports.mark = function (genFun) {
++        return (
++          Object.setPrototypeOf
++            ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype)
++            : ((genFun.__proto__ = GeneratorFunctionPrototype),
++              define(genFun, toStringTagSymbol, "GeneratorFunction")),
++            (genFun.prototype = Object.create(Gp)),
++            genFun
++        );
++      }),
++      (exports.awrap = function (arg) {
++        return { __await: arg };
++      }),
++      defineIteratorMethods(AsyncIterator.prototype),
++      define(AsyncIterator.prototype, asyncIteratorSymbol, function () {
++        return this;
++      }),
++      (exports.AsyncIterator = AsyncIterator),
++      (exports.async = function (
++        innerFn,
++        outerFn,
++        self,
++        tryLocsList,
++        PromiseImpl
++      ) {
++        void 0 === PromiseImpl && (PromiseImpl = Promise);
++        var iter = new AsyncIterator(
++          wrap(innerFn, outerFn, self, tryLocsList),
++          PromiseImpl
++        );
++        return exports.isGeneratorFunction(outerFn)
++          ? iter
++          : iter.next().then(function (result) {
++            return result.done ? result.value : iter.next();
++          });
++      }),
++      defineIteratorMethods(Gp),
++      define(Gp, toStringTagSymbol, "Generator"),
++      define(Gp, iteratorSymbol, function () {
++        return this;
++      }),
++      define(Gp, "toString", function () {
++        return "[object Generator]";
++      }),
++      (exports.keys = function (object) {
++        var keys = [];
++        for (var key in object) {
++          keys.push(key);
++        }
++        return (
++          keys.reverse(),
++            function next() {
++              for (; keys.length; ) {
++                var key = keys.pop();
++                if (key in object)
++                  return (next.value = key), (next.done = !1), next;
++              }
++              return (next.done = !0), next;
++            }
++        );
++      }),
++      (exports.values = values),
++      (Context.prototype = {
++        constructor: Context,
++        reset: function reset(skipTempReset) {
++          if (
++            ((this.prev = 0),
++              (this.next = 0),
++              (this.sent = this._sent = undefined),
++              (this.done = !1),
++              (this.delegate = null),
++              (this.method = "next"),
++              (this.arg = undefined),
++              this.tryEntries.forEach(resetTryEntry),
++              !skipTempReset)
++          )
++            for (var name in this) {
++              "t" === name.charAt(0) &&
++              hasOwn.call(this, name) &&
++              !isNaN(+name.slice(1)) &&
++              (this[name] = undefined);
++            }
++        },
++        stop: function stop() {
++          this.done = !0;
++          var rootRecord = this.tryEntries[0].completion;
++          if ("throw" === rootRecord.type) throw rootRecord.arg;
++          return this.rval;
++        },
++        dispatchException: function dispatchException(exception) {
++          if (this.done) throw exception;
++          var context = this;
++          function handle(loc, caught) {
++            return (
++              (record.type = "throw"),
++                (record.arg = exception),
++                (context.next = loc),
++              caught && ((context.method = "next"), (context.arg = undefined)),
++                !!caught
++            );
++          }
++          for (var i = this.tryEntries.length - 1; i >= 0; --i) {
++            var entry = this.tryEntries[i],
++              record = entry.completion;
++            if ("root" === entry.tryLoc) return handle("end");
++            if (entry.tryLoc <= this.prev) {
++              var hasCatch = hasOwn.call(entry, "catchLoc"),
++                hasFinally = hasOwn.call(entry, "finallyLoc");
++              if (hasCatch && hasFinally) {
++                if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
++                if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
++              } else if (hasCatch) {
++                if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
++              } else {
++                if (!hasFinally)
++                  throw new Error("try statement without catch or finally");
++                if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
++              }
++            }
++          }
++        },
++        abrupt: function abrupt(type, arg) {
++          for (var i = this.tryEntries.length - 1; i >= 0; --i) {
++            var entry = this.tryEntries[i];
++            if (
++              entry.tryLoc <= this.prev &&
++              hasOwn.call(entry, "finallyLoc") &&
++              this.prev < entry.finallyLoc
++            ) {
++              var finallyEntry = entry;
++              break;
++            }
++          }
++          finallyEntry &&
++          ("break" === type || "continue" === type) &&
++          finallyEntry.tryLoc <= arg &&
++          arg <= finallyEntry.finallyLoc &&
++          (finallyEntry = null);
++          var record = finallyEntry ? finallyEntry.completion : {};
++          return (
++            (record.type = type),
++              (record.arg = arg),
++              finallyEntry
++                ? ((this.method = "next"),
++                  (this.next = finallyEntry.finallyLoc),
++                  ContinueSentinel)
++                : this.complete(record)
++          );
++        },
++        complete: function complete(record, afterLoc) {
++          if ("throw" === record.type) throw record.arg;
++          return (
++            "break" === record.type || "continue" === record.type
++              ? (this.next = record.arg)
++              : "return" === record.type
++                ? ((this.rval = this.arg = record.arg),
++                  (this.method = "return"),
++                  (this.next = "end"))
++                : "normal" === record.type && afterLoc && (this.next = afterLoc),
++              ContinueSentinel
++          );
++        },
++        finish: function finish(finallyLoc) {
++          for (var i = this.tryEntries.length - 1; i >= 0; --i) {
++            var entry = this.tryEntries[i];
++            if (entry.finallyLoc === finallyLoc)
++              return (
++                this.complete(entry.completion, entry.afterLoc),
++                  resetTryEntry(entry),
++                  ContinueSentinel
++              );
++          }
++        },
++        catch: function _catch(tryLoc) {
++          for (var i = this.tryEntries.length - 1; i >= 0; --i) {
++            var entry = this.tryEntries[i];
++            if (entry.tryLoc === tryLoc) {
++              var record = entry.completion;
++              if ("throw" === record.type) {
++                var thrown = record.arg;
++                resetTryEntry(entry);
++              }
++              return thrown;
++            }
++          }
++          throw new Error("illegal catch attempt");
++        },
++        delegateYield: function delegateYield(iterable, resultName, nextLoc) {
++          return (
++            (this.delegate = {
++              iterator: values(iterable),
++              resultName: resultName,
++              nextLoc: nextLoc
++            }),
++            "next" === this.method && (this.arg = undefined),
++              ContinueSentinel
++          );
++        }
++      }),
++      exports
++  );
++}
++
++function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
++  try {
++    var info = gen[key](arg);
++    var value = info.value;
++  } catch (error) {
++    reject(error);
++    return;
++  }
++  if (info.done) {
++    resolve(value);
++  } else {
++    Promise.resolve(value).then(_next, _throw);
++  }
++}
++
++function _asyncToGenerator(fn) {
++  return function () {
++    var self = this,
++      args = arguments;
++    return new Promise(function (resolve, reject) {
++      var gen = fn.apply(self, args);
++      function _next(value) {
++        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
++      }
++      function _throw(err) {
++        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
++      }
++      _next(undefined);
++    });
++  };
++}
++
++var autoReconnect = true; // by default don't use reconnecting-websocket
++
++var Apis = null;
++var statusCb = null;
++
++var setRpcConnectionStatusCallback = function setRpcConnectionStatusCallback(
++  callback
++) {
++  statusCb = callback;
++  if (Apis) Apis.setRpcConnectionStatusCallback(callback);
++};
++
++exports.setRpcConnectionStatusCallback = setRpcConnectionStatusCallback;
++
++var setAutoReconnect = function setAutoReconnect(auto) {
++  autoReconnect = auto;
++};
++
++exports.setAutoReconnect = setAutoReconnect;
++
++var reset = function reset() {
++  var cs =
++    arguments.length > 0 && arguments[0] !== undefined
++      ? arguments[0]
++      : "ws://localhost:8090";
++  var connect = arguments.length > 1 ? arguments[1] : undefined;
++  var connectTimeout =
++    arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 4000;
++  var optionalApis = arguments.length > 3 ? arguments[3] : undefined;
++  var closeCb = arguments.length > 4 ? arguments[4] : undefined;
++  return close().then(function () {
++    Apis = newApis();
++    Apis.setRpcConnectionStatusCallback(statusCb);
++    if (Apis && connect)
++      Apis.connect(cs, connectTimeout, optionalApis, closeCb);
++    return Apis;
++  });
++};
++
++exports.reset = reset;
++
++var instance = function instance() {
++  var cs =
++    arguments.length > 0 && arguments[0] !== undefined
++      ? arguments[0]
++      : "ws://localhost:8090";
++  var connect = arguments.length > 1 ? arguments[1] : undefined;
++  var connectTimeout =
++    arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 4000;
++  var optionalApis = arguments.length > 3 ? arguments[3] : undefined;
++  var closeCb = arguments.length > 4 ? arguments[4] : undefined;
++
++  if (!Apis) {
++    Apis = newApis();
++    Apis.setRpcConnectionStatusCallback(statusCb);
++  }
++
++  if (Apis && connect) {
++    Apis.connect(cs, connectTimeout, optionalApis);
++  }
++
++  if (closeCb) Apis.closeCb = closeCb;
++  return Apis;
++};
++
++exports.instance = instance;
++
++var chainId = function chainId() {
++  return instance().chain_id;
++};
++
++exports.chainId = chainId;
++
++var close = /*#__PURE__*/ (function () {
++  var _ref = _asyncToGenerator(
++    /*#__PURE__*/ _regeneratorRuntime().mark(function _callee() {
++      return _regeneratorRuntime().wrap(function _callee$(_context) {
++        while (1) {
++          switch ((_context.prev = _context.next)) {
++            case 0:
++              if (!Apis) {
++                _context.next = 4;
++                break;
++              }
++
++              _context.next = 3;
++              return Apis.close();
++
++            case 3:
++              Apis = null;
++
++            case 4:
++            case "end":
++              return _context.stop();
++          }
++        }
++      }, _callee);
++    })
++  );
++
++  return function close() {
++    return _ref.apply(this, arguments);
++  };
++})();
++
++exports.close = close;
++
++var get = function get(name) {
++  return new Proxy([], {
++    get: function get(_, method) {
++      return function () {
++        for (
++          var _len = arguments.length, args = new Array(_len), _key = 0;
++          _key < _len;
++          _key++
++        ) {
++          args[_key] = arguments[_key];
++        }
++
++        return Apis[name].exec(method, [].concat(args));
++      };
++    }
++  });
++};
++
++var db = get("_db");
++exports.db = db;
++var network = get("_net");
++exports.network = network;
++var history = get("_hist");
++exports.history = history;
++var crypto = get("_crypt");
++exports.crypto = crypto;
++var orders = get("_orders");
++exports.orders = orders;
++
++var newApis = function newApis() {
++  return {
++    connect: (function (_connect) {
++      function connect(_x, _x2) {
++        return _connect.apply(this, arguments);
++      }
++
++      connect.toString = function () {
++        return _connect.toString();
++      };
++
++      return connect;
++    })(function (cs, connectTimeout) {
++      var optionalApis =
++        arguments.length > 2 && arguments[2] !== undefined
++          ? arguments[2]
++          : {
++            enableCrypto: false,
++            enableOrders: false
++          };
++      // console.log("INFO\tApiInstances\tconnect\t", cs);
++      Apis.url = cs;
++      var rpc_user = "",
++        rpc_password = "";
++
++      if (
++        typeof window !== "undefined" &&
++        window.location &&
++        window.location.protocol === "https:" &&
++        cs.indexOf("wss://") < 0
++      ) {
++        throw new Error("Secure domains require wss connection");
++      }
++
++      if (Apis.ws_rpc) {
++        Apis.ws_rpc.statusCb = null;
++        Apis.ws_rpc.keepAliveCb = null;
++        Apis.ws_rpc.on_close = null;
++        Apis.ws_rpc.on_reconnect = null;
++      }
++
++      Apis.ws_rpc = new _ChainWebSocket.default(
++        cs,
++        Apis.statusCb,
++        connectTimeout,
++        autoReconnect,
++        function (closed) {
++          if (Apis._db && !closed) {
++            Apis._db.exec("get_objects", [["2.1.0"]]).catch(function (e) {});
++          }
++        }
++      );
++      Apis.init_promise = Apis.ws_rpc
++        .login(rpc_user, rpc_password)
++        .then(function () {
++          //console.log("Connected to API node:", cs);
++          Apis._db = new _GrapheneApi.default(Apis.ws_rpc, "database");
++          Apis._net = new _GrapheneApi.default(
++            Apis.ws_rpc,
++            "network_broadcast"
++          );
++          Apis._hist = new _GrapheneApi.default(Apis.ws_rpc, "history");
++          if (optionalApis.enableOrders)
++            Apis._orders = new _GrapheneApi.default(Apis.ws_rpc, "orders");
++          if (optionalApis.enableCrypto)
++            Apis._crypt = new _GrapheneApi.default(Apis.ws_rpc, "crypto");
++
++          var db_promise = Apis._db.init().then(function () {
++            //https://github.com/cryptonomex/graphene/wiki/chain-locked-tx
++            return Apis._db.exec("get_chain_id", []).then(function (_chain_id) {
++              Apis.chain_id = _chain_id;
++              return _ChainConfig.default.setChainId(_chain_id); //DEBUG console.log("chain_id1",this.chain_id)
++            });
++          });
++
++          Apis.ws_rpc.on_reconnect = function () {
++            if (!Apis.ws_rpc) return;
++            Apis.ws_rpc.login("", "").then(function () {
++              Apis._db.init().then(function () {
++                if (Apis.statusCb) Apis.statusCb("reconnect");
++              });
++
++              Apis._net.init();
++
++              Apis._hist.init();
++
++              if (optionalApis.enableOrders) Apis._orders.init();
++              if (optionalApis.enableCrypto) Apis._crypt.init();
++            });
++          };
++
++          Apis.ws_rpc.on_close = function () {
++            Apis.close().then(function () {
++              if (Apis.closeCb) Apis.closeCb();
++            });
++          };
++
++          var initPromises = [db_promise, Apis._net.init(), Apis._hist.init()];
++          if (optionalApis.enableOrders) initPromises.push(Apis._orders.init());
++          if (optionalApis.enableCrypto) initPromises.push(Apis._crypt.init());
++          return Promise.all(initPromises);
++        })
++        .catch(function (err) {
++          console.error(
++            cs,
++            "Failed to initialize with error",
++            err && err.message
++          );
++          return Apis.close().then(function () {
++            if (Apis && connect) {
++              Apis.connect(cs, connectTimeout, optionalApis);
++            }
++
++            throw err;
++          });
++        });
++    }),
++    close: (function () {
++      var _close = _asyncToGenerator(
++        /*#__PURE__*/ _regeneratorRuntime().mark(function _callee2() {
++          return _regeneratorRuntime().wrap(function _callee2$(_context2) {
++            while (1) {
++              switch ((_context2.prev = _context2.next)) {
++                case 0:
++                  if (!(Apis.ws_rpc && Apis.ws_rpc.ws.readyState === 1)) {
++                    _context2.next = 3;
++                    break;
++                  }
++
++                  _context2.next = 3;
++                  return Apis.ws_rpc.close();
++
++                case 3:
++                  Apis.ws_rpc = null;
++
++                case 4:
++                case "end":
++                  return _context2.stop();
++              }
++            }
++          }, _callee2);
++        })
++      );
++
++      function close() {
++        return _close.apply(this, arguments);
++      }
++
++      return close;
++    })(),
++    db_api: function db_api() {
++      return Apis._db;
++    },
++    network_api: function network_api() {
++      return Apis._net;
++    },
++    history_api: function history_api() {
++      return Apis._hist;
++    },
++    crypto_api: function crypto_api() {
++      return Apis._crypt;
++    },
++    orders_api: function orders_api() {
++      return Apis._orders;
++    },
++    setRpcConnectionStatusCallback: function setRpcConnectionStatusCallback(
++      callback
++    ) {
++      return (Apis.statusCb = callback);
++    }
++  };
++};
 diff --git a/node_modules/meta1-vision-ws/lib/ChainWebSocket.js b/node_modules/meta1-vision-ws/lib/ChainWebSocket.js
 index 7553811..0b9330e 100644
 --- a/node_modules/meta1-vision-ws/lib/ChainWebSocket.js
@@ -350,4 +1185,980 @@ index 7553811..0b9330e 100644
 +});
 +
 +var _default = ChainWebSocket;
++exports.default = _default;
+diff --git a/node_modules/meta1-vision-ws/lib/ConnectionManager.js b/node_modules/meta1-vision-ws/lib/ConnectionManager.js
+index d1dcf86..e0a7420 100644
+--- a/node_modules/meta1-vision-ws/lib/ConnectionManager.js
++++ b/node_modules/meta1-vision-ws/lib/ConnectionManager.js
+@@ -1 +1,969 @@
+-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var Apis=_interopRequireWildcard(require("./ApiInstances")),_ChainWebSocket=_interopRequireDefault(require("./ChainWebSocket"));function _interopRequireDefault(b){return b&&b.__esModule?b:{default:b}}function _interopRequireWildcard(e){if(e&&e.__esModule)return e;var a={};if(null!=e)for(var b in e)if(Object.prototype.hasOwnProperty.call(e,b)){var c=Object.defineProperty&&Object.getOwnPropertyDescriptor?Object.getOwnPropertyDescriptor(e,b):{};c.get||c.set?Object.defineProperty(a,b,c):a[b]=e[b]}return a.default=e,a}function _defineProperty(d,a,b){return a in d?Object.defineProperty(d,a,{value:b,enumerable:!0,configurable:!0,writable:!0}):d[a]=b,d}class Manager{constructor(a){var h=this;let{url:i,urls:b,autoFallback:c,closeCb:d,optionalApis:e,urlChangeCallback:f}=a;_defineProperty(this,"setCloseCb",b=>{this.closeCb=b}),_defineProperty(this,"logFailure",(e,a,b)=>{let c=b&&b.message?b.message:"";console.error(e,"Failed to connect to "+a+(c?" Error: "+JSON.stringify(c):""))}),_defineProperty(this,"_onClose",()=>{this.isConnected=!1,this.closeCb&&(this.closeCb(),this.setCloseCb(null)),this.autoFallback&&this.connectWithFallback()}),_defineProperty(this,"connect",async function(){let d=!(0<arguments.length&&arguments[0]!==void 0)||arguments[0],a=1<arguments.length&&arguments[1]!==void 0?arguments[1]:h.url;try{let b=await Apis.instance(a,d,void 0,h.optionalApis,h._onClose).init_promise;return h.url=a,h.isConnected=!0,b}catch(b){throw await Apis.close(),b}}),_defineProperty(this,"connectWithFallback",async function(){let f=!(0<arguments.length&&arguments[0]!==void 0)||arguments[0],a=1<arguments.length&&arguments[1]!==void 0?arguments[1]:h.url,g=2<arguments.length&&arguments[2]!==void 0?arguments[2]:0,c=3<arguments.length&&arguments[3]!==void 0?arguments[3]:null,d=4<arguments.length&&arguments[4]!==void 0?arguments[4]:null;if(g>h.urls.length)return d(new Error("Tried "+g+" connections, none of which worked: "+JSON.stringify(h.urls.concat(h.url))));try{return await h.connect(f,a)}catch(a){return h.urlChangeCallback&&h.urlChangeCallback(h.urls[g]),h.connectWithFallback(f,h.urls[g],g+1,c,d)}}),_defineProperty(this,"checkConnections",async function(){let i=0<arguments.length&&arguments[0]!==void 0?arguments[0]:"",a=1<arguments.length&&arguments[1]!==void 0?arguments[1]:"",b=2<arguments.length?arguments[2]:void 0,c=3<arguments.length?arguments[3]:void 0,j={},d=h.urls.concat(h.url),e=d.map(async e=>{/* Use default timeout and no reconnecting-websocket */let b=new _ChainWebSocket.default(e,()=>{},void 0,!1);j[e]=new Date().getTime();try{await b.login(i,a);let c={[e]:new Date().getTime()-j[e]};return await b.close(),c}catch(c){return e===h.url?h.url=h.urls[0]:h.urls=h.urls.filter(a=>a!==e),void(await b.close())}});try{let c=await Promise.all(e),a=c.filter(a=>!!a).sort((b,c)=>Object.values(b)[0]-Object.values(c)[0]).reduce((d,b)=>{let c=Object.keys(b)[0];return d[c]=b[c],d},{});return console.log(`Checked ${c.length} connections, ${c.length-Object.keys(a).length} failed`),a}catch(d){return h.checkConnections(i,a,b,c)}}),this.url=i,this.urls=b.filter(a=>a!==i),this.autoFallback=c,this.closeCb=d,this.optionalApis=e||{},this.isConnected=!1,this.urlChangeCallback=f}static close(){return Apis.close()}}var _default=Manager;exports.default=_default;
+\ No newline at end of file
++"use strict";
++
++Object.defineProperty(exports, "__esModule", {
++  value: true
++});
++exports.default = void 0;
++
++var Apis = _interopRequireWildcard(require("./ApiInstances"));
++
++var _ChainWebSocket = _interopRequireDefault(require("./ChainWebSocket"));
++
++function _interopRequireDefault(obj) {
++  return obj && obj.__esModule ? obj : { default: obj };
++}
++
++function _getRequireWildcardCache(nodeInterop) {
++  if (typeof WeakMap !== "function") return null;
++  var cacheBabelInterop = new WeakMap();
++  var cacheNodeInterop = new WeakMap();
++  return (_getRequireWildcardCache = function _getRequireWildcardCache(
++    nodeInterop
++  ) {
++    return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
++  })(nodeInterop);
++}
++
++function _interopRequireWildcard(obj, nodeInterop) {
++  if (!nodeInterop && obj && obj.__esModule) {
++    return obj;
++  }
++  if (obj === null || (typeof obj !== "object" && typeof obj !== "function")) {
++    return { default: obj };
++  }
++  var cache = _getRequireWildcardCache(nodeInterop);
++  if (cache && cache.has(obj)) {
++    return cache.get(obj);
++  }
++  var newObj = {};
++  var hasPropertyDescriptor =
++    Object.defineProperty && Object.getOwnPropertyDescriptor;
++  for (var key in obj) {
++    if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
++      var desc = hasPropertyDescriptor
++        ? Object.getOwnPropertyDescriptor(obj, key)
++        : null;
++      if (desc && (desc.get || desc.set)) {
++        Object.defineProperty(newObj, key, desc);
++      } else {
++        newObj[key] = obj[key];
++      }
++    }
++  }
++  newObj.default = obj;
++  if (cache) {
++    cache.set(obj, newObj);
++  }
++  return newObj;
++}
++
++function _regeneratorRuntime() {
++  "use strict";
++  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime =
++    function _regeneratorRuntime() {
++      return exports;
++    };
++  var exports = {},
++    Op = Object.prototype,
++    hasOwn = Op.hasOwnProperty,
++    $Symbol = "function" == typeof Symbol ? Symbol : {},
++    iteratorSymbol = $Symbol.iterator || "@@iterator",
++    asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator",
++    toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
++  function define(obj, key, value) {
++    return (
++      Object.defineProperty(obj, key, {
++        value: value,
++        enumerable: !0,
++        configurable: !0,
++        writable: !0
++      }),
++        obj[key]
++    );
++  }
++  try {
++    define({}, "");
++  } catch (err) {
++    define = function define(obj, key, value) {
++      return (obj[key] = value);
++    };
++  }
++  function wrap(innerFn, outerFn, self, tryLocsList) {
++    var protoGenerator =
++        outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator,
++      generator = Object.create(protoGenerator.prototype),
++      context = new Context(tryLocsList || []);
++    return (
++      (generator._invoke = (function (innerFn, self, context) {
++        var state = "suspendedStart";
++        return function (method, arg) {
++          if ("executing" === state)
++            throw new Error("Generator is already running");
++          if ("completed" === state) {
++            if ("throw" === method) throw arg;
++            return doneResult();
++          }
++          for (context.method = method, context.arg = arg; ; ) {
++            var delegate = context.delegate;
++            if (delegate) {
++              var delegateResult = maybeInvokeDelegate(delegate, context);
++              if (delegateResult) {
++                if (delegateResult === ContinueSentinel) continue;
++                return delegateResult;
++              }
++            }
++            if ("next" === context.method)
++              context.sent = context._sent = context.arg;
++            else if ("throw" === context.method) {
++              if ("suspendedStart" === state)
++                throw ((state = "completed"), context.arg);
++              context.dispatchException(context.arg);
++            } else
++              "return" === context.method &&
++              context.abrupt("return", context.arg);
++            state = "executing";
++            var record = tryCatch(innerFn, self, context);
++            if ("normal" === record.type) {
++              if (
++                ((state = context.done ? "completed" : "suspendedYield"),
++                record.arg === ContinueSentinel)
++              )
++                continue;
++              return { value: record.arg, done: context.done };
++            }
++            "throw" === record.type &&
++            ((state = "completed"),
++              (context.method = "throw"),
++              (context.arg = record.arg));
++          }
++        };
++      })(innerFn, self, context)),
++        generator
++    );
++  }
++  function tryCatch(fn, obj, arg) {
++    try {
++      return { type: "normal", arg: fn.call(obj, arg) };
++    } catch (err) {
++      return { type: "throw", arg: err };
++    }
++  }
++  exports.wrap = wrap;
++  var ContinueSentinel = {};
++  function Generator() {}
++  function GeneratorFunction() {}
++  function GeneratorFunctionPrototype() {}
++  var IteratorPrototype = {};
++  define(IteratorPrototype, iteratorSymbol, function () {
++    return this;
++  });
++  var getProto = Object.getPrototypeOf,
++    NativeIteratorPrototype = getProto && getProto(getProto(values([])));
++  NativeIteratorPrototype &&
++  NativeIteratorPrototype !== Op &&
++  hasOwn.call(NativeIteratorPrototype, iteratorSymbol) &&
++  (IteratorPrototype = NativeIteratorPrototype);
++  var Gp =
++    (GeneratorFunctionPrototype.prototype =
++      Generator.prototype =
++        Object.create(IteratorPrototype));
++  function defineIteratorMethods(prototype) {
++    ["next", "throw", "return"].forEach(function (method) {
++      define(prototype, method, function (arg) {
++        return this._invoke(method, arg);
++      });
++    });
++  }
++  function AsyncIterator(generator, PromiseImpl) {
++    function invoke(method, arg, resolve, reject) {
++      var record = tryCatch(generator[method], generator, arg);
++      if ("throw" !== record.type) {
++        var result = record.arg,
++          value = result.value;
++        return value &&
++        "object" == typeof value &&
++        hasOwn.call(value, "__await")
++          ? PromiseImpl.resolve(value.__await).then(
++            function (value) {
++              invoke("next", value, resolve, reject);
++            },
++            function (err) {
++              invoke("throw", err, resolve, reject);
++            }
++          )
++          : PromiseImpl.resolve(value).then(
++            function (unwrapped) {
++              (result.value = unwrapped), resolve(result);
++            },
++            function (error) {
++              return invoke("throw", error, resolve, reject);
++            }
++          );
++      }
++      reject(record.arg);
++    }
++    var previousPromise;
++    this._invoke = function (method, arg) {
++      function callInvokeWithMethodAndArg() {
++        return new PromiseImpl(function (resolve, reject) {
++          invoke(method, arg, resolve, reject);
++        });
++      }
++      return (previousPromise = previousPromise
++        ? previousPromise.then(
++          callInvokeWithMethodAndArg,
++          callInvokeWithMethodAndArg
++        )
++        : callInvokeWithMethodAndArg());
++    };
++  }
++  function maybeInvokeDelegate(delegate, context) {
++    var method = delegate.iterator[context.method];
++    if (undefined === method) {
++      if (((context.delegate = null), "throw" === context.method)) {
++        if (
++          delegate.iterator.return &&
++          ((context.method = "return"),
++            (context.arg = undefined),
++            maybeInvokeDelegate(delegate, context),
++          "throw" === context.method)
++        )
++          return ContinueSentinel;
++        (context.method = "throw"),
++          (context.arg = new TypeError(
++            "The iterator does not provide a 'throw' method"
++          ));
++      }
++      return ContinueSentinel;
++    }
++    var record = tryCatch(method, delegate.iterator, context.arg);
++    if ("throw" === record.type)
++      return (
++        (context.method = "throw"),
++          (context.arg = record.arg),
++          (context.delegate = null),
++          ContinueSentinel
++      );
++    var info = record.arg;
++    return info
++      ? info.done
++        ? ((context[delegate.resultName] = info.value),
++          (context.next = delegate.nextLoc),
++        "return" !== context.method &&
++        ((context.method = "next"), (context.arg = undefined)),
++          (context.delegate = null),
++          ContinueSentinel)
++        : info
++      : ((context.method = "throw"),
++        (context.arg = new TypeError("iterator result is not an object")),
++        (context.delegate = null),
++        ContinueSentinel);
++  }
++  function pushTryEntry(locs) {
++    var entry = { tryLoc: locs[0] };
++    1 in locs && (entry.catchLoc = locs[1]),
++    2 in locs && ((entry.finallyLoc = locs[2]), (entry.afterLoc = locs[3])),
++      this.tryEntries.push(entry);
++  }
++  function resetTryEntry(entry) {
++    var record = entry.completion || {};
++    (record.type = "normal"), delete record.arg, (entry.completion = record);
++  }
++  function Context(tryLocsList) {
++    (this.tryEntries = [{ tryLoc: "root" }]),
++      tryLocsList.forEach(pushTryEntry, this),
++      this.reset(!0);
++  }
++  function values(iterable) {
++    if (iterable) {
++      var iteratorMethod = iterable[iteratorSymbol];
++      if (iteratorMethod) return iteratorMethod.call(iterable);
++      if ("function" == typeof iterable.next) return iterable;
++      if (!isNaN(iterable.length)) {
++        var i = -1,
++          next = function next() {
++            for (; ++i < iterable.length; ) {
++              if (hasOwn.call(iterable, i))
++                return (next.value = iterable[i]), (next.done = !1), next;
++            }
++            return (next.value = undefined), (next.done = !0), next;
++          };
++        return (next.next = next);
++      }
++    }
++    return { next: doneResult };
++  }
++  function doneResult() {
++    return { value: undefined, done: !0 };
++  }
++  return (
++    (GeneratorFunction.prototype = GeneratorFunctionPrototype),
++      define(Gp, "constructor", GeneratorFunctionPrototype),
++      define(GeneratorFunctionPrototype, "constructor", GeneratorFunction),
++      (GeneratorFunction.displayName = define(
++        GeneratorFunctionPrototype,
++        toStringTagSymbol,
++        "GeneratorFunction"
++      )),
++      (exports.isGeneratorFunction = function (genFun) {
++        var ctor = "function" == typeof genFun && genFun.constructor;
++        return (
++          !!ctor &&
++          (ctor === GeneratorFunction ||
++            "GeneratorFunction" === (ctor.displayName || ctor.name))
++        );
++      }),
++      (exports.mark = function (genFun) {
++        return (
++          Object.setPrototypeOf
++            ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype)
++            : ((genFun.__proto__ = GeneratorFunctionPrototype),
++              define(genFun, toStringTagSymbol, "GeneratorFunction")),
++            (genFun.prototype = Object.create(Gp)),
++            genFun
++        );
++      }),
++      (exports.awrap = function (arg) {
++        return { __await: arg };
++      }),
++      defineIteratorMethods(AsyncIterator.prototype),
++      define(AsyncIterator.prototype, asyncIteratorSymbol, function () {
++        return this;
++      }),
++      (exports.AsyncIterator = AsyncIterator),
++      (exports.async = function (
++        innerFn,
++        outerFn,
++        self,
++        tryLocsList,
++        PromiseImpl
++      ) {
++        void 0 === PromiseImpl && (PromiseImpl = Promise);
++        var iter = new AsyncIterator(
++          wrap(innerFn, outerFn, self, tryLocsList),
++          PromiseImpl
++        );
++        return exports.isGeneratorFunction(outerFn)
++          ? iter
++          : iter.next().then(function (result) {
++            return result.done ? result.value : iter.next();
++          });
++      }),
++      defineIteratorMethods(Gp),
++      define(Gp, toStringTagSymbol, "Generator"),
++      define(Gp, iteratorSymbol, function () {
++        return this;
++      }),
++      define(Gp, "toString", function () {
++        return "[object Generator]";
++      }),
++      (exports.keys = function (object) {
++        var keys = [];
++        for (var key in object) {
++          keys.push(key);
++        }
++        return (
++          keys.reverse(),
++            function next() {
++              for (; keys.length; ) {
++                var key = keys.pop();
++                if (key in object)
++                  return (next.value = key), (next.done = !1), next;
++              }
++              return (next.done = !0), next;
++            }
++        );
++      }),
++      (exports.values = values),
++      (Context.prototype = {
++        constructor: Context,
++        reset: function reset(skipTempReset) {
++          if (
++            ((this.prev = 0),
++              (this.next = 0),
++              (this.sent = this._sent = undefined),
++              (this.done = !1),
++              (this.delegate = null),
++              (this.method = "next"),
++              (this.arg = undefined),
++              this.tryEntries.forEach(resetTryEntry),
++              !skipTempReset)
++          )
++            for (var name in this) {
++              "t" === name.charAt(0) &&
++              hasOwn.call(this, name) &&
++              !isNaN(+name.slice(1)) &&
++              (this[name] = undefined);
++            }
++        },
++        stop: function stop() {
++          this.done = !0;
++          var rootRecord = this.tryEntries[0].completion;
++          if ("throw" === rootRecord.type) throw rootRecord.arg;
++          return this.rval;
++        },
++        dispatchException: function dispatchException(exception) {
++          if (this.done) throw exception;
++          var context = this;
++          function handle(loc, caught) {
++            return (
++              (record.type = "throw"),
++                (record.arg = exception),
++                (context.next = loc),
++              caught && ((context.method = "next"), (context.arg = undefined)),
++                !!caught
++            );
++          }
++          for (var i = this.tryEntries.length - 1; i >= 0; --i) {
++            var entry = this.tryEntries[i],
++              record = entry.completion;
++            if ("root" === entry.tryLoc) return handle("end");
++            if (entry.tryLoc <= this.prev) {
++              var hasCatch = hasOwn.call(entry, "catchLoc"),
++                hasFinally = hasOwn.call(entry, "finallyLoc");
++              if (hasCatch && hasFinally) {
++                if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
++                if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
++              } else if (hasCatch) {
++                if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
++              } else {
++                if (!hasFinally)
++                  throw new Error("try statement without catch or finally");
++                if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
++              }
++            }
++          }
++        },
++        abrupt: function abrupt(type, arg) {
++          for (var i = this.tryEntries.length - 1; i >= 0; --i) {
++            var entry = this.tryEntries[i];
++            if (
++              entry.tryLoc <= this.prev &&
++              hasOwn.call(entry, "finallyLoc") &&
++              this.prev < entry.finallyLoc
++            ) {
++              var finallyEntry = entry;
++              break;
++            }
++          }
++          finallyEntry &&
++          ("break" === type || "continue" === type) &&
++          finallyEntry.tryLoc <= arg &&
++          arg <= finallyEntry.finallyLoc &&
++          (finallyEntry = null);
++          var record = finallyEntry ? finallyEntry.completion : {};
++          return (
++            (record.type = type),
++              (record.arg = arg),
++              finallyEntry
++                ? ((this.method = "next"),
++                  (this.next = finallyEntry.finallyLoc),
++                  ContinueSentinel)
++                : this.complete(record)
++          );
++        },
++        complete: function complete(record, afterLoc) {
++          if ("throw" === record.type) throw record.arg;
++          return (
++            "break" === record.type || "continue" === record.type
++              ? (this.next = record.arg)
++              : "return" === record.type
++                ? ((this.rval = this.arg = record.arg),
++                  (this.method = "return"),
++                  (this.next = "end"))
++                : "normal" === record.type && afterLoc && (this.next = afterLoc),
++              ContinueSentinel
++          );
++        },
++        finish: function finish(finallyLoc) {
++          for (var i = this.tryEntries.length - 1; i >= 0; --i) {
++            var entry = this.tryEntries[i];
++            if (entry.finallyLoc === finallyLoc)
++              return (
++                this.complete(entry.completion, entry.afterLoc),
++                  resetTryEntry(entry),
++                  ContinueSentinel
++              );
++          }
++        },
++        catch: function _catch(tryLoc) {
++          for (var i = this.tryEntries.length - 1; i >= 0; --i) {
++            var entry = this.tryEntries[i];
++            if (entry.tryLoc === tryLoc) {
++              var record = entry.completion;
++              if ("throw" === record.type) {
++                var thrown = record.arg;
++                resetTryEntry(entry);
++              }
++              return thrown;
++            }
++          }
++          throw new Error("illegal catch attempt");
++        },
++        delegateYield: function delegateYield(iterable, resultName, nextLoc) {
++          return (
++            (this.delegate = {
++              iterator: values(iterable),
++              resultName: resultName,
++              nextLoc: nextLoc
++            }),
++            "next" === this.method && (this.arg = undefined),
++              ContinueSentinel
++          );
++        }
++      }),
++      exports
++  );
++}
++
++function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
++  try {
++    var info = gen[key](arg);
++    var value = info.value;
++  } catch (error) {
++    reject(error);
++    return;
++  }
++  if (info.done) {
++    resolve(value);
++  } else {
++    Promise.resolve(value).then(_next, _throw);
++  }
++}
++
++function _asyncToGenerator(fn) {
++  return function () {
++    var self = this,
++      args = arguments;
++    return new Promise(function (resolve, reject) {
++      var gen = fn.apply(self, args);
++      function _next(value) {
++        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
++      }
++      function _throw(err) {
++        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
++      }
++      _next(undefined);
++    });
++  };
++}
++
++function _classCallCheck(instance, Constructor) {
++  if (!(instance instanceof Constructor)) {
++    throw new TypeError("Cannot call a class as a function");
++  }
++}
++
++function _defineProperties(target, props) {
++  for (var i = 0; i < props.length; i++) {
++    var descriptor = props[i];
++    descriptor.enumerable = descriptor.enumerable || false;
++    descriptor.configurable = true;
++    if ("value" in descriptor) descriptor.writable = true;
++    Object.defineProperty(target, descriptor.key, descriptor);
++  }
++}
++
++function _createClass(Constructor, protoProps, staticProps) {
++  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
++  if (staticProps) _defineProperties(Constructor, staticProps);
++  Object.defineProperty(Constructor, "prototype", { writable: false });
++  return Constructor;
++}
++
++function _defineProperty(obj, key, value) {
++  if (key in obj) {
++    Object.defineProperty(obj, key, {
++      value: value,
++      enumerable: true,
++      configurable: true,
++      writable: true
++    });
++  } else {
++    obj[key] = value;
++  }
++  return obj;
++}
++
++var Manager = /*#__PURE__*/ (function () {
++  function Manager(_ref) {
++    var _this = this;
++
++    var _url = _ref.url,
++      urls = _ref.urls,
++      autoFallback = _ref.autoFallback,
++      closeCb = _ref.closeCb,
++      optionalApis = _ref.optionalApis,
++      urlChangeCallback = _ref.urlChangeCallback;
++
++    _classCallCheck(this, Manager);
++
++    _defineProperty(this, "setCloseCb", function (cb) {
++      _this.closeCb = cb;
++    });
++
++    _defineProperty(this, "logFailure", function (method, url, err) {
++      var message = err && err.message ? err.message : "";
++      console.error(
++        method,
++        "Failed to connect to " +
++        url +
++        (message ? " Error: " + JSON.stringify(message) : "")
++      );
++    });
++
++    _defineProperty(this, "_onClose", function () {
++      _this.isConnected = false;
++
++      if (_this.closeCb) {
++        _this.closeCb();
++
++        _this.setCloseCb(null);
++      }
++
++      _this.autoFallback && _this.connectWithFallback();
++    });
++
++    _defineProperty(
++      this,
++      "connect",
++      /*#__PURE__*/ _asyncToGenerator(
++        /*#__PURE__*/ _regeneratorRuntime().mark(function _callee() {
++          var connect,
++            url,
++            res,
++            _args = arguments;
++          return _regeneratorRuntime().wrap(
++            function _callee$(_context) {
++              while (1) {
++                switch ((_context.prev = _context.next)) {
++                  case 0:
++                    connect =
++                      _args.length > 0 && _args[0] !== undefined
++                        ? _args[0]
++                        : true;
++                    url =
++                      _args.length > 1 && _args[1] !== undefined
++                        ? _args[1]
++                        : _this.url;
++                    _context.prev = 2;
++                    _context.next = 5;
++                    return Apis.instance(
++                      url,
++                      connect,
++                      undefined,
++                      _this.optionalApis,
++                      _this._onClose
++                    ).init_promise;
++
++                  case 5:
++                    res = _context.sent;
++                    _this.url = url;
++                    _this.isConnected = true;
++                    return _context.abrupt("return", res);
++
++                  case 11:
++                    _context.prev = 11;
++                    _context.t0 = _context["catch"](2);
++                    _context.next = 15;
++                    return Apis.close();
++
++                  case 15:
++                    throw _context.t0;
++
++                  case 16:
++                  case "end":
++                    return _context.stop();
++                }
++              }
++            },
++            _callee,
++            null,
++            [[2, 11]]
++          );
++        })
++      )
++    );
++
++    _defineProperty(
++      this,
++      "connectWithFallback",
++      /*#__PURE__*/ _asyncToGenerator(
++        /*#__PURE__*/ _regeneratorRuntime().mark(function _callee2() {
++          var connect,
++            url,
++            index,
++            resolve,
++            reject,
++            _args2 = arguments;
++          return _regeneratorRuntime().wrap(
++            function _callee2$(_context2) {
++              while (1) {
++                switch ((_context2.prev = _context2.next)) {
++                  case 0:
++                    connect =
++                      _args2.length > 0 && _args2[0] !== undefined
++                        ? _args2[0]
++                        : true;
++                    url =
++                      _args2.length > 1 && _args2[1] !== undefined
++                        ? _args2[1]
++                        : _this.url;
++                    index =
++                      _args2.length > 2 && _args2[2] !== undefined
++                        ? _args2[2]
++                        : 0;
++                    resolve =
++                      _args2.length > 3 && _args2[3] !== undefined
++                        ? _args2[3]
++                        : null;
++                    reject =
++                      _args2.length > 4 && _args2[4] !== undefined
++                        ? _args2[4]
++                        : null;
++
++                    if (!(index > _this.urls.length)) {
++                      _context2.next = 7;
++                      break;
++                    }
++
++                    return _context2.abrupt(
++                      "return",
++                      reject(
++                        new Error(
++                          "Tried " +
++                          index +
++                          " connections, none of which worked: " +
++                          JSON.stringify(_this.urls.concat(_this.url))
++                        )
++                      )
++                    );
++
++                  case 7:
++                    _context2.prev = 7;
++                    _context2.next = 10;
++                    return _this.connect(connect, url);
++
++                  case 10:
++                    return _context2.abrupt("return", _context2.sent);
++
++                  case 13:
++                    _context2.prev = 13;
++                    _context2.t0 = _context2["catch"](7);
++                    if (_this.urlChangeCallback)
++                      _this.urlChangeCallback(_this.urls[index]);
++                    return _context2.abrupt(
++                      "return",
++                      _this.connectWithFallback(
++                        connect,
++                        _this.urls[index],
++                        index + 1,
++                        resolve,
++                        reject
++                      )
++                    );
++
++                  case 17:
++                  case "end":
++                    return _context2.stop();
++                }
++              }
++            },
++            _callee2,
++            null,
++            [[7, 13]]
++          );
++        })
++      )
++    );
++
++    _defineProperty(
++      this,
++      "checkConnections",
++      /*#__PURE__*/ _asyncToGenerator(
++        /*#__PURE__*/ _regeneratorRuntime().mark(function _callee4() {
++          var rpc_user,
++            rpc_password,
++            resolve,
++            reject,
++            connectionStartTimes,
++            fullList,
++            connectionPromises,
++            res,
++            final,
++            _args4 = arguments;
++          return _regeneratorRuntime().wrap(
++            function _callee4$(_context4) {
++              while (1) {
++                switch ((_context4.prev = _context4.next)) {
++                  case 0:
++                    rpc_user =
++                      _args4.length > 0 && _args4[0] !== undefined
++                        ? _args4[0]
++                        : "";
++                    rpc_password =
++                      _args4.length > 1 && _args4[1] !== undefined
++                        ? _args4[1]
++                        : "";
++                    resolve = _args4.length > 2 ? _args4[2] : undefined;
++                    reject = _args4.length > 3 ? _args4[3] : undefined;
++                    connectionStartTimes = {};
++                    fullList = _this.urls.concat(_this.url);
++                    connectionPromises = fullList.map(
++                      /*#__PURE__*/ (function () {
++                        var _ref5 = _asyncToGenerator(
++                          /*#__PURE__*/ _regeneratorRuntime().mark(
++                            function _callee3(url) {
++                              var conn, result;
++                              return _regeneratorRuntime().wrap(
++                                function _callee3$(_context3) {
++                                  while (1) {
++                                    switch ((_context3.prev = _context3.next)) {
++                                      case 0:
++                                        /* Use default timeout and no reconnecting-websocket */
++                                        conn = new _ChainWebSocket.default(
++                                          url,
++                                          function () {},
++                                          4000,
++                                          true
++                                        );
++                                        connectionStartTimes[url] =
++                                          new Date().getTime();
++                                        _context3.prev = 2;
++                                        _context3.next = 5;
++                                        return conn.login(
++                                          rpc_user,
++                                          rpc_password
++                                        );
++
++                                      case 5:
++                                        result = {
++                                          [url]:
++                                          new Date().getTime() -
++                                          connectionStartTimes[url]
++                                        };
++                                        _context3.next = 8;
++                                        return conn.close();
++
++                                      case 8:
++                                        return _context3.abrupt(
++                                          "return",
++                                          result
++                                        );
++
++                                      case 11:
++                                        _context3.prev = 11;
++                                        _context3.t0 = _context3["catch"](2);
++
++                                        if (url === _this.url) {
++                                          _this.url = _this.urls[0];
++                                        } else {
++                                          _this.urls = _this.urls.filter(
++                                            function (a) {
++                                              return a !== url;
++                                            }
++                                          );
++                                        }
++
++                                        _context3.next = 16;
++                                        return conn.close();
++
++                                      case 16:
++                                        return _context3.abrupt("return");
++
++                                      case 17:
++                                      case "end":
++                                        return _context3.stop();
++                                    }
++                                  }
++                                },
++                                _callee3,
++                                null,
++                                [[2, 11]]
++                              );
++                            }
++                          )
++                        );
++
++                        return function (_x) {
++                          return _ref5.apply(this, arguments);
++                        };
++                      })()
++                    );
++                    _context4.prev = 7;
++                    _context4.next = 10;
++                    return Promise.all(connectionPromises);
++
++                  case 10:
++                    res = _context4.sent;
++                    final = res
++                      .filter(function (a) {
++                        return !!a;
++                      })
++                      .sort(function (a, b) {
++                        return Object.values(a)[0] - Object.values(b)[0];
++                      })
++                      .reduce(function (f, a) {
++                        var key = Object.keys(a)[0];
++                        f[key] = a[key];
++                        return f;
++                      }, {});
++                    console.log(
++                      `Checked ${res.length} connections, ${
++                        res.length - Object.keys(final).length
++                      } failed`
++                    );
++                    return _context4.abrupt("return", final);
++
++                  case 16:
++                    _context4.prev = 16;
++                    _context4.t0 = _context4["catch"](7);
++                    return _context4.abrupt(
++                      "return",
++                      _this.checkConnections(
++                        rpc_user,
++                        rpc_password,
++                        resolve,
++                        reject
++                      )
++                    );
++
++                  case 19:
++                  case "end":
++                    return _context4.stop();
++                }
++              }
++            },
++            _callee4,
++            null,
++            [[7, 16]]
++          );
++        })
++      )
++    );
++
++    this.url = _url;
++    this.urls = urls.filter(function (a) {
++      return a !== _url;
++    });
++    this.autoFallback = autoFallback;
++    this.closeCb = closeCb;
++    this.optionalApis = optionalApis || {};
++    this.isConnected = false;
++    this.urlChangeCallback = urlChangeCallback;
++  }
++
++  _createClass(Manager, null, [
++    {
++      key: "close",
++      value: function close() {
++        return Apis.close();
++      }
++    }
++  ]);
++
++  return Manager;
++})();
++
++var _default = Manager;
 +exports.default = _default;
