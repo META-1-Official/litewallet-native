@@ -1,8 +1,8 @@
 diff --git a/node_modules/meta1-vision-ws/lib/ApiInstances.js b/node_modules/meta1-vision-ws/lib/ApiInstances.js
-index 3d13f47..39b5ae4 100644
+index 3d13f47..3dd88a1 100644
 --- a/node_modules/meta1-vision-ws/lib/ApiInstances.js
 +++ b/node_modules/meta1-vision-ws/lib/ApiInstances.js
-@@ -1,2 +1,828 @@
+@@ -1,2 +1,827 @@
 -"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.orders=exports.crypto=exports.history=exports.network=exports.db=exports.close=exports.chainId=exports.instance=exports.reset=exports.setAutoReconnect=exports.setRpcConnectionStatusCallback=void 0;var _ChainWebSocket=_interopRequireDefault(require("./ChainWebSocket")),_GrapheneApi=_interopRequireDefault(require("./GrapheneApi")),_ChainConfig=_interopRequireDefault(require("./ChainConfig"));function _interopRequireDefault(b){return b&&b.__esModule?b:{default:b}}var autoReconnect=!1,Apis=null,statusCb=null;// by default don't use reconnecting-websocket
 -const setRpcConnectionStatusCallback=b=>{statusCb=b,Apis&&Apis.setRpcConnectionStatusCallback(b)};exports.setRpcConnectionStatusCallback=setRpcConnectionStatusCallback;const setAutoReconnect=b=>{autoReconnect=b};exports.setAutoReconnect=setAutoReconnect;const reset=function(){let f=0<arguments.length&&arguments[0]!==void 0?arguments[0]:"ws://localhost:8090",a=1<arguments.length?arguments[1]:void 0,b=2<arguments.length&&arguments[2]!==void 0?arguments[2]:4e3,c=3<arguments.length?arguments[3]:void 0,d=4<arguments.length?arguments[4]:void 0;return close().then(()=>(Apis=newApis(),Apis.setRpcConnectionStatusCallback(statusCb),Apis&&a&&Apis.connect(f,b,c,d),Apis))};exports.reset=reset;const instance=function(){let f=0<arguments.length&&arguments[0]!==void 0?arguments[0]:"ws://localhost:8090",a=1<arguments.length?arguments[1]:void 0,b=2<arguments.length&&arguments[2]!==void 0?arguments[2]:4e3,c=3<arguments.length?arguments[3]:void 0,d=4<arguments.length?arguments[4]:void 0;return Apis||(Apis=newApis(),Apis.setRpcConnectionStatusCallback(statusCb)),Apis&&a&&Apis.connect(f,b,c),d&&(Apis.closeCb=d),Apis};exports.instance=instance;const chainId=()=>instance().chain_id;exports.chainId=chainId;const close=async()=>{Apis&&(await Apis.close(),Apis=null)};exports.close=close;const get=d=>new Proxy([],{get:(a,e)=>function(){for(var a=arguments.length,c=Array(a),b=0;b<a;b++)c[b]=arguments[b];return Apis[d].exec(e,[...c])}}),db=get("_db");exports.db=db;const network=get("_net");exports.network=network;const history=get("_hist");exports.history=history;const crypto=get("_crypt");exports.crypto=crypto;const orders=get("_orders");exports.orders=orders;const newApis=()=>({connect:function(d,a){let e=2<arguments.length&&void 0!==arguments[2]?arguments[2]:{enableCrypto:!1,enableOrders:!1};if(Apis.url=d,"undefined"!=typeof window&&window.location&&"https:"===window.location.protocol&&0>d.indexOf("wss://"))throw new Error("Secure domains require wss connection");Apis.ws_rpc&&(Apis.ws_rpc.statusCb=null,Apis.ws_rpc.keepAliveCb=null,Apis.ws_rpc.on_close=null,Apis.ws_rpc.on_reconnect=null),Apis.ws_rpc=new _ChainWebSocket.default(d,Apis.statusCb,a,autoReconnect,b=>{Apis._db&&!b&&Apis._db.exec("get_objects",[["2.1.0"]]).catch(()=>{})}),Apis.init_promise=Apis.ws_rpc.login("","").then(()=>{Apis._db=new _GrapheneApi.default(Apis.ws_rpc,"database"),Apis._net=new _GrapheneApi.default(Apis.ws_rpc,"network_broadcast"),Apis._hist=new _GrapheneApi.default(Apis.ws_rpc,"history"),e.enableOrders&&(Apis._orders=new _GrapheneApi.default(Apis.ws_rpc,"orders")),e.enableCrypto&&(Apis._crypt=new _GrapheneApi.default(Apis.ws_rpc,"crypto"));var c=Apis._db.init().then(()=>Apis._db.exec("get_chain_id",[]).then(b=>(Apis.chain_id=b,_ChainConfig.default.setChainId(b))));Apis.ws_rpc.on_reconnect=()=>{Apis.ws_rpc&&Apis.ws_rpc.login("","").then(()=>{Apis._db.init().then(()=>{Apis.statusCb&&Apis.statusCb("reconnect")}),Apis._net.init(),Apis._hist.init(),e.enableOrders&&Apis._orders.init(),e.enableCrypto&&Apis._crypt.init()})},Apis.ws_rpc.on_close=()=>{Apis.close().then(()=>{Apis.closeCb&&Apis.closeCb()})};let a=[c,Apis._net.init(),Apis._hist.init()];return e.enableOrders&&a.push(Apis._orders.init()),e.enableCrypto&&a.push(Apis._crypt.init()),Promise.all(a)}).catch(a=>(console.error(d,"Failed to initialize with error",a&&a.message),Apis.close().then(()=>{throw a})))},close:async()=>{Apis.ws_rpc&&1===Apis.ws_rpc.ws.readyState&&(await Apis.ws_rpc.close()),Apis.ws_rpc=null},db_api:()=>Apis._db,network_api:()=>Apis._net,history_api:()=>Apis._hist,crypto_api:()=>Apis._crypt,orders_api:()=>Apis._orders,setRpcConnectionStatusCallback:b=>Apis.statusCb=b});
 \ No newline at end of file
@@ -769,14 +769,13 @@ index 3d13f47..39b5ae4 100644
 +            "Failed to initialize with error",
 +            err && err.message
 +          );
-+          throw err;
-+          // return Apis.close().then(function () {
-+          //   // if (Apis && Apis.connect) {
-+          //   //   Apis.connect(cs, connectTimeout, optionalApis);
-+          //   // }
-+          //
-+          //   throw err;
-+          // });
++          return Apis.close().then(function () {
++            if (Apis && Apis.connect) {
++              Apis.connect(cs, connectTimeout, optionalApis);
++            }
++
++            throw err;
++          });
 +        });
 +    }),
 +    close: (function () {
