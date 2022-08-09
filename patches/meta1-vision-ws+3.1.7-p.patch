@@ -1,8 +1,8 @@
 diff --git a/node_modules/meta1-vision-ws/lib/ApiInstances.js b/node_modules/meta1-vision-ws/lib/ApiInstances.js
-index 3d13f47..f74482c 100644
+index 3d13f47..39b5ae4 100644
 --- a/node_modules/meta1-vision-ws/lib/ApiInstances.js
 +++ b/node_modules/meta1-vision-ws/lib/ApiInstances.js
-@@ -1,2 +1,827 @@
+@@ -1,2 +1,828 @@
 -"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.orders=exports.crypto=exports.history=exports.network=exports.db=exports.close=exports.chainId=exports.instance=exports.reset=exports.setAutoReconnect=exports.setRpcConnectionStatusCallback=void 0;var _ChainWebSocket=_interopRequireDefault(require("./ChainWebSocket")),_GrapheneApi=_interopRequireDefault(require("./GrapheneApi")),_ChainConfig=_interopRequireDefault(require("./ChainConfig"));function _interopRequireDefault(b){return b&&b.__esModule?b:{default:b}}var autoReconnect=!1,Apis=null,statusCb=null;// by default don't use reconnecting-websocket
 -const setRpcConnectionStatusCallback=b=>{statusCb=b,Apis&&Apis.setRpcConnectionStatusCallback(b)};exports.setRpcConnectionStatusCallback=setRpcConnectionStatusCallback;const setAutoReconnect=b=>{autoReconnect=b};exports.setAutoReconnect=setAutoReconnect;const reset=function(){let f=0<arguments.length&&arguments[0]!==void 0?arguments[0]:"ws://localhost:8090",a=1<arguments.length?arguments[1]:void 0,b=2<arguments.length&&arguments[2]!==void 0?arguments[2]:4e3,c=3<arguments.length?arguments[3]:void 0,d=4<arguments.length?arguments[4]:void 0;return close().then(()=>(Apis=newApis(),Apis.setRpcConnectionStatusCallback(statusCb),Apis&&a&&Apis.connect(f,b,c,d),Apis))};exports.reset=reset;const instance=function(){let f=0<arguments.length&&arguments[0]!==void 0?arguments[0]:"ws://localhost:8090",a=1<arguments.length?arguments[1]:void 0,b=2<arguments.length&&arguments[2]!==void 0?arguments[2]:4e3,c=3<arguments.length?arguments[3]:void 0,d=4<arguments.length?arguments[4]:void 0;return Apis||(Apis=newApis(),Apis.setRpcConnectionStatusCallback(statusCb)),Apis&&a&&Apis.connect(f,b,c),d&&(Apis.closeCb=d),Apis};exports.instance=instance;const chainId=()=>instance().chain_id;exports.chainId=chainId;const close=async()=>{Apis&&(await Apis.close(),Apis=null)};exports.close=close;const get=d=>new Proxy([],{get:(a,e)=>function(){for(var a=arguments.length,c=Array(a),b=0;b<a;b++)c[b]=arguments[b];return Apis[d].exec(e,[...c])}}),db=get("_db");exports.db=db;const network=get("_net");exports.network=network;const history=get("_hist");exports.history=history;const crypto=get("_crypt");exports.crypto=crypto;const orders=get("_orders");exports.orders=orders;const newApis=()=>({connect:function(d,a){let e=2<arguments.length&&void 0!==arguments[2]?arguments[2]:{enableCrypto:!1,enableOrders:!1};if(Apis.url=d,"undefined"!=typeof window&&window.location&&"https:"===window.location.protocol&&0>d.indexOf("wss://"))throw new Error("Secure domains require wss connection");Apis.ws_rpc&&(Apis.ws_rpc.statusCb=null,Apis.ws_rpc.keepAliveCb=null,Apis.ws_rpc.on_close=null,Apis.ws_rpc.on_reconnect=null),Apis.ws_rpc=new _ChainWebSocket.default(d,Apis.statusCb,a,autoReconnect,b=>{Apis._db&&!b&&Apis._db.exec("get_objects",[["2.1.0"]]).catch(()=>{})}),Apis.init_promise=Apis.ws_rpc.login("","").then(()=>{Apis._db=new _GrapheneApi.default(Apis.ws_rpc,"database"),Apis._net=new _GrapheneApi.default(Apis.ws_rpc,"network_broadcast"),Apis._hist=new _GrapheneApi.default(Apis.ws_rpc,"history"),e.enableOrders&&(Apis._orders=new _GrapheneApi.default(Apis.ws_rpc,"orders")),e.enableCrypto&&(Apis._crypt=new _GrapheneApi.default(Apis.ws_rpc,"crypto"));var c=Apis._db.init().then(()=>Apis._db.exec("get_chain_id",[]).then(b=>(Apis.chain_id=b,_ChainConfig.default.setChainId(b))));Apis.ws_rpc.on_reconnect=()=>{Apis.ws_rpc&&Apis.ws_rpc.login("","").then(()=>{Apis._db.init().then(()=>{Apis.statusCb&&Apis.statusCb("reconnect")}),Apis._net.init(),Apis._hist.init(),e.enableOrders&&Apis._orders.init(),e.enableCrypto&&Apis._crypt.init()})},Apis.ws_rpc.on_close=()=>{Apis.close().then(()=>{Apis.closeCb&&Apis.closeCb()})};let a=[c,Apis._net.init(),Apis._hist.init()];return e.enableOrders&&a.push(Apis._orders.init()),e.enableCrypto&&a.push(Apis._crypt.init()),Promise.all(a)}).catch(a=>(console.error(d,"Failed to initialize with error",a&&a.message),Apis.close().then(()=>{throw a})))},close:async()=>{Apis.ws_rpc&&1===Apis.ws_rpc.ws.readyState&&(await Apis.ws_rpc.close()),Apis.ws_rpc=null},db_api:()=>Apis._db,network_api:()=>Apis._net,history_api:()=>Apis._hist,crypto_api:()=>Apis._crypt,orders_api:()=>Apis._orders,setRpcConnectionStatusCallback:b=>Apis.statusCb=b});
 \ No newline at end of file
@@ -769,13 +769,14 @@ index 3d13f47..f74482c 100644
 +            "Failed to initialize with error",
 +            err && err.message
 +          );
-+          return Apis.close().then(function () {
-+            if (Apis && connect) {
-+              Apis.connect(cs, connectTimeout, optionalApis);
-+            }
-+
-+            throw err;
-+          });
++          throw err;
++          // return Apis.close().then(function () {
++          //   // if (Apis && Apis.connect) {
++          //   //   Apis.connect(cs, connectTimeout, optionalApis);
++          //   // }
++          //
++          //   throw err;
++          // });
 +        });
 +    }),
 +    close: (function () {
@@ -834,11 +835,11 @@ index 3d13f47..f74482c 100644
 +  };
 +};
 diff --git a/node_modules/meta1-vision-ws/lib/ChainWebSocket.js b/node_modules/meta1-vision-ws/lib/ChainWebSocket.js
-index 7553811..0b9330e 100644
+index 7553811..02efc5b 100644
 --- a/node_modules/meta1-vision-ws/lib/ChainWebSocket.js
 +++ b/node_modules/meta1-vision-ws/lib/ChainWebSocket.js
 @@ -1,3 +1,344 @@
--"use strict";var _isomorphicWs=_interopRequireDefault(require("isomorphic-ws"));Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;function _interopRequireDefault(b){return b&&b.__esModule?b:{default:b}}function _defineProperty(d,a,b){return a in d?Object.defineProperty(d,a,{value:b,enumerable:!0,configurable:!0,writable:!0}):d[a]=b,d}const SOCKET_DEBUG=!1,MAX_SEND_LIFE=500,MAX_RECV_LIFE=1000;class ChainWebSocket{constructor(f,a){let b=2<arguments.length&&arguments[2]!==void 0?arguments[2]:5e3,c=!(3<arguments.length&&arguments[3]!==void 0)||arguments[3],d=4<arguments.length&&arguments[4]!==void 0?arguments[4]:null;_defineProperty(this,"connect",(c,a)=>new Promise((b,e)=>{this.current_reject=e,this.current_resolve=b;try{this.ws=new _isomorphicWs.default(c)}catch(a){// DISCONNECTED
+-"use strict";var _isomorphicWs=_interopRequireDefault(require("isomorphic-ws"));Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;function _interopRequireDefault(b){return b&&b.__esModule?b:{default:b}}function _defineProperty(d,a,b){return a in d?Object.defineProperty(d,a,{value:b,enumerable:!0,configurable:!0,writable:!0}):d[a]=b,d}const SOCKET_DEBUG=!1,MAX_SEND_LIFE=5,MAX_RECV_LIFE=10;class ChainWebSocket{constructor(f,a){let b=2<arguments.length&&arguments[2]!==void 0?arguments[2]:5e3,c=!(3<arguments.length&&arguments[3]!==void 0)||arguments[3],d=4<arguments.length&&arguments[4]!==void 0?arguments[4]:null;_defineProperty(this,"connect",(c,a)=>new Promise((b,e)=>{this.current_reject=e,this.current_resolve=b;try{this.ws=new _isomorphicWs.default(c)}catch(a){// DISCONNECTED
 -this.ws={readyState:3,close:()=>{}},e(new Error("Invalid url",c," closed"))}this.ws.onopen=this.onOpen,this.ws.onerror=this.onError,this.ws.onmessage=this.onMessage,this.ws.onclose=this.onClose,this.connectionTimeout=setTimeout(()=>{this.current_reject&&(this.current_reject=null,this.close(),e(new Error("Connection attempt timed out after "+a/1e3+"s")))},a)})),_defineProperty(this,"onOpen",()=>{clearTimeout(this.connectionTimeout),this.statusCb&&this.statusCb("open"),this.on_reconnect&&this.on_reconnect(),this.keepalive_timer=setInterval(()=>(this.recv_life--,0==this.recv_life?(console.error(this.url+" connection is dead, terminating ws"),void this.close()):void(this.send_life--,0==this.send_life&&(this.keepAliveCb&&this.keepAliveCb(this.closed),this.send_life=MAX_SEND_LIFE))),5e3),this.current_reject=null,this.current_resolve()}),_defineProperty(this,"onError",b=>{this.keepalive_timer&&(clearInterval(this.keepalive_timer),this.keepalive_timer=void 0),clearTimeout(this.connectionTimeout),this.statusCb&&this.statusCb("error"),this.current_reject&&this.current_reject(b)}),_defineProperty(this,"onMessage",b=>{this.recv_life=MAX_RECV_LIFE,this.listener(JSON.parse(b.data))}),_defineProperty(this,"onClose",()=>{this.closed=!0,this.keepalive_timer&&(clearInterval(this.keepalive_timer),this.keepalive_timer=void 0);for(var b=this.responseCbId+1;b<=this.cbId;b+=1)this.cbs[b].reject(new Error("connection closed"));this.statusCb&&this.statusCb("closed"),this._closeCb&&this._closeCb(),this.on_close&&this.on_close()}),_defineProperty(this,"call",d=>{if(1!==this.ws.readyState)return Promise.reject(new Error("websocket state error:"+this.ws.readyState));let a=d[1];if(SOCKET_DEBUG&&console.log("[ChainWebSocket] >---- call ----->  \"id\":"+(this.cbId+1),JSON.stringify(d)),this.cbId+=1,["set_subscribe_callback","subscribe_to_market","broadcast_transaction_with_callback","set_pending_transaction_callback","set_block_applied_callback"].includes(a)&&(this.subs[this.cbId]={callback:d[2][0]},d[2][0]=this.cbId),["unsubscribe_from_market","unsubscribe_from_accounts"].includes(a)){if("function"!=typeof d[2][0])throw new Error("First parameter of unsub must be the original callback");let c=d[2].splice(0,1)[0];// Find the corresponding subscription
 -for(let b in this.subs)if(this.subs[b].callback===c){this.unsub[this.cbId]=b;break}}var e={method:"call",params:d};return e.id=this.cbId,this.send_life=MAX_SEND_LIFE,new Promise((c,a)=>{this.cbs[this.cbId]={time:new Date,resolve:c,reject:a},this.ws.send(JSON.stringify(e))})}),_defineProperty(this,"listener",d=>{SOCKET_DEBUG&&console.log("[ChainWebSocket] <---- reply ----<",JSON.stringify(d));let a=!1,e=null;"notice"===d.method&&(a=!0,d.id=d.params[0]),a?e=this.subs[d.id].callback:(e=this.cbs[d.id],this.responseCbId=d.id),e&&!a?(d.error?e.reject(d.error):e.resolve(d.result),delete this.cbs[d.id],this.unsub[d.id]&&(delete this.subs[this.unsub[d.id]],delete this.unsub[d.id])):e&&a?e(d.params[1]):console.log("Warning: unknown websocket response: ",d)}),_defineProperty(this,"login",(c,a)=>this.connect_promise.then(()=>this.call([1,"login",[c,a]]))),_defineProperty(this,"close",()=>new Promise(b=>(clearInterval(this.keepalive_timer),this.keepalive_timer=void 0,this._closeCb=()=>{b(),this._closeCb=null},this.ws?void(this.ws.terminate?this.ws.terminate():this.ws.close(),3===this.ws.readyState&&b()):(console.log("Websocket already cleared",this),b())))),this.url=f,this.statusCb=a,this.current_reject=null,this.on_reconnect=null,this.closed=!1,this.send_life=MAX_SEND_LIFE,this.recv_life=MAX_RECV_LIFE,this.keepAliveCb=d,this.cbId=0,this.responseCbId=0,this.cbs={},this.subs={},this.unsub={},this.connect_promise=this.connect(f,b)}}var _default=ChainWebSocket;exports.default=_default;
 \ No newline at end of file
@@ -893,7 +894,7 @@ index 7553811..0b9330e 100644
 +}
 +
 +var SOCKET_DEBUG = false;
-+var MAX_SEND_LIFE = 5;
++var MAX_SEND_LIFE = 500;
 +var MAX_RECV_LIFE = MAX_SEND_LIFE * 2;
 +
 +var ChainWebSocket = /*#__PURE__*/ _createClass(function ChainWebSocket(
@@ -903,7 +904,7 @@ index 7553811..0b9330e 100644
 +  var _this = this;
 +
 +  var _connectTimeout =
-+    arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 5000;
++    arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 4000;
 +
 +  var autoReconnect =
 +    arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
@@ -980,7 +981,7 @@ index 7553811..0b9330e 100644
 +
 +        _this.send_life = MAX_SEND_LIFE;
 +      }
-+    }, 5000);
++    }, 4000);
 +    _this.current_reject = null;
 +
 +    _this.current_resolve();
@@ -1162,7 +1163,7 @@ index 7553811..0b9330e 100644
 +      }
 +
 +      if (_this.ws.readyState === 3) {
-+        _this.connect && _this.connect(_this.url, 5000);
++        _this.connect && _this.connect(_this.url, 4000);
 +        res();
 +      }
 +    });
@@ -2161,4 +2162,34 @@ index d1dcf86..e0a7420 100644
 +})();
 +
 +var _default = Manager;
++exports.default = _default;
+diff --git a/node_modules/meta1-vision-ws/lib/GrapheneApi.js b/node_modules/meta1-vision-ws/lib/GrapheneApi.js
+index 254c049..617f017 100644
+--- a/node_modules/meta1-vision-ws/lib/GrapheneApi.js
++++ b/node_modules/meta1-vision-ws/lib/GrapheneApi.js
+@@ -1,2 +1,22 @@
+-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;class GrapheneApi{constructor(c,a){this.ws_rpc=c,this.api_name=a}init(){var c=this;return this.ws_rpc.call([1,this.api_name,[]]).then(a=>(c.api_id=a,c))}exec(c,a){return this.ws_rpc.call([this.api_id,c,a]).catch(b=>{// console.log("!!! GrapheneApi error: ", method, params, error, JSON.stringify(error));
+-throw b})}}var _default=GrapheneApi;exports.default=_default;
+\ No newline at end of file
++'use strict';
++Object.defineProperty(exports, '__esModule', { value: !0 }), exports.default = void 0;
++
++class GrapheneApi {
++  constructor(c, a) {
++    this.ws_rpc = c, this.api_name = a;
++  }
++
++  init() {
++    var c = this;
++    return this.ws_rpc.call([1, this.api_name, []]).then(a => (c.api_id = a, c));
++  }
++
++  exec(c, a) {
++    return this.ws_rpc.call([this.api_id, c, a]).catch(b => {// console.log("!!! GrapheneApi error: ", method, params, error, JSON.stringify(error));
++      throw b;
++    });
++  }
++}
++
++var _default = GrapheneApi;
 +exports.default = _default;
