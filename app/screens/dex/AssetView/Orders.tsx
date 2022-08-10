@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { RefreshControl, SafeAreaView, ScrollView, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { colors } from '../../../styles/colors';
-import { getOrderBook } from '../../../utils/meta1Api';
+import { getOrderBook } from '../../../services/meta1Api';
 import { OrderBook } from '../../../utils/meta1dexTypes';
 import { AssetViewTSP } from './AssetView';
 import { useAVStore } from './AssetViewStore';

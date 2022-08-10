@@ -3,7 +3,7 @@ import { zip, zipObject } from 'lodash';
 import QRCode from 'qrcode';
 import { useEffect, useState } from 'react';
 import create from 'zustand';
-import { excludeIndex } from '.';
+import { excludeIndex } from '../utils';
 import config from '../config';
 import { useStore } from '../store';
 import {
@@ -17,8 +17,8 @@ import {
   OP_TYPE,
   RESULT_TYPE,
   TypeIdPrefixed,
-} from './meta1dexTypes';
-import { setupOnStatusCallbackHook } from './meta1wsHook';
+} from '../utils/meta1dexTypes';
+import { setupOnStatusCallbackHook } from '../utils/meta1wsHook';
 
 // Number of milliseconds in one year
 const YY = 3.154e10;

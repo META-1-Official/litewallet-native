@@ -20,7 +20,7 @@ import SettingsScreen from './screens/SettingsScreen';
 import WalletScreen from './screens/WalletScreen';
 import { useStore } from './store';
 import { colors } from './styles/colors';
-import { loadAvatar } from './utils/litewalletApi';
+import { loadAvatar } from './services/litewalletApi';
 
 const Tab = createBottomTabNavigator();
 

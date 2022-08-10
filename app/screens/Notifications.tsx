@@ -3,8 +3,8 @@ import { RefreshControl, SafeAreaView, ScrollView, Text, TextStyle, View } from 
 import { Circle, TrendingUp } from 'react-native-feather';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
-import { useAssets } from '../utils/meta1Api';
-import { getNotifications, Notification } from '../utils/litewalletApi';
+import { useAssets } from '../services/meta1Api';
+import { getNotifications, Notification } from '../services/litewalletApi';
 
 export default function Notifications() {
   const [refreshing, setRefreshing] = React.useState(false);

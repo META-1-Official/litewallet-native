@@ -1,4 +1,4 @@
-import { FullHistoryOrder, getHistoricalOrders } from '../app/utils/meta1Api';
+import { FullHistoryOrder, getHistoricalOrders } from '../app/services/meta1Api';
 import Meta1, { iLimitOrder } from '../app/utils/meta1dexTypes';
 import config from '../app/config';
 import { isOpen, isResolved } from '../app/utils/historyUtils';

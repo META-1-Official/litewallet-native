@@ -7,7 +7,7 @@ import { useAVStore } from '../../screens/dex/AssetView/AssetViewStore';
 import { useStore } from '../../store';
 import { colors } from '../../styles/colors';
 import { catchError, getPassword, tid, Timeout } from '../../utils';
-import { placeLimitOrder, useAssets, useAssetsStore } from '../../utils/meta1Api';
+import { placeLimitOrder, useAssets, useAssetsStore } from '../../services/meta1Api';
 import { useNewLoaderModal } from '../LoaderModal';
 import { useShowModal } from '../SuccessModal';
 

@@ -19,7 +19,12 @@ import Loader from '../../components/Loader';
 import { useStore } from '../../store';
 import { colors } from '../../styles/colors';
 import { tid } from '../../utils';
-import { AddrT, AssetBalanceT, getAddressForAccountAsset, useAssets } from '../../utils/meta1Api';
+import {
+  AddrT,
+  AssetBalanceT,
+  getAddressForAccountAsset,
+  useAssets,
+} from '../../services/meta1Api';
 
 type HeaderProps = {
   title: string;

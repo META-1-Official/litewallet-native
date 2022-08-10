@@ -9,7 +9,7 @@ export default {
     NETWORK === 'TESTNET'
       ? 'https://faucet.dev.meta-exchange.vision/faucet'
       : 'https://faucet.meta-exchange.vision/faucet',
-  litewalletApiHost:
+  liteWalletApiHost:
     NETWORK === 'TESTNET'
       ? 'https://litewallet.dev.cryptomailsvc.io'
       : 'https://litewallet.cryptomailsvc.io',
