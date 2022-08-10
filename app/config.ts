@@ -17,4 +17,5 @@ export default {
     NETWORK === 'TESTNET'
       ? 'https://gateway.dev.meta-exchange.vision'
       : 'https://gateway.api.meta-exchange.vision',
+  API_URL: 'https://api.meta-exchange.vision',
 };

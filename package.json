@@ -52,6 +52,7 @@
     "@types/react-native-dotenv": "^0.2.0",
     "@types/react-native-svg-charts": "^5.0.12",
     "assert": "^2.0.0",
+    "axios": "^0.27.2",
     "babel-plugin-polyfill-corejs2": "^0.3.1",
     "babel-plugin-polyfill-corejs3": "^0.5.2",
     "babel-plugin-polyfill-es-shims": "^0.6.1",

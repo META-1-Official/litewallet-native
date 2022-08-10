@@ -1,5 +1,5 @@
 diff --git a/node_modules/meta1-vision-ws/lib/ApiInstances.js b/node_modules/meta1-vision-ws/lib/ApiInstances.js
-index 3d13f47..3dd88a1 100644
+index 3d13f47..f74482c 100644
 --- a/node_modules/meta1-vision-ws/lib/ApiInstances.js
 +++ b/node_modules/meta1-vision-ws/lib/ApiInstances.js
 @@ -1,2 +1,827 @@
@@ -770,7 +770,7 @@ index 3d13f47..3dd88a1 100644
 +            err && err.message
 +          );
 +          return Apis.close().then(function () {
-+            if (Apis && Apis.connect) {
++            if (Apis && connect) {
 +              Apis.connect(cs, connectTimeout, optionalApis);
 +            }
 +
@@ -834,7 +834,7 @@ index 3d13f47..3dd88a1 100644
 +  };
 +};
 diff --git a/node_modules/meta1-vision-ws/lib/ChainWebSocket.js b/node_modules/meta1-vision-ws/lib/ChainWebSocket.js
-index 7553811..02efc5b 100644
+index 7553811..0b9330e 100644
 --- a/node_modules/meta1-vision-ws/lib/ChainWebSocket.js
 +++ b/node_modules/meta1-vision-ws/lib/ChainWebSocket.js
 @@ -1,3 +1,344 @@
@@ -893,7 +893,7 @@ index 7553811..02efc5b 100644
 +}
 +
 +var SOCKET_DEBUG = false;
-+var MAX_SEND_LIFE = 500;
++var MAX_SEND_LIFE = 5;
 +var MAX_RECV_LIFE = MAX_SEND_LIFE * 2;
 +
 +var ChainWebSocket = /*#__PURE__*/ _createClass(function ChainWebSocket(
@@ -903,7 +903,7 @@ index 7553811..02efc5b 100644
 +  var _this = this;
 +
 +  var _connectTimeout =
-+    arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 4000;
++    arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 5000;
 +
 +  var autoReconnect =
 +    arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
@@ -980,7 +980,7 @@ index 7553811..02efc5b 100644
 +
 +        _this.send_life = MAX_SEND_LIFE;
 +      }
-+    }, 4000);
++    }, 5000);
 +    _this.current_reject = null;
 +
 +    _this.current_resolve();
@@ -1162,7 +1162,7 @@ index 7553811..02efc5b 100644
 +      }
 +
 +      if (_this.ws.readyState === 3) {
-+        _this.connect && _this.connect(_this.url, 4000);
++        _this.connect && _this.connect(_this.url, 5000);
 +        res();
 +      }
 +    });
@@ -2161,34 +2161,4 @@ index d1dcf86..e0a7420 100644
 +})();
 +
 +var _default = Manager;
-+exports.default = _default;
-diff --git a/node_modules/meta1-vision-ws/lib/GrapheneApi.js b/node_modules/meta1-vision-ws/lib/GrapheneApi.js
-index 254c049..617f017 100644
---- a/node_modules/meta1-vision-ws/lib/GrapheneApi.js
-+++ b/node_modules/meta1-vision-ws/lib/GrapheneApi.js
-@@ -1,2 +1,22 @@
--"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;class GrapheneApi{constructor(c,a){this.ws_rpc=c,this.api_name=a}init(){var c=this;return this.ws_rpc.call([1,this.api_name,[]]).then(a=>(c.api_id=a,c))}exec(c,a){return this.ws_rpc.call([this.api_id,c,a]).catch(b=>{// console.log("!!! GrapheneApi error: ", method, params, error, JSON.stringify(error));
--throw b})}}var _default=GrapheneApi;exports.default=_default;
-\ No newline at end of file
-+'use strict';
-+Object.defineProperty(exports, '__esModule', { value: !0 }), exports.default = void 0;
-+
-+class GrapheneApi {
-+  constructor(c, a) {
-+    this.ws_rpc = c, this.api_name = a;
-+  }
-+
-+  init() {
-+    var c = this;
-+    return this.ws_rpc.call([1, this.api_name, []]).then(a => (c.api_id = a, c));
-+  }
-+
-+  exec(c, a) {
-+    return this.ws_rpc.call([this.api_id, c, a]).catch(b => {// console.log("!!! GrapheneApi error: ", method, params, error, JSON.stringify(error));
-+      throw b;
-+    });
-+  }
-+}
-+
-+var _default = GrapheneApi;
 +exports.default = _default;

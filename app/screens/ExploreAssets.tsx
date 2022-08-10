@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Image,
   Platform,
@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { ArrowLeft } from 'react-native-feather';
 import { logoAsset } from '../../assets';
+import Services from '../services';
 import { colors } from '../styles/colors';
 import { tid } from '../utils';
 import { useAssets } from '../utils/meta1Api';
@@ -170,7 +171,17 @@ function NotFound() {
 export default function ExploreAssets({ navigation }: any) {
   const [tab, setTab] = useState(0);
   const tabs = [<Approved />, <NotFound />, <NotFound />];
-  const price = useAssets().find('META1')?.usdt_value || 0;
+  // const price = useAssets().find('META1')?.usdt_value || 0;
+  const [price, setPrice] = useState<number>(0);
+
+  useEffect(() => {
+    (async () => {
+      const newPrice = await Services.getPrice();
+      console.log(newPrice);
+      setPrice(+newPrice);
+    })();
+  }, []);
+
   return (
     <>
       <Header navigation={navigation} />
