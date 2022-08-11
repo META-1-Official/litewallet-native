@@ -13,7 +13,7 @@ import {
 import { grey200, grey600 } from 'react-native-paper/src/styles/colors';
 import { BrandYellow } from '../styles/colors';
 import { tid } from '../utils';
-import { AssetBalanceT, refreshAssets, useAssets } from '../utils/meta1Api';
+import { AssetBalanceT, refreshAssets, useAssets } from '../services/meta1Api';
 
 const { width } = Dimensions.get('screen');
 

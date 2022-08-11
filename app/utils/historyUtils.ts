@@ -1,5 +1,5 @@
 import { inFuture } from '.';
-import { AccountBalanceT, FilledRetT, HistoryRetT, limitOrderObjExt } from './meta1Api';
+import { AccountBalanceT, FilledRetT, HistoryRetT, limitOrderObjExt } from '../services/meta1Api';
 
 export const preprocessOrder = (order: any, userAssets: AccountBalanceT | null): HistoryRetT => {
   return {

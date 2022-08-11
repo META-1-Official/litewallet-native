@@ -10,7 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NETWORK } from '@env';
 import RNRestart from 'react-native-restart';
 import { CountryPicker } from '../components/CountryPicker';
-import { getToken, signUp } from '../utils/litewalletApi';
+import { getToken, signUp } from '../services/litewalletApi';
 
 const resolves = (ms: number) => new Promise<void>(resolve => setTimeout(() => resolve(), ms));
 const rejects = (ms: number) => new Promise<void>((_, reject) => setTimeout(() => reject(), ms));

@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Loader from '../../components/Loader';
-import { getHistoryForAsset, useAssets } from '../../utils/meta1Api';
+import { getHistoryForAsset, useAssets } from '../../services/meta1Api';
 import { LineChart, Grid } from 'react-native-svg-charts';
 import { DexTSP } from '.';
 import { dexAssetView } from './AssetView/AssetViewStore';

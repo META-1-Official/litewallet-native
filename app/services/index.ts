@@ -1,19 +1,3 @@
-import axios, { AxiosInstance } from 'axios';
-import config from '../config';
+import LiteWalletServices from './litewallet.services';
 
-class Services {
-  private api: AxiosInstance;
-
-  constructor() {
-    this.api = axios.create({
-      baseURL: config.API_URL,
-    });
-  }
-
-  getPrice = async () => {
-    const response = await this.api.get('/getprice');
-    return response.data;
-  };
-}
-
-export default new Services();
+export default LiteWalletServices;

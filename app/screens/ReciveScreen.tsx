@@ -16,7 +16,7 @@ import { useAssetPicker } from '../components/AssetSelectModal';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { shadow, tid } from '../utils';
-import { AddrT, getAddressForAccountAsset } from '../utils/meta1Api';
+import { AddrT, getAddressForAccountAsset } from '../services/meta1Api';
 import { SvgXml } from 'react-native-svg';
 import { useNavigation } from '@react-navigation/core';
 import { WalletNavigationProp } from './WalletScreen';

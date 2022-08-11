@@ -23,7 +23,7 @@ import {
   HistoryRetT,
   useAssetsStore,
   _login,
-} from '../../../utils/meta1Api';
+} from '../../../services/meta1Api';
 import { AssetViewTSP } from './AssetView';
 import { useAVStore } from './AssetViewStore';
 import { LoginRetT } from '../../../utils/meta1dexTypes';

@@ -16,7 +16,7 @@ import CreateWalletScreen from './screens/CreateWalletScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import LinkWalletScreen from './screens/LinkWalletScreen';
 import { Options, useOptions, useStore } from './store';
-import { Connect } from './utils/meta1Api';
+import { Connect } from './services/meta1Api';
 import { DexNav } from './WalletNav';
 import { PrivacyPolicy, TOSScreen } from './screens/PrivacyPolicy';
 import Loader from './components/Loader';

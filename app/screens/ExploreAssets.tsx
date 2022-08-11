@@ -11,10 +11,10 @@ import {
 } from 'react-native';
 import { ArrowLeft } from 'react-native-feather';
 import { logoAsset } from '../../assets';
-import Services from '../services';
+import Services from '../services/exchange.services';
 import { colors } from '../styles/colors';
 import { tid } from '../utils';
-import { useAssets } from '../utils/meta1Api';
+// import { useAssets } from '../utils/meta1Api';
 
 const comm: ViewStyle = {
   borderRadius: 100,

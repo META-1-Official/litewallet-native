@@ -4,7 +4,7 @@ import WebView from 'react-native-webview';
 import html from '../../../../bruhchart/dist';
 import { Buffer } from 'buffer';
 import { useAVStore } from './AssetViewStore';
-import { useTicker } from '../../../utils/meta1Api';
+import { useTicker } from '../../../services/meta1Api';
 import Loader from '../../../components/Loader';
 import { ALL_BUCKETS } from '../../../utils/meta1dexTypes';
 import { colors } from '../../../styles/colors';

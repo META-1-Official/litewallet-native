@@ -20,7 +20,7 @@ import { Heading, TextSecondary } from '../components/typography';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { tid, useScroll } from '../utils';
-import { getAccount } from '../utils/meta1Api';
+import { getAccount } from '../services/meta1Api';
 import meta1dex from '../utils/meta1dexTypes';
 import { required, RuleFn } from '../utils/useFormHelper/rules';
 import { Input } from '../utils/useFormHelper/useFormHelper';
