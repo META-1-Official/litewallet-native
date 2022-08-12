@@ -503,7 +503,10 @@ const makeSendFn =
         );
         liteWalletServices
           .saveBalance(accountName)
-          .then(res => console.log('Balance has been saved', res));
+          .then(res => console.log('Balance of sender has been updated', res));
+        liteWalletServices
+          .saveBalance(toAccount)
+          .then(res => console.log('Balance of receiver has been updated', res));
       },
       { onErr: () => onEnd() },
     );
