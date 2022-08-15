@@ -8,7 +8,7 @@ import { Heading, TextSecondary } from '../components/typography';
 import { useStore } from '../store';
 import { catchError } from '../utils';
 import createAccountWithPassword from '../utils/accountCreate';
-import { getAccount } from '../utils/meta1Api';
+import { getAccount } from '../services/meta1Api';
 import {
   email,
   hasSpecialChars,

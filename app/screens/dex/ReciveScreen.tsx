@@ -19,7 +19,12 @@ import Loader from '../../components/Loader';
 import { useStore } from '../../store';
 import { colors } from '../../styles/colors';
 import { tid } from '../../utils';
-import { AddrT, AssetBalanceT, getAddressForAccountAsset, useAssets } from '../../utils/meta1Api';
+import {
+  AddrT,
+  AssetBalanceT,
+  getAddressForAccountAsset,
+  useAssets,
+} from '../../services/meta1Api';
 
 type HeaderProps = {
   title: string;
@@ -193,7 +198,9 @@ const AssetSelection: React.FC<AssetSelectionProps> = ({ select }) => {
   }
 
   const assets = accountAssets!.assetsWithBalance
-    .filter(e => e.symbol !== 'BNB' && e.symbol !== 'XLM')
+    .filter(
+      e => e.symbol !== 'BNB' && e.symbol !== 'XLM' && e.symbol !== 'EOS' && e.symbol !== 'META1',
+    )
     .filter(e => !searchText || e.symbol.includes(searchText.toLocaleUpperCase()));
 
   return (
@@ -286,11 +293,11 @@ const AssetSelection: React.FC<AssetSelectionProps> = ({ select }) => {
 
 const DexRecive: React.FC<DexSSP> = props => {
   const [asset, selectAsset] = useState<AssetBalanceT | undefined>(undefined);
-  const selectCoinText = <Text style={{ color: colors.BrandYellow }}> Select a coin</Text>;
+  const selectCoinText = <Text style={{ color: colors.BrandYellow }}>Select a coin</Text>;
   const shareThisAddressText = (
     <View style={{ flexDirection: 'row' }}>
       <Info width={18} height={18} color={colors.BrandYellow} />
-      <Text style={{ color: colors.BrandYellow }}> Share this addres</Text>
+      <Text style={{ color: colors.BrandYellow }}>Share this address</Text>
     </View>
   );
 

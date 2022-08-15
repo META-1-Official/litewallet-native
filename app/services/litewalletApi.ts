@@ -1,11 +1,11 @@
 import throttle from 'lodash.throttle';
 import { Alert, Platform } from 'react-native';
 import { Asset } from 'react-native-image-picker';
-import { promptPromise } from '.';
+import { promptPromise } from '../utils';
 import config from '../config';
 import { useStore } from '../store';
 
-const HOST = config.litewalletApiHost;
+const HOST = config.liteWalletApiHost;
 
 enum Method {
   _getUserData = '/getUserData',

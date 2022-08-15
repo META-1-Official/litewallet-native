@@ -17,7 +17,7 @@ import {
 } from 'react-native';
 import { X } from 'react-native-feather';
 import { tid, useScroll } from '../utils';
-import { AssetBalanceT, useAssets, useAssetsStore } from '../utils/meta1Api';
+import { AssetBalanceT, useAssets, useAssetsStore } from '../services/meta1Api';
 import { RootStackNP } from '../WalletNav';
 import { TextSecondary } from './typography';
 

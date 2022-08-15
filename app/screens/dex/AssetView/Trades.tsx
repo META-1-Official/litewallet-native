@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { RefreshControl, SafeAreaView, ScrollView, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { colors } from '../../../styles/colors';
-import { getTradesForAssetPair } from '../../../utils/meta1Api';
+import { getTradesForAssetPair } from '../../../services/meta1Api';
 import { AssetViewTSP } from './AssetView';
 import { useAVStore } from './AssetViewStore';
 type TradesT = ReturnType<typeof getTradesForAssetPair> extends Promise<infer T> ? T : never;

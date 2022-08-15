@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { AccountBalanceT } from '../utils/meta1Api';
+import { AccountBalanceT } from '../services/meta1Api';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { ArrowDown, ArrowUp } from 'react-native-feather';

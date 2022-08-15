@@ -10,7 +10,7 @@ import {
   getTradesForAssetPair,
   HistoryRetT,
   useAssetsStore,
-} from '../app/utils/meta1Api';
+} from '../app/services/meta1Api';
 import meta1dex, { fcTime } from '../app/utils/meta1dexTypes';
 import Meta1 from '../app/utils/meta1dexTypes';
 
@@ -153,6 +153,5 @@ describe('Meta1 api tests', () => {
       new fcTime('2018-01-01T00:00:00'),
       new fcTime(),
     );
-
   });
 });

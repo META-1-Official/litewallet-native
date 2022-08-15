@@ -13,7 +13,7 @@ import { Grid, LineChart } from 'react-native-svg-charts';
 import { DexTSP } from '.';
 import Loader from '../../components/Loader';
 import { tid } from '../../utils';
-import { getHistoryForAsset, useAssets } from '../../utils/meta1Api';
+import { getHistoryForAsset, useAssets } from '../../services/meta1Api';
 import { dexAssetView } from './AssetView/AssetViewStore';
 
 const Chart: React.FC<{ symbol: string; color: string }> = ({ symbol, color }) => {

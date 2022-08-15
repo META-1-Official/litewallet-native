@@ -53,7 +53,7 @@ export default function TradingHelp() {
         sell/buy. The cost for this order will be calculated automatically. Note that there will be
         an additional fee required to actually place the order. {'\n'}Once the order is filled
         (i.e. someone sold/bought your offer), your account will be credited by the corresponding
-        asset. {'\n'}Unfilled orders can be canceled at any time.
+        asset. {'\n'}Unfilled orders can be cancelled at any time.
       </Paragraph>
     </Page>
   );

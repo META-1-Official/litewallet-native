@@ -13,6 +13,7 @@ import Backdrop from '../components/Backdrop';
 import { List } from '../components/List';
 import Loader from '../components/Loader';
 import RoundedButton from '../components/RoundedButton';
+import liteWalletServices from '../services/litewallet.services';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { catchError, tid, useScroll } from '../utils';
@@ -22,7 +23,7 @@ import {
   sendWithPassword,
   useAssets,
   useAssetsStore,
-} from '../utils/meta1Api';
+} from '../services/meta1Api';
 import { useNewLoaderModal } from '../components/LoaderModal';
 import { DexSSP } from './dex';
 import { HeaderProps } from './dex/SendScreen';
@@ -500,6 +501,12 @@ const makeSendFn =
           `Successfully sent ${standalone.amount} ${standalone.asset.symbol} to ${toAccount}`,
           nav => nav.goBack(),
         );
+        liteWalletServices
+          .saveBalance(accountName)
+          .then(res => console.log('Balance of sender has been updated', res));
+        liteWalletServices
+          .saveBalance(toAccount)
+          .then(res => console.log('Balance of receiver has been updated', res));
       },
       { onErr: () => onEnd() },
     );

@@ -9,7 +9,7 @@ import MaterialToggle from '../components/MaterialToggle';
 import PortfolioHeader from '../components/PortfolioHeader';
 import PortfolioListing from '../components/PortfolioListing';
 import { colors } from '../styles/colors';
-import { useAssets } from './../utils/meta1Api';
+import { useAssets } from '../services/meta1Api';
 import Loader from '../components/Loader';
 import AppHeader from '../components/AppHeaer';
 import TradeScreen from './TradeScreen';

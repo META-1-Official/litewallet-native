@@ -31,7 +31,7 @@ import {
   swapWithPassword,
   useAssets,
   useAssetsStore,
-} from '../utils/meta1Api';
+} from '../services/meta1Api';
 import meta1dex from '../utils/meta1dexTypes';
 import { createPair, theAsset, useAsset } from '../utils/useAsset';
 
@@ -83,6 +83,7 @@ const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanc
 
       B.setTicker(tickerB || undefined);
     }
+
     load();
   }, [A?.asset.symbol, B?.asset.symbol]);
 
@@ -99,6 +100,7 @@ type ScreenAssets = {
   A: theAsset;
   B: theAsset;
 };
+
 interface AssetsProp {
   assets: ScreenAssets;
 }
@@ -175,6 +177,7 @@ const DarkFloatingButton = ({ assets }: AssetsProp) => {
 };
 
 type DM<T> = { darkMode?: boolean } & T;
+
 interface AssetProp {
   asset: theAsset;
   slave?: boolean;
@@ -188,7 +191,7 @@ const AssetDisplay = ({ asset, darkMode }: DM<AssetProp>) => {
       <View style={styles.rowCenter}>
         <Image style={styles.assetIcon} source={asset.asset._asset.icon /*Bruh wtf is dis */} />
         <View>
-          <Heading style={darkStyle({ color: '#fff' }, styles.font18x500)}>
+          <Heading style={darkStyle(styles.whiteText, styles.font18x500)}>
             {asset.asset.symbol}
           </Heading>
           <TextSecondary style={styles.font14}>
@@ -277,7 +280,7 @@ const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
   return (
     <Input
       {...tid('TradeScreen/AmountInput/amount')}
-      style={darkStyle({ color: '#fff' }, styles.amountInput)}
+      style={darkStyle(styles.whiteText, styles.amountInput)}
       value={amount}
       validate={validateNumber}
       keyboardType="numeric"
@@ -300,7 +303,7 @@ const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
   );
 };
 
-const UsdInput = ({ asset, darkMode, slave }: DM<AssetProp>) => {
+const UsdInput = ({ asset, darkMode }: DM<AssetProp>) => {
   const [amount, setAmount] = useState(asset.toUsdt().toFixed());
   const { isCause, cause } = useCause();
 
@@ -308,7 +311,7 @@ const UsdInput = ({ asset, darkMode, slave }: DM<AssetProp>) => {
     if (!isCause) {
       // Maybe it's stupid fix todo: review it
       // setAmount((slave ? asset.opponent().toUsdt() : asset.toUsdt()).toFixed(2));
-      setAmount((asset.toUsdt()).toFixed(2));
+      setAmount(asset.toUsdt().toFixed(2));
     }
   }, [asset.amount, isCause]);
 
@@ -421,6 +424,7 @@ const makeMessage = (assets: ScreenAssets) =>
 interface Props {
   darkMode?: boolean;
 }
+
 type kindaStyle = Partial<typeof styles> | ViewStyle | TextStyle | ImageStyle;
 
 const optStyleFactory =
@@ -563,6 +567,7 @@ const styles = StyleSheet.create({
   },
   assetIcon: { width: 42, height: 42, resizeMode: 'contain', marginRight: 8 },
   font18x500: { fontSize: 18, fontWeight: '500' },
+  whiteText: { color: '#fff' },
   font14: { fontSize: 14 },
   amountInput: {
     fontSize: 18,

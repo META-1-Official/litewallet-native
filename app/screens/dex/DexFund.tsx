@@ -10,8 +10,8 @@ import PortfolioListing from '../../components/PortfolioListing';
 import { useStore } from '../../store';
 import { colors } from '../../styles/colors';
 import { tid } from '../../utils';
-import { useAssets } from '../../utils/meta1Api';
-import { getHistory } from '../../utils/litewalletApi';
+import { useAssets } from '../../services/meta1Api';
+import { getHistory } from '../../services/litewalletApi';
 import { dexAssetView } from './AssetView/AssetViewStore';
 
 const GRAPH_INTERVAL = {
