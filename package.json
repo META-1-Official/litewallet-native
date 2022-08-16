@@ -43,6 +43,7 @@
     "@react-navigation/native": "^6.0.4",
     "@react-navigation/native-stack": "^6.2.2",
     "@react-navigation/stack": "^6.0.9",
+    "@reduxjs/toolkit": "^1.8.3",
     "@sentry/react-native": "^3.2.13",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.omit": "^4.5.6",
@@ -91,7 +92,9 @@
     "react-native-svg-charts": "^5.4.0",
     "react-native-text-input-mask": "^3.1.4",
     "react-native-vector-icons": "^8.1.0",
+    "react-native-vision-camera": "^2.14.0",
     "react-native-webview": "^11.14.2",
+    "react-redux": "^8.0.2",
     "stream-browserify": "^3.0.0",
     "zustand": "^3.5.13"
   },

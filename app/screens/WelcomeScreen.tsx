@@ -27,6 +27,7 @@ const WelcomeScreen = () => {
       <ContentSlider scrollX={scrollX} />
       <View style={{ alignSelf: 'stretch' }}>
         <RoundedButton title="Create META Wallet" onPress={CreateWalletPress} />
+        <RoundedButton title="FaceKI" onPress={() => nav.navigate('FaceKI')} />
 
         <RoundedButton
           title="Link META Wallet"
