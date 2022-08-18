@@ -8,46 +8,48 @@ import { RootNavigationProp } from '../App';
 import RoundedButton from '../components/RoundedButton';
 import FaceKiCameraView from '../components/FaceKICameraView';
 
-const FaceKIScreen = () => {
+const FaceKIScreen = ({ route, navigation }) => {
   const nav = useNavigation<RootNavigationProp>();
   const onClick = () => nav.navigate('FaceKI');
   const [cameraPermission, setCameraPermission] = useState<CameraPermissionStatus>();
+  const { firstName, lastName, mobile, accountName } = route.params;
 
-  useEffect(() => {
-    const getCameraPermission = async () => {
-      const permission = await Camera.getCameraPermissionStatus();
-      setCameraPermission(permission);
-    };
-    getCameraPermission().catch(console.error);
-  }, []);
-
-  useEffect(() => {
-    if (cameraPermission === 'denied') {
-      Linking.openSettings();
-    } else if (cameraPermission === 'not-determined') {
-      const requestCameraPermission = async () => {
-        const permission = await Camera.requestCameraPermission();
-        setCameraPermission(permission);
-      };
-      requestCameraPermission().catch(console.error);
-    }
-  }, [cameraPermission]);
+  // useEffect(() => {
+  //   const getCameraPermission = async () => {
+  //     const permission = await Camera.getCameraPermissionStatus();
+  //     setCameraPermission(permission);
+  //   };
+  //   getCameraPermission().catch(console.error);
+  // }, []);
+  //
+  // useEffect(() => {
+  //   if (cameraPermission === 'denied') {
+  //     Linking.openSettings();
+  //   } else if (cameraPermission === 'not-determined') {
+  //     const requestCameraPermission = async () => {
+  //       const permission = await Camera.requestCameraPermission();
+  //       setCameraPermission(permission);
+  //     };
+  //     requestCameraPermission().catch(console.error);
+  //   }
+  // }, [cameraPermission]);
 
   return (
-    <SafeAreaView
+    <View
       style={{
         flex: 1,
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        backgroundColor: '#fff',
+        height: '100%',
+        width: '100%',
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        paddingBottom: 40,
       }}
     >
-      <View style={{ alignSelf: 'stretch' }}>
-        <Text>{cameraPermission}</Text>
-        {cameraPermission === 'authorized' && <FaceKiCameraView />}
-        <RoundedButton title="Capture photo" onPress={onClick} />
-      </View>
-    </SafeAreaView>
+      <Text>{cameraPermission}</Text>
+      {/*{cameraPermission === 'authorized' && <FaceKiCameraView />}*/}
+      <FaceKiCameraView />
+    </View>
   );
 };
 

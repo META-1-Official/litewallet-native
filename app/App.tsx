@@ -1,5 +1,6 @@
-import * as React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import 'react-native-gesture-handler';
+import { Provider } from 'react-redux';
 import {
   DefaultTheme,
   NavigationContainer,
@@ -9,10 +10,14 @@ import { createStackNavigator, StackNavigationProp } from '@react-navigation/sta
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider as PaperProvider } from 'react-native-paper';
 import SplashScreen from 'react-native-splash-screen';
+import ESignatureScreen from './screens/ESignatureScreen';
+import FaceKIScreen from './screens/FaceKIScreen';
+import FaceKISuccessScreen from './screens/FaceKISuccessScreen';
 
 import Legal from './screens/LegalScreen';
 import AppHeader from './components/AppHeaer';
 import CreateWalletScreen from './screens/CreateWalletScreen';
+import PasskeyScreen from './screens/PasskeyScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import LinkWalletScreen from './screens/LinkWalletScreen';
 import { Options, useOptions, useStore } from './store';
@@ -28,7 +33,7 @@ import RNRestart from 'react-native-restart';
 import { SENTRY_DSN } from '@env';
 import { Alert, LogBox } from 'react-native';
 
-const { useEffect } = React;
+import { createStore } from './store/createStore';
 
 // Construct a new instrumentation instance. This is needed to communicate between the integration and React
 const routingInstrumentation = new Sentry.ReactNavigationInstrumentation();
@@ -64,6 +69,11 @@ export type RootStackParamList = {
   Legal: undefined;
   Privacy: undefined;
   CreateWallet: undefined;
+  FaceKI: undefined;
+  FaceKISuccess: undefined;
+  Passkey: undefined;
+  ESignature: undefined;
+  ImportWallet: undefined;
   LinkWallet: undefined;
   TOS: undefined;
   Loader: undefined;
@@ -91,6 +101,16 @@ const AuthNav = () => {
       <Stack.Screen name="Privacy" component={PrivacyPolicy} />
       <Stack.Screen name="TOS" component={TOSScreen} />
       <Stack.Screen name="CreateWallet" component={CreateWalletScreen} />
+      <Stack.Screen
+        name="FaceKI"
+        options={{
+          title: 'Create Wallet',
+        }}
+        component={FaceKIScreen}
+      />
+      <Stack.Screen name="FaceKISuccess" component={FaceKISuccessScreen} />
+      <Stack.Screen name="Passkey" component={PasskeyScreen} />
+      <Stack.Screen name="ESignature" component={ESignatureScreen} />
       <Stack.Screen name="LinkWallet" component={LinkWalletScreen} />
       <Stack.Screen
         name="Loader"
@@ -134,7 +154,7 @@ async function EnableSentryPrompt() {
 
 function App() {
   LogBox.ignoreAllLogs();
-  const [dark, setDark] = React.useState(false);
+  const [dark, setDark] = useState(false);
   useEffect(() => {
     SplashScreen.hide();
     Connect();
@@ -142,7 +162,7 @@ function App() {
   }, []);
 
   const navigationRef = useNavigationContainerRef();
-  const routePrefixRef = React.useRef<string | undefined>();
+  const routePrefixRef = useRef<string | undefined>();
 
   const authorized = useStore(state => state.authorized);
 
@@ -154,39 +174,41 @@ function App() {
   }
 
   return (
-    <PaperProvider>
-      <SafeAreaProvider>
-        <NavigationContainer
-          ref={navigationRef}
-          theme={{
-            ...DefaultTheme,
-            colors: {
-              ...DefaultTheme.colors,
-              background: dark ? '#000' : DefaultTheme.colors.background,
-            },
-          }}
-          onReady={() => {
-            routingInstrumentation.registerNavigationContainer(navigationRef);
-            routePrefixRef.current = navigationRef.getCurrentRoute()?.name?.split('_').at(0);
-          }}
-          onStateChange={() => {
-            const oldPrefix = routePrefixRef.current;
-            const currentRouteName = navigationRef.getCurrentRoute()?.name;
-            // Unprefixed route
-            if (currentRouteName?.indexOf('_') === -1) {
-              return;
-            }
-            const prefix = currentRouteName?.split('_').at(0);
-            if (prefix !== oldPrefix) {
-              setDark(prefix !== 'Wallet');
-              routePrefixRef.current = prefix;
-            }
-          }}
-        >
-          {<CurrentNav />}
-        </NavigationContainer>
-      </SafeAreaProvider>
-    </PaperProvider>
+    <Provider store={createStore}>
+      <PaperProvider>
+        <SafeAreaProvider>
+          <NavigationContainer
+            ref={navigationRef}
+            theme={{
+              ...DefaultTheme,
+              colors: {
+                ...DefaultTheme.colors,
+                background: dark ? '#000' : DefaultTheme.colors.background,
+              },
+            }}
+            onReady={() => {
+              routingInstrumentation.registerNavigationContainer(navigationRef);
+              routePrefixRef.current = navigationRef.getCurrentRoute()?.name?.split('_').at(0);
+            }}
+            onStateChange={() => {
+              const oldPrefix = routePrefixRef.current;
+              const currentRouteName = navigationRef.getCurrentRoute()?.name;
+              // Unprefixed route
+              if (currentRouteName?.indexOf('_') === -1) {
+                return;
+              }
+              const prefix = currentRouteName?.split('_').at(0);
+              if (prefix !== oldPrefix) {
+                setDark(prefix !== 'Wallet');
+                routePrefixRef.current = prefix;
+              }
+            }}
+          >
+            {<CurrentNav />}
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </PaperProvider>
+    </Provider>
   );
 }
 

@@ -10,14 +10,14 @@ import { catchError } from '../utils';
 import createAccountWithPassword from '../utils/accountCreate';
 import { getAccount } from '../services/meta1Api';
 import {
-  email,
-  hasSpecialChars,
+  // email,
+  // hasSpecialChars,
   lettersOnly,
-  minLen,
-  noRepeat,
-  noSpace,
+  // minLen,
+  // noRepeat,
+  // noSpace,
   required,
-  upperAndLowerCase,
+  // upperAndLowerCase,
 } from '../utils/useFormHelper/rules';
 //@ts-ignore
 import { ChainValidation } from 'meta1-vision-js';
@@ -82,139 +82,146 @@ const CreateWalletScreen: React.FC = () => {
         backgroundColor: '#fff',
       }}
     >
-      <ScrollView>
+      <ScrollView
+        contentContainerStyle={{
+          flex: 1,
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+        }}
+      >
         <View style={{ marginHorizontal: 24 }}>
           <Heading style={{ marginBottom: 8 }}>Create META Wallet</Heading>
           <TextSecondary style={{ marginBottom: 18 }}>
             Provide access to your META Lite Wallet
           </TextSecondary>
 
-          <KeyboardAwareScrollView extraHeight={Platform.OS === 'ios' ? 1 : 120}>
-            <View>
-              <View style={{ flexDirection: 'row' }}>
-                <Input
-                  control={control}
-                  style={{ width: '48%' }}
-                  name="firstName"
-                  label="First Name"
-                  rules={{
-                    required,
-                    validate: {
-                      lettersOnly,
-                    },
-                  }}
-                />
-                <View style={{ width: '4%' }} />
-                <Input
-                  control={control}
-                  style={{ width: '48%' }}
-                  name="lastName"
-                  label="Last Name"
-                  rules={{ required, validate: { lettersOnly } }}
-                />
-              </View>
+          {/*<KeyboardAwareScrollView extraHeight={Platform.OS === 'ios' ? 1 : 120}>*/}
+          <View>
+            <View style={{ flexDirection: 'row' }}>
               <Input
                 control={control}
-                name="email"
-                label="Email"
-                autoCapitalize="none"
-                autoCorrect={false}
-                autoCompleteType="email"
+                style={{ width: '48%' }}
+                name="firstName"
+                label="First Name"
                 rules={{
                   required,
                   validate: {
-                    email,
+                    lettersOnly,
                   },
                 }}
               />
-              <PhoneInput control={control} name="mobile" />
+              <View style={{ width: '4%' }} />
               <Input
                 control={control}
-                name="accountName"
-                label="Account Name"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoCorrect={false}
-                rules={{
-                  required,
-                  validate: {
-                    premiumName,
-                    chainValidate,
-                    freeName,
-                  },
-                }}
-                render={props => (
-                  <TextInput
-                    {...props}
-                    onChangeText={t => props.onChangeText?.(t.toLowerCase())}
-                  />
-                )}
-              />
-              <Input
-                control={control}
-                name="password"
-                label="Password"
-                rules={{
-                  required,
-                  validate: {
-                    _minLen: minLen(8),
-                    hasSpecialChars,
-                    upperAndLowerCase,
-                    noRepeat,
-                    noSpace,
-                  },
-                }}
-                render={PasswordInput}
-              />
-              <TextSecondary style={{ fontSize: 14 }}>
-                Please keep your password in a safe place. Don’t share it with any third-parties or
-                send it online.
-              </TextSecondary>
-              <Input
-                control={control}
-                name="passwordRepeat"
-                label="Confirm Password"
-                secureTextEntry={true}
-                rules={{
-                  required,
-                  validate: {
-                    same: t =>
-                      t === getValues('password') ||
-                      'Confirm password should be the same as Password',
-                  },
-                }}
+                style={{ width: '48%' }}
+                name="lastName"
+                label="Last Name"
+                rules={{ required, validate: { lettersOnly } }}
               />
             </View>
-          </KeyboardAwareScrollView>
+            {/*<Input*/}
+            {/*  control={control}*/}
+            {/*  name="email"*/}
+            {/*  label="Email"*/}
+            {/*  autoCapitalize="none"*/}
+            {/*  autoCorrect={false}*/}
+            {/*  autoCompleteType="email"*/}
+            {/*  rules={{*/}
+            {/*    required,*/}
+            {/*    validate: {*/}
+            {/*      email,*/}
+            {/*    },*/}
+            {/*  }}*/}
+            {/*/>*/}
+            <PhoneInput control={control} name="mobile" />
+            <Input
+              control={control}
+              name="accountName"
+              label="Wallet Name"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
+              rules={{
+                required,
+                validate: {
+                  premiumName,
+                  chainValidate,
+                  freeName,
+                },
+              }}
+              render={props => (
+                <TextInput {...props} onChangeText={t => props.onChangeText?.(t.toLowerCase())} />
+              )}
+            />
+            {/*<Input*/}
+            {/*  control={control}*/}
+            {/*  name="password"*/}
+            {/*  label="Password"*/}
+            {/*  rules={{*/}
+            {/*    required,*/}
+            {/*    validate: {*/}
+            {/*      _minLen: minLen(8),*/}
+            {/*      hasSpecialChars,*/}
+            {/*      upperAndLowerCase,*/}
+            {/*      noRepeat,*/}
+            {/*      noSpace,*/}
+            {/*    },*/}
+            {/*  }}*/}
+            {/*  render={PasswordInput}*/}
+            {/*/>*/}
+            {/*<TextSecondary style={{ fontSize: 14 }}>*/}
+            {/*  Please keep your password in a safe place. Don’t share it with any third-parties or*/}
+            {/*  send it online.*/}
+            {/*</TextSecondary>*/}
+            {/*<Input*/}
+            {/*  control={control}*/}
+            {/*  name="passwordRepeat"*/}
+            {/*  label="Confirm Password"*/}
+            {/*  secureTextEntry={true}*/}
+            {/*  rules={{*/}
+            {/*    required,*/}
+            {/*    validate: {*/}
+            {/*      same: t =>*/}
+            {/*        t === getValues('password') ||*/}
+            {/*        'Confirm password should be the same as Password',*/}
+            {/*    },*/}
+            {/*  }}*/}
+            {/*/>*/}
+          </View>
+          {/*</KeyboardAwareScrollView>*/}
         </View>
         <View>
           <RoundedButton
             title="Submit"
             // disabled={!Object(errors.values)}
-            onPress={handleSubmit(fs => {
-              navigation.navigate('Loader');
-              catchError(
-                async () => {
-                  const _apiRes = await createAccountWithPassword(
-                    fs.accountName,
-                    fs.password,
-                    // --Who cares
-                    false,
-                    '',
-                    1,
-                    '',
-                    // --
-                    fs.mobile,
-                    fs.email,
-                    fs.lastName,
-                    fs.firstName,
-                  );
-                  authorize(fs.accountName, fs.password);
-                },
-                {
-                  onErr: () => navigation.goBack(),
-                },
-              );
+            // onPress={handleSubmit(fs => {
+            //   navigation.navigate('Loader');
+            //   catchError(
+            //     async () => {
+            //       const _apiRes = await createAccountWithPassword(
+            //         fs.accountName,
+            //         fs.password,
+            //         // --Who cares
+            //         false,
+            //         '',
+            //         1,
+            //         '',
+            //         // --
+            //         fs.mobile,
+            //         fs.email,
+            //         fs.lastName,
+            //         fs.firstName,
+            //       );
+            //       authorize(fs.accountName, fs.password);
+            //     },
+            //     {
+            //       onErr: () => navigation.goBack(),
+            //     },
+            //   );
+            // })}
+            onPress={handleSubmit(formState => {
+              const { firstName, lastName, mobile, accountName } = formState;
+              navigation.navigate('FaceKI', { firstName, lastName, mobile, accountName });
             })}
           />
         </View>
