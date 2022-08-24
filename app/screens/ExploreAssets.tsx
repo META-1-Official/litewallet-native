@@ -155,7 +155,7 @@ function Approved() {
         name="GOLD RESERVE ASSET ASSIGNMENT OF $5,600,000,000 WITH SUPPORTING BONDS OF EQUAL VALUE INSURING THE PRINCIPAL GOLD RESERVES"
         qty="$5,600,000,000"
         status="Approved"
-        progress={0.7326}
+        progress={1}
       />
     </ScrollView>
   );

@@ -12,7 +12,7 @@ import { colors } from '../styles/colors';
 import { useAssets } from '../services/meta1Api';
 import Loader from '../components/Loader';
 import AppHeader from '../components/AppHeaer';
-import TradeScreen from './TradeScreen';
+import TradeScreen from './Trade/TradeScreen';
 import ReciveScreen from './ReciveScreen';
 import SendScreen from './SendScreen';
 

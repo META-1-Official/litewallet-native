@@ -4,7 +4,7 @@ import { ArrowLeft } from 'react-native-feather';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { DexSSP } from '.';
 import { tid } from '../../utils';
-import TradeScreen from '../TradeScreen';
+import TradeScreen from '../Trade/TradeScreen';
 
 type HeaderProps = {
   title: string;

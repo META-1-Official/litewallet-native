@@ -172,7 +172,7 @@ const BottomRow = ({ onPress, darkMode }: { onPress: () => void; darkMode?: bool
         alignItems: 'center',
       }}
     >
-      <Text style={{ color: '#617283', fontWeight: '500' }}> FEE: 0.00035 META1 </Text>
+      <Text style={{ color: '#617283', fontWeight: '500' }}> FEE: 0.00034 META1 </Text>
       <View
         style={{
           backgroundColor: '#330000',
@@ -197,7 +197,7 @@ const BottomRow = ({ onPress, darkMode }: { onPress: () => void; darkMode?: bool
         alignItems: 'center',
       }}
     >
-      <Text style={{ color: '#617283', fontWeight: '500' }}> FEE: 0.00035 META1 </Text>
+      <Text style={{ color: '#617283', fontWeight: '500' }}> FEE: 0.00034 META1 </Text>
       <View
         style={{
           backgroundColor: '#fff',
@@ -492,7 +492,7 @@ const makeSendFn =
           {
             toAccount,
             asset: standalone.asset.symbol,
-            amount: Number(standalone.amount), // 0.00035 fixed fee
+            amount: Number(standalone.amount), // 0.00034 fixed fee
           },
         );
         await useAssetsStore.getState().fetchUserAssets(accountName);
