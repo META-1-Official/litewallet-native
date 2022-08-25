@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useAssetPicker } from '../components/AssetSelectModal';
 import { AssetBalanceT, useAssetsStore } from '../services/meta1Api';
 import * as Sentry from '@sentry/react-native';
-import { Ticker } from './meta1dexTypes';
+import { Ticker } from '../utils/meta1dexTypes';
 
 export type theAsset = {
   asset: AssetBalanceT;

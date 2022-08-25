@@ -1,83 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useController, UseControllerProps } from 'react-hook-form';
-import { StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
-import { DefaultTheme, HelperText } from 'react-native-paper';
-import { tid } from '..';
-import { colors } from '../../styles/colors';
-import _get from 'lodash.get';
-import PaperTextInput, {
-  TextInputProps,
-} from 'react-native-paper/src/components/TextInput/TextInput';
 import { useNavigation } from '@react-navigation/native';
-import { ChevronDown, Eye, EyeOff } from 'react-native-feather';
-import { RootNavigationProp } from '../../App';
-import { CountryUS, CountryData, isoToEmoji } from '../../components/CountryPicker/CountryList';
-import { RuleFn, rule } from './rules';
+import React, { useEffect, useRef, useState } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { ChevronDown } from 'react-native-feather';
 import TextInputMask from 'react-native-text-input-mask';
-import { RenderProps } from 'react-native-paper/src/components/TextInput/types';
+import { RootNavigationProp } from '../App';
+import { rule, RuleFn } from '../constants/formRules';
+import Input from '../components/Input/Input';
+import { tid } from '../utils';
+import { CountryData, CountryUS, isoToEmoji } from './CountryPicker/CountryList';
 
-const theme: typeof DefaultTheme = {
-  ...DefaultTheme,
-  //@ts-ignore
-  colors: {
-    primary: colors.BrandYellow,
-    accent: colors.BrandYellow,
-    text: colors.mutedGray,
-    placeholder: colors.mutedGray,
-  },
-};
-
-type Props = { name: string; control: any; rules?: UseControllerProps<any>['rules'] } & Omit<
-  TextInputProps,
-  'theme'
->;
-export function Input({ name, control, rules, ...props }: Props) {
-  const {
-    field,
-    fieldState: { error },
-  } = useController({
-    control,
-    defaultValue: '',
-    name,
-    rules,
-  });
-
-  return (
-    <View style={{ width: _get(props, 'style.width', 'auto') }}>
-      <PaperTextInput
-        {...props}
-        placeholderTextColor={colors.mutedGray}
-        style={[styles.input, props.style, { width: 'auto' }]}
-        underlineColor={theme.colors.text}
-        theme={theme}
-        {...tid(`useFrom/Input/${name}`)}
-        value={field.value}
-        onChangeText={field.onChange}
-      />
-      <HelperText padding="none" type="error" visible={!!error}>
-        {error?.message}
-      </HelperText>
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  input: {
-    //height: 60,
-    backgroundColor: 'transparent',
-    paddingHorizontal: 0,
-    fontSize: 18,
-    //marginTop: 8,
-  },
-});
-
-const defRule: RuleFn = _t => rule(false, 'Invalid phone number');
 interface CommonProps {
   name: string;
   control: any;
 }
 
-export function PhoneInput({ name, control }: CommonProps) {
+const defRule: RuleFn = _t => rule(false, 'Invalid phone number');
+
+const PhoneInput = ({ name, control }: CommonProps) => {
   const navigation = useNavigation<RootNavigationProp>();
   const [country, setCountry] = useState(CountryUS);
   const [internalValue, setInternal] = useState('');
@@ -102,7 +41,7 @@ export function PhoneInput({ name, control }: CommonProps) {
 
       //  prettier-ignore
       const newRule: RuleFn = (t) =>
-       rule(re.test(t), 'This should be a valid phone number');
+        rule(re.test(t), 'This should be a valid phone number');
 
       ruleRef.current = newRule;
     } else {
@@ -196,36 +135,6 @@ export function PhoneInput({ name, control }: CommonProps) {
       </View>
     </View>
   );
-}
+};
 
-export function PasswordInput(props: RenderProps) {
-  const [visible, setVisible] = useState(true);
-  return (
-    <View key={123} style={{ flexDirection: 'row', alignItems: 'center' }}>
-      <TextInput
-        {...props}
-        {...tid('CreateWallet/password')}
-        autoCapitalize={'none'}
-        autoCorrect={false}
-        style={[props.style, { maxWidth: '88%', paddingRight: 8 }]}
-        secureTextEntry={visible}
-      />
-      <TouchableOpacity {...tid('CreateWallet/copyPassword')} onPress={() => setVisible(!visible)}>
-        <View
-          style={{
-            backgroundColor: colors.BrandYellow,
-            marginTop: 14,
-            padding: 6,
-            borderRadius: 5,
-          }}
-        >
-          {visible ? (
-            <EyeOff width={20} height={20} color="#000" />
-          ) : (
-            <Eye width={20} height={20} color="#000" />
-          )}
-        </View>
-      </TouchableOpacity>
-    </View>
-  );
-}
+export default PhoneInput;

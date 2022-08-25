@@ -22,8 +22,8 @@ import { colors } from '../styles/colors';
 import { tid, useScroll } from '../utils';
 import { getAccount } from '../services/meta1Api';
 import meta1dex from '../utils/meta1dexTypes';
-import { required, RuleFn } from '../utils/useFormHelper/rules';
-import { Input } from '../utils/useFormHelper/useFormHelper';
+import { required, RuleFn } from '../constants/formRules';
+import Input from '../components/Input/Input';
 
 const { width, height } = Dimensions.get('screen');
 const knownAccount: RuleFn = async text => {

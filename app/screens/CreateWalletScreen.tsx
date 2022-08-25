@@ -18,23 +18,26 @@ import {
   noSpace,
   required,
   upperAndLowerCase,
-} from '../utils/useFormHelper/rules';
+} from '../constants/formRules';
 //@ts-ignore
 import { ChainValidation } from 'meta1-vision-js';
 import { useForm } from 'react-hook-form';
 import { RootNavigationProp } from '../App';
-import { Input, PasswordInput, PhoneInput } from '../utils/useFormHelper/useFormHelper';
+// import { Input, PasswordInput, PhoneInput } from '../hooks/useFormHelper';
+import Input from '../components/Input/Input';
+import PasswordInput from '../components/PasswordInput';
+import PhoneInput from '../components/PhoneInput';
+
+const premiumName = (t: string) =>
+  /^[a-z][a-z0-9]*([-][a-z0-9]+)+$/.test(t) ||
+  'This is a premium name which is not supported by this faucet. Please enter a regular name containing least one dash or a number';
+
+const chainValidate = (t: string) => ChainValidation.is_account_name_error(t);
 
 const freeName = async (text: string) => {
   const acc = await getAccount(text).catch(console.debug);
   return !acc || 'This account name is already taken';
 };
-
-const premiumName = (t: string) =>
-  ChainValidation.is_cheap_name(t) ||
-  'This is a premium name which is not supported by this faucet. Please enter a regular name containing least one dash or a number';
-
-const chainValidate = (t: string) => ChainValidation.is_account_name_error(t);
 
 const CreateWalletScreen: React.FC = () => {
   const navigation = useNavigation<RootNavigationProp>();
@@ -51,28 +54,6 @@ const CreateWalletScreen: React.FC = () => {
       passwordRepeat: '',
     },
   });
-
-  // const { Input, formState, valid, validState } = useForm([
-  //   { name: 'first_name', lable: 'First name', rules: [required, lettersOnly] },
-  //   { name: 'last_name', lable: 'Last name', rules: [required, lettersOnly] },
-  //   { name: 'email', lable: 'Email', rules: [required, email] },
-  //   { name: 'mobile', lable: 'Mobile number', rules: [mobile] },
-  //   {
-  //     name: 'account_name',
-  //     lable: 'Account name',
-  //     rules: [required, premiumName, freeName, chainValidate],
-  //   },
-  //   {
-  //     name: 'password',
-  //     lable: 'Password',
-  //     rules: [required, minLen(8), hasSpecialChars, upperAndLowerCase, noRepeat, noSpace],
-  //   },
-  //   {
-  //     name: 'password_repeat',
-  //     lable: 'Confirm Password',
-  //     rules: [required, same('password')],
-  //   },
-  // ]);
 
   return (
     <SafeAreaView
@@ -138,9 +119,9 @@ const CreateWalletScreen: React.FC = () => {
                 rules={{
                   required,
                   validate: {
-                    premiumName,
                     chainValidate,
                     freeName,
+                    premiumName,
                   },
                 }}
                 render={props => (

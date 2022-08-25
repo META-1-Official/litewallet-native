@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { AssetBalanceT } from '../../../services/meta1Api';
 import meta1dex from '../../../utils/meta1dexTypes';
-import { createPair, useAsset } from '../../../utils/useAsset';
+import { createPair, useAsset } from '../../../hooks/useAsset';
 
 const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanceT) => {
   const [A, B] = createPair(

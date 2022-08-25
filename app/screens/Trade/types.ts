@@ -1,5 +1,5 @@
 import { ImageStyle, TextInputProps, TextStyle, ViewStyle } from 'react-native';
-import { theAsset } from '../../utils/useAsset';
+import { theAsset } from '../../hooks/useAsset';
 import styles from './TradeScreen.styles';
 
 export type InputProps = {

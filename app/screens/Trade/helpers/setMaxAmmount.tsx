@@ -1,5 +1,5 @@
 import { Alert } from 'react-native';
-import { theAsset } from '../../../utils/useAsset';
+import { theAsset } from '../../../hooks/useAsset';
 
 type ScreenAssets = {
   A: theAsset;

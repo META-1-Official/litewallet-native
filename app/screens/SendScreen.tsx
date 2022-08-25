@@ -28,7 +28,7 @@ import { useNewLoaderModal } from '../components/LoaderModal';
 import { DexSSP } from './dex';
 import { HeaderProps } from './dex/SendScreen';
 import { SvgIcons } from '../../assets';
-import { StandaloneAsset, useAsset } from '../utils/useAsset';
+import { StandaloneAsset, useAsset } from '../hooks/useAsset';
 import throttle from 'lodash.throttle';
 import { ShowModalFn, useShowModal } from '../components/SuccessModal';
 import { useNavigation } from '@react-navigation/native';
