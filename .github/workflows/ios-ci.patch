@@ -1,0 +1,46 @@
+diff --git a/ios/nativeapp.xcodeproj/project.pbxproj b/ios/nativeapp.xcodeproj/project.pbxproj
+index fe12aec..5b924d9 100644
+--- a/ios/nativeapp.xcodeproj/project.pbxproj
++++ b/ios/nativeapp.xcodeproj/project.pbxproj
+@@ -498,9 +498,9 @@
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+ 				CLANG_ENABLE_MODULES = YES;
+-				CODE_SIGN_IDENTITY = "Apple Development";
++				CODE_SIGN_IDENTITY = "iPhone Developer";
+ 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+-				CODE_SIGN_STYLE = Automatic;
++				CODE_SIGN_STYLE = Manual;
+ 				CURRENT_PROJECT_VERSION = 27;
+ 				DEVELOPMENT_TEAM = BL96N576T8;
+ 				ENABLE_BITCODE = NO;
+@@ -518,7 +518,7 @@
+ 				);
+ 				PRODUCT_BUNDLE_IDENTIFIER = io.meta1.appbeta;
+ 				PRODUCT_NAME = META1;
+-				PROVISIONING_PROFILE_SPECIFIER = "";
++				PROVISIONING_PROFILE_SPECIFIER = "match Development io.meta1.appbeta";
+ 				STRIP_INSTALLED_PRODUCT = NO;
+ 				STRIP_STYLE = all;
+ 				STRIP_SWIFT_SYMBOLS = NO;
+@@ -534,9 +534,9 @@
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+ 				CLANG_ENABLE_MODULES = YES;
+-				CODE_SIGN_IDENTITY = "Apple Development";
++				CODE_SIGN_IDENTITY = "iPhone Developer";
+ 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+-				CODE_SIGN_STYLE = Automatic;
++				CODE_SIGN_STYLE = Manual;
+ 				COPY_PHASE_STRIP = NO;
+ 				CURRENT_PROJECT_VERSION = 27;
+ 				DEVELOPMENT_TEAM = BL96N576T8;
+@@ -554,7 +554,7 @@
+ 				);
+ 				PRODUCT_BUNDLE_IDENTIFIER = io.meta1.appbeta;
+ 				PRODUCT_NAME = META1;
+-				PROVISIONING_PROFILE_SPECIFIER = "";
++				PROVISIONING_PROFILE_SPECIFIER = "match Development io.meta1.appbeta";
+ 				STRIP_INSTALLED_PRODUCT = NO;
+ 				STRIP_STYLE = all;
+ 				STRIP_SWIFT_SYMBOLS = NO;

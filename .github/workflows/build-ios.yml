@@ -25,6 +25,13 @@ jobs:
         run: |
           cd ios
           pod install
+        # Try to patch out the automatic code signing
+        # You probably can ignore it if this fails
+        # Assuming you know what you're doing
+      - name: Select manual code signing
+        continue-on-error: true
+        run: |
+          git apply .github/workflows/ios-ci.patch
       - name: Build and upload to Diawi
         run: |
           cd ios
