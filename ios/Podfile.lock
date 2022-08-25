@@ -289,6 +289,8 @@ PODS:
     - InputMask (~> 6.1.0)
     - React-Core
     - React-RCTText
+  - react-native-web-browser (0.2.0):
+    - React-Core
   - react-native-webview (11.17.2):
     - React-Core
   - React-perflogger (0.66.0)
@@ -463,6 +465,7 @@ DEPENDENCIES:
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-text-input-mask (from `../node_modules/react-native-text-input-mask`)
+  - "react-native-web-browser (from `../node_modules/@toruslabs/react-native-web-browser`)"
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -557,6 +560,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-splash-screen"
   react-native-text-input-mask:
     :path: "../node_modules/react-native-text-input-mask"
+  react-native-web-browser:
+    :path: "../node_modules/@toruslabs/react-native-web-browser"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-perflogger:
@@ -647,6 +652,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   react-native-text-input-mask: 36a546b378fadd2efe1b7484a859d34bc2c80395
+  react-native-web-browser: c460e907deee31c9fda02e4e37bee7688808f0f7
   react-native-webview: 380c1a03ec94b7ed764dac8db1e7c9952d08c93a
   React-perflogger: 1f554c2b684e2f484f9edcdfdaeedab039fbaca8
   React-RCTActionSheet: 610d5a5d71ab4808734782c8bca6a12ec3563672
@@ -675,6 +681,6 @@ SPEC CHECKSUMS:
   Yoga: c11abbf5809216c91fcd62f5571078b83d9b6720
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 6b0d55d74c3b9c4fef1da75863736a1387137b70
+PODFILE CHECKSUM: 7ef05a0a79c13d6201eb5087469074519aab15b9
 
 COCOAPODS: 1.11.3
