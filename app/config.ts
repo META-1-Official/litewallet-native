@@ -18,4 +18,6 @@ export default {
       ? 'https://gateway.dev.meta-exchange.vision'
       : 'https://gateway.api.meta-exchange.vision',
   API_URL: 'https://api.meta-exchange.vision',
+  WEB3_CLIENT_ID:
+    'BENfRWt5wyCFCi-nKzu6gIlPABHbvgub3lhZUhUp_r4XD2xmdph0MZMaXY89xnfPVs9wMao5vlBiA6dtP-4H1i0',
 };

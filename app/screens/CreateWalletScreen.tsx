@@ -25,6 +25,20 @@ import { useForm } from 'react-hook-form';
 import { RootNavigationProp } from '../App';
 import { Input, PasswordInput, PhoneInput } from '../utils/useFormHelper/useFormHelper';
 
+// import * as WebBrowser from '@toruslabs/react-native-web-browser';
+// import Web3Auth, { OPENLOGIN_NETWORK, LOGIN_PROVIDER } from '@web3auth/react-native-sdk';
+//
+// const web3auth = new Web3Auth(WebBrowser, {
+//   clientId:
+//     'BENfRWt5wyCFCi-nKzu6gIlPABHbvgub3lhZUhUp_r4XD2xmdph0MZMaXY89xnfPVs9wMao5vlBiA6dtP-4H1i0',
+//   network: OPENLOGIN_NETWORK.TESTNET,
+// });
+
+// const state = web3auth.login({
+//   loginProvider: LOGIN_PROVIDER.GOOGLE,
+//   redirectUrl: '',
+// });
+
 const freeName = async (text: string) => {
   const acc = await getAccount(text).catch(console.debug);
   return !acc || 'This account name is already taken';
