@@ -14,13 +14,14 @@ export const Web3AuthScreen = ({ route }) => {
   const nav = useNavigation<RootNavigationProp>();
   const [privateKey, setPrivateKey] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  const [email, setEmail] = useState('');
   const { firstName, lastName, mobile, accountName } = route.params;
 
   useEffect(() => {
     if (privateKey) {
-      nav.navigate('FaceKI', { privateKey, firstName, lastName, mobile, accountName });
+      nav.navigate('FaceKI', { privateKey, firstName, lastName, mobile, accountName, email });
     }
-  }, [privateKey, firstName, lastName, mobile, accountName]);
+  }, [privateKey]);
 
   const login = async () => {
     try {
@@ -34,6 +35,10 @@ export const Web3AuthScreen = ({ route }) => {
         loginProvider: LOGIN_PROVIDER.GOOGLE,
         redirectUrl: resolvedRedirectUrl,
       });
+
+      console.log('!!!State: ', state);
+      setEmail(state?.userInfo?.email);
+      console.log(state.userInfo.email);
 
       setPrivateKey(state.privKey || 'no key');
     } catch (e) {
@@ -80,7 +85,14 @@ export const Web3AuthScreen = ({ route }) => {
             title="Next"
             disabled={!privateKey}
             onPress={() =>
-              nav.navigate('FaceKI', { privateKey, firstName, lastName, mobile, accountName })
+              nav.navigate('FaceKI', {
+                privateKey,
+                firstName,
+                lastName,
+                mobile,
+                accountName,
+                email,
+              })
             }
           />
         </View>

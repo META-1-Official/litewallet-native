@@ -8,7 +8,7 @@ import { generateKeyFromPassword } from '../utils/accountCreate';
 
 export const FaceKISuccessScreen = ({ route }) => {
   const nav = useNavigation<RootNavigationProp>();
-  const { path, privateKey, accountName } = route.params;
+  const { path, privateKey, accountName, email, firstName, lastName, mobile } = route.params;
   console.log('!!!Path: ', path);
 
   const passKey = generateKeyFromPassword(accountName, '', privateKey, true);
@@ -55,7 +55,9 @@ export const FaceKISuccessScreen = ({ route }) => {
           <RoundedButton
             styles={{ flex: 1 }}
             title="Next"
-            onPress={() => nav.navigate('Passkey', { passKey })}
+            onPress={() =>
+              nav.navigate('Passkey', { passKey, email, accountName, mobile, firstName, lastName })
+            }
           />
         </View>
       </ScrollView>

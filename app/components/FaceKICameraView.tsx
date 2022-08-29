@@ -9,7 +9,7 @@ import { livelinessCheck, verifyUser } from '../store/faceKI/faceKI.actions';
 import styles from './FaceKICameraView.styles';
 import RoundedButton from './RoundedButton';
 
-const FaceKiCameraView = ({ mobile, privateKey, accountName }) => {
+const FaceKiCameraView = ({ mobile, privateKey, accountName, email, firstName, lastName }) => {
   const devices = useCameraDevices();
   const device = devices.front;
   const [photo, setPhoto] = useState<any>(false);
@@ -55,7 +55,7 @@ const FaceKiCameraView = ({ mobile, privateKey, accountName }) => {
         const verifyStatus = await faceKIAPI.verifyUser({ image });
         console.log('!!!!! after verify');
 
-        if (verifyStatus.data.status === 'Verify OK' && verifyStatus.data.name === mobile) {
+        if (verifyStatus.data.status === 'Verify OK' && verifyStatus.data.name === email) {
           console.log('You have been already enrolled!');
           console.log('!!!!!!!!Response:', verifyStatus);
           nav.navigate('FaceKISuccess', {
@@ -63,10 +63,14 @@ const FaceKiCameraView = ({ mobile, privateKey, accountName }) => {
             path: capture.path,
             accountName,
             privateKey,
+            email,
+            mobile,
+            firstName,
+            lastName,
           });
         } else {
           console.log('!!!!! before enrolled');
-          const enrollStatus = await faceKIAPI.enrollUser({ image, name: mobile });
+          const enrollStatus = await faceKIAPI.enrollUser({ image, name: email });
           console.log('!!!!! after enrolled');
 
           if (enrollStatus.data.status === 'Enroll OK') {
@@ -76,6 +80,10 @@ const FaceKiCameraView = ({ mobile, privateKey, accountName }) => {
               path: capture.path,
               accountName,
               privateKey,
+              email,
+              mobile,
+              firstName,
+              lastName,
             });
           } else {
             nav.goBack();

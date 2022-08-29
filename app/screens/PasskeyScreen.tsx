@@ -5,9 +5,31 @@ import { ScrollView } from 'react-native-gesture-handler';
 import * as url from 'url';
 import RoundedButton from '../components/RoundedButton';
 import * as WebBrowser from '@toruslabs/react-native-web-browser';
+import getToken from '../services/eSignature';
+
+const handleNext = async (email, firstName, lastName, mobile) => {
+  let token;
+  console.log('!!! handler', email);
+  const response = await getToken(email);
+  console.log('!!!Response ', response);
+
+  if (response && response.headers) {
+    if (response.headers.authorization) {
+      token = response.headers.authorization;
+    }
+  }
+
+  console.log('!Token: ', token);
+  console.log('!Data: ', firstName, lastName, mobile, token);
+
+  let result = await WebBrowser.openBrowserAsync(
+    `https://humankyc.cryptomailsvc.io/e-sign?email${encodeURIComponent(email)}&token=${token}`,
+  );
+  console.log('!!!WebBrowser: ', result);
+};
 
 export const PasskeyScreen = ({ route, navigation }) => {
-  const { passKey } = route.params;
+  const { passKey, firstName, lastName, mobile, email, accountName } = route.params;
   const [checkboxesState, setCheckBoxesState] = useState([false, false, false, false, false]);
   const handleCheckBox = (id: number) => {
     setCheckBoxesState(prevState => {
@@ -138,11 +160,7 @@ export const PasskeyScreen = ({ route, navigation }) => {
             title="Next"
             // onPress={() => navigation.navigate('ESignature')}
             disabled={!isEveryCheckBoxesValid}
-            onPress={async () => {
-              let result = await WebBrowser.openBrowserAsync('https://humankyc.cryptomailsvc.io/');
-              console.log('!!!WebBrowser: ', result);
-              // Linking.openURL('https://humankyc.cryptomailsvc.io/');
-            }}
+            onPress={() => handleNext(email, firstName, lastName, mobile)}
           />
         </View>
       </ScrollView>
