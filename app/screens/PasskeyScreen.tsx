@@ -1,11 +1,31 @@
-import React from 'react';
-import { Linking, Platform, SafeAreaView, Text, View } from 'react-native';
+import React, { useMemo, useState } from 'react';
+import { Linking, Platform, SafeAreaView, Text, TextInput, View } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import { ScrollView } from 'react-native-gesture-handler';
 import * as url from 'url';
 import RoundedButton from '../components/RoundedButton';
+import * as WebBrowser from '@toruslabs/react-native-web-browser';
 
 export const PasskeyScreen = ({ route, navigation }) => {
+  const { passKey } = route.params;
+  const [checkboxesState, setCheckBoxesState] = useState([false, false, false, false, false]);
+  const handleCheckBox = (id: number) => {
+    setCheckBoxesState(prevState => {
+      const newState = [...prevState];
+      newState[id] = !newState[id];
+      return newState;
+    });
+  };
+  const isEveryCheckBoxesValid = useMemo(() => {
+    return (
+      checkboxesState[0] &&
+      checkboxesState[1] &&
+      checkboxesState[2] &&
+      checkboxesState[3] &&
+      checkboxesState[4]
+    );
+  }, [checkboxesState]);
+
   return (
     <SafeAreaView
       style={{
@@ -26,6 +46,7 @@ export const PasskeyScreen = ({ route, navigation }) => {
       >
         <View style={{}}>
           <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Save Passkey</Text>
+          <TextInput value={passKey.privKey} />
           <Text style={{ fontSize: 18, paddingTop: 33, paddingBottom: 33 }}>
             Please keep your Passkey in a safe place. Don't share it with any third-parties or send
             it online.
@@ -60,31 +81,51 @@ export const PasskeyScreen = ({ route, navigation }) => {
           }}
         >
           <View style={{ flex: 1, flexDirection: 'row' }}>
-            <CheckBox boxType="square" value={false} onValueChange={() => {}} />
+            <CheckBox
+              boxType="square"
+              value={checkboxesState[0]}
+              onValueChange={() => handleCheckBox(0)}
+            />
             <Text style={{ marginLeft: 20, flex: 1 }}>
               I understand that I will lose access to my funds if I lose my passkey
             </Text>
           </View>
           <View style={{ flex: 1, flexDirection: 'row' }}>
-            <CheckBox boxType="square" value={false} onValueChange={() => {}} />
+            <CheckBox
+              boxType="square"
+              value={checkboxesState[1]}
+              onValueChange={() => handleCheckBox(1)}
+            />
             <Text style={{ marginLeft: 20, flex: 1 }}>
               I understand that no one can recover my passkey if I lose or forget it
             </Text>
           </View>
           <View style={{ flex: 1, flexDirection: 'row' }}>
-            <CheckBox boxType="square" value={false} onValueChange={() => {}} />
+            <CheckBox
+              boxType="square"
+              value={checkboxesState[2]}
+              onValueChange={() => handleCheckBox(2)}
+            />
             <Text style={{ marginLeft: 20, flex: 1 }}>
               I have written down or otherwise stored my passkey
             </Text>
           </View>
           <View style={{ flex: 1, flexDirection: 'row' }}>
-            <CheckBox boxType="square" value={false} onValueChange={() => {}} />
+            <CheckBox
+              boxType="square"
+              value={checkboxesState[3]}
+              onValueChange={() => handleCheckBox(3)}
+            />
             <Text style={{ marginLeft: 20, flex: 1 }}>
               I am a living man or woman hence a living being
             </Text>
           </View>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-            <CheckBox boxType="square" value={false} onValueChange={() => {}} />
+            <CheckBox
+              boxType="square"
+              value={checkboxesState[4]}
+              onValueChange={() => handleCheckBox(4)}
+            />
             <Text style={{ marginLeft: 20, flex: 1 }}>
               Sign META Association Membership Agreement
             </Text>
@@ -96,8 +137,11 @@ export const PasskeyScreen = ({ route, navigation }) => {
             styles={{ flex: 1 }}
             title="Next"
             // onPress={() => navigation.navigate('ESignature')}
-            onPress={() => {
-              Linking.openURL('https://humankyc.cryptomailsvc.io/');
+            disabled={!isEveryCheckBoxesValid}
+            onPress={async () => {
+              let result = await WebBrowser.openBrowserAsync('https://humankyc.cryptomailsvc.io/');
+              console.log('!!!WebBrowser: ', result);
+              // Linking.openURL('https://humankyc.cryptomailsvc.io/');
             }}
           />
         </View>

@@ -12,15 +12,15 @@ const resolvedRedirectUrl = 'io.meta1.appbeta://auth';
 
 export const Web3AuthScreen = ({ route }) => {
   const nav = useNavigation<RootNavigationProp>();
-  const [key, setKey] = useState('');
+  const [privateKey, setPrivateKey] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const { firstName, lastName, mobile, accountName } = route.params;
 
   useEffect(() => {
-    if (key) {
-      nav.navigate('FaceKI', { key, firstName, lastName, mobile, accountName });
+    if (privateKey) {
+      nav.navigate('FaceKI', { privateKey, firstName, lastName, mobile, accountName });
     }
-  }, [key, firstName, lastName, mobile, accountName]);
+  }, [privateKey, firstName, lastName, mobile, accountName]);
 
   const login = async () => {
     try {
@@ -35,7 +35,7 @@ export const Web3AuthScreen = ({ route }) => {
         redirectUrl: resolvedRedirectUrl,
       });
 
-      setKey(state.privKey || 'no key');
+      setPrivateKey(state.privKey || 'no key');
     } catch (e) {
       console.error(e);
       setErrorMsg(String(e));
@@ -69,7 +69,7 @@ export const Web3AuthScreen = ({ route }) => {
           Now, its time to setup your passwordless authentication for your new META 1 wallet
         </Text>
 
-        <Text>Key: {key}</Text>
+        <Text>Key: {privateKey}</Text>
         <Text>Error: {errorMsg}</Text>
         <Text>Linking URL: {resolvedRedirectUrl}</Text>
         <Button title="Login with Web3Auth" onPress={login} />
@@ -78,9 +78,9 @@ export const Web3AuthScreen = ({ route }) => {
           <RoundedButton
             styles={{ flex: 1 }}
             title="Next"
-            disabled={!key}
+            disabled={!privateKey}
             onPress={() =>
-              nav.navigate('FaceKI', { key, firstName, lastName, mobile, accountName })
+              nav.navigate('FaceKI', { privateKey, firstName, lastName, mobile, accountName })
             }
           />
         </View>

@@ -9,7 +9,7 @@ import { livelinessCheck, verifyUser } from '../store/faceKI/faceKI.actions';
 import styles from './FaceKICameraView.styles';
 import RoundedButton from './RoundedButton';
 
-const FaceKiCameraView = ({ mobile }) => {
+const FaceKiCameraView = ({ mobile, privateKey, accountName }) => {
   const devices = useCameraDevices();
   const device = devices.front;
   const [photo, setPhoto] = useState<any>(false);
@@ -58,7 +58,12 @@ const FaceKiCameraView = ({ mobile }) => {
         if (verifyStatus.data.status === 'Verify OK' && verifyStatus.data.name === mobile) {
           console.log('You have been already enrolled!');
           console.log('!!!!!!!!Response:', verifyStatus);
-          nav.navigate('FaceKISuccess', { status: verifyStatus.data, path: capture.path });
+          nav.navigate('FaceKISuccess', {
+            status: verifyStatus.data,
+            path: capture.path,
+            accountName,
+            privateKey,
+          });
         } else {
           console.log('!!!!! before enrolled');
           const enrollStatus = await faceKIAPI.enrollUser({ image, name: mobile });
@@ -66,7 +71,12 @@ const FaceKiCameraView = ({ mobile }) => {
 
           if (enrollStatus.data.status === 'Enroll OK') {
             console.log('User has been successfully enrolled!');
-            nav.navigate('FaceKISuccess', { status: enrollStatus.data, path: capture.path });
+            nav.navigate('FaceKISuccess', {
+              status: enrollStatus.data,
+              path: capture.path,
+              accountName,
+              privateKey,
+            });
           } else {
             nav.goBack();
           }
@@ -99,31 +109,33 @@ const FaceKiCameraView = ({ mobile }) => {
             <View style={styles.leftBottom} />
             <View style={styles.rightBottom} />
           </View>
+
+          <View
+            style={{
+              position: 'absolute',
+              bottom: 0,
+            }}
+          >
+            <Text
+              style={{
+                color: '#FFC000',
+                fontSize: 16,
+                textAlign: 'center',
+                lineHeight: 22,
+                paddingBottom: 20,
+              }}
+            >
+              Next, we will setup your Biometric two factor authentication, to ensure the security
+              of your wallet
+            </Text>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+              <RoundedButton styles={{ flex: 1 }} title="Cancel" onPress={() => nav.goBack()} />
+              <RoundedButton styles={{ flex: 1 }} title="Verify" onPress={verifyHandler} />
+            </View>
+          </View>
         </>
       )}
-      <View
-        style={{
-          position: 'absolute',
-          bottom: 0,
-        }}
-      >
-        <Text
-          style={{
-            color: '#FFC000',
-            fontSize: 16,
-            textAlign: 'center',
-            lineHeight: 22,
-            paddingBottom: 20,
-          }}
-        >
-          Next, we will setup your Biometric two factor authentication, to ensure the security of
-          your wallet
-        </Text>
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-          <RoundedButton styles={{ flex: 1 }} title="Cancel" onPress={() => nav.goBack()} />
-          <RoundedButton styles={{ flex: 1 }} title="Verify" onPress={verifyHandler} />
-        </View>
-      </View>
+      {photo && <Text style={{ position: 'absolute', bottom: 40 }}>Loading...</Text>}
     </View>
   );
 };
