@@ -10,8 +10,10 @@ interface AppState {
   authorized: boolean;
   avatarUrl: string;
   token: string;
+  needUpdate: boolean;
   authorize: (accountName: string, password?: string) => void;
   logout: () => void;
+  setNeedUpdate: (flag: boolean) => void;
   setToken: (token: string) => void;
   setAvatar: (url: string) => void;
   loading: boolean;
@@ -34,7 +36,9 @@ export const useStore = create<AppState>(
           });
           signUp({ accountName }).catch(e => console.warn(e));
         },
+        needUpdate: false,
         token: '',
+        setNeedUpdate: (flag: boolean) => set({ needUpdate: flag }),
         setToken: (token: string) => set({ token }),
         setAvatar: (url: string) => set({ avatarUrl: url }),
         logout: () => set({ accountName: '', authorized: false, password: '', avatarUrl: '' }),

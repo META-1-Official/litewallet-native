@@ -1,6 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Platform, SafeAreaView, TextInput, View } from 'react-native';
+import {
+  NativeSyntheticEvent,
+  Platform,
+  SafeAreaView,
+  TextInput,
+  TextInputChangeEventData,
+  View,
+} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import RoundedButton from '../components/RoundedButton';
@@ -34,15 +41,11 @@ const premiumName = (t: string) =>
 
 const chainValidate = (t: string) => ChainValidation.is_account_name_error(t);
 
-const freeName = async (text: string) => {
-  const acc = await getAccount(text).catch(console.debug);
-  return !acc || 'This account name is already taken';
-};
-
 const CreateWalletScreen: React.FC = () => {
   const navigation = useNavigation<RootNavigationProp>();
   const authorize = useStore(state => state.authorize);
-  const { control, handleSubmit, getValues } = useForm({
+  let accountNameInputValue = '';
+  const { control, handleSubmit, getValues, setError } = useForm({
     mode: 'onChange',
     defaultValues: {
       firstName: '',
@@ -54,6 +57,23 @@ const CreateWalletScreen: React.FC = () => {
       passwordRepeat: '',
     },
   });
+
+  const freeName = async (text: string) => {
+    const acc = await getAccount(text).catch(console.debug);
+    if (accountNameInputValue) {
+      return !acc || 'This account name is already taken';
+    } else {
+      setTimeout(
+        () => setError('accountName', { type: 'required', message: 'This field is required' }),
+        1,
+      );
+      return true;
+    }
+  };
+
+  const setAccountNameInputValue = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    accountNameInputValue = e.nativeEvent.text;
+  };
 
   return (
     <SafeAreaView
@@ -116,6 +136,7 @@ const CreateWalletScreen: React.FC = () => {
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoCorrect={false}
+                onChange={e => setAccountNameInputValue(e)}
                 rules={{
                   required,
                   validate: {

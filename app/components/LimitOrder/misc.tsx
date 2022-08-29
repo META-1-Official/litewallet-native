@@ -177,7 +177,7 @@ export enum OrderType {
 
 export const useCreateOrder = (toGive: any, toGet: any, type: OrderType) => {
   const loaderModal = useNewLoaderModal();
-  const { accountName } = useStore();
+  const { accountName, setNeedUpdate } = useStore();
   const successModal = useShowModal();
 
   const getAccountInfo = async () => ({
@@ -201,7 +201,9 @@ export const useCreateOrder = (toGive: any, toGet: any, type: OrderType) => {
       `Place Limit Order - ${type}`,
     );
     loaderModal.close();
-    successModal(`Successfully placed ${type} order`, () => {});
+    successModal(`Successfully placed ${type} order`, () => {
+      setNeedUpdate(true);
+    });
     return to;
   };
   return {

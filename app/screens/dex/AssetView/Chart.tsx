@@ -9,6 +9,7 @@ import Loader from '../../../components/Loader';
 import { ALL_BUCKETS } from '../../../utils/meta1dexTypes';
 import { colors } from '../../../styles/colors';
 import { tid } from '../../../utils';
+import { useStore } from '../../../store';
 
 const mkInject = (s: any) =>
   `window.candleSeries.setData(JSON.parse('${JSON.stringify(s)}'));
@@ -17,6 +18,7 @@ const mkInject = (s: any) =>
 
 const Candle: React.FC<{}> = () => {
   const { assetA, assetB } = useAVStore();
+  const { needUpdate, setNeedUpdate } = useStore();
   const [bucket, setBucket] = useState(ALL_BUCKETS['1D']);
   const wwRef = useRef<WebView | null>(null);
   const ticks = useTicker(assetA, assetB, bucket);
@@ -25,7 +27,10 @@ const Candle: React.FC<{}> = () => {
     if (wwRef.current) {
       wwRef.current.injectJavaScript(mkInject(ticks));
     }
-  }, [ticks]);
+    if (needUpdate) {
+      setNeedUpdate(false);
+    }
+  }, [ticks, needUpdate]);
 
   if (!ticks) {
     return <Loader bgc="#000" />;

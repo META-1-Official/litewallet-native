@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import {
   SafeAreaView,
   View,
@@ -10,6 +10,8 @@ import {
   Keyboard,
   Alert,
   TouchableOpacity,
+  NativeSyntheticEvent,
+  TextInputChangeEventData,
 } from 'react-native';
 import { Eye, EyeOff, Key } from 'react-native-feather';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -26,10 +28,6 @@ import { required, RuleFn } from '../constants/formRules';
 import Input from '../components/Input/Input';
 
 const { width, height } = Dimensions.get('screen');
-const knownAccount: RuleFn = async text => {
-  const acc = await getAccount(text).catch(console.debug);
-  return !!acc || 'Account not found';
-};
 
 const validatePassword = async (login: string, password: string) => {
   try {
@@ -42,13 +40,28 @@ const validatePassword = async (login: string, password: string) => {
   }
 };
 const LinkWalletScreen: React.FC = () => {
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, setError } = useForm({
     mode: 'onChange',
     defaultValues: {
       account_name: '',
       password: '',
     },
   });
+
+  let accountNameInputValue = '';
+
+  const knownAccount: RuleFn = async text => {
+    const acc = await getAccount(text).catch(console.debug);
+    if (accountNameInputValue) {
+      return !!acc || 'Account not found';
+    } else {
+      setTimeout(
+        () => setError('account_name', { type: 'required', message: 'This field is required' }),
+        1,
+      );
+      return true;
+    }
+  };
 
   const offsetY = useRef(new Animated.Value(0)).current;
   const scroll = useScroll(true);
@@ -74,6 +87,10 @@ const LinkWalletScreen: React.FC = () => {
       hideSubscription.remove();
     };
   });
+
+  const setAccountNameInputValue = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    accountNameInputValue = e.nativeEvent.text;
+  };
 
   const authorzie = useStore(state => state.authorize);
   return (
@@ -106,6 +123,7 @@ const LinkWalletScreen: React.FC = () => {
               paddingHorizontal: 32,
             }}
             rules={{ required, validate: { knownAccount } }}
+            onChange={e => setAccountNameInputValue(e)}
             name="account_name"
             label="Account Name"
             render={props => (

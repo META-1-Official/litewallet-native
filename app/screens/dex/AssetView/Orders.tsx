@@ -6,9 +6,11 @@ import { getOrderBook } from '../../../services/meta1Api';
 import { OrderBook } from '../../../utils/meta1dexTypes';
 import { AssetViewTSP } from './AssetView';
 import { useAVStore } from './AssetViewStore';
+import { useStore } from '../../../store';
 
 export const Orders: React.FC<AssetViewTSP> = () => {
   const { assetA, assetB } = useAVStore(x => x);
+  const { needUpdate, setNeedUpdate } = useStore();
 
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -22,9 +24,12 @@ export const Orders: React.FC<AssetViewTSP> = () => {
         setRefreshing(false);
       }
       setOrders(newOrders);
+      if (needUpdate) {
+        setNeedUpdate(false);
+      }
     };
     fn();
-  }, [refreshing, assetA, assetB]);
+  }, [refreshing, assetA, assetB, needUpdate]);
 
   return (
     <SafeAreaView style={{ height: '100%', backgroundColor: '#000', padding: 12 }}>

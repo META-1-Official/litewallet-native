@@ -193,7 +193,7 @@ export const OpenOrdersPage = () => {
 
 export const MyOrders: React.FC<AssetViewTSP> = () => {
   const { assetA, assetB } = useAVStore(x => x);
-  const { accountName, password } = useStore();
+  const { accountName, password, needUpdate, setNeedUpdate } = useStore();
   const { userAssets } = useAssetsStore();
   const account = useAccount(accountName, password);
   const { tab, lt, rt, offsetX } = useTabs();
@@ -224,9 +224,12 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
         loader.close();
         setRefreshing(false);
       }
+      if (needUpdate) {
+        setNeedUpdate(false);
+      }
     };
     fn();
-  }, [accountName, account, refreshing, userAssets]);
+  }, [accountName, account, refreshing, userAssets, needUpdate]);
 
   const amtToReadable = (amt: AmountT) => _amtToReadable(amt, userAssets);
 

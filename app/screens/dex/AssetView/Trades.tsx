@@ -5,10 +5,12 @@ import { colors } from '../../../styles/colors';
 import { getTradesForAssetPair } from '../../../services/meta1Api';
 import { AssetViewTSP } from './AssetView';
 import { useAVStore } from './AssetViewStore';
+import { useStore } from '../../../store';
 type TradesT = ReturnType<typeof getTradesForAssetPair> extends Promise<infer T> ? T : never;
 
 export const Trades: React.FC<AssetViewTSP> = () => {
   const { assetA, assetB } = useAVStore(x => x);
+  const { needUpdate, setNeedUpdate } = useStore();
 
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -20,9 +22,12 @@ export const Trades: React.FC<AssetViewTSP> = () => {
         setRefreshing(false);
       }
       setTrades(newTrades);
+      if (needUpdate) {
+        setNeedUpdate(false);
+      }
     };
     fn();
-  }, [refreshing, assetA, assetB]);
+  }, [refreshing, assetA, assetB, needUpdate]);
   return (
     <SafeAreaView style={{ height: '100%', backgroundColor: '#000' }}>
       <ScrollView
