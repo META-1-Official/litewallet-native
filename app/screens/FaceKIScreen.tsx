@@ -12,7 +12,7 @@ const FaceKIScreen = ({ route, navigation }) => {
   const nav = useNavigation<RootNavigationProp>();
   const onClick = () => nav.navigate('FaceKI');
   const [cameraPermission, setCameraPermission] = useState<CameraPermissionStatus>();
-  const { firstName, lastName, mobile, accountName } = route.params;
+  const { key, firstName, lastName, mobile, accountName } = route.params;
 
   // useEffect(() => {
   //   const getCameraPermission = async () => {
@@ -48,7 +48,7 @@ const FaceKIScreen = ({ route, navigation }) => {
     >
       <Text>{cameraPermission}</Text>
       {/*{cameraPermission === 'authorized' && <FaceKiCameraView />}*/}
-      <FaceKiCameraView />
+      <FaceKiCameraView mobile={mobile} />
     </View>
   );
 };
