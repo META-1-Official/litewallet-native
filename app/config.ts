@@ -18,4 +18,8 @@ export default {
       ? 'https://gateway.dev.meta-exchange.vision'
       : 'https://gateway.api.meta-exchange.vision',
   API_URL: 'https://api.meta-exchange.vision',
+  TEST_ACCOUNT: {
+    LOGIN: process.env.TEST_ACCOUNT || '',
+    PASSWORD: process.env.TEST_ACCOIUNT_PASSWORD || '',
+  },
 };

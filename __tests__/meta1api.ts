@@ -51,13 +51,13 @@ describe('Meta1 api tests', () => {
   });
 
   it('Fetches all assets and respective balances, and assets are valid', async () => {
-    const assets = await fetchAccountBalances('kj-test2');
+    const assets = await fetchAccountBalances(config.TEST_ACCOUNT.LOGIN);
     expect(assets).toBeTruthy();
     assets!.assetsWithBalance.forEach(balance => expect(balance._asset.id.startsWith('1.3')));
   });
 
   it('Account total, Toatal chnage and Change percent are valid', async () => {
-    const assets = await fetchAccountBalances('kj-test2');
+    const assets = await fetchAccountBalances(config.TEST_ACCOUNT.LOGIN);
     expect(assets).toBeTruthy();
     expect(assets!.accountTotal).toEqual(expect.any(Number));
     expect(assets!.totalChange).toEqual(expect.any(Number));
@@ -86,8 +86,8 @@ describe('Meta1 api tests', () => {
   /*
   it('Places sell order, real slow', async () => {
     const accountInfo = {
-      accountName: 'kj-test2',
-      password: 'P5KFSVTSJDmjPFWy51gfpskdxUJfUVXtVVAhz1q7TBqW2imhH4C1',
+      accountName: config.TEST_ACCOUNT.LOGIN,
+      password: config.TEST_ACCOUNT.PASSWORD,
     };
 
     const account = await Meta1.login(accountInfo.accountName, accountInfo.password);
@@ -119,17 +119,14 @@ describe('Meta1 api tests', () => {
   // });
 
   it('Cool order History', async () => {
-    await useAssetsStore.getState().fetchUserAssets('kj-test2');
-    const res = await getHistoricalOrders('kj-test2');
+    await useAssetsStore.getState().fetchUserAssets(config.TEST_ACCOUNT.LOGIN);
+    const res = await getHistoricalOrders(config.TEST_ACCOUNT.LOGIN);
     const first: {
       order: HistoryRetT;
       canceled: any;
       filled: any[];
     } = res.values().next().value;
-    const acc = await meta1dex.login(
-      'kj-test2',
-      'P5KFSVTSJDmjPFWy51gfpskdxUJfUVXtVVAhz1q7TBqW2imhH4C1',
-    );
+    const acc = await meta1dex.login(config.TEST_ACCOUNT.LOGIN, config.TEST_ACCOUNT.PASSWORD);
 
     const order = await acc.getOrder(
       first.order.limit_order_create_operation.result.object_id_type,
