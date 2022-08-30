@@ -23,7 +23,6 @@ import {
   HistoryRetT,
   useAssetsStore,
   _login,
-  getESHistory,
 } from '../../../services/meta1Api';
 import { AssetViewTSP } from './AssetView';
 import { useAVStore } from './AssetViewStore';
