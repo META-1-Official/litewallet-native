@@ -36,7 +36,7 @@ import PasswordInput from '../components/PasswordInput';
 import PhoneInput from '../components/PhoneInput';
 
 const premiumName = (t: string) =>
-  /^[a-z][a-z0-9]*([-][a-z0-9]+)+$/.test(t) ||
+  /^[a-z][a-z0-9]*((([-][a-z0-9]+)+)|[0-9]+)$/.test(t) ||
   'This is a premium name which is not supported by this faucet. Please enter a regular name containing least one dash or a number';
 
 const chainValidate = (t: string) => ChainValidation.is_account_name_error(t);
