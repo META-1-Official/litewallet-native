@@ -207,7 +207,7 @@ export const useCreateOrder = (toGive: any, toGet: any, type: OrderType) => {
     return to;
   };
   return {
-    fn: (price: number, amount: number) =>
+    createOrder: (price: number, amount: number) =>
       catchError(fn(price, amount), {
         anyway: () => {
           loaderModal.close();

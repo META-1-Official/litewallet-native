@@ -37,7 +37,11 @@ export const Tab: React.FC<Props> = ({ type }) => {
     fn();
   }, [assetA, assetB]);
 
-  const { fn } = useCreateOrder(assetB, assetA, type);
+  const clearForm = () => {
+    dispatch({ type: Update.AMOUNT, payload: '0' });
+  };
+
+  const { createOrder } = useCreateOrder(assetB, assetA, type);
 
   return (
     <DismissKeyboardView style={{ flexGrow: 1, padding: 12 }}>
@@ -68,7 +72,10 @@ export const Tab: React.FC<Props> = ({ type }) => {
       />
       <TouchableOpacity
         {...tid('LimitOrder/ActionButton')}
-        onPress={() => fn(Number(state.price), Number(state.total))}
+        onPress={async () => {
+          await createOrder(Number(state.price), Number(state.total));
+          clearForm();
+        }}
       >
         <View
           style={{
