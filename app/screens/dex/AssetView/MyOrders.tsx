@@ -23,12 +23,14 @@ import {
   HistoryRetT,
   useAssetsStore,
   _login,
+  getESHistory,
 } from '../../../services/meta1Api';
 import { AssetViewTSP } from './AssetView';
 import { useAVStore } from './AssetViewStore';
 import { LoginRetT } from '../../../utils/meta1dexTypes';
 import { isOpen, isResolved, preprocessOrder, RejectFn } from '../../../utils/historyUtils';
 import { useNewLoaderModal } from '../../../components/LoaderModal';
+
 const { width } = Dimensions.get('screen');
 
 const Circle = ({ progress, isBuy }: { progress: number; isBuy: boolean }) => {
@@ -105,7 +107,7 @@ const _amtToReadable = (amt: AmountT, userAssets: AccountBalanceT | null) => {
 
 type HistoryEntry = Exclude<ReturnType<FullHistoryOrder['get']>, undefined>;
 export const OpenOrdersPage = () => {
-  const { accountName, password } = useStore();
+  const { accountName, password, needUpdate, setNeedUpdate } = useStore();
   const { userAssets } = useAssetsStore();
   const account = useAccount(accountName, password);
 
@@ -120,7 +122,6 @@ export const OpenOrdersPage = () => {
       // Fetch all open orders for real
       if (account) {
         const tmp: { id: string }[] = await account.orders();
-        console.log(tmp);
         const open = await Promise.all(tmp.map(e => account.getOrder(e.id)));
         open.forEach(e =>
           hist.set(e.id as string, {
@@ -134,9 +135,12 @@ export const OpenOrdersPage = () => {
       if (refreshing) {
         setRefreshing(false);
       }
+      if (needUpdate) {
+        setNeedUpdate(false);
+      }
     };
     fn();
-  }, [accountName, account, refreshing, userAssets]);
+  }, [accountName, account, refreshing, needUpdate, userAssets]);
 
   const getTradingPair = ({ order }: HistoryEntry) => {
     const give = order.limit_order_create_operation.amount_to_sell.asset.symbol;
@@ -209,7 +213,6 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
       // Fetch all open orders for real
       if (account) {
         const tmp: { id: string }[] = await account.orders();
-        console.log(tmp);
         const open = await Promise.all(tmp.map(e => account.getOrder(e.id)));
         open.forEach(e =>
           hist.set(e.id as string, {
@@ -431,6 +434,11 @@ const RenderRow =
       progress = pays / (isBuy ? sellAmt : buyAmt);
     }
 
+    const date = v.order.raw.expiration || v.order.raw.op[1].expiration;
+    const orderDate = new Date(
+      new Date(date).setFullYear(new Date(date).getFullYear() - 1),
+    ).toLocaleString();
+
     const buyPrice = filled.length ? meanFilled : sellAmt / buyAmt;
     const sellPrice = Math.max(buyAmt / sellAmt, sellAmt / buyAmt);
     return (
@@ -469,6 +477,7 @@ const RenderRow =
               .toFixed(Math.min(sellingAsset._asset.precision, buyingAsset._asset.precision))
               .slice(0, 10)}
           </Text>
+          <Text style={{ color: '#fff', fontSize: 14 }}>{orderDate}</Text>
         </View>
         <View style={{ margin: 8 }}>{lastCol(orderStatus, k)}</View>
       </View>
