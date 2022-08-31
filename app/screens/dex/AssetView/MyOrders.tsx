@@ -477,7 +477,7 @@ const RenderRow =
           </Text>
           <Text style={{ color: '#fff', fontSize: 18 }}>
             Amount:{' '}
-            {(isBuy ? buyAmt / sellAmt : sellAmt).toFixed(
+            {(isBuy ? buyAmt : sellAmt).toFixed(
               Math.max(sellingAsset._asset.precision, buyingAsset._asset.precision),
             )}
           </Text>
