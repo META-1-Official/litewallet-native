@@ -43,6 +43,11 @@ export const Tab: React.FC<Props> = ({ type }) => {
 
   const { createOrder } = useCreateOrder(assetB, assetA, type);
 
+  const handleOrderPlacement = async () => {
+    await createOrder(Number(state.price), Number(state.total));
+    clearForm();
+  };
+
   return (
     <DismissKeyboardView style={{ flexGrow: 1, padding: 12 }}>
       <InputRow
@@ -70,13 +75,7 @@ export const Tab: React.FC<Props> = ({ type }) => {
           dispatch({ type: Update.TOTAL, payload: n.toString() });
         }}
       />
-      <TouchableOpacity
-        {...tid('LimitOrder/ActionButton')}
-        onPress={async () => {
-          await createOrder(Number(state.price), Number(state.total));
-          clearForm();
-        }}
-      >
+      <TouchableOpacity {...tid('LimitOrder/ActionButton')} onPress={handleOrderPlacement}>
         <View
           style={{
             backgroundColor: colors.BrandYellow,

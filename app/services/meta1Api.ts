@@ -502,7 +502,9 @@ export function resolveObjectId(id: string) {
 }
 
 export type AmountT = { amount: number; asset_id: string };
+
 interface IResultRecord extends Record<keyof typeof RESULT_TYPE, any> {}
+
 export type limitOrderObjBase<amtT> = {
   fee: amtT;
   seller: string;
@@ -569,6 +571,7 @@ export const parseHistoryEntry = (
     },
   };
 };
+
 export interface HistoryRetT extends Record<keyof typeof OP_TYPE, limitOrderObjExt> {
   raw: any;
 }
@@ -730,6 +733,7 @@ export interface AccountKeysT {
   activeKey: string;
   privateKey: string;
 }
+
 export const getAccountKeys = async (acc: AccountWithPassword): Promise<AccountKeysT> => {
   const account = await _login(acc.accountName, acc.password);
   //@ts-ignore

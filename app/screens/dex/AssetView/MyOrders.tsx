@@ -257,8 +257,19 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
     history?.forEach(v => {
       const { canceled, filled } = v;
       const order = v.order.limit_order_create_operation;
+
       if (!reject(canceled, filled, order)) {
-        n++;
+        const sellingAsset = order.amount_to_sell.asset;
+        const buyingAsset = order.min_to_receive.asset;
+
+        if (
+          !(
+            ![assetA, assetB].includes(sellingAsset.symbol) ||
+            ![assetA, assetB].includes(buyingAsset.symbol)
+          )
+        ) {
+          n++;
+        }
       }
     });
     return n;

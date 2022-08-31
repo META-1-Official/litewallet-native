@@ -18,6 +18,7 @@ interface InputRowProps {
   onInc?: () => void;
   onDec?: () => void;
 }
+
 export const InputRow: React.FC<InputRowProps> = ({ title, value, onChange, onInc, onDec }) => {
   return (
     <View
@@ -191,6 +192,7 @@ export const useCreateOrder = (toGive: any, toGet: any, type: OrderType) => {
       return;
     }
     loaderModal.open();
+
     const to = await Timeout(
       placeLimitOrder(accountInfo as any, {
         toGet,
@@ -206,9 +208,10 @@ export const useCreateOrder = (toGive: any, toGet: any, type: OrderType) => {
     });
     return to;
   };
+
   return {
-    createOrder: (price: number, amount: number) =>
-      catchError(fn(price, amount), {
+    createOrder: (price: number, amount: number) => {
+      return catchError(fn(price, amount), {
         anyway: () => {
           loaderModal.close();
           console.log('All done');
@@ -219,7 +222,8 @@ export const useCreateOrder = (toGive: any, toGet: any, type: OrderType) => {
           }
           return err;
         },
-      }),
+      });
+    },
   };
 };
 
