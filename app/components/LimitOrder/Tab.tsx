@@ -24,21 +24,24 @@ export const Tab: React.FC<Props> = ({ type }) => {
   const [state, dispatch] = useOrderState(assetA, assetB, type);
   const decimals = asAsset(assetB).precision();
   const fixedB = (n: number) => n.toFixed(decimals);
+
+  const getPrice = async () => {
+    const t = await meta1dex.db.get_ticker(assetB, assetA);
+    const newPrice = Number(t.lowest_ask) || Number(t.latest);
+    if (type === OrderType.Sell) {
+      dispatch({ type: Update.PRICE, payload: fixedB(1 / newPrice) });
+    } else {
+      dispatch({ type: Update.PRICE, payload: fixedB(newPrice) });
+    }
+  };
+
   useEffect(() => {
-    const fn = async () => {
-      const t = await meta1dex.db.get_ticker(assetB, assetA);
-      const newPrice = Number(t.lowest_ask) || Number(t.latest);
-      if (type === OrderType.Sell) {
-        dispatch({ type: Update.PRICE, payload: fixedB(1 / newPrice) });
-      } else {
-        dispatch({ type: Update.PRICE, payload: fixedB(newPrice) });
-      }
-    };
-    fn();
+    getPrice();
   }, [assetA, assetB]);
 
   const clearForm = () => {
     dispatch({ type: Update.AMOUNT, payload: '0' });
+    getPrice();
   };
 
   const { createOrder } = useCreateOrder(assetB, assetA, type);
