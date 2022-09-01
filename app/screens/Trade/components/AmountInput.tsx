@@ -34,6 +34,7 @@ const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
           if (ticker && ticker.lowest_ask !== '0') {
             const bAmt = Number(txt) / Number(ticker.lowest_ask);
             opponent.setAmount(bAmt.toFixed(opponent.asset._asset.precision));
+            asset.formUsdt(opponent.toUsdt(bAmt.toFixed(opponent.asset._asset.precision)));
           } else {
             opponent.formUsdt(asset.toUsdt(txt));
           }

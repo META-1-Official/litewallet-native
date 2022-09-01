@@ -14,7 +14,7 @@ const UsdInput = ({ asset, darkMode }: DM<AssetProp>) => {
   useEffect(() => {
     if (!isCause) {
       // Maybe it's stupid fix todo: review it
-      // setAmount((slave ? asset.opponent().toUsdt() : asset.toUsdt()).toFixed(2));
+      // setAmount((slave ? asset.toUsdt(asset.opponent().amount) : asset.toUsdt()).toFixed(2));
       setAmount(asset.toUsdt().toFixed(2));
     }
   }, [asset.amount, isCause]);
