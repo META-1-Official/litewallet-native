@@ -35,16 +35,10 @@ import Input from '../components/Input/Input';
 import PasswordInput from '../components/PasswordInput';
 import PhoneInput from '../components/PhoneInput';
 
-const premiumName = (t: string) =>
-  /^[a-z][a-z0-9]*((([-][a-z0-9]+)+)|[0-9]+)([a-z0-9]*)$/.test(t) ||
-  'This is a premium name which is not supported by this faucet. Please enter a regular name containing least one dash or a number';
-
-const chainValidate = (t: string) => ChainValidation.is_account_name_error(t);
-
 const CreateWalletScreen: React.FC = () => {
   const navigation = useNavigation<RootNavigationProp>();
   const authorize = useStore(state => state.authorize);
-  let accountNameInputValue = '';
+
   const { control, handleSubmit, getValues, setError } = useForm({
     mode: 'onChange',
     defaultValues: {
@@ -58,9 +52,12 @@ const CreateWalletScreen: React.FC = () => {
     },
   });
 
-  const freeName = async (text: string) => {
-    const acc = await getAccount(text).catch(console.debug);
-    if (accountNameInputValue) {
+  const chainValidate = (accountName: string) =>
+    ChainValidation.is_account_name_error(accountName);
+
+  const freeName = async (accountName: string) => {
+    const acc = await getAccount(accountName).catch(console.debug);
+    if (accountName) {
       return !acc || 'This account name is already taken';
     } else {
       setTimeout(
@@ -71,8 +68,21 @@ const CreateWalletScreen: React.FC = () => {
     }
   };
 
-  const setAccountNameInputValue = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
-    accountNameInputValue = e.nativeEvent.text;
+  const premiumName = (accountName: string) =>
+    /^[a-z][a-z0-9]*((([-][a-z0-9]+)+)|[0-9]+)([a-z0-9]*)$/.test(accountName) ||
+    'This is a premium name which is not supported by this faucet. Please enter a regular name containing least one dash or a number';
+
+  const customValidator = async (accountName: string) => {
+    const chain = await chainValidate(accountName);
+    const free = await freeName(accountName);
+    const premium = await premiumName(accountName);
+    return typeof chain === 'string'
+      ? chain
+      : typeof free === 'string'
+      ? free
+      : typeof premium === 'string'
+      ? premium
+      : true;
   };
 
   return (
@@ -136,13 +146,10 @@ const CreateWalletScreen: React.FC = () => {
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoCorrect={false}
-                onChange={e => setAccountNameInputValue(e)}
                 rules={{
                   required,
                   validate: {
-                    chainValidate,
-                    freeName,
-                    premiumName,
+                    customValidator,
                   },
                 }}
                 render={props => (
