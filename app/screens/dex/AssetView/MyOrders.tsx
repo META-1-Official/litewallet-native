@@ -445,9 +445,18 @@ const RenderRow =
     }
 
     const date = v.order.raw.expiration || v.order.raw.op[1].expiration;
+    const timeZoneOffset = new Date().getTimezoneOffset();
     const orderDate = new Date(
-      new Date(date).setFullYear(new Date(date).getFullYear() - 1),
-    ).toLocaleString();
+      new Date(new Date(date).setFullYear(new Date(date).getFullYear() - 1)).setMinutes(
+        new Date(date).getMinutes() - timeZoneOffset - 120,
+      ),
+    )
+      .toISOString()
+      .split('.')[0]
+      .split('T')
+      .reverse()
+      .join(', ');
+    // ).toLocaleString();
 
     const buyPrice = filled.length ? meanFilled : sellAmt / buyAmt;
     const sellPrice = Math.max(buyAmt / sellAmt, sellAmt / buyAmt);

@@ -15,6 +15,7 @@ const setMaxAmount = (assets: ScreenAssets) => {
     const bMax = Math.floor(x) / pow;
     A.setAmount(aMax.toFixed(A.asset._asset.precision));
     B.setAmount(bMax.toFixed(B.asset._asset.precision));
+    B.formUsdt(A.toUsdt(aMax.toFixed(A.asset._asset.precision)));
   } else {
     Alert.alert('Failed to get exchange rate', 'No open orders found');
   }
