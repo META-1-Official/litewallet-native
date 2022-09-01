@@ -37,11 +37,12 @@ const mkMutMsgFinal =
 
 const consumeTxInfo = mkMutMsg(m => m.split('bitshares-crypto')[0]);
 const InsufficientBalance = mkMutMsgFinal(m => {
+  console.log('!err:', m);
   if (m.indexOf('Insufficient Balance:') !== -1) {
-    return 'Insufficient Balance:' + m.split('Insufficient Balance:')[1];
+    return 'Insufficient Balance';
   }
   if (m.indexOf('Insufficient balance:') !== -1) {
-    return 'Insufficient Balance:' + m.split('Insufficient balance:')[1];
+    return 'Insufficient Balance';
   }
   throw new Error('Token not found');
 });
