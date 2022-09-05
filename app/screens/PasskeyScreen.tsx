@@ -5,13 +5,21 @@ import { ScrollView } from 'react-native-gesture-handler';
 import * as url from 'url';
 import RoundedButton from '../components/RoundedButton';
 import * as WebBrowser from '@toruslabs/react-native-web-browser';
-import getToken from '../services/eSignature';
+import config from '../config';
+import { createUser, getToken } from '../services/eSignature';
 
-const handleNext = async (email, firstName, lastName, mobile) => {
+const handleNext = async (email, firstName, lastName, mobile, passKey) => {
+  const redirectUrl = 'io.meta1.appbeta://auth';
+  const faceKiId = email + passKey.privKey;
   let token;
-  console.log('!!! handler', email);
+
+  console.log('!!! createUser', email, email + passKey.privKey);
+  const user = await createUser(email, faceKiId);
+  console.log('!!! Response: ', user);
+
+  console.log('!!! getToken', email);
   const response = await getToken(email);
-  console.log('!!!Response ', response);
+  console.log('!!!Response getToken ', response);
 
   if (response && response.headers) {
     if (response.headers.authorization) {
@@ -21,9 +29,11 @@ const handleNext = async (email, firstName, lastName, mobile) => {
 
   console.log('!Token: ', token);
   console.log('!Data: ', firstName, lastName, mobile, token);
+  const phoneNumber = mobile.replace(/\s/g, '');
+  const encodedEmail = encodeURIComponent(email);
 
   let result = await WebBrowser.openBrowserAsync(
-    `https://humankyc.cryptomailsvc.io/e-sign?email${encodeURIComponent(email)}&token=${token}`,
+    `${config.E_SIGNATURE_API_URL}/e-sign?email=${encodedEmail}&firstName${firstName}&lastName=${lastName}&phoneNumber=${phoneNumber}&token=${token}&redirectUrl=${redirectUrl}`,
   );
   console.log('!!!WebBrowser: ', result);
 };
@@ -160,7 +170,7 @@ export const PasskeyScreen = ({ route, navigation }) => {
             title="Next"
             // onPress={() => navigation.navigate('ESignature')}
             disabled={!isEveryCheckBoxesValid}
-            onPress={() => handleNext(email, firstName, lastName, mobile)}
+            onPress={() => handleNext(email, firstName, lastName, mobile, passKey)}
           />
         </View>
       </ScrollView>

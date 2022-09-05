@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-import { FACE_KI_API_URL } from '@env';
-import { FaceAttributes } from './types';
+import config from '../../config';
+// import { FaceAttributes } from './types';
 
-const baseUrl = FACE_KI_API_URL;
+const baseUrl = config.FACE_KI_API_URL;
 
 export interface VerifyParams {
   image: string;

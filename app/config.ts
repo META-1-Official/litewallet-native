@@ -1,23 +1,27 @@
 import { NETWORK } from '@env';
 
+const isTestnet = NETWORK === 'TESTNET';
+
 export default {
-  META1_CONNECTION_URL:
-    NETWORK === 'TESTNET'
-      ? 'wss://api.test.meta-exchange.vision/ws'
-      : 'wss://api.meta-exchange.vision/ws',
-  faucetAddress:
-    NETWORK === 'TESTNET'
-      ? 'https://faucet.dev.meta-exchange.vision/faucet'
-      : 'https://faucet.meta-exchange.vision/faucet',
-  liteWalletApiHost:
-    NETWORK === 'TESTNET'
-      ? 'https://litewallet.dev.cryptomailsvc.io'
-      : 'https://litewallet.cryptomailsvc.io',
-  GatewayUrl:
-    NETWORK === 'TESTNET'
-      ? 'https://gateway.dev.meta-exchange.vision'
-      : 'https://gateway.api.meta-exchange.vision',
+  META1_CONNECTION_URL: isTestnet
+    ? 'wss://api.test.meta-exchange.vision/ws'
+    : 'wss://api.meta-exchange.vision/ws',
+  faucetAddress: isTestnet
+    ? 'https://faucet.dev.meta-exchange.vision/faucet'
+    : 'https://faucet.meta-exchange.vision/faucet',
+  liteWalletApiHost: isTestnet
+    ? 'https://litewallet.dev.cryptomailsvc.io'
+    : 'https://litewallet.cryptomailsvc.io',
+  GatewayUrl: isTestnet
+    ? 'https://gateway.dev.meta-exchange.vision'
+    : 'https://gateway.api.meta-exchange.vision',
   API_URL: 'https://api.meta-exchange.vision',
   WEB3_CLIENT_ID:
     'BENfRWt5wyCFCi-nKzu6gIlPABHbvgub3lhZUhUp_r4XD2xmdph0MZMaXY89xnfPVs9wMao5vlBiA6dtP-4H1i0',
+  FACE_KI_API_URL: isTestnet
+    ? 'https://biometric.dev.cryptomailsvc.io'
+    : 'https://biometric.dev.cryptomailsvc.io',
+  E_SIGNATURE_API_URL: isTestnet
+    ? 'https://e-sign.dev.cryptomailsvc.io'
+    : 'https://humankyc.cryptomailsvc.io',
 };
