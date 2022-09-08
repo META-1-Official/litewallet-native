@@ -18,6 +18,7 @@ import Legal from './screens/LegalScreen';
 import AppHeader from './components/AppHeaer';
 import CreateWalletScreen from './screens/CreateWalletScreen';
 import PasskeyScreen from './screens/PasskeyScreen';
+import PaymentSuccess from './screens/PaymentSuccess';
 import Web3AuthScreen from './screens/Web3AuthScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import LinkWalletScreen from './screens/LinkWalletScreen';
@@ -75,6 +76,7 @@ export type RootStackParamList = {
   FaceKISuccess: undefined;
   Passkey: undefined;
   ESignature: undefined;
+  PaymentSuccess: undefined;
   ImportWallet: undefined;
   LinkWallet: undefined;
   TOS: undefined;
@@ -114,6 +116,7 @@ const AuthNav = () => {
       <Stack.Screen name="FaceKISuccess" component={FaceKISuccessScreen} />
       <Stack.Screen name="Passkey" component={PasskeyScreen} />
       <Stack.Screen name="ESignature" component={ESignatureScreen} />
+      <Stack.Screen name="PaymentSuccess" component={PaymentSuccess} />
       <Stack.Screen name="LinkWallet" component={LinkWalletScreen} />
       <Stack.Screen
         name="Loader"

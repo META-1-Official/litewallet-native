@@ -1,18 +1,21 @@
-import React, { useMemo, useState } from 'react';
+import { useNavigation } from '@react-navigation/core';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Linking, Platform, SafeAreaView, Text, TextInput, View } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import { ScrollView } from 'react-native-gesture-handler';
 import * as url from 'url';
+import { RootNavigationProp } from '../App';
 import RoundedButton from '../components/RoundedButton';
 import * as WebBrowser from '@toruslabs/react-native-web-browser';
 import config from '../config';
 import { createUser, getToken } from '../services/eSignature';
 
-const handleNext = async (email, firstName, lastName, mobile, passKey) => {
+const handleNext = async (email, firstName, lastName, mobile, passKey, setBrowserResult) => {
   const redirectUrl = 'io.meta1.appbeta://auth';
   const faceKiId = email + passKey.privKey;
   let token;
 
+  console.log('!!! PassKey:', passKey);
   console.log('!!! createUser', email, email + passKey.privKey);
   const user = await createUser(email, faceKiId);
   console.log('!!! Response: ', user);
@@ -35,12 +38,22 @@ const handleNext = async (email, firstName, lastName, mobile, passKey) => {
   let result = await WebBrowser.openBrowserAsync(
     `${config.E_SIGNATURE_API_URL}/e-sign?email=${encodedEmail}&firstName${firstName}&lastName=${lastName}&phoneNumber=${phoneNumber}&token=${token}&redirectUrl=${redirectUrl}`,
   );
+  setBrowserResult(result);
   console.log('!!!WebBrowser: ', result);
 };
 
 export const PasskeyScreen = ({ route, navigation }) => {
+  const nav = useNavigation<RootNavigationProp>();
+  const [browserResult, setBrowserResult] = useState(null);
   const { passKey, firstName, lastName, mobile, email, accountName } = route.params;
   const [checkboxesState, setCheckBoxesState] = useState([false, false, false, false, false]);
+
+  useEffect(() => {
+    if (browserResult?.type === 'cancel' || browserResult?.type === 'dismiss') {
+      nav.navigate('PaymentSuccess', { email, accountName });
+    }
+  }, [browserResult]);
+
   const handleCheckBox = (id: number) => {
     setCheckBoxesState(prevState => {
       const newState = [...prevState];
@@ -170,7 +183,9 @@ export const PasskeyScreen = ({ route, navigation }) => {
             title="Next"
             // onPress={() => navigation.navigate('ESignature')}
             disabled={!isEveryCheckBoxesValid}
-            onPress={() => handleNext(email, firstName, lastName, mobile, passKey)}
+            onPress={() =>
+              handleNext(email, firstName, lastName, mobile, passKey, setBrowserResult)
+            }
           />
         </View>
       </ScrollView>
