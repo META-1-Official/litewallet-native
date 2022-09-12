@@ -50,7 +50,7 @@ export const PasskeyScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     if (browserResult?.type === 'cancel' || browserResult?.type === 'dismiss') {
-      nav.navigate('PaymentSuccess', { email, accountName });
+      nav.navigate('PaymentSuccess', { email, accountName, passKey, mobile, lastName, firstName });
     }
   }, [browserResult]);
 
