@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Linking, Platform, SafeAreaView, Text, TextInput, View } from 'react-native';
+import { Button, Linking, Platform, SafeAreaView, Text, TextInput, View } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import { ScrollView } from 'react-native-gesture-handler';
 import * as url from 'url';
@@ -9,6 +9,9 @@ import RoundedButton from '../components/RoundedButton';
 import * as WebBrowser from '@toruslabs/react-native-web-browser';
 import config from '../config';
 import { createUser, getToken } from '../services/eSignature';
+import { PrivateKey, key } from 'meta1-vision-js';
+
+const genKey = (seed: string) => `P${PrivateKey.fromSeed(key.normalize_brainKey(seed)).toWif()}`;
 
 const handleNext = async (email, firstName, lastName, mobile, passKey, setBrowserResult) => {
   const redirectUrl = 'io.meta1.appbeta://auth';
@@ -91,11 +94,22 @@ export const PasskeyScreen = ({ route, navigation }) => {
       >
         <View style={{}}>
           <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Save Passkey</Text>
-          <TextInput value={passKey.privKey} />
-          <Text style={{ fontSize: 18, paddingTop: 33, paddingBottom: 33 }}>
+          <Text style={{ fontSize: 18, paddingTop: 5 }}>
             Please keep your Passkey in a safe place. Don't share it with any third-parties or send
             it online.
           </Text>
+
+          <View style={{ marginTop: 20, marginBottom: 20 }}>
+            <TextInput
+              style={{
+                padding: 10,
+                borderWidth: 1,
+                borderStyle: 'solid',
+                borderColor: 'black',
+              }}
+              value={genKey(`${accountName}${passKey}`)}
+            />
+          </View>
         </View>
 
         <View

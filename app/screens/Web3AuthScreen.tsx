@@ -59,7 +59,7 @@ export const Web3AuthScreen = ({ route }) => {
         contentContainerStyle={{
           flex: 1,
           flexDirection: 'column',
-          justifyContent: 'center',
+          justifyContent: 'flex-start',
           alignItems: 'center',
         }}
       >
@@ -69,14 +69,12 @@ export const Web3AuthScreen = ({ route }) => {
             fontWeight: 'bold',
             color: '#2E2E2E',
             padding: 40,
+            marginBottom: 80,
           }}
         >
           Now, its time to setup your passwordless authentication for your new META 1 wallet
         </Text>
 
-        <Text>Key: {privateKey}</Text>
-        <Text>Error: {errorMsg}</Text>
-        <Text>Linking URL: {resolvedRedirectUrl}</Text>
         <Button title="Login with Web3Auth" onPress={login} />
 
         <View style={{ position: 'absolute', bottom: 0, width: '100%' }}>

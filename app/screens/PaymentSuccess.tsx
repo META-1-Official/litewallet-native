@@ -4,7 +4,6 @@ import { SafeAreaView, ScrollView, Text, TextInput, View } from 'react-native';
 import { RootNavigationProp } from '../App';
 import RoundedButton from '../components/RoundedButton';
 import { getUser } from '../services/eSignature';
-import { signUp } from '../services/litewalletApi';
 //@ts-ignore
 import { PrivateKey, key } from 'meta1-vision-js';
 import { catchError } from '../utils';
@@ -70,16 +69,40 @@ export const PaymentSuccess = ({ route, navigation }) => {
           paddingRight: 30,
         }}
       >
-        <View>
-          <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Success</Text>
+        <Text style={{ fontSize: 30, fontWeight: 'bold' }}>
+          {user ? 'Successfully Paid' : 'Loading...'}
+        </Text>
+        <View style={{ flex: 1, justifyContent: 'center' }}>
           {user && (
             <>
-              <Text>Email: {user?.email}</Text>
-              <Text>VoiceitID: {user?.status?.voiceitID}</Text>
-              <Text>Payment Status: {user?.status?.isPayed ? 'Paid' : 'Unpaid'}</Text>
-              <Text>Sign Status: {user?.status?.isSign ? 'Signed' : 'Unsigned'}</Text>
-              <Text style={{ fontSize: 30, fontWeight: 'bold', marginTop: 20 }}>Save Passkey</Text>
-              <TextInput value={auth} />
+              <View style={{ marginTop: 20, marginBottom: 20 }}>
+                <TextInput
+                  style={{
+                    padding: 10,
+                    borderWidth: 1,
+                    borderStyle: 'solid',
+                    borderColor: 'black',
+                  }}
+                  value={genKey(`${accountName}${passKey}`)}
+                />
+              </View>
+              <View
+                style={{
+                  backgroundColor: '#FFF2F2',
+                  borderColor: '#FF2F2F',
+                  borderWidth: 1,
+                  padding: 20,
+                }}
+              >
+                <View>
+                  <Text style={{ fontSize: 22 }}>Important information</Text>
+                  <Text style={{ fontSize: 15, paddingTop: 15 }}>
+                    If you forget your password phrase you will be unable to access your account
+                    and your funds. We cannot reset or restore your password! Memorise or white
+                    your username and password!
+                  </Text>
+                </View>
+              </View>
             </>
           )}
         </View>
