@@ -4,9 +4,9 @@ import { Text, View, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Camera } from 'react-native-vision-camera';
 import { CameraPermissionStatus } from 'react-native-vision-camera/src/Camera';
-import { RootNavigationProp } from '../App';
-import RoundedButton from '../components/RoundedButton';
-import FaceKiCameraView from '../components/FaceKICameraView';
+import { RootNavigationProp } from '../../App';
+import RoundedButton from '../../components/RoundedButton';
+import FaceKiCameraView from '../../components/FaceKICameraView';
 
 const FaceKIScreen = ({ route, navigation }) => {
   const nav = useNavigation<RootNavigationProp>();

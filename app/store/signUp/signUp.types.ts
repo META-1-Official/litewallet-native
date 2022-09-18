@@ -1,3 +1,17 @@
+export interface Step1 {
+  firstName: string;
+  lastName: string;
+  mobile: string;
+  accountName: string;
+}
+
+export interface Step2 {
+  email: string;
+  privateKey: string;
+}
+
+export interface SignUpState extends Step1, Step2 {}
+
 export interface FaceKIState {
   name?: string;
   image?: string;

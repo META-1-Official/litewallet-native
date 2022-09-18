@@ -4,16 +4,24 @@ import { Button, Linking, Platform, SafeAreaView, Text, TextInput, View } from '
 import CheckBox from '@react-native-community/checkbox';
 import { ScrollView } from 'react-native-gesture-handler';
 import * as url from 'url';
-import { RootNavigationProp } from '../App';
-import RoundedButton from '../components/RoundedButton';
+import { RootNavigationProp } from '../../App';
+import RoundedButton from '../../components/RoundedButton';
 import * as WebBrowser from '@toruslabs/react-native-web-browser';
-import config from '../config';
-import { createUser, getToken } from '../services/eSignature';
+import config from '../../config';
+import { createUser, getToken } from '../../services/eSignature';
 import { PrivateKey, key } from 'meta1-vision-js';
 
 const genKey = (seed: string) => `P${PrivateKey.fromSeed(key.normalize_brainKey(seed)).toWif()}`;
 
-const handleNext = async (email, firstName, lastName, mobile, passKey, setBrowserResult) => {
+const handleNext = async (
+  email,
+  accountName,
+  firstName,
+  lastName,
+  mobile,
+  passKey,
+  setBrowserResult,
+) => {
   const redirectUrl = 'io.meta1.appbeta://auth';
   const faceKiId = email + passKey.privKey;
   let token;
@@ -39,7 +47,7 @@ const handleNext = async (email, firstName, lastName, mobile, passKey, setBrowse
   const encodedEmail = encodeURIComponent(email);
 
   let result = await WebBrowser.openBrowserAsync(
-    `${config.E_SIGNATURE_API_URL}/e-sign?email=${encodedEmail}&firstName${firstName}&lastName=${lastName}&phoneNumber=${phoneNumber}&token=${token}&redirectUrl=${redirectUrl}`,
+    `${config.E_SIGNATURE_API_URL}/e-sign?email=${encodedEmail}&firstName${firstName}&lastName=${lastName}&phoneNumber=${phoneNumber}&walletName=${accountName}&token=${token}&redirectUrl=${redirectUrl}`,
   );
   setBrowserResult(result);
   console.log('!!!WebBrowser: ', result);
@@ -198,7 +206,15 @@ export const PasskeyScreen = ({ route, navigation }) => {
             // onPress={() => navigation.navigate('ESignature')}
             disabled={!isEveryCheckBoxesValid}
             onPress={() =>
-              handleNext(email, firstName, lastName, mobile, passKey, setBrowserResult)
+              handleNext(
+                email,
+                accountName,
+                firstName,
+                lastName,
+                mobile,
+                passKey,
+                setBrowserResult,
+              )
             }
           />
         </View>

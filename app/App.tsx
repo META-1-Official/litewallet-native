@@ -10,16 +10,16 @@ import { createStackNavigator, StackNavigationProp } from '@react-navigation/sta
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider as PaperProvider } from 'react-native-paper';
 import SplashScreen from 'react-native-splash-screen';
-import ESignatureScreen from './screens/ESignatureScreen';
-import FaceKIScreen from './screens/FaceKIScreen';
-import FaceKISuccessScreen from './screens/FaceKISuccessScreen';
+import ESignatureScreen from './screens/SignUp/ESignatureScreen';
+import FaceKIScreen from './screens/SignUp/FaceKIScreen';
+import FaceKISuccessScreen from './screens/SignUp/FaceKISuccessScreen';
 
-import Legal from './screens/LegalScreen';
+import Legal from './screens/SignUp/LegalScreen';
 import AppHeader from './components/AppHeaer';
-import CreateWalletScreen from './screens/CreateWalletScreen';
-import PasskeyScreen from './screens/PasskeyScreen';
+import CreateWalletScreen from './screens/SignUp/CreateWalletScreen';
+import PasskeyScreen from './screens/SignUp/PasskeyScreen';
 import PaymentSuccess from './screens/PaymentSuccess';
-import Web3AuthScreen from './screens/Web3AuthScreen';
+import Web3AuthScreen from './screens/SignUp/Web3AuthScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import LinkWalletScreen from './screens/LinkWalletScreen';
 import { Options, useOptions, useStore } from './store';

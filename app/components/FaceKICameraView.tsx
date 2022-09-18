@@ -5,7 +5,7 @@ import { Camera, PhotoFile, useCameraDevices } from 'react-native-vision-camera'
 import { RootNavigationProp } from '../App';
 // import { launchImageLibrary } from 'react-native-image-picker';
 import faceKIAPI from '../services/faceKI/faceKI.service';
-import { livelinessCheck, verifyUser } from '../store/faceKI/faceKI.actions';
+import { livelinessCheck, verifyUser } from '../store/signUp/signUp.actions';
 import styles from './FaceKICameraView.styles';
 import RoundedButton from './RoundedButton';
 

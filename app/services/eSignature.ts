@@ -1,8 +1,8 @@
 import axios from 'axios';
 import config from '../config';
 
-export const createUser = async (email: string, voiceitID: string) => {
-  return await axios.post(`${config.E_SIGNATURE_API_URL}/apiewallet/users`, { email, voiceitID });
+export const createUser = async (email: string, facekiID: string) => {
+  return await axios.post(`${config.E_SIGNATURE_API_URL}/apiewallet/users`, { email, facekiID });
 };
 
 export const getUser = async (email: string) => {
