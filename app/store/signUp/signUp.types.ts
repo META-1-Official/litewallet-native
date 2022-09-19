@@ -15,7 +15,13 @@ export interface SignUpState extends Step1, Step2 {
   faceKIStatus: string;
   image: string;
   eSignatureStatus: string; // 'cancel' | 'dismiss'
-  registerStatus: any;
+  registerStatus?: {
+    active_key: string;
+    memo_key: string;
+    name: string;
+    owner_key: string;
+    referrer: string;
+  };
 }
 
 export interface FaceKIState {

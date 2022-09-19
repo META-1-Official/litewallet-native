@@ -13,7 +13,7 @@ const initialState: SignUpState = {
   faceKIStatus: '',
   image: '',
   eSignatureStatus: '',
-  registerStatus: '',
+  registerStatus: undefined,
 };
 
 export const signUpSlice = createSlice({

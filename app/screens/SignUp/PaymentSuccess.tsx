@@ -46,7 +46,7 @@ export const PaymentSuccess = () => {
         }}
       >
         <Text style={{ fontSize: 30, fontWeight: 'bold' }}>
-          {registerStatus ? 'Successfully Paid' : 'Loading...'}
+          {!registerStatus ? 'Loading...' : 'Successfully Paid'}
         </Text>
         <View style={{ flex: 1, justifyContent: 'center' }}>
           {registerStatus && (
