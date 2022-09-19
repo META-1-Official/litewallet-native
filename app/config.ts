@@ -4,7 +4,7 @@ const isTestnet = NETWORK === 'TESTNET';
 
 export default {
   META1_CONNECTION_URL: isTestnet
-    ? 'wss://api.test.meta-exchange.vision/ws'
+    ? 'wss://api.dev.meta-exchange.vision/ws'
     : 'wss://api.meta-exchange.vision/ws',
   faucetAddress: isTestnet
     ? 'https://faucet.dev.meta-exchange.vision/faucet'
