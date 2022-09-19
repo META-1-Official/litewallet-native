@@ -1,54 +1,30 @@
 import { useNavigation } from '@react-navigation/core';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { SafeAreaView, ScrollView, Text, TextInput, View } from 'react-native';
-import { RootNavigationProp } from '../App';
-import RoundedButton from '../components/RoundedButton';
-import { getUser } from '../services/eSignature';
-//@ts-ignore
-import { PrivateKey, key } from 'meta1-vision-js';
-import { catchError } from '../utils';
-import createAccountWithPassword from '../utils/accountCreate';
+import { RootNavigationProp } from '../../App';
+import RoundedButton from '../../components/RoundedButton';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { registerAccount } from '../../store/signUp/signUp.actions';
 
-const genKey = (seed: string) => `P${PrivateKey.fromSeed(key.normalize_brainKey(seed)).toWif()}`;
-
-export const PaymentSuccess = ({ route, navigation }) => {
-  const { email, accountName, passKey, mobile, lastName, firstName } = route.params;
+export const PaymentSuccess = () => {
   const nav = useNavigation<RootNavigationProp>();
-  const [user, setUser] = useState<any>(null);
-  const [auth, setAuth] = useState<string>('');
+  const dispatch = useAppDispatch();
+  const { email, accountName, passKey, mobile, lastName, firstName, registerStatus } =
+    useAppSelector(state => state.signUp);
 
   useEffect(() => {
-    (async () => {
-      const response = await getUser(email);
-      setUser(response.data);
-      const password = genKey(`${accountName}${passKey}`);
-      console.log('!Password:', password);
-      setAuth(password);
-      // const signupResponse = await signUp({ accountName }).catch(e => console.warn(e));
-      // setAuth(signupResponse);
-      await catchError(
-        async () => {
-          const _apiRes = await createAccountWithPassword(
-            accountName,
-            password,
-            false,
-            '',
-            1,
-            '',
-            mobile,
-            email,
-            lastName,
-            firstName,
-          );
-          console.log('_apiRes: ', _apiRes);
-        },
-        {
-          // onErr: () => navigation.goBack(),
-        },
+    if (!registerStatus) {
+      dispatch(
+        registerAccount({
+          accountName,
+          passKey,
+          mobile,
+          email,
+          firstName,
+          lastName,
+        }),
       );
-
-      console.log(setAuth);
-    })();
+    }
   }, []);
 
   return (
@@ -70,10 +46,10 @@ export const PaymentSuccess = ({ route, navigation }) => {
         }}
       >
         <Text style={{ fontSize: 30, fontWeight: 'bold' }}>
-          {user ? 'Successfully Paid' : 'Loading...'}
+          {registerStatus ? 'Successfully Paid' : 'Loading...'}
         </Text>
         <View style={{ flex: 1, justifyContent: 'center' }}>
-          {user && (
+          {registerStatus && (
             <>
               <View style={{ marginTop: 20, marginBottom: 20 }}>
                 <TextInput
@@ -83,7 +59,7 @@ export const PaymentSuccess = ({ route, navigation }) => {
                     borderStyle: 'solid',
                     borderColor: 'black',
                   }}
-                  value={genKey(`${accountName}${passKey}`)}
+                  value={passKey}
                 />
               </View>
               <View

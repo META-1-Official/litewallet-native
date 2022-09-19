@@ -3,32 +3,34 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, Image } from 'react-native';
 import { Camera, PhotoFile, useCameraDevices } from 'react-native-vision-camera';
 import { RootNavigationProp } from '../App';
-// import { launchImageLibrary } from 'react-native-image-picker';
-import faceKIAPI from '../services/faceKI/faceKI.service';
-import { livelinessCheck, verifyUser } from '../store/signUp/signUp.actions';
+import { useAppDispatch, useAppSelector } from '../hooks';
+import { faceKIVerify } from '../store/signUp/signUp.actions';
 import styles from './FaceKICameraView.styles';
 import RoundedButton from './RoundedButton';
 
-const FaceKiCameraView = ({ mobile, privateKey, accountName, email, firstName, lastName }) => {
+interface Props {
+  firstName: string;
+  lastName: string;
+  accountName: string;
+  mobile: string;
+  email: string;
+  privateKey: string;
+}
+
+const FaceKiCameraView = ({ email }: Props) => {
+  const nav = useNavigation<RootNavigationProp>();
+  const dispatch = useAppDispatch();
   const devices = useCameraDevices();
   const device = devices.front;
   const [photo, setPhoto] = useState<any>(false);
-  const nav = useNavigation<RootNavigationProp>();
   const camera = useRef<Camera>(null);
+  const { faceKIStatus } = useAppSelector(state => state.signUp);
 
-  // useEffect(() => {
-  //   (async () => {
-  // const result = await launchImageLibrary({ mediaType: 'photo' });
-  // @ts-ignore
-  // setPhoto(result);
-  // })();
-  // }, []);
-
-  // useEffect(() => {
-  //   if (photo) {
-  //     faceKIAPI.enrollUser({ name: 'Alek', image: photo }).then(() => {});
-  //   }
-  // }, [photo]);
+  useEffect(() => {
+    if (faceKIStatus) {
+      nav.navigate('FaceKISuccess');
+    }
+  }, [faceKIStatus]);
 
   if (device == null) {
     return <Text>Camera is not ready. Loading...</Text>;
@@ -40,56 +42,7 @@ const FaceKiCameraView = ({ mobile, privateKey, accountName, email, firstName, l
       setPhoto(capture);
 
       const image = capture.path;
-      console.log('!!!Photo captured');
-      console.log('!Path: ', capture.path);
-
-      console.log('!!!Before liveness checking');
-      const livelinessStatus = await faceKIAPI.livelinessCheck({ image });
-      console.log('!!!After liveness checking');
-
-      if (livelinessStatus.data.liveness === 'Spoof') {
-        console.warn('!!!Spoof - Try again');
-        nav.goBack();
-      } else {
-        console.log('!!!!! before verify');
-        const verifyStatus = await faceKIAPI.verifyUser({ image });
-        console.log('!!!!! after verify');
-
-        if (verifyStatus.data.status === 'Verify OK' && verifyStatus.data.name === email) {
-          console.log('You have been already enrolled!');
-          console.log('!!!!!!!!Response:', verifyStatus);
-          nav.navigate('FaceKISuccess', {
-            status: verifyStatus.data,
-            path: capture.path,
-            accountName,
-            privateKey,
-            email,
-            mobile,
-            firstName,
-            lastName,
-          });
-        } else {
-          console.log('!!!!! before enrolled');
-          const enrollStatus = await faceKIAPI.enrollUser({ image, name: email });
-          console.log('!!!!! after enrolled');
-
-          if (enrollStatus.data.status === 'Enroll OK') {
-            console.log('User has been successfully enrolled!');
-            nav.navigate('FaceKISuccess', {
-              status: enrollStatus.data,
-              path: capture.path,
-              accountName,
-              privateKey,
-              email,
-              mobile,
-              firstName,
-              lastName,
-            });
-          } else {
-            nav.goBack();
-          }
-        }
-      }
+      dispatch(faceKIVerify({ image, email }));
     } else {
       console.warn('Camera is not available');
     }

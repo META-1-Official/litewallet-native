@@ -18,7 +18,7 @@ import Legal from './screens/SignUp/LegalScreen';
 import AppHeader from './components/AppHeaer';
 import CreateWalletScreen from './screens/SignUp/CreateWalletScreen';
 import PasskeyScreen from './screens/SignUp/PasskeyScreen';
-import PaymentSuccess from './screens/PaymentSuccess';
+import PaymentSuccess from './screens/SignUp/PaymentSuccess';
 import Web3AuthScreen from './screens/SignUp/Web3AuthScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import LinkWalletScreen from './screens/LinkWalletScreen';

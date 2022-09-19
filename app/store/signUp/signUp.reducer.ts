@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { getWeb3User } from './signUp.actions';
-import { SignUpState, Step1, Step2 } from './signUp.types';
+import { eSignatureProceed, faceKIVerify, getWeb3User, registerAccount } from './signUp.actions';
+import { SignUpState, Step1 } from './signUp.types';
 
 const initialState: SignUpState = {
   firstName: '',
@@ -9,6 +9,11 @@ const initialState: SignUpState = {
   accountName: '',
   email: '',
   privateKey: '',
+  passKey: '',
+  faceKIStatus: '',
+  image: '',
+  eSignatureStatus: '',
+  registerStatus: '',
 };
 
 export const signUpSlice = createSlice({
@@ -21,18 +26,25 @@ export const signUpSlice = createSlice({
       state.mobile = action.payload.mobile;
       state.accountName = action.payload.accountName;
     },
-    step2Save: (state, action: PayloadAction<Step2>) => {
-      state.email = action.payload.email;
-      state.privateKey = action.payload.privateKey;
-    },
   },
   extraReducers: builder => {
     builder.addCase(getWeb3User.fulfilled, (state, action) => {
       state.email = action.payload.email;
       state.privateKey = action.payload.privateKey;
+      state.passKey = action.payload.passKey;
+    });
+    builder.addCase(faceKIVerify.fulfilled, (state, action) => {
+      state.faceKIStatus = action.payload.status;
+      state.image = action.payload.image;
+    });
+    builder.addCase(eSignatureProceed.fulfilled, (state, action) => {
+      state.eSignatureStatus = action.payload.type;
+    });
+    builder.addCase(registerAccount.fulfilled, (state, action) => {
+      state.registerStatus = action.payload;
     });
   },
 });
 
-export const { step1Save, step2Save } = signUpSlice.actions;
+export const { step1Save } = signUpSlice.actions;
 export default signUpSlice.reducer;

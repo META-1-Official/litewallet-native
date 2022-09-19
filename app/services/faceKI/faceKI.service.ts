@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 import config from '../../config';
-// import { FaceAttributes } from './types';
 
 const baseUrl = config.FACE_KI_API_URL;
 
@@ -15,17 +14,19 @@ export interface RemoveUserParams {
 
 export interface EnrollUserParams extends VerifyParams, RemoveUserParams {}
 
+export interface FaceKIVerifyParams {
+  image: string;
+  email: string;
+}
+
 const faceKIAPI = {
   livelinessCheck: async ({ image }: VerifyParams) => {
-    console.log('!!!!!!!!!!!!!![eq');
     const formData = new FormData();
     formData.append('image', {
       uri: `file://${image}`,
       name: image.split('/').reverse()[0],
       type: 'image/jpeg',
     });
-
-    console.log('!FormData', JSON.stringify(formData));
 
     return await axios.post(baseUrl + '/face/attribute', formData, {
       headers: { 'content-type': 'multipart/form-data' },

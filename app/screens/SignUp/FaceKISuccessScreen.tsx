@@ -4,14 +4,11 @@ import { Image, SafeAreaView, Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { RootNavigationProp } from '../../App';
 import RoundedButton from '../../components/RoundedButton';
-import { generateKeyFromPassword } from '../../utils/accountCreate';
+import { useAppSelector } from '../../hooks';
 
-export const FaceKISuccessScreen = ({ route }) => {
+export const FaceKISuccessScreen = () => {
   const nav = useNavigation<RootNavigationProp>();
-  const { path, privateKey, accountName, email, firstName, lastName, mobile } = route.params;
-  console.log('!!!Path: ', path);
-
-  const passKey = generateKeyFromPassword(accountName, '', privateKey, true);
+  const { image } = useAppSelector(state => state.signUp);
 
   return (
     <SafeAreaView
@@ -39,7 +36,7 @@ export const FaceKISuccessScreen = ({ route }) => {
             overflow: 'hidden',
           }}
         >
-          <Image style={{ width: '100%', height: '100%' }} source={{ uri: path }} />
+          <Image style={{ width: '100%', height: '100%' }} source={{ uri: image }} />
         </View>
         <View style={{}}>
           <Text
@@ -55,9 +52,7 @@ export const FaceKISuccessScreen = ({ route }) => {
           <RoundedButton
             styles={{ flex: 1 }}
             title="Next"
-            onPress={() =>
-              nav.navigate('Passkey', { passKey, email, accountName, mobile, firstName, lastName })
-            }
+            onPress={() => nav.navigate('Passkey')}
           />
         </View>
       </ScrollView>

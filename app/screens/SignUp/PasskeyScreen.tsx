@@ -1,69 +1,37 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Button, Linking, Platform, SafeAreaView, Text, TextInput, View } from 'react-native';
+import { SafeAreaView, Text, TextInput, View } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import { ScrollView } from 'react-native-gesture-handler';
-import * as url from 'url';
 import { RootNavigationProp } from '../../App';
 import RoundedButton from '../../components/RoundedButton';
-import * as WebBrowser from '@toruslabs/react-native-web-browser';
-import config from '../../config';
-import { createUser, getToken } from '../../services/eSignature';
-import { PrivateKey, key } from 'meta1-vision-js';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { eSignatureProceed } from '../../store/signUp/signUp.actions';
 
-const genKey = (seed: string) => `P${PrivateKey.fromSeed(key.normalize_brainKey(seed)).toWif()}`;
-
-const handleNext = async (
-  email,
-  accountName,
-  firstName,
-  lastName,
-  mobile,
-  passKey,
-  setBrowserResult,
-) => {
-  const redirectUrl = 'io.meta1.appbeta://auth';
-  const faceKiId = email + passKey.privKey;
-  let token;
-
-  console.log('!!! PassKey:', passKey);
-  console.log('!!! createUser', email, email + passKey.privKey);
-  const user = await createUser(email, faceKiId);
-  console.log('!!! Response: ', user);
-
-  console.log('!!! getToken', email);
-  const response = await getToken(email);
-  console.log('!!!Response getToken ', response);
-
-  if (response && response.headers) {
-    if (response.headers.authorization) {
-      token = response.headers.authorization;
-    }
-  }
-
-  console.log('!Token: ', token);
-  console.log('!Data: ', firstName, lastName, mobile, token);
-  const phoneNumber = mobile.replace(/\s/g, '');
-  const encodedEmail = encodeURIComponent(email);
-
-  let result = await WebBrowser.openBrowserAsync(
-    `${config.E_SIGNATURE_API_URL}/e-sign?email=${encodedEmail}&firstName${firstName}&lastName=${lastName}&phoneNumber=${phoneNumber}&walletName=${accountName}&token=${token}&redirectUrl=${redirectUrl}`,
-  );
-  setBrowserResult(result);
-  console.log('!!!WebBrowser: ', result);
-};
-
-export const PasskeyScreen = ({ route, navigation }) => {
+export const PasskeyScreen = () => {
   const nav = useNavigation<RootNavigationProp>();
-  const [browserResult, setBrowserResult] = useState(null);
-  const { passKey, firstName, lastName, mobile, email, accountName } = route.params;
+  const dispatch = useAppDispatch();
+  const {
+    passKey,
+    privateKey,
+    firstName,
+    lastName,
+    mobile,
+    email,
+    accountName,
+    eSignatureStatus,
+  } = useAppSelector(state => state.signUp);
   const [checkboxesState, setCheckBoxesState] = useState([false, false, false, false, false]);
 
+  const handleNext = async () => {
+    dispatch(eSignatureProceed({ firstName, lastName, mobile, email, accountName, privateKey }));
+  };
+
   useEffect(() => {
-    if (browserResult?.type === 'cancel' || browserResult?.type === 'dismiss') {
-      nav.navigate('PaymentSuccess', { email, accountName, passKey, mobile, lastName, firstName });
+    if (eSignatureStatus === 'cancel' || eSignatureStatus === 'dismiss') {
+      nav.navigate('PaymentSuccess');
     }
-  }, [browserResult]);
+  });
 
   const handleCheckBox = (id: number) => {
     setCheckBoxesState(prevState => {
@@ -115,7 +83,7 @@ export const PasskeyScreen = ({ route, navigation }) => {
                 borderStyle: 'solid',
                 borderColor: 'black',
               }}
-              value={genKey(`${accountName}${passKey}`)}
+              value={passKey}
             />
           </View>
         </View>
@@ -203,19 +171,8 @@ export const PasskeyScreen = ({ route, navigation }) => {
           <RoundedButton
             styles={{ flex: 1 }}
             title="Next"
-            // onPress={() => navigation.navigate('ESignature')}
             disabled={!isEveryCheckBoxesValid}
-            onPress={() =>
-              handleNext(
-                email,
-                accountName,
-                firstName,
-                lastName,
-                mobile,
-                passKey,
-                setBrowserResult,
-              )
-            }
+            onPress={() => handleNext()}
           />
         </View>
       </ScrollView>

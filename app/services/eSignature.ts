@@ -10,7 +10,6 @@ export const getUser = async (email: string) => {
 };
 
 export const getToken = async (email: string) => {
-  console.log('!!! Before getToken', email);
   return await axios.get(`${config.E_SIGNATURE_API_URL}/apiewallet/sign/token`, {
     headers: {
       Accept: 'application/json',
