@@ -6,12 +6,15 @@ import { web3Login } from '../../services/web3.services';
 
 import faceKIAPI, { FaceKIVerifyParams } from '../../services/faceKI/faceKI.service';
 import createAccountWithPassword from '../../utils/accountCreate';
-import { SignUpState } from './signUp.types';
+import { SignUpState, Web3UserParams } from './signUp.types';
 
-export const getWeb3User = createAsyncThunk('signUp/web3Login', async () => {
-  const response = await web3Login();
-  return { email: response?.userInfo?.email || '', privateKey: response.privKey || '' };
-});
+export const getWeb3User = createAsyncThunk(
+  'signUp/web3Login',
+  async ({ provider }: Web3UserParams) => {
+    const response = await web3Login(provider);
+    return { email: response?.userInfo?.email || '', privateKey: response.privKey || '' };
+  },
+);
 
 export const faceKIVerify = createAsyncThunk(
   'signUp/faceKIVerify',

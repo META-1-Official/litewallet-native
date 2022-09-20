@@ -1,3 +1,5 @@
+import { LOGIN_PROVIDER } from '@web3auth/react-native-sdk';
+
 export interface Step1 {
   firstName: string;
   lastName: string;
@@ -22,6 +24,10 @@ export interface SignUpState extends Step1, Step2 {
     owner_key: string;
     referrer: string;
   };
+}
+
+export interface Web3UserParams {
+  provider: keyof typeof LOGIN_PROVIDER;
 }
 
 export interface FaceKIState {

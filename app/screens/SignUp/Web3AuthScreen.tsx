@@ -4,6 +4,7 @@ import { SafeAreaView, Text, View, Button } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { RootNavigationProp } from '../../App';
 import RoundedButton from '../../components/RoundedButton';
+import { LOGIN_PROVIDER } from '@web3auth/react-native-sdk';
 
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getWeb3User } from '../../store/signUp/signUp.actions';
@@ -19,8 +20,8 @@ export const Web3AuthScreen = () => {
     }
   }, [privateKey]);
 
-  const login = async () => {
-    dispatch(getWeb3User());
+  const login = async (provider: keyof typeof LOGIN_PROVIDER) => {
+    dispatch(getWeb3User({ provider }));
   };
 
   return (
@@ -51,7 +52,11 @@ export const Web3AuthScreen = () => {
           Now, its time to setup your passwordless authentication for your new META 1 wallet
         </Text>
 
-        <Button title="Login with Web3Auth" onPress={login} />
+        <Button title="Login with Google" onPress={() => login('GOOGLE')} />
+        <Button title="Login with Facebook" onPress={() => login('FACEBOOK')} />
+        <Button title="Login with Twitter" onPress={() => login('TWITTER')} />
+        <Button title="Login with Github" onPress={() => login('GITHUB')} />
+        <Button title="Login with Email" onPress={() => login('JWT')} />
 
         <View style={{ position: 'absolute', bottom: 0, width: '100%' }}>
           <RoundedButton

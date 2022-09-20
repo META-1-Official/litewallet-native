@@ -9,9 +9,9 @@ const web3auth = new Web3Auth(WebBrowser, {
   network: OPENLOGIN_NETWORK.TESTNET,
 });
 
-export const web3Login = (): Promise<State> => {
+export const web3Login = (provider: keyof typeof LOGIN_PROVIDER): Promise<State> => {
   return web3auth.login({
-    loginProvider: LOGIN_PROVIDER.GOOGLE,
+    loginProvider: LOGIN_PROVIDER[provider],
     redirectUrl: resolvedRedirectUrl,
   });
 };
