@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { eSignatureProceed, faceKIVerify, getWeb3User, registerAccount } from './signUp.actions';
 import { SignUpState, Step1 } from './signUp.types';
+// @ts-ignore
+import { PrivateKey, key } from 'meta1-vision-js';
 
 const initialState: SignUpState = {
   firstName: '',
@@ -31,7 +33,9 @@ export const signUpSlice = createSlice({
     builder.addCase(getWeb3User.fulfilled, (state, action) => {
       state.email = action.payload.email;
       state.privateKey = action.payload.privateKey;
-      state.passKey = action.payload.passKey;
+      state.passKey = `P${PrivateKey.fromSeed(
+        key.normalize_brainKey(`usr_${state.accountName}${action.payload.privateKey}`),
+      ).toWif()}`;
     });
     builder.addCase(faceKIVerify.fulfilled, (state, action) => {
       state.faceKIStatus = action.payload.status;

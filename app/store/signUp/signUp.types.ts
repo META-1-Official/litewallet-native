@@ -8,10 +8,10 @@ export interface Step1 {
 export interface Step2 {
   email: string;
   privateKey: string;
-  passKey: string;
 }
 
 export interface SignUpState extends Step1, Step2 {
+  passKey: string;
   faceKIStatus: string;
   image: string;
   eSignatureStatus: string; // 'cancel' | 'dismiss'
