@@ -1,11 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SafeAreaView, TextInput, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import RoundedButton from '../../components/RoundedButton';
 import { Heading, TextSecondary } from '../../components/typography';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getAccount } from '../../services/meta1Api';
+import { getWeb3User } from '../../store/signUp/signUp.actions';
 import { step1Save } from '../../store/signUp/signUp.reducer';
 import { lettersOnly, required } from '../../utils/useFormHelper/rules';
 //@ts-ignore
@@ -26,8 +27,16 @@ const premiumName = (t: string) =>
 const chainValidate = (t: string) => ChainValidation.is_account_name_error(t);
 
 const CreateWalletScreen: React.FC = () => {
+  const nav = useNavigation<RootNavigationProp>();
   const dispatch = useAppDispatch();
-  const navigation = useNavigation<RootNavigationProp>();
+  const { privateKey } = useAppSelector(state => state.signUp);
+
+  useEffect(() => {
+    if (privateKey) {
+      nav.navigate('FaceKI');
+    }
+  }, [privateKey]);
+
   const { control, handleSubmit } = useForm({
     mode: 'onChange',
     defaultValues: {
@@ -109,7 +118,8 @@ const CreateWalletScreen: React.FC = () => {
             title="Submit"
             onPress={handleSubmit(formState => {
               dispatch(step1Save(formState));
-              navigation.navigate('Web3Auth');
+              // @ts-ignore | this hack is required to use form with all providers
+              dispatch(getWeb3User({ provider: undefined }));
             })}
           />
         </View>

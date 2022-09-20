@@ -19,7 +19,6 @@ import AppHeader from './components/AppHeaer';
 import CreateWalletScreen from './screens/SignUp/CreateWalletScreen';
 import PasskeyScreen from './screens/SignUp/PasskeyScreen';
 import PaymentSuccess from './screens/SignUp/PaymentSuccess';
-import Web3AuthScreen from './screens/SignUp/Web3AuthScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import LinkWalletScreen from './screens/LinkWalletScreen';
 import { Options, useOptions, useStore } from './store';
@@ -71,7 +70,6 @@ export type RootStackParamList = {
   Legal: undefined;
   Privacy: undefined;
   CreateWallet: undefined;
-  Web3Auth: undefined;
   FaceKI: undefined;
   FaceKISuccess: undefined;
   Passkey: undefined;
@@ -105,7 +103,6 @@ const AuthNav = () => {
       <Stack.Screen name="Privacy" component={PrivacyPolicy} />
       <Stack.Screen name="TOS" component={TOSScreen} />
       <Stack.Screen name="CreateWallet" component={CreateWalletScreen} />
-      <Stack.Screen name="Web3Auth" component={Web3AuthScreen} />
       <Stack.Screen
         name="FaceKI"
         options={{
