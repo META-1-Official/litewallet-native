@@ -10,10 +10,6 @@ const web3auth = new Web3Auth(WebBrowser, {
 });
 
 export const web3Login = (provider: keyof typeof LOGIN_PROVIDER): Promise<State> => {
-  console.log('!!!!!:', {
-    loginProvider: LOGIN_PROVIDER[provider],
-    redirectUrl: resolvedRedirectUrl,
-  });
   return web3auth.login({
     loginProvider: LOGIN_PROVIDER[provider],
     redirectUrl: resolvedRedirectUrl,

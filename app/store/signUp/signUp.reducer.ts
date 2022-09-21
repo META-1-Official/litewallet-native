@@ -34,7 +34,7 @@ export const signUpSlice = createSlice({
       state.email = action.payload.email;
       state.privateKey = action.payload.privateKey;
       state.passKey = `P${PrivateKey.fromSeed(
-        key.normalize_brainKey(`usr_${state.accountName}${action.payload.privateKey}`),
+        key.normalize_brainKey(`${action.payload.email}${action.payload.privateKey}`),
       ).toWif()}`;
     });
     builder.addCase(faceKIVerify.fulfilled, (state, action) => {
