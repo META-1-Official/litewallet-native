@@ -31,7 +31,7 @@ import { LoaderModalContent } from './components/LoaderModal';
 import { CountryPicker, CountryPickerParams } from './components/CountryPicker';
 import { setJSExceptionHandler } from 'react-native-exception-handler';
 import RNRestart from 'react-native-restart';
-import { SENTRY_DSN } from '@env';
+// import { SENTRY_DSN } from '@env';
 import { Alert, LogBox } from 'react-native';
 
 import { createStore } from './store/createStore';
@@ -40,22 +40,22 @@ import { createStore } from './store/createStore';
 const routingInstrumentation = new Sentry.ReactNavigationInstrumentation();
 
 useOptions.persist.rehydrate().then(() => {
-  if (SENTRY_DSN && Options.get('sentryEnabled')) {
-    console.log('--- SENTRY INIT ---');
-    Sentry.init({
-      dsn: SENTRY_DSN,
-      // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
-      // We recommend adjusting this value in production.
-      tracesSampleRate: 1.0,
-      integrations: [
-        new Sentry.ReactNativeTracing({
-          // Pass instrumentation to be used as `routingInstrumentation`
-          routingInstrumentation,
-          // ...
-        }),
-      ],
-    });
-  }
+  // if (SENTRY_DSN && Options.get('sentryEnabled')) {
+  console.log('--- SENTRY INIT ---');
+  Sentry.init({
+    dsn: 'https://4fe8a584a54046abb98df42e62403b10@o1422625.ingest.sentry.io/6769553', //SENTRY_DSN,
+    // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+    // We recommend adjusting this value in production.
+    tracesSampleRate: 1.0,
+    // integrations: [
+    //   new Sentry.ReactNativeTracing({
+    //     // Pass instrumentation to be used as `routingInstrumentation`
+    //     routingInstrumentation,
+    //     // ...
+    //   }),
+    // ],
+  });
+  // }
 });
 
 setJSExceptionHandler((e, _fatal) => {
