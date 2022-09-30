@@ -41,6 +41,8 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           DIAWI_TOKEN: ${{ secrets.DIAWI_TOKEN }}
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT }}
+          NETWORK: ${{ secrets.NETWORK }}
+          REACT_API_URL: ${{ secrets.REACT_APP_API_URL }}
       - name: Get Diawi URL and QR Code
         run: |
           echo ============================
@@ -52,7 +54,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ios-build 
+          name: ios-build
           path: |
             dist/**/*.ipa
             dist/**/*.zip
