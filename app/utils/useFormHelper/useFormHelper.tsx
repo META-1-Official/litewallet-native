@@ -10,7 +10,7 @@ import PaperTextInput, {
 } from 'react-native-paper/src/components/TextInput/TextInput';
 import { useNavigation } from '@react-navigation/native';
 import { ChevronDown, Eye, EyeOff } from 'react-native-feather';
-import { RootNavigationProp } from '../../App';
+import { RootNavigationProp } from '../../AuthNav';
 import { CountryUS, CountryData, isoToEmoji } from '../../components/CountryPicker/CountryList';
 import { RuleFn, rule } from './rules';
 import TextInputMask from 'react-native-text-input-mask';

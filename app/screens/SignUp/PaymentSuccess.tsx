@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect } from 'react';
 import { SafeAreaView, ScrollView, Text, TextInput, View } from 'react-native';
-import { RootNavigationProp } from '../../App';
+import { RootNavigationProp } from '../../AuthNav';
 import RoundedButton from '../../components/RoundedButton';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { registerAccount } from '../../store/signUp/signUp.actions';

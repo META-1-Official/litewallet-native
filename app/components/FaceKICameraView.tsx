@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, Image } from 'react-native';
 import { Camera, PhotoFile, useCameraDevices } from 'react-native-vision-camera';
-import { RootNavigationProp } from '../App';
+import { RootNavigationProp } from '../AuthNav';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { faceKIVerify } from '../store/signUp/signUp.actions';
 import styles from './FaceKICameraView.styles';

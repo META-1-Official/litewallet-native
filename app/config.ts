@@ -12,6 +12,9 @@ export default {
   liteWalletApiHost: isTestnet
     ? 'https://litewallet.dev.cryptomailsvc.io'
     : 'https://litewallet.cryptomailsvc.io',
+  liteWalletOldApiHost: isTestnet
+    ? 'https://litewallet.dev2.cryptomailsvc.io'
+    : 'https://litewallet.cryptomailsvc.io',
   GatewayUrl: isTestnet
     ? 'https://gateway.dev.meta-exchange.vision'
     : 'https://gateway.api.meta-exchange.vision',

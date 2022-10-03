@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import ContentSlider, { Backdrop } from '../components/ContentSlider';
 import RoundedButton from '../components/RoundedButton';
 import { colors } from '../styles/colors';
-import { RootNavigationProp } from '../App';
+import { RootNavigationProp } from '../AuthNav';
 import { useNavigation } from '@react-navigation/core';
 
 const WelcomeScreen = () => {

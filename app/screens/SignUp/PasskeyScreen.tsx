@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { SafeAreaView, Text, TextInput, View } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import { ScrollView } from 'react-native-gesture-handler';
-import { RootNavigationProp } from '../../App';
+import { RootNavigationProp } from '../../AuthNav';
 import RoundedButton from '../../components/RoundedButton';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { eSignatureProceed } from '../../store/signUp/signUp.actions';

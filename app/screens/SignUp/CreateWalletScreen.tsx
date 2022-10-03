@@ -12,7 +12,7 @@ import { lettersOnly, required } from '../../utils/useFormHelper/rules';
 //@ts-ignore
 import { ChainValidation } from 'meta1-vision-js';
 import { useForm } from 'react-hook-form';
-import { RootNavigationProp } from '../../App';
+import { RootNavigationProp } from '../../AuthNav';
 import { Input, PhoneInput } from '../../utils/useFormHelper/useFormHelper';
 
 const freeName = async (text: string) => {
