@@ -9,6 +9,7 @@ import CreateWalletScreen from './screens/SignUp/CreateWalletScreen';
 import ESignatureScreen from './screens/SignUp/ESignatureScreen';
 import FaceKIScreen from './screens/SignUp/FaceKIScreen';
 import FaceKISuccessScreen from './screens/SignUp/FaceKISuccessScreen';
+import ImportWalletScreen from './screens/SignUp/ImportWalletScreen';
 import Legal from './screens/SignUp/LegalScreen';
 import PasskeyScreen from './screens/SignUp/PasskeyScreen';
 import PaymentSuccess from './screens/SignUp/PaymentSuccess';
@@ -65,6 +66,7 @@ const AuthNav = () => {
       <Stack.Screen name="ESignature" component={ESignatureScreen} />
       <Stack.Screen name="PaymentSuccess" component={PaymentSuccess} />
       <Stack.Screen name="LinkWallet" component={LinkWalletScreen} />
+      <Stack.Screen name="ImportWallet" component={ImportWalletScreen} />
       <Stack.Screen
         name="Loader"
         options={{ presentation: 'transparentModal', headerShown: false }}

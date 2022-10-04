@@ -2,17 +2,16 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { SafeAreaView, View, Image, Dimensions, TextInput, Animated, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { personAsset, personIconAsset } from '../../assets';
-import RoundedButton from '../components/RoundedButton';
-import { Heading, TextSecondary } from '../components/typography';
-import useAnimatedKeyboard from '../hooks/useAnimatedKeyboard';
-import { useStore } from '../store';
-import { tid, useScroll } from '../utils';
-import { getAccount } from '../services/meta1Api';
-import meta1dex from '../utils/meta1dexTypes';
-import { required, RuleFn } from '../utils/useFormHelper/rules';
-import { Input } from '../utils/useFormHelper/useFormHelper';
-import PasswordInput from '../components/PasswordInput';
+import { personAsset, personIconAsset } from '../../../assets';
+import RoundedButton from '../../components/RoundedButton';
+import { Heading, TextSecondary } from '../../components/typography';
+import useAnimatedKeyboard from '../../hooks/useAnimatedKeyboard';
+import migrationService from '../../services/migration.service';
+import { tid, useScroll } from '../../utils';
+import { getAccount } from '../../services/meta1Api';
+import { required, RuleFn } from '../../utils/useFormHelper/rules';
+import { Input } from '../../utils/useFormHelper/useFormHelper';
+import PasswordInput from '../../components/PasswordInput';
 
 const { width, height } = Dimensions.get('screen');
 const knownAccount: RuleFn = async text => {
@@ -20,21 +19,11 @@ const knownAccount: RuleFn = async text => {
   return !!acc || 'Account not found';
 };
 
-const validatePassword = async (login: string, password: string) => {
-  try {
-    await meta1dex.login(login, password);
-    return true;
-  } catch (e: any) {
-    console.error(e, e.stack);
-    Alert.alert('The pair of login and password do not match!');
-    return false;
-  }
-};
-const LinkWalletScreen: React.FC = () => {
+const ImportWalletScreen: React.FC = () => {
   const { control, handleSubmit } = useForm({
     mode: 'onChange',
     defaultValues: {
-      account_name: '',
+      accountName: '',
       password: '',
     },
   });
@@ -42,7 +31,15 @@ const LinkWalletScreen: React.FC = () => {
   const offsetY = useAnimatedKeyboard();
   const scroll = useScroll(true);
 
-  const authorize = useStore(state => state.authorize);
+  const importWallet = handleSubmit(async formState => {
+    const { accountName, password } = formState;
+    const response = await migrationService.validateSignature(accountName, password);
+    if (response?.isValid) {
+    } else {
+      Alert.alert('Private Key is invalid!');
+    }
+  });
+
   return (
     <SafeAreaView
       style={{
@@ -62,10 +59,10 @@ const LinkWalletScreen: React.FC = () => {
               marginBottom: 50,
             }}
           />
-          <Heading style={{ marginBottom: 8 }}>META Lite Wallet</Heading>
+          <Heading style={{ marginBottom: 8 }}>Import META Wallet</Heading>
           <TextSecondary style={{ marginBottom: 18, fontSize: 15 }}>
-            Type your wallet 'Account Name' in the box below and click the 'Link META Wallet'
-            button
+            To import your wallet please enter your Meta Wallet name and your private passkey in
+            the inputs below
           </TextSecondary>
           <Input
             control={control}
@@ -73,7 +70,7 @@ const LinkWalletScreen: React.FC = () => {
               paddingHorizontal: 32,
             }}
             rules={{ required, validate: { knownAccount } }}
-            name="account_name"
+            name="accountName"
             label="Account Name"
             render={props => (
               <View key={123} style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -100,7 +97,7 @@ const LinkWalletScreen: React.FC = () => {
             control={control}
             rules={{ required }}
             name="password"
-            label="Password"
+            label="Passkey"
             style={{
               paddingHorizontal: 32,
             }}
@@ -108,19 +105,11 @@ const LinkWalletScreen: React.FC = () => {
           />
         </Animated.View>
         <View>
-          <RoundedButton
-            title="Submit"
-            onPress={handleSubmit(async formState => {
-              const { account_name, password } = formState;
-              if (await validatePassword(account_name, password)) {
-                authorize(account_name, password);
-              }
-            })}
-          />
+          <RoundedButton title="Import" onPress={importWallet} />
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-export default LinkWalletScreen;
+export default ImportWalletScreen;
