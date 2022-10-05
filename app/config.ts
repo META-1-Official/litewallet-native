@@ -4,16 +4,16 @@ const isTestnet = NETWORK === 'TESTNET';
 
 export default {
   META1_CONNECTION_URL: isTestnet
-    ? 'wss://api.dev.meta-exchange.vision/ws'
+    ? 'wss://api.dev2.meta-exchange.vision/ws'
     : 'wss://api.meta-exchange.vision/ws',
   faucetAddress: isTestnet
-    ? 'https://faucet.dev.meta-exchange.vision/faucet'
+    ? 'https://faucet.dev2.meta-exchange.vision/faucet'
     : 'https://faucet.meta-exchange.vision/faucet',
   liteWalletApiHost: isTestnet
-    ? 'https://litewallet.dev.cryptomailsvc.io'
+    ? 'https://litewallet.dev2.cryptomailsvc.io'
     : 'https://litewallet.cryptomailsvc.io',
   liteWalletOldApiHost: isTestnet
-    ? 'https://litewallet.dev2.cryptomailsvc.io'
+    ? 'https://litewallet.dev.cryptomailsvc.io'
     : 'https://litewallet.cryptomailsvc.io',
   GatewayUrl: isTestnet
     ? 'https://gateway.dev.meta-exchange.vision'

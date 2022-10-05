@@ -1,25 +1,40 @@
-import React from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { SafeAreaView, View, Image, Dimensions, TextInput, Animated, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { personAsset, personIconAsset } from '../../../assets';
+import { RootNavigationProp } from '../../AuthNav';
 import RoundedButton from '../../components/RoundedButton';
 import { Heading, TextSecondary } from '../../components/typography';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import useAnimatedKeyboard from '../../hooks/useAnimatedKeyboard';
 import migrationService from '../../services/migration.service';
+import { getWeb3User } from '../../store/signUp/signUp.actions';
+import { step1Save } from '../../store/signUp/signUp.reducer';
 import { tid, useScroll } from '../../utils';
-import { getAccount } from '../../services/meta1Api';
 import { required, RuleFn } from '../../utils/useFormHelper/rules';
 import { Input } from '../../utils/useFormHelper/useFormHelper';
 import PasswordInput from '../../components/PasswordInput';
 
 const { width, height } = Dimensions.get('screen');
-const knownAccount: RuleFn = async text => {
-  const acc = await getAccount(text).catch(console.debug);
-  return !!acc || 'Account not found';
+
+const validateOldAccount: RuleFn = async accountName => {
+  const { data } = await migrationService.checkTransferableAccount(accountName);
+  return data?.found || 'Account not found';
 };
 
 const ImportWalletScreen: React.FC = () => {
+  const nav = useNavigation<RootNavigationProp>();
+  const dispatch = useAppDispatch();
+  const { privateKey } = useAppSelector(state => state.signUp);
+
+  useEffect(() => {
+    if (privateKey) {
+      nav.navigate('FaceKI');
+    }
+  }, [privateKey]);
+
   const { control, handleSubmit } = useForm({
     mode: 'onChange',
     defaultValues: {
@@ -31,10 +46,24 @@ const ImportWalletScreen: React.FC = () => {
   const offsetY = useAnimatedKeyboard();
   const scroll = useScroll(true);
 
-  const importWallet = handleSubmit(async formState => {
+  const handleImportWallet = handleSubmit(async formState => {
     const { accountName, password } = formState;
     const response = await migrationService.validateSignature(accountName, password);
     if (response?.isValid) {
+      const {
+        data: {
+          snapshot: { transfer_status: transferStatus },
+        },
+      } = await migrationService.checkMigrationStatus(accountName);
+      console.log('transferStatus: ', transferStatus);
+      if (['PENDING', 'PARTIALLY_DONE'].includes(transferStatus)) {
+        // todo: save migration
+        dispatch(step1Save({ accountName, mobile: '', firstName: '', lastName: '' }));
+        // @ts-ignore | this hack is required to use form with all providers
+        dispatch(getWeb3User({ provider: undefined }));
+      } else {
+        Alert.alert('This account is not able to be migrated');
+      }
     } else {
       Alert.alert('Private Key is invalid!');
     }
@@ -69,7 +98,7 @@ const ImportWalletScreen: React.FC = () => {
             style={{
               paddingHorizontal: 32,
             }}
-            rules={{ required, validate: { knownAccount } }}
+            rules={{ required, validate: { validateOldAccount } }}
             name="accountName"
             label="Account Name"
             render={props => (
@@ -105,7 +134,7 @@ const ImportWalletScreen: React.FC = () => {
           />
         </Animated.View>
         <View>
-          <RoundedButton title="Import" onPress={importWallet} />
+          <RoundedButton title="Import" onPress={handleImportWallet} />
         </View>
       </ScrollView>
     </SafeAreaView>

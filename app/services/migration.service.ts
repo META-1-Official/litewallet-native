@@ -21,11 +21,12 @@ class MigrationServices {
     return { accountName, publicKey, signature };
   };
 
-  checkOldUser = async (accountName: string) => {
+  checkTransferableAccount = async (accountName: string) => {
     try {
       const { data } = await this.api.get('/checkTransferable', { params: { accountName } });
-      return { ...data, error: false };
+      return { data, error: false };
     } catch (e) {
+      console.error(e);
       return { message: 'Something is wrong', error: true };
     }
   };
@@ -36,17 +37,19 @@ class MigrationServices {
       const { data } = await this.api.post('/validateSignature', payload);
       return data;
     } catch (e) {
+      console.error(e);
       return { message: 'Invalid Signature', error: true };
     }
   };
 
-  checkMigrationable = async (accountName: string) => {
+  checkMigrationStatus = async (accountName: string) => {
     try {
       const { data } = await this.api.get('/migration-status', {
         params: { identifier: accountName },
       });
-      return { ...data, error: false };
+      return { data, error: false };
     } catch (e) {
+      console.error(e);
       return { message: 'Not able to migrate', error: true };
     }
   };
@@ -55,8 +58,9 @@ class MigrationServices {
     try {
       const payload = await this.buildSignature(accountName, password);
       const { data } = await this.api.post('/migrate', payload);
-      return data;
+      return { data, error: false };
     } catch (e) {
+      console.error(e);
       return { message: 'Something is wrong', error: true };
     }
   };

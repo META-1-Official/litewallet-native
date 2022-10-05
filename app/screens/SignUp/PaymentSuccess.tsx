@@ -1,9 +1,10 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect } from 'react';
-import { SafeAreaView, ScrollView, Text, TextInput, View } from 'react-native';
+import { Alert, SafeAreaView, ScrollView, Text, TextInput, View } from 'react-native';
 import { RootNavigationProp } from '../../AuthNav';
 import RoundedButton from '../../components/RoundedButton';
 import { useAppDispatch, useAppSelector } from '../../hooks';
+import migrationService from '../../services/migration.service';
 import { registerAccount } from '../../store/signUp/signUp.actions';
 
 export const PaymentSuccess = () => {
@@ -13,18 +14,30 @@ export const PaymentSuccess = () => {
     useAppSelector(state => state.signUp);
 
   useEffect(() => {
-    if (!registerStatus) {
-      dispatch(
-        registerAccount({
-          accountName,
-          passKey,
-          mobile,
-          email,
-          firstName,
-          lastName,
-        }),
-      );
-    }
+    (async () => {
+      if (!registerStatus) {
+        if (!mobile) {
+          const migrationResp = await migrationService.migrate(accountName, passKey);
+          console.log('Migration response: ', migrationResp);
+          if (migrationResp) {
+            Alert.alert('Migration done!');
+          } else {
+            Alert.alert('Something went wrong!');
+          }
+        } else {
+          dispatch(
+            registerAccount({
+              accountName,
+              passKey,
+              mobile,
+              email,
+              firstName,
+              lastName,
+            }),
+          );
+        }
+      }
+    })();
   }, []);
 
   return (
