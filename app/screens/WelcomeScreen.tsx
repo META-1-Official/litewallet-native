@@ -11,7 +11,6 @@ const WelcomeScreen = () => {
   const nav = useNavigation<RootNavigationProp>();
   const CreateWalletPress = () => nav.navigate('Legal');
   const LinkWalletPress = () => nav.navigate('LinkWallet');
-  const ImportWalletPress = () => nav.navigate('ImportWallet');
   const scrollX = useRef(new Animated.Value(0)).current;
 
   return (
@@ -32,12 +31,6 @@ const WelcomeScreen = () => {
         <RoundedButton
           title="Link META Wallet"
           onPress={LinkWalletPress}
-          styles={styles.LinkWalletStyle}
-        />
-
-        <RoundedButton
-          title="Import META Wallet"
-          onPress={ImportWalletPress}
           styles={styles.LinkWalletStyle}
         />
       </View>

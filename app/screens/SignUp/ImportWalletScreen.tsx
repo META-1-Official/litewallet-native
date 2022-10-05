@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { SafeAreaView, View, Image, Dimensions, TextInput, Animated, Alert } from 'react-native';
+import { SafeAreaView, View, Image, Dimensions, Animated, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { personAsset, personIconAsset } from '../../../assets';
+import { personAsset } from '../../../assets';
 import { RootNavigationProp } from '../../AuthNav';
 import RoundedButton from '../../components/RoundedButton';
 import { Heading, TextSecondary } from '../../components/typography';
@@ -12,17 +12,12 @@ import useAnimatedKeyboard from '../../hooks/useAnimatedKeyboard';
 import migrationService from '../../services/migration.service';
 import { getWeb3User } from '../../store/signUp/signUp.actions';
 import { step1Save } from '../../store/signUp/signUp.reducer';
-import { tid, useScroll } from '../../utils';
-import { required, RuleFn } from '../../utils/useFormHelper/rules';
+import { useScroll } from '../../utils';
+import { required } from '../../utils/useFormHelper/rules';
 import { Input } from '../../utils/useFormHelper/useFormHelper';
 import PasswordInput from '../../components/PasswordInput';
 
 const { width, height } = Dimensions.get('screen');
-
-const validateOldAccount: RuleFn = async accountName => {
-  const { data } = await migrationService.checkTransferableAccount(accountName);
-  return data?.found || 'Account not found';
-};
 
 const ImportWalletScreen: React.FC = () => {
   const nav = useNavigation<RootNavigationProp>();
@@ -90,38 +85,8 @@ const ImportWalletScreen: React.FC = () => {
           />
           <Heading style={{ marginBottom: 8 }}>Import META Wallet</Heading>
           <TextSecondary style={{ marginBottom: 18, fontSize: 15 }}>
-            To import your wallet please enter your Meta Wallet name and your private passkey in
-            the inputs below
+            To import your wallet please enter your Meta Wallet private passkey in the input below
           </TextSecondary>
-          <Input
-            control={control}
-            style={{
-              paddingHorizontal: 32,
-            }}
-            rules={{ required, validate: { validateOldAccount } }}
-            name="accountName"
-            label="Account Name"
-            render={props => (
-              <View key={123} style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Image
-                  source={personIconAsset}
-                  style={{
-                    width: 24,
-                    height: 32,
-                    resizeMode: 'contain',
-                  }}
-                />
-                <TextInput
-                  {...props}
-                  {...tid('LinkWallet/AccountName')}
-                  autoCapitalize={'none'}
-                  autoCorrect={false}
-                  keyboardType={'email-address'}
-                  style={[props.style, { paddingLeft: 8 }]}
-                />
-              </View>
-            )}
-          />
           <Input
             control={control}
             rules={{ required }}
