@@ -16,6 +16,7 @@ const initialState: SignUpState = {
   image: '',
   eSignatureStatus: '',
   registerStatus: undefined,
+  isMigration: false,
 };
 
 export const signUpSlice = createSlice({
@@ -27,6 +28,7 @@ export const signUpSlice = createSlice({
       state.lastName = action.payload.lastName;
       state.mobile = action.payload.mobile;
       state.accountName = action.payload.accountName;
+      state.isMigration = action.payload.isMigration;
     },
   },
   extraReducers: builder => {
