@@ -42,7 +42,7 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           DIAWI_TOKEN: ${{ secrets.DIAWI_TOKEN }}
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT }}
-          SENTRY_DSN: ${{ SENTRY_DSN }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       - name: Get Diawi URL and QR Code
         run: |
           echo ============================
