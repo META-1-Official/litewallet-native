@@ -10,14 +10,24 @@ import { registerAccount } from '../../store/signUp/signUp.actions';
 export const PaymentSuccess = () => {
   const nav = useNavigation<RootNavigationProp>();
   const dispatch = useAppDispatch();
-  const { email, accountName, passKey, mobile, lastName, firstName, registerStatus, isMigration } =
-    useAppSelector(state => state.signUp);
+  const {
+    email,
+    accountName,
+    passKey,
+    mobile,
+    lastName,
+    firstName,
+    registerStatus,
+    isMigration,
+    password,
+  } = useAppSelector(state => state.signUp);
 
   useEffect(() => {
     (async () => {
       if (!registerStatus) {
         if (isMigration) {
-          const migrationResp = await migrationService.migrate(accountName, passKey);
+          const migrationResp = await migrationService.migrate(accountName, password as string);
+          console.log('Migration: ', accountName, password);
           console.log('Migration response: ', migrationResp);
           if (migrationResp) {
             Alert.alert('Migration done!');

@@ -6,6 +6,7 @@ export interface Step1 {
   mobile: string;
   accountName: string;
   isMigration?: boolean;
+  password?: string;
 }
 
 export interface Step2 {

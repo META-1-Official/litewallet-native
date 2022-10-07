@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ChangeEvent, useEffect, useState } from 'react';
-import { SafeAreaView, TextInput, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, Text, TextInput, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import RoundedButton from '../../components/RoundedButton';
 import { Heading, TextSecondary } from '../../components/typography';
@@ -18,7 +18,7 @@ import { Input, PhoneInput } from '../../utils/useFormHelper/useFormHelper';
 
 const freeName = async (accountName: string) => {
   const acc = await getAccount(accountName).catch(console.debug);
-  return !acc || 'This account name is already taken';
+  return !acc || 'This account name has already taken';
 };
 
 const premiumName = (accountName: string) =>
@@ -123,18 +123,24 @@ const CreateWalletScreen: React.FC = () => {
             />
           </View>
           {migratable && (
-            <RoundedButton
-              title="Import wallet"
-              onPress={handleSubmit(formState => {
-                dispatch(step1Save(formState));
-                nav.navigate('ImportWallet');
-              })}
-            />
+            <>
+              <Text style={{ marginBottom: 8 }}>
+                We found account with the same name in our old blockchain. Do you want to import
+                it?
+              </Text>
+              <RoundedButton
+                title="Import wallet"
+                onPress={handleSubmit(formState => {
+                  dispatch(step1Save(formState));
+                  nav.navigate('ImportWallet');
+                })}
+              />
+            </>
           )}
         </View>
         <View>
           <RoundedButton
-            title="Submit"
+            title="Create wallet"
             onPress={handleSubmit(formState => {
               dispatch(step1Save(formState));
               // @ts-ignore | this hack is required to use form with all providers

@@ -22,7 +22,7 @@ const { width, height } = Dimensions.get('screen');
 const ImportWalletScreen: React.FC = () => {
   const nav = useNavigation<RootNavigationProp>();
   const dispatch = useAppDispatch();
-  const { accountName, mobile, firstName, lastName, privateKey, isMigration } = useAppSelector(
+  const { accountName, mobile, firstName, lastName, privateKey } = useAppSelector(
     state => state.signUp,
   );
 
@@ -55,7 +55,9 @@ const ImportWalletScreen: React.FC = () => {
       console.log('transferStatus: ', transferStatus);
       if (['PENDING', 'PARTIALLY_DONE'].includes(transferStatus)) {
         // todo: save migration
-        dispatch(step1Save({ accountName, mobile, firstName, lastName, isMigration: true }));
+        dispatch(
+          step1Save({ accountName, mobile, firstName, lastName, isMigration: true, password }),
+        );
         // @ts-ignore | this hack is required to use form with all providers
         dispatch(getWeb3User({ provider: undefined }));
       } else {
