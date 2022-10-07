@@ -46,9 +46,11 @@ export const signUpSlice = createSlice({
       state.image = action.payload.image;
     });
     builder.addCase(eSignatureProceed.fulfilled, (state, action) => {
+      console.log('E-signature: ', action.payload);
       state.eSignatureStatus = action.payload.type;
     });
     builder.addCase(registerAccount.fulfilled, (state, action) => {
+      console.log('Registration: ', action.payload);
       state.registerStatus = action.payload;
     });
   },

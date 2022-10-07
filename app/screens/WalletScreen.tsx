@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { SafeAreaView, View, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, View, Text, Alert } from 'react-native';
 import {
   createStackNavigator,
   StackNavigationProp,
@@ -8,6 +8,8 @@ import {
 import MaterialToggle from '../components/MaterialToggle';
 import PortfolioHeader from '../components/PortfolioHeader';
 import PortfolioListing from '../components/PortfolioListing';
+import { useAppSelector } from '../hooks';
+import migrationService from '../services/migration.service';
 import { colors } from '../styles/colors';
 import { useAssets } from '../services/meta1Api';
 import Loader from '../components/Loader';
@@ -19,6 +21,23 @@ import SendScreen from './SendScreen';
 const WalletScreen = () => {
   const [showZeroBalance, setShowZeroBalacnce] = useState(false);
   const allAssets = useAssets();
+  const { accountName, isMigration, password } = useAppSelector(state => state.signUp);
+
+  useEffect(() => {
+    // todo: move to custom hook
+    (async () => {
+      if (isMigration) {
+        const migrationResp = await migrationService.migrate(accountName, password as string);
+        console.log('Migration: ', accountName, password);
+        console.log('Migration response: ', migrationResp);
+        if (migrationResp) {
+          Alert.alert('Migration done!');
+        } else {
+          Alert.alert('Something went wrong!');
+        }
+      }
+    })();
+  }, []);
 
   if (allAssets === null) {
     return <Loader />;

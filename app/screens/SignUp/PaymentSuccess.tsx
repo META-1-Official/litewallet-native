@@ -5,11 +5,14 @@ import { RootNavigationProp } from '../../AuthNav';
 import RoundedButton from '../../components/RoundedButton';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import migrationService from '../../services/migration.service';
+import { useStore } from '../../store';
 import { registerAccount } from '../../store/signUp/signUp.actions';
 
 export const PaymentSuccess = () => {
   const nav = useNavigation<RootNavigationProp>();
   const dispatch = useAppDispatch();
+  // todo: move it to actions
+  const authorize = useStore(state => state.authorize);
   const {
     email,
     accountName,
@@ -34,21 +37,26 @@ export const PaymentSuccess = () => {
           } else {
             Alert.alert('Something went wrong!');
           }
-        } else {
-          dispatch(
-            registerAccount({
-              accountName,
-              passKey,
-              mobile,
-              email,
-              firstName,
-              lastName,
-            }),
-          );
         }
+        dispatch(
+          registerAccount({
+            accountName,
+            passKey,
+            mobile,
+            email,
+            firstName,
+            lastName,
+          }),
+        );
       }
     })();
   }, []);
+
+  useEffect(() => {
+    if (registerStatus) {
+      authorize(accountName, passKey);
+    }
+  }, [registerStatus]);
 
   return (
     <SafeAreaView
@@ -69,7 +77,7 @@ export const PaymentSuccess = () => {
         }}
       >
         <Text style={{ fontSize: 30, fontWeight: 'bold' }}>
-          {!registerStatus ? 'Loading...' : 'Successfully Paid'}
+          {!registerStatus ? 'Loading...' : 'Account successfully created!'}
         </Text>
         <View style={{ flex: 1, justifyContent: 'center' }}>
           {registerStatus && (
