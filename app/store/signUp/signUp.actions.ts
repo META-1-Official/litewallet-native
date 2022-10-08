@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import * as WebBrowser from '@toruslabs/react-native-web-browser';
 import config from '../../config';
 import { createUser, getToken } from '../../services/eSignature';
+import migrationService from '../../services/migration.service';
 import { web3Login } from '../../services/web3.services';
 
 import faceKIAPI, { FaceKIVerifyParams } from '../../services/faceKI/faceKI.service';
@@ -71,7 +72,7 @@ export const eSignatureProceed = createAsyncThunk(
 );
 
 export const registerAccount = createAsyncThunk(
-  '/signUp/registerAccount',
+  'signUp/registerAccount',
   async ({
     accountName,
     passKey,
@@ -95,5 +96,13 @@ export const registerAccount = createAsyncThunk(
       lastName,
       firstName,
     );
+  },
+);
+
+// todo: fix type
+export const migrateAccount = createAsyncThunk(
+  'migration/migrate',
+  ({ accountName, password }: any) => {
+    return migrationService.migrate(accountName, password);
   },
 );

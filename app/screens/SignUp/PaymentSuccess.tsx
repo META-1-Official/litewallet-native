@@ -1,10 +1,9 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect } from 'react';
-import { Alert, SafeAreaView, ScrollView, Text, TextInput, View } from 'react-native';
+import { SafeAreaView, ScrollView, Text, TextInput, View } from 'react-native';
 import { RootNavigationProp } from '../../AuthNav';
 import RoundedButton from '../../components/RoundedButton';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import migrationService from '../../services/migration.service';
 import { useStore } from '../../store';
 import { registerAccount } from '../../store/signUp/signUp.actions';
 
@@ -13,31 +12,12 @@ export const PaymentSuccess = () => {
   const dispatch = useAppDispatch();
   // todo: move it to actions
   const authorize = useStore(state => state.authorize);
-  const {
-    email,
-    accountName,
-    passKey,
-    mobile,
-    lastName,
-    firstName,
-    registerStatus,
-    isMigration,
-    password,
-  } = useAppSelector(state => state.signUp);
+  const { email, accountName, passKey, mobile, lastName, firstName, registerStatus } =
+    useAppSelector(state => state.signUp);
 
   useEffect(() => {
     (async () => {
       if (!registerStatus) {
-        if (isMigration) {
-          const migrationResp = await migrationService.migrate(accountName, password as string);
-          console.log('Migration: ', accountName, password);
-          console.log('Migration response: ', migrationResp);
-          if (migrationResp) {
-            Alert.alert('Migration done!');
-          } else {
-            Alert.alert('Something went wrong!');
-          }
-        }
         dispatch(
           registerAccount({
             accountName,
