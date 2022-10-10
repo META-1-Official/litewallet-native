@@ -99,9 +99,26 @@ export const registerAccount = createAsyncThunk(
   },
 );
 
+export const validateSignature = createAsyncThunk(
+  'migration/validateSignature',
+  // todo: fix type
+  ({ accountName, password }: any) => {
+    return migrationService.validateSignature(accountName, password);
+  },
+);
+
+export const checkMigrationStatus = createAsyncThunk(
+  'migration/checkMigrationStatus',
+  // todo: fix type
+  ({ accountName }: any) => {
+    return migrationService.checkMigrationStatus(accountName);
+  },
+);
+
 // todo: fix type
 export const migrateAccount = createAsyncThunk(
   'migration/migrate',
+  // todo: fix type
   ({ accountName, password }: any) => {
     return migrationService.migrate(accountName, password);
   },

@@ -28,7 +28,7 @@ const FaceKiCameraView = ({ email }: Props) => {
 
   useEffect(() => {
     if (faceKIStatus) {
-      nav.navigate('FaceKISuccess');
+      nav.replace('FaceKISuccess');
     }
   }, [faceKIStatus]);
 

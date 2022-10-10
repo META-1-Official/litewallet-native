@@ -32,6 +32,10 @@ export const signUpSlice = createSlice({
       state.isMigration = action.payload.isMigration;
       state.password = action.payload.password;
     },
+    clearFaceKI: state => {
+      state.faceKIStatus = '';
+      state.image = '';
+    },
   },
   extraReducers: builder => {
     builder.addCase(getWeb3User.fulfilled, (state, action) => {
@@ -56,5 +60,5 @@ export const signUpSlice = createSlice({
   },
 });
 
-export const { step1Save } = signUpSlice.actions;
+export const { step1Save, clearFaceKI } = signUpSlice.actions;
 export default signUpSlice.reducer;

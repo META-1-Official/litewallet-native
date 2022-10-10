@@ -1,17 +1,18 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { SafeAreaView, View, Image, Dimensions, Animated, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { personAsset } from '../../../assets';
 import { RootNavigationProp } from '../../AuthNav';
+import LoaderPopover from '../../components/LoaderPopover';
 import RoundedButton from '../../components/RoundedButton';
 import { Heading, TextSecondary } from '../../components/typography';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import useAnimatedKeyboard from '../../hooks/useAnimatedKeyboard';
 import migrationService from '../../services/migration.service';
 import { getWeb3User } from '../../store/signUp/signUp.actions';
-import { step1Save } from '../../store/signUp/signUp.reducer';
+import { clearFaceKI, step1Save } from '../../store/signUp/signUp.reducer';
 import { useScroll } from '../../utils';
 import { required } from '../../utils/useFormHelper/rules';
 import { Input } from '../../utils/useFormHelper/useFormHelper';
@@ -19,20 +20,31 @@ import PasswordInput from '../../components/PasswordInput';
 
 const { width, height } = Dimensions.get('screen');
 
+const STATUSES = ['PENDING', 'PARTIALLY_DONE'];
+
 const ImportWalletScreen: React.FC = () => {
   const nav = useNavigation<RootNavigationProp>();
   const dispatch = useAppDispatch();
   const { accountName, mobile, firstName, lastName, privateKey } = useAppSelector(
     state => state.signUp,
   );
+  const [status, setStatus] = useState<string>('');
 
   useEffect(() => {
-    if (privateKey) {
-      nav.navigate('FaceKI');
-    }
-  }, [privateKey]);
+    dispatch(clearFaceKI());
+  }, []);
 
-  const { control, handleSubmit } = useForm({
+  useEffect(() => {
+    if (privateKey && STATUSES.includes(status)) {
+      nav.replace('FaceKI');
+    }
+  });
+
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm({
     mode: 'onChange',
     defaultValues: {
       accountName: '',
@@ -52,14 +64,16 @@ const ImportWalletScreen: React.FC = () => {
           snapshot: { transfer_status: transferStatus },
         },
       } = await migrationService.checkMigrationStatus(accountName);
-      console.log('transferStatus: ', transferStatus);
-      if (['PENDING', 'PARTIALLY_DONE'].includes(transferStatus)) {
+      if (STATUSES.includes(transferStatus)) {
+        setStatus(transferStatus);
         // todo: save migration
         dispatch(
-          step1Save({ accountName, mobile, firstName, lastName, isMigration: true, password }),
+          step1Save({ accountName, mobile, firstName, lastName, password, isMigration: true }),
         );
-        // @ts-ignore | this hack is required to use form with all providers
-        dispatch(getWeb3User({ provider: undefined }));
+        if (!privateKey) {
+          // @ts-ignore | this hack is required to use form with all providers
+          dispatch(getWeb3User({ provider: undefined }));
+        }
       } else {
         Alert.alert('This account is not able to be migrated');
       }
@@ -106,6 +120,7 @@ const ImportWalletScreen: React.FC = () => {
           <RoundedButton title="Import" onPress={handleImportWallet} />
         </View>
       </ScrollView>
+      <LoaderPopover loading={isSubmitting} />
     </SafeAreaView>
   );
 };
