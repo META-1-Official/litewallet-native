@@ -1,17 +1,24 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ContentSlider, { Backdrop } from '../components/ContentSlider';
 import RoundedButton from '../components/RoundedButton';
+import { useAppDispatch } from '../hooks';
+import { clearSignUpState } from '../store/signUp/signUp.reducer';
 import { colors } from '../styles/colors';
 import { RootNavigationProp } from '../AuthNav';
 import { useNavigation } from '@react-navigation/core';
 
 const WelcomeScreen = () => {
+  const dispatch = useAppDispatch();
   const nav = useNavigation<RootNavigationProp>();
   const CreateWalletPress = () => nav.navigate('Legal');
   const LinkWalletPress = () => nav.navigate('LinkWallet');
   const scrollX = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    dispatch(clearSignUpState());
+  }, []);
 
   return (
     <SafeAreaView

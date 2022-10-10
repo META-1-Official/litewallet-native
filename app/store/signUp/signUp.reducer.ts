@@ -36,6 +36,9 @@ export const signUpSlice = createSlice({
       state.faceKIStatus = '';
       state.image = '';
     },
+    clearSignUpState: () => {
+      return { ...initialState };
+    },
   },
   extraReducers: builder => {
     builder.addCase(getWeb3User.fulfilled, (state, action) => {
@@ -60,5 +63,5 @@ export const signUpSlice = createSlice({
   },
 });
 
-export const { step1Save, clearFaceKI } = signUpSlice.actions;
+export const { step1Save, clearFaceKI, clearSignUpState } = signUpSlice.actions;
 export default signUpSlice.reducer;
