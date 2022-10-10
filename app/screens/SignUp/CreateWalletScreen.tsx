@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Text, TextInput, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import LoaderPopover from '../../components/LoaderPopover';
 import RoundedButton from '../../components/RoundedButton';
 import { Heading, TextSecondary } from '../../components/typography';
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -38,7 +39,11 @@ const CreateWalletScreen: React.FC = () => {
     }
   }, [privateKey]);
 
-  const { control, handleSubmit } = useForm({
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm({
     mode: 'onChange',
     defaultValues: {
       firstName: '',
@@ -134,6 +139,7 @@ const CreateWalletScreen: React.FC = () => {
                   dispatch(step1Save(formState));
                   nav.navigate('ImportWallet');
                 })}
+                disabled={isSubmitting}
               />
             </>
           )}
@@ -146,9 +152,11 @@ const CreateWalletScreen: React.FC = () => {
               // @ts-ignore | this hack is required to use form with all providers
               dispatch(getWeb3User({ provider: undefined }));
             })}
+            disabled={isSubmitting}
           />
         </View>
       </ScrollView>
+      <LoaderPopover loading={isSubmitting} />
     </SafeAreaView>
   );
 };
