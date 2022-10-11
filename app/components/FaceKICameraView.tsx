@@ -28,9 +28,10 @@ const FaceKiCameraView = ({ email }: Props) => {
 
   useEffect(() => {
     if (faceKIStatus) {
-      nav.replace('FaceKISuccess');
+      nav.navigate('FaceKISuccess');
+      setPhoto(false);
     }
-  }, [faceKIStatus]);
+  }, [faceKIStatus, nav]);
 
   if (device == null) {
     return <Text>Camera is not ready. Loading...</Text>;

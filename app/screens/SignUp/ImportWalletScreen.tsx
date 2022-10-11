@@ -1,10 +1,10 @@
-import { useNavigation } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { SafeAreaView, View, Image, Dimensions, Animated, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { personAsset } from '../../../assets';
-import { RootNavigationProp } from '../../AuthNav';
+import { RootStackParamList } from '../../AuthNav';
 import LoaderPopover from '../../components/LoaderPopover';
 import RoundedButton from '../../components/RoundedButton';
 import { Heading, TextSecondary } from '../../components/typography';
@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import useAnimatedKeyboard from '../../hooks/useAnimatedKeyboard';
 import migrationService from '../../services/migration.service';
 import { getWeb3User } from '../../store/signUp/signUp.actions';
-import { clearFaceKI, step1Save } from '../../store/signUp/signUp.reducer';
+import { step1Save } from '../../store/signUp/signUp.reducer';
 import { useScroll } from '../../utils';
 import { required } from '../../utils/useFormHelper/rules';
 import { Input } from '../../utils/useFormHelper/useFormHelper';
@@ -22,8 +22,9 @@ const { width, height } = Dimensions.get('screen');
 
 const STATUSES = ['PENDING', 'PARTIALLY_DONE'];
 
-const ImportWalletScreen: React.FC = () => {
-  const nav = useNavigation<RootNavigationProp>();
+type Props = NativeStackScreenProps<RootStackParamList, 'ImportWallet'>;
+
+const ImportWalletScreen: React.FC<Props> = ({ navigation }) => {
   const dispatch = useAppDispatch();
   const { accountName, mobile, firstName, lastName, privateKey } = useAppSelector(
     state => state.signUp,
@@ -31,14 +32,10 @@ const ImportWalletScreen: React.FC = () => {
   const [status, setStatus] = useState<string>('');
 
   useEffect(() => {
-    dispatch(clearFaceKI());
-  }, []);
-
-  useEffect(() => {
     if (privateKey && STATUSES.includes(status)) {
-      nav.replace('FaceKI');
+      navigation.navigate('FaceKI');
     }
-  });
+  }, [privateKey, status, navigation]);
 
   const {
     control,

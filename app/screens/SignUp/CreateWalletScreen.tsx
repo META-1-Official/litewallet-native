@@ -1,7 +1,8 @@
-import { useNavigation } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Text, TextInput, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { RootStackParamList } from '../../AuthNav';
 import LoaderPopover from '../../components/LoaderPopover';
 import RoundedButton from '../../components/RoundedButton';
 import { Heading, TextSecondary } from '../../components/typography';
@@ -11,10 +12,9 @@ import migrationService from '../../services/migration.service';
 import { getWeb3User } from '../../store/signUp/signUp.actions';
 import { step1Save } from '../../store/signUp/signUp.reducer';
 import { lettersOnly, required } from '../../utils/useFormHelper/rules';
-//@ts-ignore
+//@ts-ignore todo: fix type
 import { ChainValidation } from 'meta1-vision-js';
 import { useForm } from 'react-hook-form';
-import { RootNavigationProp } from '../../AuthNav';
 import { Input, PhoneInput } from '../../utils/useFormHelper/useFormHelper';
 
 const freeName = async (accountName: string) => {
@@ -28,16 +28,17 @@ const premiumName = (accountName: string) =>
 
 const chainValidate = (accountName: string) => ChainValidation.is_account_name_error(accountName);
 
-const CreateWalletScreen: React.FC = () => {
-  const nav = useNavigation<RootNavigationProp>();
+type Props = NativeStackScreenProps<RootStackParamList, 'CreateWallet'>;
+
+const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
   const dispatch = useAppDispatch();
-  const { privateKey } = useAppSelector(state => state.signUp);
+  const { privateKey, web3Pending } = useAppSelector(state => state.signUp);
 
   useEffect(() => {
-    if (privateKey) {
-      nav.navigate('FaceKI');
+    if (privateKey && !web3Pending) {
+      navigation.navigate('FaceKI');
     }
-  }, [privateKey]);
+  }, [privateKey, web3Pending]);
 
   const {
     control,
@@ -137,7 +138,7 @@ const CreateWalletScreen: React.FC = () => {
                 title="Import wallet"
                 onPress={handleSubmit(formState => {
                   dispatch(step1Save(formState));
-                  nav.navigate('ImportWallet');
+                  navigation.navigate('ImportWallet');
                 })}
                 disabled={isSubmitting}
               />

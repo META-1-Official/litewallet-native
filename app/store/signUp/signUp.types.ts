@@ -16,6 +16,7 @@ export interface Step2 {
 
 export interface SignUpState extends Step1, Step2 {
   passKey: string;
+  web3Pending: boolean;
   faceKIStatus: string;
   image: string;
   eSignatureStatus: string; // 'cancel' | 'dismiss'

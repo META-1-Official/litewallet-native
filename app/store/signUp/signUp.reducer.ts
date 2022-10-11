@@ -12,6 +12,7 @@ const initialState: SignUpState = {
   email: '',
   privateKey: '',
   passKey: '',
+  web3Pending: false,
   faceKIStatus: '',
   image: '',
   eSignatureStatus: '',
@@ -41,12 +42,19 @@ export const signUpSlice = createSlice({
     },
   },
   extraReducers: builder => {
+    builder.addCase(getWeb3User.pending, state => {
+      state.email = '';
+      state.privateKey = '';
+      state.passKey = '';
+      state.web3Pending = true;
+    });
     builder.addCase(getWeb3User.fulfilled, (state, action) => {
       state.email = action.payload.email;
       state.privateKey = action.payload.privateKey;
       state.passKey = `P${PrivateKey.fromSeed(
         key.normalize_brainKey(`${action.payload.email}${action.payload.privateKey}`),
       ).toWif()}`;
+      state.web3Pending = false;
     });
     builder.addCase(faceKIVerify.fulfilled, (state, action) => {
       state.faceKIStatus = action.payload.status;

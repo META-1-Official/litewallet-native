@@ -1,14 +1,26 @@
-import React, { useState } from 'react';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import { CameraPermissionStatus } from 'react-native-vision-camera/src/Camera';
+import { RootStackParamList } from '../../AuthNav';
 import FaceKiCameraView from '../../components/FaceKICameraView';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { clearFaceKI } from '../../store/signUp/signUp.reducer';
 
-const FaceKIScreen = () => {
+type Props = NativeStackScreenProps<RootStackParamList, 'FaceKI'>;
+
+const FaceKIScreen: React.FC<Props> = ({ navigation }) => {
+  const dispatch = useAppDispatch();
   const [cameraPermission] = useState<CameraPermissionStatus>();
   const { privateKey, firstName, lastName, mobile, accountName, email } = useAppSelector(
     state => state.signUp,
   );
+
+  useEffect(() => {
+    return navigation.addListener('focus', () => {
+      dispatch(clearFaceKI());
+    });
+  }, [navigation]);
 
   return (
     <View
