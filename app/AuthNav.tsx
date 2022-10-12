@@ -62,8 +62,8 @@ const AuthNav = () => {
         component={FaceKIScreen}
       />
       <Stack.Screen name="FaceKISuccess" component={FaceKISuccessScreen} />
-      <Stack.Screen name="Passkey" component={PasskeyScreen} />
       <Stack.Screen name="ESignature" component={ESignatureScreen} />
+      <Stack.Screen name="Passkey" component={PasskeyScreen} />
       <Stack.Screen name="PaymentSuccess" component={PaymentSuccess} />
       <Stack.Screen name="LinkWallet" component={LinkWalletScreen} />
       <Stack.Screen name="ImportWallet" component={ImportWalletScreen} />
