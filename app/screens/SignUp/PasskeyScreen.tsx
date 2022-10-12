@@ -1,12 +1,16 @@
+import Clipboard from '@react-native-clipboard/clipboard';
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useMemo, useState } from 'react';
-import { SafeAreaView, Text, TextInput, View } from 'react-native';
+import { Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import { ScrollView } from 'react-native-gesture-handler';
 import { RootNavigationProp } from '../../AuthNav';
 import RoundedButton from '../../components/RoundedButton';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { eSignatureProceed } from '../../store/signUp/signUp.actions';
+
+import { SvgIcons } from '../../../assets';
+import styles from './PasskeyScreen.styles';
 
 export const PasskeyScreen = () => {
   const nav = useNavigation<RootNavigationProp>();
@@ -40,6 +44,11 @@ export const PasskeyScreen = () => {
       return newState;
     });
   };
+
+  const handleCopy = () => {
+    Clipboard.setString(passKey);
+  };
+
   const isEveryCheckBoxesValid = useMemo(() => {
     return (
       checkboxesState[0] &&
@@ -51,54 +60,27 @@ export const PasskeyScreen = () => {
   }, [checkboxesState]);
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        justifyContent: 'space-between',
-        backgroundColor: '#fff',
-      }}
-    >
-      <ScrollView
-        contentContainerStyle={{
-          flex: 1,
-          flexDirection: 'column',
-          justifyContent: 'flex-start',
-          alignItems: 'center',
-          paddingLeft: 30,
-          paddingRight: 30,
-        }}
-      >
-        <View style={{}}>
-          <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Save Passkey</Text>
-          <Text style={{ fontSize: 18, paddingTop: 5 }}>
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.contentContainerStyle}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Save Passkey</Text>
+          <Text style={styles.subtitle}>
             Please keep your Passkey in a safe place. Don't share it with any third-parties or send
             it online.
           </Text>
 
-          <View style={{ marginTop: 20, marginBottom: 20 }}>
-            <TextInput
-              style={{
-                padding: 10,
-                borderWidth: 1,
-                borderStyle: 'solid',
-                borderColor: 'black',
-              }}
-              value={passKey}
-            />
+          <View style={styles.inputWrapper}>
+            <TextInput style={styles.input} value={passKey} />
+            <Pressable style={styles.btnCopy} onPress={handleCopy}>
+              <SvgIcons.Copy width={20} />
+            </Pressable>
           </View>
         </View>
 
-        <View
-          style={{
-            backgroundColor: '#FFF2F2',
-            borderColor: '#FF2F2F',
-            borderWidth: 1,
-            padding: 20,
-          }}
-        >
+        <View style={styles.importantInfo}>
           <View>
-            <Text style={{ fontSize: 22 }}>Important information</Text>
-            <Text style={{ fontSize: 15, paddingTop: 15 }}>
+            <Text style={styles.importantInfoTitle}>Important information</Text>
+            <Text style={styles.importantInfoDescription}>
               If you forget your password phrase you will be unable to access your account and your
               funds. We cannot reset or restore your password! Memorise or white your username and
               password!
@@ -106,68 +88,58 @@ export const PasskeyScreen = () => {
           </View>
         </View>
 
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'column',
-            marginTop: 35,
-            width: '100%',
-            flexGrow: 0.75,
-          }}
-        >
-          <View style={{ flex: 1, flexDirection: 'row' }}>
+        <View style={styles.checkboxGroup}>
+          <View style={styles.checkboxRow}>
             <CheckBox
               boxType="square"
               value={checkboxesState[0]}
               onValueChange={() => handleCheckBox(0)}
             />
-            <Text style={{ marginLeft: 20, flex: 1 }}>
+            <Text style={styles.checkboxText}>
               I understand that I will lose access to my funds if I lose my passkey
             </Text>
           </View>
-          <View style={{ flex: 1, flexDirection: 'row' }}>
+          <View style={styles.checkboxRow}>
             <CheckBox
               boxType="square"
               value={checkboxesState[1]}
               onValueChange={() => handleCheckBox(1)}
             />
-            <Text style={{ marginLeft: 20, flex: 1 }}>
+            <Text style={styles.checkboxText}>
               I understand that no one can recover my passkey if I lose or forget it
             </Text>
           </View>
-          <View style={{ flex: 1, flexDirection: 'row' }}>
+          <View style={styles.checkboxRow}>
             <CheckBox
               boxType="square"
               value={checkboxesState[2]}
               onValueChange={() => handleCheckBox(2)}
             />
-            <Text style={{ marginLeft: 20, flex: 1 }}>
+            <Text style={styles.checkboxText}>
               I have written down or otherwise stored my passkey
             </Text>
           </View>
-          <View style={{ flex: 1, flexDirection: 'row' }}>
+          <View style={styles.checkboxRow}>
             <CheckBox
               boxType="square"
               value={checkboxesState[3]}
               onValueChange={() => handleCheckBox(3)}
             />
-            <Text style={{ marginLeft: 20, flex: 1 }}>
+            <Text style={styles.checkboxText}>
               I am a living man or woman hence a living being
             </Text>
           </View>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={[styles.checkboxRow, { justifyContent: 'space-between' }]}>
             <CheckBox
               boxType="square"
               value={checkboxesState[4]}
               onValueChange={() => handleCheckBox(4)}
             />
-            <Text style={{ marginLeft: 20, flex: 1 }}>
-              Sign META Association Membership Agreement
-            </Text>
+            <Text style={styles.checkboxText}>Sign META Association Membership Agreement</Text>
           </View>
         </View>
 
-        <View style={{ position: 'absolute', bottom: 0, width: '100%' }}>
+        <View style={styles.buttonGroup}>
           <RoundedButton
             styles={{ flex: 1 }}
             title="Next"

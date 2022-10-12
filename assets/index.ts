@@ -28,4 +28,5 @@ export const SvgIcons = {
   Trade: require('./icons/trade.svg').default as any,
   TradesClock: require('./icons/trades-clock.svg').default as any,
   Wallet: require('./icons/wallet.svg').default as any,
+  Copy: require('./icons/copy-icon.svg').default as any,
 };

@@ -57,7 +57,6 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
   const [migratable, setMigratable] = useState(false);
   const checkMigrationAvailability = async (accountName: string) => {
     const { data } = await migrationService.checkTransferableAccount(accountName);
-    console.log(data, accountName);
     setMigratable(data?.found);
     return true;
   };
