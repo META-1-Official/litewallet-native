@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { Viewer } from '@react-pdf-viewer/core';
 import { TextSecondary } from '../typography';
 
 import styles from './ESignature.styles';
@@ -19,13 +18,6 @@ const ESignature: React.FC = () => {
         Please review and sign the META Private Membership Agreement, this is required to use our
         platform or any of META’s services.
       </TextSecondary>
-
-      <Viewer
-        fileUrl={'pdf-demo.pdf'}
-        initialPage={pageIndex}
-        onPageChange={handlePageChange}
-        onDocumentLoad={handleDocumentLoad}
-      />
 
       <View />
     </View>
