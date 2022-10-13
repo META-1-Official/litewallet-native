@@ -22,18 +22,5 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
-      <activity
-        android:name=".SignIn"
-        android:launchMode="singleTop">
-        <intent-filter>
-          <action android:name="android.intent.action.VIEW" />
-
-          <category android:name="android.intent.category.DEFAULT" />
-          <category android:name="android.intent.category.BROWSABLE" />
-
-          <!-- Accept URIs: io.meta1.appbeta://* -->
-          <data android:scheme="io.meta1.appbeta" />
-        </intent-filter>
-      </activity>
     </application>
 </manifest>
