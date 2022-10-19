@@ -1,20 +1,24 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
-import { CameraPermissionStatus } from 'react-native-vision-camera/src/Camera';
+import React, { useEffect } from 'react';
+import { View } from 'react-native';
 import { RootStackParamList } from '../../AuthNav';
 import FaceKiCameraView from '../../components/FaceKICameraView';
+import Loader from '../../components/Loader';
 import { useAppDispatch, useAppSelector } from '../../hooks';
+import useCameraPermission from '../../hooks/useCameraPermission';
 import { clearFaceKI } from '../../store/signUp/signUp.reducer';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'FaceKI'>;
 
 const FaceKIScreen: React.FC<Props> = ({ navigation }) => {
   const dispatch = useAppDispatch();
-  const [cameraPermission] = useState<CameraPermissionStatus>();
+
   const { privateKey, firstName, lastName, mobile, accountName, email } = useAppSelector(
     state => state.signUp,
   );
+
+  const cameraPermission = useCameraPermission();
+  const isCameraAvailable = cameraPermission === 'authorized';
 
   useEffect(() => {
     return navigation.addListener('focus', () => {
@@ -34,15 +38,17 @@ const FaceKIScreen: React.FC<Props> = ({ navigation }) => {
         paddingBottom: 40,
       }}
     >
-      <Text>{cameraPermission}</Text>
-      <FaceKiCameraView
-        mobile={mobile}
-        privateKey={privateKey}
-        accountName={accountName}
-        email={email}
-        firstName={firstName}
-        lastName={lastName}
-      />
+      {!isCameraAvailable && <Loader />}
+      {isCameraAvailable && (
+        <FaceKiCameraView
+          mobile={mobile}
+          privateKey={privateKey}
+          accountName={accountName}
+          email={email}
+          firstName={firstName}
+          lastName={lastName}
+        />
+      )}
     </View>
   );
 };

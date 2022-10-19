@@ -1,11 +1,12 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text } from 'react-native';
 import { Camera, PhotoFile, useCameraDevices } from 'react-native-vision-camera';
 import { RootNavigationProp } from '../AuthNav';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { faceKIVerify } from '../store/signUp/signUp.actions';
 import styles from './FaceKICameraView.styles';
+import Loader from './Loader';
 import RoundedButton from './RoundedButton';
 
 interface Props {
@@ -29,7 +30,7 @@ const FaceKiCameraView = ({ email }: Props) => {
   useEffect(() => {
     if (faceKIStatus) {
       nav.navigate('FaceKISuccess');
-      setPhoto(false);
+      setTimeout(() => setPhoto(false), 200);
     }
   }, [faceKIStatus, nav]);
 
@@ -49,14 +50,21 @@ const FaceKiCameraView = ({ email }: Props) => {
     }
   };
 
+  if (photo) {
+    return <Loader />;
+  }
+
   return (
     <View style={styles.container}>
       {!photo && (
-        <Camera style={styles.camera} ref={camera} device={device} isActive={true} photo={true} />
-      )}
-      {photo && <Image style={{ width: '100%', height: '115%' }} source={{ uri: photo.path }} />}
-      {!photo && (
         <>
+          <Camera
+            style={styles.camera}
+            ref={camera}
+            device={device}
+            isActive={true}
+            photo={true}
+          />
           <View style={{ position: 'absolute', top: 20 }}>
             <Text style={{ color: '#fff', fontSize: 22, textAlign: 'center', lineHeight: 30 }}>
               Bio-Metric 2 Factor Authentication
@@ -97,7 +105,6 @@ const FaceKiCameraView = ({ email }: Props) => {
           </View>
         </>
       )}
-      {photo && <Text style={{ position: 'absolute', bottom: 40 }}>Loading...</Text>}
     </View>
   );
 };

@@ -32,6 +32,7 @@ export const PasskeyScreen = () => {
   };
 
   useEffect(() => {
+    console.log('!!ESiGN: ', eSignatureStatus);
     if (eSignatureStatus === 'cancel' || eSignatureStatus === 'dismiss') {
       nav.navigate('PaymentSuccess');
     }

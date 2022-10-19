@@ -22,7 +22,9 @@ const styles = StyleSheet.create({
     height: 40,
     borderWidth: 2,
     borderColor: '#fff',
+    borderRightWidth: 0,
     borderRightColor: 'transparent',
+    borderBottomWidth: 0,
     borderBottomColor: 'transparent',
   },
   leftBottom: {
@@ -32,7 +34,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     borderWidth: 2,
     borderColor: '#fff',
+    borderRightWidth: 0,
     borderRightColor: 'transparent',
+    borderTopWidth: 0,
     borderTopColor: 'transparent',
   },
   rightTop: {
@@ -42,7 +46,9 @@ const styles = StyleSheet.create({
     right: 0,
     borderWidth: 2,
     borderColor: '#fff',
+    borderLeftWidth: 0,
     borderLeftColor: 'transparent',
+    borderBottomWidth: 0,
     borderBottomColor: 'transparent',
   },
   rightBottom: {
@@ -53,7 +59,9 @@ const styles = StyleSheet.create({
     right: 0,
     borderWidth: 2,
     borderColor: '#fff',
+    borderLeftWidth: 0,
     borderLeftColor: 'transparent',
+    borderTopWidth: 0,
     borderTopColor: 'transparent',
   },
 });

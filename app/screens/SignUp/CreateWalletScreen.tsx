@@ -149,8 +149,12 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
             title="Create wallet"
             onPress={handleSubmit(formState => {
               dispatch(step1Save(formState));
-              // @ts-ignore | this hack is required to use form with all providers
-              dispatch(getWeb3User({ provider: undefined }));
+              if (!privateKey) {
+                // @ts-ignore | this hack is required to use form with all providers
+                dispatch(getWeb3User({ provider: undefined }));
+              } else {
+                navigation.navigate('FaceKI');
+              }
             })}
             disabled={isSubmitting}
           />
