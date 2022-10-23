@@ -1,42 +1,74 @@
-import { useNavigation } from '@react-navigation/core';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect } from 'react';
-import { SafeAreaView, ScrollView, Text, TextInput, View } from 'react-native';
-import { RootNavigationProp } from '../../AuthNav';
-import RoundedButton from '../../components/RoundedButton';
+import { SafeAreaView } from 'react-native';
+import Toast from 'react-native-toast-message';
+import { RootStackParamList } from '../../AuthNav';
+import Loader from '../../components/Loader';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useStore } from '../../store';
-import { registerAccount } from '../../store/signUp/signUp.actions';
+import { getAccountPaymentStatus, registerAccount } from '../../store/signUp/signUp.actions';
 
-export const PaymentSuccess = () => {
-  const nav = useNavigation<RootNavigationProp>();
+type Props = NativeStackScreenProps<RootStackParamList, 'PaymentSuccess'>;
+
+export const PaymentSuccess = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
   // todo: move it to actions
   const authorize = useStore(state => state.authorize);
-  const { email, accountName, passKey, mobile, lastName, firstName, registerStatus } =
-    useAppSelector(state => state.signUp);
+  const { email, accountName, passKey, mobile, lastName, firstName } = useAppSelector(
+    state => state.signUp,
+  );
 
+  // check payment status
   useEffect(() => {
-    (async () => {
-      if (!registerStatus) {
-        dispatch(
-          registerAccount({
-            accountName,
-            passKey,
-            mobile,
-            email,
-            firstName,
-            lastName,
-          }),
-        );
-      }
-    })();
+    dispatch(getAccountPaymentStatus(email))
+      .unwrap()
+      .then(promiseResult => {
+        console.log('PromiseResult: ', promiseResult);
+        if (promiseResult && promiseResult.isSign) {
+          if (promiseResult.isPayed || promiseResult.isPayedByCrypto) {
+            console.log('Payments: ', promiseResult.pays);
+            dispatch(
+              registerAccount({
+                accountName,
+                passKey,
+                mobile,
+                email,
+                firstName,
+                lastName,
+              }),
+            )
+              .unwrap()
+              .then(registrationStatus => {
+                if (registrationStatus) {
+                  authorize(accountName, passKey);
+                }
+              })
+              .catch(() => {
+                navigation.goBack();
+                Toast.show({
+                  type: 'error',
+                  text1: "Account hasn't been created!",
+                  text2: 'Something went wrong!',
+                });
+              });
+          } else {
+            navigation.goBack();
+            Toast.show({
+              type: 'error',
+              text1: "Account hasn't been created!",
+              text2: 'Please pay 1$ for account',
+            });
+          }
+        } else {
+          navigation.goBack();
+          Toast.show({
+            type: 'error',
+            text1: "Account hasn't been created!",
+            text2: 'Please sign the document',
+          });
+        }
+      });
   }, []);
-
-  useEffect(() => {
-    if (registerStatus) {
-      authorize(accountName, passKey);
-    }
-  }, [registerStatus]);
 
   return (
     <SafeAreaView
@@ -46,61 +78,7 @@ export const PaymentSuccess = () => {
         backgroundColor: '#fff',
       }}
     >
-      <ScrollView
-        contentContainerStyle={{
-          flex: 1,
-          flexDirection: 'column',
-          justifyContent: 'flex-start',
-          alignItems: 'center',
-          paddingLeft: 30,
-          paddingRight: 30,
-        }}
-      >
-        <Text style={{ fontSize: 30, fontWeight: 'bold' }}>
-          {!registerStatus ? 'Loading...' : 'Account successfully created!'}
-        </Text>
-        <View style={{ flex: 1, justifyContent: 'center' }}>
-          {registerStatus && (
-            <>
-              <View style={{ marginTop: 20, marginBottom: 20 }}>
-                <TextInput
-                  style={{
-                    padding: 10,
-                    borderWidth: 1,
-                    borderStyle: 'solid',
-                    borderColor: 'black',
-                  }}
-                  value={passKey}
-                />
-              </View>
-              <View
-                style={{
-                  backgroundColor: '#FFF2F2',
-                  borderColor: '#FF2F2F',
-                  borderWidth: 1,
-                  padding: 20,
-                }}
-              >
-                <View>
-                  <Text style={{ fontSize: 22 }}>Important information</Text>
-                  <Text style={{ fontSize: 15, paddingTop: 15 }}>
-                    If you forget your password phrase you will be unable to access your account
-                    and your funds. We cannot reset or restore your password! Memorise or white
-                    your username and password!
-                  </Text>
-                </View>
-              </View>
-            </>
-          )}
-        </View>
-        <View style={{ position: 'absolute', bottom: 0, width: '100%' }}>
-          <RoundedButton
-            styles={{ flex: 1 }}
-            title="Link wallet now"
-            onPress={() => nav.navigate('LinkWallet')}
-          />
-        </View>
-      </ScrollView>
+      <Loader />
     </SafeAreaView>
   );
 };

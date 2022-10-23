@@ -21,18 +21,21 @@ export interface FaceKIVerifyParams {
 
 const faceKIAPI = {
   livelinessCheck: async ({ image }: VerifyParams) => {
+    console.log('Liveliness service start');
     const formData = new FormData();
     formData.append('image', {
       uri: `file://${image}`,
       name: image.split('/').reverse()[0],
       type: 'image/jpeg',
     });
-
-    return await axios.post(baseUrl + '/face/attribute', formData, {
+    const response = await axios.post(baseUrl + '/face/attribute', formData, {
       headers: { 'content-type': 'multipart/form-data' },
     });
+    return response.data;
   },
+
   enrollUser: async ({ image, name }: EnrollUserParams) => {
+    console.log('EnrollUser service start');
     const formData = new FormData();
     formData.append('image', {
       uri: `file://${image}`,
@@ -40,31 +43,41 @@ const faceKIAPI = {
       type: 'image/jpeg',
     });
     formData.append('name', name);
-    return await axios.post(baseUrl + '/enroll_user', formData, {
+    const response = await axios.post(baseUrl + '/enroll_user', formData, {
       headers: { 'content-type': 'multipart/form-data' },
     });
+    return response.data;
   },
+
   verifyUser: async ({ image }: VerifyParams) => {
+    console.log('VerifyUser service start');
     const formData = new FormData();
     formData.append('image', {
       uri: `file://${image}`,
       name: image.split('/').reverse()[0],
       type: 'image/jpeg',
     });
-    return await axios.post(baseUrl + '/verify_user', formData, {
+    const response = await axios.post(baseUrl + '/verify_user', formData, {
       headers: { 'content-type': 'multipart/form-data' },
     });
+    return response.data;
   },
+
   userList: async () => {
-    return await axios.post(baseUrl + '/user_list');
+    const response = await axios.post(baseUrl + '/user_list');
+    return response.data;
   },
+
   removeUser: async ({ name }: RemoveUserParams) => {
     const formData = new FormData();
     formData.append('name', name);
-    return await axios.post(baseUrl + '/remove_user', formData);
+    const response = await axios.post(baseUrl + '/remove_user', formData);
+    return response.data;
   },
+
   removeAllUsers: async () => {
-    return await axios.post(baseUrl + '/remove_all');
+    const response = await axios.post(baseUrl + '/remove_all');
+    return response.data;
   },
 };
 

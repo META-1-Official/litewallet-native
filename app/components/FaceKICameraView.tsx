@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Platform, Image } from 'react-native';
 import { Camera, PhotoFile, useCameraDevices } from 'react-native-vision-camera';
 import { RootNavigationProp } from '../AuthNav';
 import { useAppDispatch, useAppSelector } from '../hooks';
@@ -18,40 +18,74 @@ interface Props {
   privateKey: string;
 }
 
+const takePhoto = async (camera: Camera) => {
+  if (Platform.OS === 'android') {
+    const capture: PhotoFile = await camera.takeSnapshot({
+      quality: 50,
+      skipMetadata: true,
+    });
+    if (capture) {
+      return capture;
+    }
+  }
+  return await camera.takePhoto({
+    qualityPrioritization: 'speed',
+    skipMetadata: true,
+  });
+};
+
 const FaceKiCameraView = ({ email }: Props) => {
   const nav = useNavigation<RootNavigationProp>();
   const dispatch = useAppDispatch();
   const devices = useCameraDevices();
-  const device = devices.front;
-  const [photo, setPhoto] = useState<any>(false);
+  const device = devices.front || devices.back || devices.external || devices.unspecified;
+  const [photo, setPhoto] = useState<PhotoFile | undefined>();
   const camera = useRef<Camera>(null);
   const { faceKIStatus } = useAppSelector(state => state.signUp);
 
   useEffect(() => {
-    if (faceKIStatus) {
+    if (faceKIStatus && faceKIStatus !== 'error') {
       nav.navigate('FaceKISuccess');
-      setTimeout(() => setPhoto(false), 200);
+      setTimeout(() => setPhoto(undefined), 200);
     }
   }, [faceKIStatus, nav]);
 
-  if (device == null) {
-    return <Text>Camera is not ready. Loading...</Text>;
-  }
+  useEffect(() => {
+    console.log('FaceKIStatus: ', faceKIStatus);
+    if (faceKIStatus === 'error') {
+      setPhoto(undefined);
+      console.log('Photo has been removed!');
+    }
+  }, [faceKIStatus, nav]);
 
   const verifyHandler = async () => {
     if (camera?.current) {
-      const capture: PhotoFile = await camera.current.takePhoto();
+      const capture = await takePhoto(camera.current);
       setPhoto(capture);
-
-      const image = capture.path;
-      dispatch(faceKIVerify({ image, email }));
+      dispatch(faceKIVerify({ image: capture.path, email }));
     } else {
       console.warn('Camera is not available');
     }
   };
 
+  if (device == null) {
+    return <Text>Camera is not ready. Loading...</Text>;
+  }
+
   if (photo) {
-    return <Loader />;
+    return (
+      <>
+        <Image
+          style={{
+            width: '100%',
+            height: '115%',
+            position: 'absolute',
+          }}
+          source={{ uri: photo?.path }}
+        />
+        <Loader />
+      </>
+    );
   }
 
   return (
@@ -64,6 +98,7 @@ const FaceKiCameraView = ({ email }: Props) => {
             device={device}
             isActive={true}
             photo={true}
+            preset={Platform.OS === 'android' ? 'medium' : 'high'}
           />
           <View style={{ position: 'absolute', top: 20 }}>
             <Text style={{ color: '#fff', fontSize: 22, textAlign: 'center', lineHeight: 30 }}>

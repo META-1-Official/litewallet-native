@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import 'react-native-gesture-handler';
+import Toast from 'react-native-toast-message';
 import { Provider } from 'react-redux';
 import {
   DefaultTheme,
@@ -132,6 +133,7 @@ function App() {
           >
             {<CurrentNav />}
           </NavigationContainer>
+          <Toast />
         </SafeAreaProvider>
       </PaperProvider>
     </Provider>

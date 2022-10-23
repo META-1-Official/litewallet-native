@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import {
+  ActivityIndicator,
   Animated,
   GestureResponderEvent,
   StyleProp,
@@ -17,9 +18,10 @@ interface Props {
   onPress: (e: GestureResponderEvent) => void;
   styles?: StyleProp<ViewStyle & TextStyle>;
   disabled?: boolean;
+  pending?: boolean;
 }
 
-const RoundedButton = ({ title, onPress, styles: propStyles, disabled }: Props) => {
+const RoundedButton = ({ title, onPress, styles: propStyles, disabled, pending }: Props) => {
   const colorRef = useRef(new Animated.Value(disabled ? 0 : 150));
 
   useEffect(() => {
@@ -53,6 +55,7 @@ const RoundedButton = ({ title, onPress, styles: propStyles, disabled }: Props) 
       >
         <Animated.View style={[styles.SubmitButtonStyle, { backgroundColor: color }, propStyles]}>
           <Text style={[styles.TextStyle, propStyles]}> {title} </Text>
+          {pending && <ActivityIndicator style={styles.indicator} />}
         </Animated.View>
       </TouchableOpacity>
     </View>
@@ -77,6 +80,11 @@ const styles = StyleSheet.create({
     color: '#000',
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  indicator: {
+    position: 'absolute',
+    right: 20,
+    top: 12,
   },
 });
 

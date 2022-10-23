@@ -20,6 +20,9 @@ export interface SignUpState extends Step1, Step2 {
   faceKIStatus: string;
   image: string;
   eSignatureStatus: string; // 'cancel' | 'dismiss'
+  eSignaturePending: boolean;
+  // todo: fix type of payment status
+  paymentStatus: any;
   registerStatus?: {
     active_key: string;
     memo_key: string;

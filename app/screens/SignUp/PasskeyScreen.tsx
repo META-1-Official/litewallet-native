@@ -1,10 +1,10 @@
 import Clipboard from '@react-native-clipboard/clipboard';
-import { useNavigation } from '@react-navigation/core';
-import React, { useEffect, useMemo, useState } from 'react';
-import { Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { AppState, Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import { ScrollView } from 'react-native-gesture-handler';
-import { RootNavigationProp } from '../../AuthNav';
+import { RootStackParamList } from '../../AuthNav';
 import RoundedButton from '../../components/RoundedButton';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { eSignatureProceed } from '../../store/signUp/signUp.actions';
@@ -12,8 +12,9 @@ import { eSignatureProceed } from '../../store/signUp/signUp.actions';
 import { SvgIcons } from '../../../assets';
 import styles from './PasskeyScreen.styles';
 
-export const PasskeyScreen = () => {
-  const nav = useNavigation<RootNavigationProp>();
+type Props = NativeStackScreenProps<RootStackParamList, 'Passkey'>;
+
+export const PasskeyScreen = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
   const {
     passKey,
@@ -24,19 +25,47 @@ export const PasskeyScreen = () => {
     email,
     accountName,
     eSignatureStatus,
+    eSignaturePending,
   } = useAppSelector(state => state.signUp);
   const [checkboxesState, setCheckBoxesState] = useState([false, false, false, false, false]);
 
-  const handleNext = async () => {
-    dispatch(eSignatureProceed({ firstName, lastName, mobile, email, accountName, privateKey }));
+  const handleNext = () => {
+    dispatch(eSignatureProceed({ firstName, lastName, mobile, email, accountName, privateKey }))
+      .unwrap()
+      .then(promiseResult => {
+        console.log('PromiseResult: ', promiseResult);
+        navigation.navigate('PaymentSuccess');
+      });
+  };
+
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+
+  // todo: fix type of appState
+  const handleAppStateChange = (nextAppState: any) => {
+    if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+      console.log('App has come to the foreground!');
+    }
+    appState.current = nextAppState;
+    setAppStateVisible(appState.current);
+    console.log('AppState', appState.current);
   };
 
   useEffect(() => {
-    console.log('!!ESiGN: ', eSignatureStatus);
-    if (eSignatureStatus === 'cancel' || eSignatureStatus === 'dismiss') {
-      nav.navigate('PaymentSuccess');
+    const subscription = AppState.addEventListener('change', handleAppStateChange);
+    console.log('!subscription');
+    return () => {
+      console.log('!subscription remove');
+      subscription.remove();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (appStateVisible === 'active' && eSignatureStatus) {
+      console.log('!subscription success');
+      navigation.navigate('PaymentSuccess');
     }
-  });
+  }, [appStateVisible]);
 
   const handleCheckBox = (id: number) => {
     setCheckBoxesState(prevState => {
@@ -144,8 +173,9 @@ export const PasskeyScreen = () => {
           <RoundedButton
             styles={{ flex: 1 }}
             title="Next"
-            disabled={!isEveryCheckBoxesValid}
-            onPress={() => handleNext()}
+            disabled={!isEveryCheckBoxesValid || eSignaturePending}
+            onPress={handleNext}
+            pending={eSignaturePending}
           />
         </View>
       </ScrollView>
