@@ -10,33 +10,14 @@ import { SignUpState, Step1 } from './signUp.types';
 // @ts-ignore
 import { PrivateKey, key } from 'meta1-vision-js';
 
-// const initialState: SignUpState = {
-//   firstName: '',
-//   lastName: '',
-//   mobile: '',
-//   accountName: '',
-//   email: '',
-//   privateKey: '',
-//   passKey: '',
-//   web3Pending: false,
-//   faceKIStatus: '',
-//   image: '',
-//   eSignatureStatus: '',
-//   eSignaturePending: false,
-//   paymentStatus: undefined,
-//   registerStatus: undefined,
-//   isMigration: false,
-//   password: '',
-// };
-// todo: remove this and uncomment previous
 const initialState: SignUpState = {
-  firstName: 'Aleksandr',
-  lastName: 'Ufimtsev',
-  mobile: '+79061977035',
-  accountName: 'fimak-test1',
-  email: 'fimak@bk.ru',
-  privateKey: '0cb7a3e24fa9ae0bb63f6a5b6617928744c9ff3d2ef5f81b691bfd28d2d614b0',
-  passKey: 'P5JH6J2R5npYndUADjEYBnQwgS4pUk6RCmCcDxY3pYpL6HBB3m5e',
+  firstName: '',
+  lastName: '',
+  mobile: '',
+  accountName: '',
+  email: '',
+  privateKey: '',
+  passKey: '',
   web3Pending: false,
   faceKIStatus: '',
   image: '',
@@ -47,6 +28,25 @@ const initialState: SignUpState = {
   isMigration: false,
   password: '',
 };
+// todo: remove this and uncomment previous
+// const initialState: SignUpState = {
+//   firstName: 'Aleksandr',
+//   lastName: 'Ufimtsev',
+//   mobile: '+79061977035',
+//   accountName: 'fimak-test1',
+//   email: 'fimak@bk.ru',
+//   privateKey: '0cb7a3e24fa9ae0bb63f6a5b6617928744c9ff3d2ef5f81b691bfd28d2d614b0',
+//   passKey: 'P5JH6J2R5npYndUADjEYBnQwgS4pUk6RCmCcDxY3pYpL6HBB3m5e',
+//   web3Pending: false,
+//   faceKIStatus: '',
+//   image: '',
+//   eSignatureStatus: '',
+//   eSignaturePending: false,
+//   paymentStatus: undefined,
+//   registerStatus: undefined,
+//   isMigration: false,
+//   password: '',
+// };
 
 export const signUpSlice = createSlice({
   name: 'signUp',
