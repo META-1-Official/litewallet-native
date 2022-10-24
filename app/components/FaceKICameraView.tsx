@@ -54,7 +54,7 @@ const FaceKiCameraView = ({ email }: Props) => {
             console.log('Photo has been removed!');
           } else {
             nav.navigate('FaceKISuccess');
-            // setTimeout(() => setPhoto(undefined), 200);
+            setTimeout(() => setPhoto(undefined), 200);
           }
         })
         .catch(promiseRejectedValue => {
