@@ -51,8 +51,8 @@ async function refreshToken() {
   const password = storedPass
     ? storedPass
     : await promptPromise(
-        'Enter password',
-        'Password is required for this operation',
+        'Enter passkey',
+        'Passkey is required for this operation',
         'secure-text',
       ).then(e => e || '');
 

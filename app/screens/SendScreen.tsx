@@ -446,7 +446,7 @@ const PasswordView = ({ darkMode, password, setPassword }: PVProps) => (
       {...tid('SendScreen/password')}
       style={{ fontSize: 18, fontWeight: '500', color: darkMode ? '#fff' : '#000' }}
       value={password}
-      placeholder="Password"
+      placeholder="Passkey"
       secureTextEntry
       placeholderTextColor={darkMode ? '#aaa' : '#bbb'}
       onChangeText={t => setPassword(t)}

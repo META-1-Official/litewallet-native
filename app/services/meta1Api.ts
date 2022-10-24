@@ -65,7 +65,7 @@ export async function _login(accountName: string, password: string) {
   try {
     return await Meta1.login(accountName, password);
   } catch (e) {
-    throw new Error('The pair of login and password do not match!');
+    throw new Error('The pair of login and passkey do not match!');
   }
 }
 

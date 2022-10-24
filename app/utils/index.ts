@@ -238,7 +238,7 @@ export const promptPromise = (
       msg,
       [
         { text: 'Cancel', onPress: () => resolve(null) },
-        { text: 'Ok', onPress: t => (t ? resolve(t) : reject(new Error('Password is required'))) },
+        { text: 'Ok', onPress: t => (t ? resolve(t) : reject(new Error('Passkey is required'))) },
       ],
       { type },
     );
@@ -317,7 +317,7 @@ export const tid = (_s: string) =>
   (s => ({ testID: s, accessibilityLabel: s }))(_s.replace(/\s+/gm, '_'));
 
 export const getPassword = async () =>
-  await promptPromise('Enter password', 'Password is required for this operation', 'secure-text');
+  await promptPromise('Enter passkey', 'Passkey is required for this operation', 'secure-text');
 
 export const shadow = {
   D3: {

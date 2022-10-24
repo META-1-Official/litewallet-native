@@ -26,7 +26,7 @@ const validatePassword = async (login: string, password: string) => {
     return true;
   } catch (e: any) {
     console.error(e, e.stack);
-    Alert.alert('The pair of login and password do not match!');
+    Alert.alert('The pair of login and passkey do not match!');
     return false;
   }
 };
@@ -100,7 +100,7 @@ const LinkWalletScreen: React.FC = () => {
             control={control}
             rules={{ required }}
             name="password"
-            label="Password"
+            label="Passkey"
             style={{
               paddingHorizontal: 32,
             }}
