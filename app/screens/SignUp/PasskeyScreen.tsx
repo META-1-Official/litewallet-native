@@ -1,7 +1,7 @@
 import Clipboard from '@react-native-clipboard/clipboard';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { AppState, Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
+import { AppState, Platform, Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import { ScrollView } from 'react-native-gesture-handler';
 import { RootStackParamList } from '../../AuthNav';
@@ -33,8 +33,10 @@ export const PasskeyScreen = ({ navigation }: Props) => {
     dispatch(eSignatureProceed({ firstName, lastName, mobile, email, accountName, privateKey }))
       .unwrap()
       .then(promiseResult => {
-        console.log('PromiseResult: ', promiseResult);
-        navigation.navigate('PaymentSuccess');
+        if (Platform.OS === 'ios') {
+          console.log('PromiseResult: ', promiseResult);
+          navigation.navigate('PaymentSuccess');
+        }
       });
   };
 
@@ -61,11 +63,12 @@ export const PasskeyScreen = ({ navigation }: Props) => {
   }, []);
 
   useEffect(() => {
-    if (appStateVisible === 'active' && eSignatureStatus) {
+    console.log('AppState and eSignatureStatus: ', appStateVisible, eSignatureStatus);
+    if (Platform.OS === 'android' && appStateVisible === 'active' && eSignatureStatus) {
       console.log('!subscription success');
       navigation.navigate('PaymentSuccess');
     }
-  }, [appStateVisible]);
+  }, [appStateVisible, eSignatureStatus]);
 
   const handleCheckBox = (id: number) => {
     setCheckBoxesState(prevState => {

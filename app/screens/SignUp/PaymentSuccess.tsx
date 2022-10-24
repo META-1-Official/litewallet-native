@@ -7,6 +7,7 @@ import Loader from '../../components/Loader';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useStore } from '../../store';
 import { getAccountPaymentStatus, registerAccount } from '../../store/signUp/signUp.actions';
+import { clearESignature } from '../../store/signUp/signUp.reducer';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'PaymentSuccess'>;
 
@@ -23,7 +24,7 @@ export const PaymentSuccess = ({ navigation }: Props) => {
     dispatch(getAccountPaymentStatus(email))
       .unwrap()
       .then(user => {
-        console.log('PromiseResult: ', user);
+        console.log('User: ', user);
         if (user && user.status?.isSign) {
           if (user.status?.isPayed || user.status?.isPayedByCrypto) {
             console.log('Payments: ', user.pays);
@@ -45,6 +46,7 @@ export const PaymentSuccess = ({ navigation }: Props) => {
                 }
               })
               .catch(() => {
+                dispatch(clearESignature());
                 navigation.goBack();
                 Toast.show({
                   type: 'error',
@@ -53,6 +55,7 @@ export const PaymentSuccess = ({ navigation }: Props) => {
                 });
               });
           } else {
+            dispatch(clearESignature());
             navigation.goBack();
             Toast.show({
               type: 'error',
@@ -61,6 +64,7 @@ export const PaymentSuccess = ({ navigation }: Props) => {
             });
           }
         } else {
+          dispatch(clearESignature());
           navigation.goBack();
           Toast.show({
             type: 'error',

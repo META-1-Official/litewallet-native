@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import * as WebBrowser from '@toruslabs/react-native-web-browser';
+import { Platform } from 'react-native';
 import Toast from 'react-native-toast-message';
 import config from '../../config';
 import { createUser, getToken, getUser } from '../../services/eSignature';
@@ -46,7 +47,7 @@ export const faceKIVerify = createAsyncThunk(
           text1: verifyStatus.status,
           text2: 'You have been verified!',
         });
-        return { status: 'success', image };
+        return { status: 'success', image: Platform.OS === 'android' ? `file://${image}` : image };
       } else {
         Toast.show({
           type: 'info',
@@ -59,7 +60,10 @@ export const faceKIVerify = createAsyncThunk(
             text1: enrollStatus.status,
             text2: 'You have been enrolled!',
           });
-          return { status: 'success', image };
+          return {
+            status: 'success',
+            image: Platform.OS === 'android' ? `file://${image}` : image,
+          };
         } else {
           Toast.show({
             type: 'info',

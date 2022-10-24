@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import React from 'react';
-import { Image, SafeAreaView, Text, View } from 'react-native';
+import { Image, Platform, SafeAreaView, Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { RootNavigationProp } from '../../AuthNav';
 import RoundedButton from '../../components/RoundedButton';

@@ -64,6 +64,9 @@ export const signUpSlice = createSlice({
       state.faceKIStatus = '';
       state.image = '';
     },
+    clearESignature: state => {
+      state.eSignatureStatus = '';
+    },
     clearSignUpState: () => {
       return { ...initialState };
     },
@@ -110,5 +113,5 @@ export const signUpSlice = createSlice({
   },
 });
 
-export const { step1Save, clearFaceKI, clearSignUpState } = signUpSlice.actions;
+export const { step1Save, clearFaceKI, clearESignature, clearSignUpState } = signUpSlice.actions;
 export default signUpSlice.reducer;

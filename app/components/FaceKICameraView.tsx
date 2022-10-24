@@ -80,7 +80,9 @@ const FaceKiCameraView = ({ email }: Props) => {
             height: '115%',
             position: 'absolute',
           }}
-          source={{ uri: photo?.path }}
+          source={{
+            uri: Platform.OS === 'android' ? `file://${photo.path}` : photo?.path,
+          }}
         />
         <Loader />
       </>
