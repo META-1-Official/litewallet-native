@@ -22,11 +22,12 @@ export const PaymentSuccess = ({ navigation }: Props) => {
   useEffect(() => {
     dispatch(getAccountPaymentStatus(email))
       .unwrap()
-      .then(promiseResult => {
-        console.log('PromiseResult: ', promiseResult);
-        if (promiseResult && promiseResult.isSign) {
-          if (promiseResult.isPayed || promiseResult.isPayedByCrypto) {
-            console.log('Payments: ', promiseResult.pays);
+      .then(user => {
+        console.log('PromiseResult: ', user);
+        if (user && user.status?.isSign) {
+          if (user.status?.isPayed || user.status?.isPayedByCrypto) {
+            console.log('Payments: ', user.pays);
+            // todo: check for user.pays.find((el) => el.customerId === user.status.facekiID
             dispatch(
               registerAccount({
                 accountName,

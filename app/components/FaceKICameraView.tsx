@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/core';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { View, Text, Platform, Image } from 'react-native';
 import { Camera, PhotoFile, useCameraDevices } from 'react-native-vision-camera';
 import { RootNavigationProp } from '../AuthNav';
-import { useAppDispatch, useAppSelector } from '../hooks';
+import { useAppDispatch } from '../hooks';
 import { faceKIVerify } from '../store/signUp/signUp.actions';
 import styles from './FaceKICameraView.styles';
 import Loader from './Loader';
@@ -41,28 +41,27 @@ const FaceKiCameraView = ({ email }: Props) => {
   const device = devices.front || devices.back || devices.external || devices.unspecified;
   const [photo, setPhoto] = useState<PhotoFile | undefined>();
   const camera = useRef<Camera>(null);
-  const { faceKIStatus } = useAppSelector(state => state.signUp);
-
-  useEffect(() => {
-    if (faceKIStatus && faceKIStatus !== 'error') {
-      nav.navigate('FaceKISuccess');
-      setTimeout(() => setPhoto(undefined), 200);
-    }
-  }, [faceKIStatus, nav]);
-
-  useEffect(() => {
-    console.log('FaceKIStatus: ', faceKIStatus);
-    if (faceKIStatus === 'error') {
-      setPhoto(undefined);
-      console.log('Photo has been removed!');
-    }
-  }, [faceKIStatus, nav]);
 
   const verifyHandler = async () => {
     if (camera?.current) {
       const capture = await takePhoto(camera.current);
       setPhoto(capture);
-      dispatch(faceKIVerify({ image: capture.path, email }));
+      dispatch(faceKIVerify({ image: capture.path, email }))
+        .unwrap()
+        .then(promiseResolvedValue => {
+          if (promiseResolvedValue.status === 'error') {
+            setPhoto(undefined);
+            console.log('Photo has been removed!');
+          } else {
+            nav.navigate('FaceKISuccess');
+            // setTimeout(() => setPhoto(undefined), 200);
+          }
+        })
+        .catch(promiseRejectedValue => {
+          console.log('Something went wrong!', promiseRejectedValue);
+          setPhoto(undefined);
+          console.log('Photo has been removed!');
+        });
     } else {
       console.warn('Camera is not available');
     }
