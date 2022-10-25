@@ -23,7 +23,9 @@ const checkFreeName = async (accountName: string) => {
 };
 
 const checkPremiumName = (accountName: string) =>
-  (ChainValidation.is_cheap_name(accountName) && /(-)/.test(accountName)) ||
+  // todo: fix of issue with validation | uncomment code below to roll it back
+  // (ChainValidation.is_cheap_name(accountName) && /(-)/.test(accountName)) ||
+  ChainValidation.is_cheap_name(accountName) ||
   'This is a premium name which is not supported by this faucet. Please enter a regular name containing least one dash or a number';
 
 const checkAccountName = (accountName: string) =>
