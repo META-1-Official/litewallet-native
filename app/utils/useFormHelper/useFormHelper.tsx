@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useController, UseControllerProps } from 'react-hook-form';
 import { StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
 import { DefaultTheme, HelperText } from 'react-native-paper';
+import debounce from 'debounce';
 import { tid } from '..';
 import { colors } from '../../styles/colors';
 import _get from 'lodash.get';
@@ -27,11 +28,13 @@ const theme: typeof DefaultTheme = {
   },
 };
 
-type Props = { name: string; control: any; rules?: UseControllerProps<any>['rules'] } & Omit<
-  TextInputProps,
-  'theme'
->;
-export function Input({ name, control, rules, ...props }: Props) {
+type Props = {
+  name: string;
+  control: any;
+  rules?: UseControllerProps<any>['rules'];
+  isDebounced?: boolean;
+} & Omit<TextInputProps, 'theme'>;
+export function Input({ name, control, rules, isDebounced = true, ...props }: Props) {
   const {
     field,
     fieldState: { error },
@@ -52,7 +55,7 @@ export function Input({ name, control, rules, ...props }: Props) {
         theme={theme}
         {...tid(`useFrom/Input/${name}`)}
         value={field.value}
-        onChangeText={field.onChange}
+        onChangeText={isDebounced ? debounce(field.onChange, 200) : field.onChange}
       />
       <HelperText padding="none" type="error" visible={!!error}>
         {error?.message}
@@ -170,6 +173,7 @@ export function PhoneInput({ name, control }: CommonProps) {
           name={name}
           style={{ width: '100%' }}
           label="Mobile Number"
+          isDebounced={false}
           rules={{
             required: 'This field is required',
             validate: {

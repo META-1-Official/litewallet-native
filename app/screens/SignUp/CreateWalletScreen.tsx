@@ -17,16 +17,17 @@ import { ChainValidation } from 'meta1-vision-js';
 import { useForm } from 'react-hook-form';
 import { Input, PhoneInput } from '../../utils/useFormHelper/useFormHelper';
 
-const freeName = async (accountName: string) => {
+const checkFreeName = async (accountName: string) => {
   const acc = await getAccount(accountName).catch(console.debug);
   return !acc || 'This account name has already taken';
 };
 
-const premiumName = (accountName: string) =>
+const checkPremiumName = (accountName: string) =>
   (ChainValidation.is_cheap_name(accountName) && /(-)/.test(accountName)) ||
   'This is a premium name which is not supported by this faucet. Please enter a regular name containing least one dash or a number';
 
-const chainValidate = (accountName: string) => ChainValidation.is_account_name_error(accountName);
+const checkAccountName = (accountName: string) =>
+  ChainValidation.is_account_name_error(accountName);
 
 type Props = NativeStackScreenProps<RootStackParamList, 'CreateWallet'>;
 
@@ -55,9 +56,29 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
   });
 
   const [migratable, setMigratable] = useState(false);
-  const checkMigrationAvailability = async (accountName: string) => {
+  const checkMigrationAvailability = async (accountName: string): Promise<boolean | string> => {
     const { data } = await migrationService.checkTransferableAccount(accountName);
     setMigratable(data?.found);
+    return true;
+  };
+
+  const handleAccountNameValidation = async (accountName: string) => {
+    const migrationAvailability = await checkMigrationAvailability(accountName);
+    if (typeof migrationAvailability === 'string') {
+      return migrationAvailability;
+    }
+    const premiumName = await checkPremiumName(accountName);
+    if (typeof premiumName === 'string') {
+      return premiumName;
+    }
+    const validName = await checkAccountName(accountName);
+    if (typeof validName === 'string') {
+      return validName;
+    }
+    const freeName = await checkFreeName(accountName);
+    if (typeof freeName === 'string') {
+      return freeName;
+    }
     return true;
   };
 
@@ -116,10 +137,7 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
               rules={{
                 required,
                 validate: {
-                  checkMigrationAvailability,
-                  premiumName,
-                  chainValidate,
-                  freeName,
+                  handleAccountNameValidation,
                 },
               }}
               render={props => (
