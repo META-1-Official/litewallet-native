@@ -55,7 +55,7 @@ export function Input({ name, control, rules, isDebounced = true, ...props }: Pr
         theme={theme}
         {...tid(`useFrom/Input/${name}`)}
         value={field.value}
-        onChangeText={isDebounced ? debounce(field.onChange, 200) : field.onChange}
+        onChangeText={isDebounced ? debounce(field.onChange, 300) : field.onChange}
       />
       <HelperText padding="none" type="error" visible={!!error}>
         {error?.message}
