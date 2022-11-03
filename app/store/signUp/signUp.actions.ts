@@ -1,80 +1,26 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import * as WebBrowser from '@toruslabs/react-native-web-browser';
-import { Platform } from 'react-native';
 import Toast from 'react-native-toast-message';
 import config from '../../config';
-import { createUser, getToken, getUser } from '../../services/eSignature';
+import { createUser, getToken, getUser, signDocument } from '../../services/eSignature';
 import migrationService from '../../services/migration.service';
-import { web3Login } from '../../services/web3.services';
-
-import faceKIAPI, { FaceKIVerifyParams } from '../../services/faceKI/faceKI.service';
 import createAccountWithPassword from '../../utils/accountCreate';
-import { SignUpState, Web3UserParams } from './signUp.types';
 
-export const getWeb3User = createAsyncThunk(
-  'signUp/web3Login',
-  async ({ provider }: Web3UserParams) => {
-    const response = await web3Login(provider);
-    return { email: response?.userInfo?.email || '', privateKey: response.privKey || '' };
-  },
-);
+interface AccountData {
+  email: string;
+  firstName: string;
+  lastName: string;
+  accountName: string;
+  mobile: string;
+}
 
-export const faceKIVerify = createAsyncThunk(
-  'signUp/faceKIVerify',
-  async ({ image, email }: FaceKIVerifyParams) => {
-    const livelinessStatus = await faceKIAPI.livelinessCheck({ image });
-    if (livelinessStatus.data.liveness === 'Spoof') {
-      Toast.show({
-        type: 'error',
-        text1: livelinessStatus.data.liveness,
-        text2: livelinessStatus.data.result,
-      });
-      console.error(
-        livelinessStatus.data.liveness,
-        livelinessStatus.data.result,
-        'Liveliness is spoof try again!',
-      );
-    } else {
-      Toast.show({
-        type: 'info',
-        text1: livelinessStatus.data.liveness,
-        text2: livelinessStatus.data.result,
-      });
-      const verifyStatus = await faceKIAPI.verifyUser({ image });
-      if (verifyStatus.status === 'Verify OK' && verifyStatus.name === email) {
-        Toast.show({
-          type: 'success',
-          text1: verifyStatus.status,
-          text2: 'You have been verified!',
-        });
-        return { status: 'success', image: Platform.OS === 'android' ? `file://${image}` : image };
-      } else {
-        Toast.show({
-          type: 'info',
-          text1: verifyStatus.status,
-        });
-        const enrollStatus = await faceKIAPI.enrollUser({ image, name: email });
-        if (enrollStatus.status === 'Enroll OK') {
-          Toast.show({
-            type: 'success',
-            text1: enrollStatus.status,
-            text2: 'You have been enrolled!',
-          });
-          return {
-            status: 'success',
-            image: Platform.OS === 'android' ? `file://${image}` : image,
-          };
-        } else {
-          Toast.show({
-            type: 'info',
-            text1: enrollStatus.status,
-          });
-        }
-      }
-    }
-    return { status: 'error', image: '' };
-  },
-);
+interface ESignatureProceedProps extends AccountData {
+  privateKey: string;
+}
+
+interface RegisterAccountProps extends AccountData {
+  passKey: string;
+}
 
 export const eSignatureProceed = createAsyncThunk(
   'signup/eSignatureProceed',
@@ -85,10 +31,7 @@ export const eSignatureProceed = createAsyncThunk(
     lastName,
     accountName,
     mobile,
-  }: Pick<
-    SignUpState,
-    'email' | 'privateKey' | 'firstName' | 'lastName' | 'accountName' | 'mobile'
-  >) => {
+  }: ESignatureProceedProps) => {
     const redirectUrl = 'io.meta1.appbeta://auth';
     const faceKIID = email + privateKey;
     console.log('CreateUser service has started');
@@ -135,17 +78,7 @@ export const getAccountPaymentStatus = createAsyncThunk(
 
 export const registerAccount = createAsyncThunk(
   'signUp/registerAccount',
-  async ({
-    accountName,
-    passKey,
-    mobile,
-    email,
-    firstName,
-    lastName,
-  }: Pick<
-    SignUpState,
-    'accountName' | 'passKey' | 'mobile' | 'email' | 'firstName' | 'lastName'
-  >) => {
+  async ({ accountName, passKey, mobile, email, firstName, lastName }: RegisterAccountProps) => {
     console.log('CreateAccountWithPassword service started!');
     return await createAccountWithPassword(
       accountName,
@@ -159,6 +92,13 @@ export const registerAccount = createAsyncThunk(
       lastName,
       firstName,
     );
+  },
+);
+
+export const eSignatureSign = createAsyncThunk(
+  'signUp/signDocument',
+  ({ token, payload }: any) => {
+    return signDocument({ token, payload });
   },
 );
 

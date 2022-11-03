@@ -11,7 +11,7 @@ import { Heading, TextSecondary } from '../../components/typography';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import useAnimatedKeyboard from '../../hooks/useAnimatedKeyboard';
 import migrationService from '../../services/migration.service';
-import { getWeb3User } from '../../store/signUp/signUp.actions';
+import { getWeb3User } from '../../store/web3/web3.actions';
 import { step1Save } from '../../store/signUp/signUp.reducer';
 import { useScroll } from '../../utils';
 import { required } from '../../utils/useFormHelper/rules';
@@ -26,9 +26,8 @@ type Props = NativeStackScreenProps<RootStackParamList, 'ImportWallet'>;
 
 const ImportWalletScreen: React.FC<Props> = ({ navigation }) => {
   const dispatch = useAppDispatch();
-  const { accountName, mobile, firstName, lastName, privateKey } = useAppSelector(
-    state => state.signUp,
-  );
+  const { accountName, mobile, firstName, lastName } = useAppSelector(state => state.signUp);
+  const { privateKey } = useAppSelector(state => state.web3);
   const [status, setStatus] = useState<string>('');
 
   useEffect(() => {

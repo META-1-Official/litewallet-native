@@ -26,6 +26,16 @@ export const getToken = async (email: string) => {
       params: { email },
     },
   );
-
   return { data, headers };
+};
+
+// todo: fix type
+export const signDocument = async ({ token, payload }: any) => {
+  const { data } = await axios.post(`${config.E_SIGNATURE_API_URL}/sign`, payload, {
+    headers: {
+      authorization: token,
+    },
+    responseType: 'arraybuffer',
+  });
+  return data;
 };

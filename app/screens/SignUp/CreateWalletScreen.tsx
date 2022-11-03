@@ -9,7 +9,7 @@ import { Heading, TextSecondary } from '../../components/typography';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getAccount } from '../../services/meta1Api';
 import migrationService from '../../services/migration.service';
-import { getWeb3User } from '../../store/signUp/signUp.actions';
+import { getWeb3User } from '../../store/web3/web3.actions';
 import { step1Save } from '../../store/signUp/signUp.reducer';
 import { lettersOnly, required } from '../../utils/useFormHelper/rules';
 //@ts-ignore todo: fix type
@@ -35,7 +35,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'CreateWallet'>;
 
 const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
   const dispatch = useAppDispatch();
-  const { privateKey, web3Pending } = useAppSelector(state => state.signUp);
+  const { privateKey, pending: web3Pending } = useAppSelector(state => state.web3);
 
   useEffect(() => {
     if (privateKey && !web3Pending) {

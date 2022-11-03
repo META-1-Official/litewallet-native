@@ -7,12 +7,13 @@ import RoundedButton from '../components/RoundedButton';
 import { Heading, TextSecondary } from '../components/typography';
 import useAnimatedKeyboard from '../hooks/useAnimatedKeyboard';
 import { useStore } from '../store';
+import { loginStep1 } from '../store/signIn/signIn.reducer';
+import { getWeb3User } from '../store/web3/web3.actions';
 import { tid, useScroll } from '../utils';
 import { getAccount } from '../services/meta1Api';
-import meta1dex from '../utils/meta1dexTypes';
+// import meta1dex from '../utils/meta1dexTypes';
 import { required, RuleFn } from '../utils/useFormHelper/rules';
 import { Input } from '../utils/useFormHelper/useFormHelper';
-import PasswordInput from '../components/PasswordInput';
 
 const { width, height } = Dimensions.get('screen');
 const knownAccount: RuleFn = async text => {
@@ -20,16 +21,17 @@ const knownAccount: RuleFn = async text => {
   return !!acc || 'Account not found';
 };
 
-const validatePassword = async (login: string, password: string) => {
-  try {
-    await meta1dex.login(login, password);
-    return true;
-  } catch (e: any) {
-    console.error(e, e.stack);
-    Alert.alert('The pair of login and passkey do not match!');
-    return false;
-  }
-};
+// const validatePassword = async (login: string, password: string) => {
+//   try {
+//     await meta1dex.login(login, password);
+//     return true;
+//   } catch (e: any) {
+//     console.error(e, e.stack);
+//     Alert.alert('The pair of login and passkey do not match!');
+//     return false;
+//   }
+// };
+
 const LinkWalletScreen: React.FC = () => {
   const { control, handleSubmit } = useForm({
     mode: 'onChange',
@@ -37,6 +39,17 @@ const LinkWalletScreen: React.FC = () => {
       account_name: '',
       password: '',
     },
+  });
+
+  const handleLogin = handleSubmit(async formState => {
+    // const { account_name, password } = formState;
+    // if (await validatePassword(account_name, password)) {
+    //   authorize(account_name, password);
+    // }
+    const { account_name } = formState;
+    loginStep1(account_name);
+    // @ts-ignore | this hack is required to use form with all providers
+    dispatch(getWeb3User({ provider: undefined }));
   });
 
   const offsetY = useAnimatedKeyboard();
@@ -96,27 +109,19 @@ const LinkWalletScreen: React.FC = () => {
               </View>
             )}
           />
-          <Input
-            control={control}
-            rules={{ required }}
-            name="password"
-            label="Passkey"
-            style={{
-              paddingHorizontal: 32,
-            }}
-            render={PasswordInput}
-          />
+          {/*<Input*/}
+          {/*  control={control}*/}
+          {/*  rules={{ required }}*/}
+          {/*  name="password"*/}
+          {/*  label="Passkey"*/}
+          {/*  style={{*/}
+          {/*    paddingHorizontal: 32,*/}
+          {/*  }}*/}
+          {/*  render={PasswordInput}*/}
+          {/*/>*/}
         </Animated.View>
         <View>
-          <RoundedButton
-            title="Submit"
-            onPress={handleSubmit(async formState => {
-              const { account_name, password } = formState;
-              if (await validatePassword(account_name, password)) {
-                authorize(account_name, password);
-              }
-            })}
-          />
+          <RoundedButton title="Submit" onPress={handleLogin} />
         </View>
       </ScrollView>
     </SafeAreaView>

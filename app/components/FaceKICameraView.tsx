@@ -4,7 +4,7 @@ import { View, Text, Platform, Image } from 'react-native';
 import { Camera, PhotoFile, useCameraDevices } from 'react-native-vision-camera';
 import { RootNavigationProp } from '../AuthNav';
 import { useAppDispatch } from '../hooks';
-import { faceKIVerify } from '../store/signUp/signUp.actions';
+import { faceKIVerify } from '../store/faceKI/faceKI.actions';
 import styles from './FaceKICameraView.styles';
 import Loader from './Loader';
 import RoundedButton from './RoundedButton';

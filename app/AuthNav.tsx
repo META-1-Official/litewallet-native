@@ -6,6 +6,7 @@ import { LoaderModalContent } from './components/LoaderModal';
 import LinkWalletScreen from './screens/LinkWalletScreen';
 import { PrivacyPolicy, TOSScreen } from './screens/PrivacyPolicy';
 import CreateWalletScreen from './screens/SignUp/CreateWalletScreen';
+import ESignatureFormScreen from './screens/SignUp/ESignatureFormScreen';
 import ESignatureScreen from './screens/SignUp/ESignatureScreen';
 import FaceKIScreen from './screens/SignUp/FaceKIScreen';
 import FaceKISuccessScreen from './screens/SignUp/FaceKISuccessScreen';
@@ -24,6 +25,7 @@ export type RootStackParamList = {
   FaceKISuccess: undefined;
   Passkey: undefined;
   ESignature: undefined;
+  ESignatureForm: undefined;
   PaymentSuccess: undefined;
   ImportWallet: undefined;
   LinkWallet: undefined;
@@ -63,6 +65,7 @@ const AuthNav = () => {
       />
       <Stack.Screen name="FaceKISuccess" component={FaceKISuccessScreen} />
       <Stack.Screen name="ESignature" component={ESignatureScreen} />
+      <Stack.Screen name="ESignatureForm" component={ESignatureFormScreen} />
       <Stack.Screen name="Passkey" component={PasskeyScreen} />
       <Stack.Screen name="PaymentSuccess" component={PaymentSuccess} />
       <Stack.Screen name="LinkWallet" component={LinkWalletScreen} />

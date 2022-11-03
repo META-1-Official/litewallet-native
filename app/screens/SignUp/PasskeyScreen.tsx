@@ -16,17 +16,10 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Passkey'>;
 
 export const PasskeyScreen = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
-  const {
-    passKey,
-    privateKey,
-    firstName,
-    lastName,
-    mobile,
-    email,
-    accountName,
-    eSignatureStatus,
-    eSignaturePending,
-  } = useAppSelector(state => state.signUp);
+  const { firstName, lastName, mobile, accountName, eSignatureStatus, eSignaturePending } =
+    useAppSelector(state => state.signUp);
+  const { email, passKey, privateKey } = useAppSelector(state => state.web3);
+
   const [checkboxesState, setCheckBoxesState] = useState([false, false, false, false, false]);
 
   const handleNext = () => {

@@ -6,16 +6,15 @@ import FaceKiCameraView from '../../components/FaceKICameraView';
 import Loader from '../../components/Loader';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import useCameraPermission from '../../hooks/useCameraPermission';
-import { clearFaceKI } from '../../store/signUp/signUp.reducer';
+import { clearFaceKI } from '../../store/faceKI/faceKI.reducer';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'FaceKI'>;
 
 const FaceKIScreen: React.FC<Props> = ({ navigation }) => {
   const dispatch = useAppDispatch();
 
-  const { privateKey, firstName, lastName, mobile, accountName, email } = useAppSelector(
-    state => state.signUp,
-  );
+  const { firstName, lastName, mobile, accountName } = useAppSelector(state => state.signUp);
+  const { privateKey, email } = useAppSelector(state => state.web3);
 
   const cameraPermission = useCameraPermission();
   const isCameraAvailable = cameraPermission === 'authorized';

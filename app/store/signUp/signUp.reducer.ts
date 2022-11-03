@@ -1,26 +1,39 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   eSignatureProceed,
-  faceKIVerify,
+  eSignatureSign,
   getAccountPaymentStatus,
-  getWeb3User,
   registerAccount,
 } from './signUp.actions';
-import { SignUpState, Step1 } from './signUp.types';
-// @ts-ignore
-import { PrivateKey, key } from 'meta1-vision-js';
+
+interface Step1 {
+  firstName: string;
+  lastName: string;
+  mobile: string;
+  accountName: string;
+  isMigration?: boolean;
+  password?: string;
+}
+
+export interface SignUpState extends Step1 {
+  eSignatureStatus: string; // 'cancel' | 'dismiss'
+  eSignaturePending: boolean;
+  // todo: fix type of payment status
+  paymentStatus: any;
+  registerStatus?: {
+    active_key: string;
+    memo_key: string;
+    name: string;
+    owner_key: string;
+    referrer: string;
+  };
+}
 
 const initialState: SignUpState = {
   firstName: '',
   lastName: '',
   mobile: '',
   accountName: '',
-  email: '',
-  privateKey: '',
-  passKey: '',
-  web3Pending: false,
-  faceKIStatus: '',
-  image: '',
   eSignatureStatus: '',
   eSignaturePending: false,
   paymentStatus: undefined,
@@ -60,10 +73,6 @@ export const signUpSlice = createSlice({
       state.isMigration = action.payload.isMigration;
       state.password = action.payload.password;
     },
-    clearFaceKI: state => {
-      state.faceKIStatus = '';
-      state.image = '';
-    },
     clearESignature: state => {
       state.eSignatureStatus = '';
     },
@@ -72,28 +81,6 @@ export const signUpSlice = createSlice({
     },
   },
   extraReducers: builder => {
-    builder.addCase(getWeb3User.pending, state => {
-      state.email = '';
-      state.privateKey = '';
-      state.passKey = '';
-      state.web3Pending = true;
-    });
-    builder.addCase(getWeb3User.fulfilled, (state, action) => {
-      state.email = action.payload.email;
-      state.privateKey = action.payload.privateKey;
-      state.passKey = `P${PrivateKey.fromSeed(
-        key.normalize_brainKey(`${action.payload.email}${action.payload.privateKey}`),
-      ).toWif()}`;
-      state.web3Pending = false;
-    });
-    builder.addCase(faceKIVerify.fulfilled, (state, action) => {
-      state.faceKIStatus = action.payload.status;
-      state.image = action.payload.image;
-    });
-    builder.addCase(faceKIVerify.rejected, state => {
-      state.faceKIStatus = 'error';
-      state.image = '';
-    });
     builder.addCase(eSignatureProceed.pending, state => {
       state.eSignaturePending = true;
     });
@@ -110,8 +97,11 @@ export const signUpSlice = createSlice({
       console.log('Registration reducer, payload: ', action.payload);
       state.registerStatus = action.payload;
     });
+    builder.addCase(eSignatureSign.fulfilled, () => {
+      console.log('Done yeah!');
+    });
   },
 });
 
-export const { step1Save, clearFaceKI, clearESignature, clearSignUpState } = signUpSlice.actions;
+export const { step1Save, clearESignature, clearSignUpState } = signUpSlice.actions;
 export default signUpSlice.reducer;

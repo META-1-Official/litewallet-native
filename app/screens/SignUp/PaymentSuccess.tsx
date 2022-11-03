@@ -15,9 +15,8 @@ export const PaymentSuccess = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
   // todo: move it to actions
   const authorize = useStore(state => state.authorize);
-  const { email, accountName, passKey, mobile, lastName, firstName } = useAppSelector(
-    state => state.signUp,
-  );
+  const { accountName, mobile, lastName, firstName } = useAppSelector(state => state.signUp);
+  const { email, passKey } = useAppSelector(state => state.web3);
 
   // check payment status
   useEffect(() => {

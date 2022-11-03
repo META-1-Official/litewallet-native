@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import React from 'react';
-import { Image, Platform, SafeAreaView, Text, View } from 'react-native';
+import { Image, SafeAreaView, Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { RootNavigationProp } from '../../AuthNav';
 import RoundedButton from '../../components/RoundedButton';
@@ -8,7 +8,7 @@ import { useAppSelector } from '../../hooks';
 
 export const FaceKISuccessScreen = () => {
   const nav = useNavigation<RootNavigationProp>();
-  const { image } = useAppSelector(state => state.signUp);
+  const { image } = useAppSelector(state => state.faceKI);
 
   return (
     <SafeAreaView
