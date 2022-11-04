@@ -1,24 +1,34 @@
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useRef } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ContentSlider, { Backdrop } from '../components/ContentSlider';
 import RoundedButton from '../components/RoundedButton';
 import { useAppDispatch } from '../hooks';
+import { clearFaceKI } from '../store/faceKI/faceKI.reducer';
+import { clearSignInInfo } from '../store/signIn/signIn.reducer';
 import { clearSignUpState } from '../store/signUp/signUp.reducer';
+import { clearWeb3AuthData } from '../store/web3/web3.reducer';
 import { colors } from '../styles/colors';
-import { RootNavigationProp } from '../AuthNav';
-import { useNavigation } from '@react-navigation/core';
+import { RootStackParamList } from '../AuthNav';
 
-const WelcomeScreen = () => {
+type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
+
+const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
   const dispatch = useAppDispatch();
-  const nav = useNavigation<RootNavigationProp>();
-  const CreateWalletPress = () => nav.navigate('Legal');
-  const LinkWalletPress = () => nav.navigate('LinkWallet');
+  const CreateWalletPress = () => navigation.navigate('Legal');
+  const LinkWalletPress = () => navigation.navigate('LinkWallet');
   const scrollX = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    dispatch(clearSignUpState());
-  }, []);
+    return navigation.addListener('focus', () => {
+      console.log('Wiping store...');
+      dispatch(clearSignUpState());
+      dispatch(clearWeb3AuthData());
+      dispatch(clearFaceKI());
+      dispatch(clearSignInInfo());
+    });
+  }, [navigation]);
 
   return (
     <SafeAreaView

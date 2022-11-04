@@ -1,17 +1,18 @@
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { SafeAreaView, View, Image, Dimensions, TextInput, Animated, Alert } from 'react-native';
+import { SafeAreaView, View, Image, Dimensions, TextInput, Animated } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { personAsset, personIconAsset } from '../../assets';
+import { RootStackParamList } from '../AuthNav';
 import RoundedButton from '../components/RoundedButton';
 import { Heading, TextSecondary } from '../components/typography';
+import { useAppDispatch } from '../hooks';
 import useAnimatedKeyboard from '../hooks/useAnimatedKeyboard';
-import { useStore } from '../store';
 import { loginStep1 } from '../store/signIn/signIn.reducer';
 import { getWeb3User } from '../store/web3/web3.actions';
 import { tid, useScroll } from '../utils';
 import { getAccount } from '../services/meta1Api';
-// import meta1dex from '../utils/meta1dexTypes';
 import { required, RuleFn } from '../utils/useFormHelper/rules';
 import { Input } from '../utils/useFormHelper/useFormHelper';
 
@@ -21,18 +22,10 @@ const knownAccount: RuleFn = async text => {
   return !!acc || 'Account not found';
 };
 
-// const validatePassword = async (login: string, password: string) => {
-//   try {
-//     await meta1dex.login(login, password);
-//     return true;
-//   } catch (e: any) {
-//     console.error(e, e.stack);
-//     Alert.alert('The pair of login and passkey do not match!');
-//     return false;
-//   }
-// };
+type Props = NativeStackScreenProps<RootStackParamList, 'LinkWallet'>;
 
-const LinkWalletScreen: React.FC = () => {
+const LinkWalletScreen: React.FC<Props> = ({ navigation }) => {
+  const dispatch = useAppDispatch();
   const { control, handleSubmit } = useForm({
     mode: 'onChange',
     defaultValues: {
@@ -41,21 +34,23 @@ const LinkWalletScreen: React.FC = () => {
     },
   });
 
-  const handleLogin = handleSubmit(async formState => {
-    // const { account_name, password } = formState;
-    // if (await validatePassword(account_name, password)) {
-    //   authorize(account_name, password);
-    // }
+  const handleLogin = handleSubmit(formState => {
     const { account_name } = formState;
-    loginStep1(account_name);
+    dispatch(loginStep1(account_name));
     // @ts-ignore | this hack is required to use form with all providers
-    dispatch(getWeb3User({ provider: undefined }));
+    dispatch(getWeb3User({ provider: undefined }))
+      .unwrap()
+      .then(web3AuthData => {
+        if (web3AuthData.privateKey) {
+          navigation.navigate('FaceKI');
+        }
+      })
+      .catch(error => console.error(error));
   });
 
   const offsetY = useAnimatedKeyboard();
   const scroll = useScroll(true);
 
-  const authorize = useStore(state => state.authorize);
   return (
     <SafeAreaView
       style={{
@@ -109,16 +104,6 @@ const LinkWalletScreen: React.FC = () => {
               </View>
             )}
           />
-          {/*<Input*/}
-          {/*  control={control}*/}
-          {/*  rules={{ required }}*/}
-          {/*  name="password"*/}
-          {/*  label="Passkey"*/}
-          {/*  style={{*/}
-          {/*    paddingHorizontal: 32,*/}
-          {/*  }}*/}
-          {/*  render={PasswordInput}*/}
-          {/*/>*/}
         </Animated.View>
         <View>
           <RoundedButton title="Submit" onPress={handleLogin} />

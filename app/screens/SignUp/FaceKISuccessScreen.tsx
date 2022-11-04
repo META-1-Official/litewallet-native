@@ -1,14 +1,45 @@
-import { useNavigation } from '@react-navigation/core';
 import React from 'react';
 import { Image, SafeAreaView, Text, View } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScrollView } from 'react-native-gesture-handler';
-import { RootNavigationProp } from '../../AuthNav';
+import Toast from 'react-native-toast-message';
+import { RootStackParamList } from '../../AuthNav';
 import RoundedButton from '../../components/RoundedButton';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { login } from '../../store/signIn/signIn.actions';
 
-export const FaceKISuccessScreen = () => {
-  const nav = useNavigation<RootNavigationProp>();
+type Props = NativeStackScreenProps<RootStackParamList, 'FaceKISuccess'>;
+
+export const FaceKISuccessScreen: React.FC<Props> = ({ navigation }) => {
+  const dispatch = useAppDispatch();
+  const { email } = useAppSelector(state => state.web3);
   const { image } = useAppSelector(state => state.faceKI);
+  const { accountName } = useAppSelector(state => state.signIn);
+  const isSigning = !!accountName;
+
+  const handleNext = () => {
+    if (isSigning) {
+      dispatch(login({ accountName, email }))
+        .unwrap()
+        .then(loginDetails => {
+          Toast.show({
+            type: 'success',
+            text1: 'Logged in successfully!',
+          });
+          console.log('loginDetails: ', loginDetails);
+        })
+        .catch(error => {
+          Toast.show({
+            type: 'error',
+            text1: 'Something went wrong!',
+            text2: 'Try to login again.',
+          });
+          console.error(error);
+        });
+    } else {
+      navigation.navigate('Passkey');
+    }
+  };
 
   return (
     <SafeAreaView
@@ -49,11 +80,7 @@ export const FaceKISuccessScreen = () => {
           </Text>
         </View>
         <View style={{ position: 'absolute', bottom: 0, width: '100%' }}>
-          <RoundedButton
-            styles={{ flex: 1 }}
-            title="Next"
-            onPress={() => nav.navigate('Passkey')}
-          />
+          <RoundedButton styles={{ flex: 1 }} title="Next" onPress={handleNext} />
         </View>
       </ScrollView>
     </SafeAreaView>

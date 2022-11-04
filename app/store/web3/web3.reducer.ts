@@ -20,7 +20,11 @@ const initialState: Web3State = {
 const web3Slice = createSlice({
   name: 'signIn',
   initialState,
-  reducers: {},
+  reducers: {
+    clearWeb3AuthData: () => {
+      return { ...initialState };
+    },
+  },
   extraReducers: builder => {
     builder.addCase(getWeb3User.pending, state => {
       state.email = '';
@@ -39,5 +43,5 @@ const web3Slice = createSlice({
   },
 });
 
-export const {} = web3Slice.actions;
+export const { clearWeb3AuthData } = web3Slice.actions;
 export default web3Slice.reducer;

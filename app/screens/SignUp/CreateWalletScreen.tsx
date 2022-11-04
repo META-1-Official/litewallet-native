@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, Text, TextInput, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { RootStackParamList } from '../../AuthNav';
@@ -35,13 +35,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'CreateWallet'>;
 
 const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
   const dispatch = useAppDispatch();
-  const { privateKey, pending: web3Pending } = useAppSelector(state => state.web3);
-
-  useEffect(() => {
-    if (privateKey && !web3Pending) {
-      navigation.navigate('FaceKI');
-    }
-  }, [privateKey, web3Pending]);
+  const { privateKey } = useAppSelector(state => state.web3);
 
   const {
     control,
@@ -83,6 +77,23 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
     }
     return true;
   };
+
+  const handleSubmitForm = handleSubmit(formState => {
+    dispatch(step1Save(formState));
+    if (!privateKey) {
+      // @ts-ignore | this hack is required to use form with all providers
+      dispatch(getWeb3User({ provider: undefined }))
+        .unwrap()
+        .then(web3AuthData => {
+          if (web3AuthData.privateKey) {
+            navigation.navigate('FaceKI');
+          }
+        })
+        .catch(error => console.error(error));
+    } else {
+      navigation.navigate('FaceKI');
+    }
+  });
 
   return (
     <SafeAreaView
@@ -167,15 +178,7 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
         <View>
           <RoundedButton
             title="Create wallet"
-            onPress={handleSubmit(formState => {
-              dispatch(step1Save(formState));
-              if (!privateKey) {
-                // @ts-ignore | this hack is required to use form with all providers
-                dispatch(getWeb3User({ provider: undefined }));
-              } else {
-                navigation.navigate('FaceKI');
-              }
-            })}
+            onPress={handleSubmitForm}
             disabled={isSubmitting}
           />
         </View>

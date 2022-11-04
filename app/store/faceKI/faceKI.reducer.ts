@@ -17,12 +17,14 @@ const faceKISlice = createSlice({
   name: 'signIn',
   initialState,
   reducers: {
-    clearFaceKI: state => {
-      state.faceKIStatus = '';
-      state.image = '';
+    clearFaceKI: () => {
+      return { ...initialState };
     },
   },
   extraReducers: builder => {
+    builder.addCase(faceKIVerify.pending, state => {
+      state.pending = true;
+    });
     builder.addCase(faceKIVerify.fulfilled, (state, action) => {
       state.faceKIStatus = action.payload.status;
       state.image = action.payload.image;

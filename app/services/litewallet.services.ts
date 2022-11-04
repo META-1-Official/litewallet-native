@@ -14,6 +14,11 @@ class LiteWalletServices {
     const { data } = await this.api.post('/saveBalance', { accountName });
     return data;
   };
+
+  login = async (accountName: string, email: string) => {
+    const { data } = await this.api.post('/login', { accountName, email });
+    return data;
+  };
 }
 
 export default new LiteWalletServices();

@@ -1,11 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { login } from './signIn.actions';
 
 interface SignInState {
   accountName?: string;
+  token: string;
+  isAuthorized: boolean;
+  pending: boolean;
 }
 
 const initialState: SignInState = {
   accountName: '',
+  token: '',
+  isAuthorized: false,
+  pending: false,
 };
 
 const signInSlice = createSlice({
@@ -15,9 +22,24 @@ const signInSlice = createSlice({
     loginStep1: (state, action: PayloadAction<string>) => {
       state.accountName = action.payload;
     },
+    clearSignInInfo: () => {
+      return { ...initialState };
+    },
   },
-  extraReducers: builder => {},
+  extraReducers: builder => {
+    builder.addCase(login.pending, state => {
+      state.pending = true;
+    });
+    builder.addCase(login.fulfilled, (state, action) => {
+      state.token = action.payload.token;
+      state.isAuthorized = true;
+      state.pending = false;
+    });
+    builder.addCase(login.rejected, state => {
+      state.pending = false;
+    });
+  },
 });
 
-export const { loginStep1 } = signInSlice.actions;
+export const { loginStep1, clearSignInInfo } = signInSlice.actions;
 export default signInSlice.reducer;
