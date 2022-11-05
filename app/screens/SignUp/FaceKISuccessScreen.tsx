@@ -6,6 +6,7 @@ import Toast from 'react-native-toast-message';
 import { RootStackParamList } from '../../AuthNav';
 import RoundedButton from '../../components/RoundedButton';
 import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useStore } from '../../store';
 import { login } from '../../store/signIn/signIn.actions';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'FaceKISuccess'>;
@@ -16,6 +17,7 @@ export const FaceKISuccessScreen: React.FC<Props> = ({ navigation }) => {
   const { image } = useAppSelector(state => state.faceKI);
   const { accountName } = useAppSelector(state => state.signIn);
   const isSigning = !!accountName;
+  const authorize = useStore(state => state.authorize);
 
   const handleNext = () => {
     if (isSigning) {
@@ -27,6 +29,7 @@ export const FaceKISuccessScreen: React.FC<Props> = ({ navigation }) => {
             text1: 'Logged in successfully!',
           });
           console.log('loginDetails: ', loginDetails);
+          authorize(accountName, undefined);
         })
         .catch(error => {
           Toast.show({
