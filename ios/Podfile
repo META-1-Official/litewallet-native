@@ -1,11 +1,13 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
+# react-native-text-input-mask
+pod 'React-RCTText', :path => '../node_modules/react-native/Libraries/Text', :modular_headers => true
+
 platform :ios, '14.0'
 install! 'cocoapods', :deterministic_uuids => false
 
-target 'meta1wallet' do
-  use_modular_headers!
+target 'nativeapp' do
   config = use_native_modules!
 
   # Flags change depending on the env values.
@@ -27,7 +29,7 @@ target 'meta1wallet' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'meta1walletTests' do
+  target 'nativeappTests' do
     inherit! :complete
     # Pods for testing
   end

@@ -246,6 +246,8 @@ android {
 
         }
     }
+
+    // package options for SignCanvas
     packagingOptions {
         pickFirst 'lib/x86/libc++_shared.so'
         pickFirst 'lib/x86_64/libjsc.so'
@@ -285,8 +287,6 @@ dependencies {
     } else {
         implementation jscFlavor
     }
-
-    implementation 'org.torusresearch:web3auth-android-sdk:3.0.0'
 }
 
 if (isNewArchitectureEnabled()) {

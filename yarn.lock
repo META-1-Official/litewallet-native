@@ -1225,10 +1225,15 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@react-native-clipboard/clipboard@^1.11.1":
+  version "1.11.1"
+  resolved "https://registry.yarnpkg.com/@react-native-clipboard/clipboard/-/clipboard-1.11.1.tgz#d3a9e685ce2383b1e92b89a334896c5575cc103d"
+  integrity sha512-nvSIIHzybVWqYxcJE5hpT17ekxAAg383Ggzw5WrYHtkKX61N1AwaKSNmXs5xHV7pmKSOe/yWjtSwxIzfW51I5Q==
+
 "@react-native-community/checkbox@^0.5.13":
-  version "0.5.13"
-  resolved "https://registry.yarnpkg.com/@react-native-community/checkbox/-/checkbox-0.5.13.tgz#f15cdc1f80ccc33fc949b7673b226225d94fe865"
-  integrity sha512-FMDYudaUbodbDOBgD6wT7s5z2QSzzghq46og8fF1yNXAp56AIrmRHZAtQhvlfyCdzWDu1+lBqgOxgupRmkCAUA==
+  version "0.5.14"
+  resolved "https://registry.yarnpkg.com/@react-native-community/checkbox/-/checkbox-0.5.14.tgz#54269f23ba966dbc6593ac121ad475c4c562d6c0"
+  integrity sha512-UmGf3wBpoCXLmVRKIDZyzOG+QR1fOhm0FOw4KzxHTCXpsBvZgIn5wbJ+MWk4io5RohQdY8GSX2MYFmkPJeJpeA==
 
 "@react-native-community/cli-clean@^9.2.1":
   version "9.2.1"
@@ -2246,13 +2251,6 @@
   integrity sha512-x5ilHXRxUPIMfjtM+1vf/GPTRWZ81nqscursm5gMznJeK9M0YnZ1c3bEvRLQ0zSSgedLx1J6MGL231ObQGGhaA==
   dependencies:
     "@types/node" "*"
-
-"@types/react-dom@^17":
-  version "17.0.18"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-17.0.18.tgz#8f7af38f5d9b42f79162eea7492e5a1caff70dc2"
-  integrity sha512-rLVtIfbwyur2iFKykP2w0pl/1unw26b5td16d5xMgp7/yjTHomkyxPYChFoCr/FtEX1lN9wY6lFj1qvKdS5kDw==
-  dependencies:
-    "@types/react" "^17"
 
 "@types/react-native-dotenv@^0.2.0":
   version "0.2.0"
@@ -4635,10 +4633,10 @@ dot-prop@^4.2.1:
   dependencies:
     is-obj "^1.0.0"
 
-dotenv@^10.0.0:
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-10.0.0.tgz#3d4227b8fb95f81096cdd2b66653fb2c7085ba81"
-  integrity sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==
+dotenv@^16.0.3:
+  version "16.0.3"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.0.3.tgz#115aec42bac5053db3c456db30cc243a5a836a07"
+  integrity sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==
 
 drbg.js@^1.0.1:
   version "1.0.1"
@@ -5024,9 +5022,9 @@ eslint-visitor-keys@^3.3.0:
   integrity sha512-mQ+suqKJVyeuwGYHAdjMFqjCyfl8+Ldnxuyp3ldiMBFKkvytrXUZWaiPCEav8qDHKty44bD+qV1IP4T+w+xXRA==
 
 eslint@^8.26.0:
-  version "8.26.0"
-  resolved "https://registry.yarnpkg.com/eslint/-/eslint-8.26.0.tgz#2bcc8836e6c424c4ac26a5674a70d44d84f2181d"
-  integrity sha512-kzJkpaw1Bfwheq4VXUezFriD1GxszX6dUekM7Z3aC2o4hju+tsR/XyTC3RcoSD7jmy9VkPU3+N6YjVU2e96Oyg==
+  version "8.27.0"
+  resolved "https://registry.yarnpkg.com/eslint/-/eslint-8.27.0.tgz#d547e2f7239994ad1faa4bb5d84e5d809db7cf64"
+  integrity sha512-0y1bfG2ho7mty+SiILVf9PfuRA49ek4Nc60Wmmu62QlobNR+CeXa4xXIJgcuwSQgZiWaPH+5BDsctpIW0PR/wQ==
   dependencies:
     "@eslint/eslintrc" "^1.3.3"
     "@humanwhocodes/config-array" "^0.11.6"
@@ -5085,9 +5083,9 @@ esmify@^2.1.1:
     through2 "^2.0.5"
 
 espree@^9.4.0:
-  version "9.4.0"
-  resolved "https://registry.yarnpkg.com/espree/-/espree-9.4.0.tgz#cd4bc3d6e9336c433265fc0aa016fc1aaf182f8a"
-  integrity sha512-DQmnRpLj7f6TgN/NYb0MTzJXL+vJF9h3pHy4JhCIs3zwcgez8xmGg3sXHcEO97BrmO2OSvCwMdfdlyl+E9KjOw==
+  version "9.4.1"
+  resolved "https://registry.yarnpkg.com/espree/-/espree-9.4.1.tgz#51d6092615567a2c2cff7833445e37c28c0065bd"
+  integrity sha512-XwctdmTO6SIvCzd9810yyNzIrOrqNYV9Koizx4C/mRhf9uq0o4yHoCEU/670pOxOL/MSraektvSAji79kX90Vg==
   dependencies:
     acorn "^8.8.0"
     acorn-jsx "^5.3.2"
@@ -5733,7 +5731,7 @@ glob-parent@^6.0.2:
   dependencies:
     is-glob "^4.0.3"
 
-glob@^7.1.1, glob@^7.1.2, glob@^7.1.3, glob@^7.1.4, glob@^7.1.6:
+glob@^7.1.1, glob@^7.1.2, glob@^7.1.3, glob@^7.1.4, glob@^7.2.3:
   version "7.2.3"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.2.3.tgz#b8df0fb802bbfa8e89bd1d938b4e16578ed44f2b"
   integrity sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==
@@ -8286,22 +8284,22 @@ object.assign@^4.1.3, object.assign@^4.1.4:
     object-keys "^1.1.1"
 
 object.entries@^1.1.5:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/object.entries/-/object.entries-1.1.5.tgz#e1acdd17c4de2cd96d5a08487cfb9db84d881861"
-  integrity sha512-TyxmjUoZggd4OrrU1W66FMDG6CuqJxsFvymeyXI51+vQLN67zYfZseptRge703kKQdo4uccgAKebXFcRCzk4+g==
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/object.entries/-/object.entries-1.1.6.tgz#9737d0e5b8291edd340a3e3264bb8a3b00d5fa23"
+  integrity sha512-leTPzo4Zvg3pmbQ3rDK69Rl8GQvIqMWubrkxONG9/ojtFE2rD9fjMKfSI5BxW3osRH1m6VdzmqK8oAY9aT4x5w==
   dependencies:
     call-bind "^1.0.2"
-    define-properties "^1.1.3"
-    es-abstract "^1.19.1"
+    define-properties "^1.1.4"
+    es-abstract "^1.20.4"
 
 object.fromentries@^2.0.5:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/object.fromentries/-/object.fromentries-2.0.5.tgz#7b37b205109c21e741e605727fe8b0ad5fa08251"
-  integrity sha512-CAyG5mWQRRiBU57Re4FKoTBjXfDoNwdFVH2Y1tS9PqCsfUTymAohOkEMSG3aRNKmv4lV3O7p1et7c187q6bynw==
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/object.fromentries/-/object.fromentries-2.0.6.tgz#cdb04da08c539cffa912dcd368b886e0904bfa73"
+  integrity sha512-VciD13dswC4j1Xt5394WR4MzmAQmlgN72phd/riNp9vtD7tp4QQWJ0R4wvclXcafgcYK8veHRed2W6XeGBvcfg==
   dependencies:
     call-bind "^1.0.2"
-    define-properties "^1.1.3"
-    es-abstract "^1.19.1"
+    define-properties "^1.1.4"
+    es-abstract "^1.20.4"
 
 object.hasown@^1.1.1:
   version "1.1.1"
@@ -8937,12 +8935,12 @@ react-is@^17.0.1:
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
 react-native-blob-util@^0.16.3:
-  version "0.16.3"
-  resolved "https://registry.yarnpkg.com/react-native-blob-util/-/react-native-blob-util-0.16.3.tgz#de6b2a78c7dfd09665d033602a6b108a3b85937b"
-  integrity sha512-zB4GzcZm88rIwMEq+Zo5m1I27o59Rqflr8EsRp/xabT52dYakCPt2kQSuBT61Sh6n664LjUqmJyWTxvcwq63Uw==
+  version "0.16.4"
+  resolved "https://registry.yarnpkg.com/react-native-blob-util/-/react-native-blob-util-0.16.4.tgz#eeb0e28f6fa6ecb357c10f154be3d2e66c010f62"
+  integrity sha512-rNKMcVsrVn+l6PQVrCIJy3N2t9zEpXP1yrP3CdnWNHh9Dsup7tJMcoun4S1Cz869L0acx4LiM40XdqqfLyqrDw==
   dependencies:
     base-64 "0.1.0"
-    glob "^7.1.6"
+    glob "^7.2.3"
 
 react-native-codegen@^0.70.6:
   version "0.70.6"
@@ -8955,11 +8953,11 @@ react-native-codegen@^0.70.6:
     nullthrows "^1.1.1"
 
 react-native-dotenv@^3.3.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/react-native-dotenv/-/react-native-dotenv-3.3.1.tgz#8f399cf28ca77d860d8e7f7323e439fa60a8ca0b"
-  integrity sha512-gAKXout1XCwCqJ3QPGoQAF2eRzOHgOnwg3x19z+ssow8bDIksJeKBqvoHDyGziVilAIP1J0bEC9Jf+VF8nFang==
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/react-native-dotenv/-/react-native-dotenv-3.4.2.tgz#75b61ee8691af5e0897a4db21f4145080fca7da3"
+  integrity sha512-O3ta0vSUmOp2hRG1uSiSz+mpagTMKzQ9LAzBDKDO0Zbd0BCBsE+p3PLTkVBzl0XGqExdCGyh/VwQeSsxpTiITA==
   dependencies:
-    dotenv "^10.0.0"
+    dotenv "^16.0.3"
 
 react-native-encrypted-storage@^4.0.3:
   version "4.0.3"
@@ -11064,9 +11062,9 @@ ws@^7, ws@^7.4.5, ws@^7.4.6, ws@^7.5.1:
   integrity sha512-F+P9Jil7UiSKSkppIiD94dN07AwvFixvLIj1Og1Rl9GGMuNipJnV9JzjD6XuqmAeiswGvUmNLjr5cFuXwNS77Q==
 
 ws@^8.5.0, ws@^8.8.1:
-  version "8.10.0"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-8.10.0.tgz#00a28c09dfb76eae4eb45c3b565f771d6951aa51"
-  integrity sha512-+s49uSmZpvtAsd2h37vIPy1RBusaLawVe8of+GyEPsaJTCMpj/2v8NpeK1SHXjBlQ95lQTmQofOJnFiLoaN3yw==
+  version "8.11.0"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-8.11.0.tgz#6a0d36b8edfd9f96d8b25683db2f8d7de6e8e143"
+  integrity sha512-HPG3wQd9sNQoT9xHyNCXoDUa+Xw/VevmY9FoHyQ+g+rrMn4j6FB4np7Z0OhdTgjx6MgQLK7jwSy1YecU1+4Asg==
 
 ws@~8.2.3:
   version "8.2.3"

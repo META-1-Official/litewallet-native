@@ -1,15 +1,39 @@
 {
-  "name": "meta1wallet",
-  "version": "1.1.3",
+  "name": "nativeapp",
+  "version": "0.0.1",
   "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/META-1-Official/litewallet-native"
+  },
   "scripts": {
     "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "ios": "react-native run-ios --device",
+    "ios:simulator": "react-native run-ios --simulator=\"iPhone 14 Pro\"",
+    "ios:clean": "yarn clean; yarn ios",
     "start": "react-native start",
+    "xcode": "xed -b ios",
     "test": "jest",
-    "lint": "eslint ."
+    "build": "yarn build:android && yarn build:ios",
+    "build:ios": "cd ios; fastlane nightly",
+    "build:android": "./buildApkRelease.sh",
+    "postinstall": "patch-package; yarn buildChart",
+    "buildChart": "$(git rev-parse --show-toplevel)/buildChart.sh",
+    "clean:ios": "xcodebuild clean -workspace ./ios/nativeapp.xcworkspace -scheme nativeapp",
+    "clean:android": "cd android && ./gradlew clean",
+    "repod": "cd ios; pod deintegrate; pod install",
+    "clean": "yarn clean:android; yarn clean:ios; yarn repod",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "react-native": "react-native",
+    "bump": "GIT_HEAD=+$(git rev-parse --short HEAD) bundle exec fastlane bump",
+    "bump:testnet": "GIT_HEAD=+$(git rev-parse --short HEAD)-testnet bundle exec fastlane bump",
+    "build:testnet": "yarn bump:testnet && yarn clean && yarn testnet:android && yarn testnet:ios && git reset --hard HEAD",
+    "testnet:android": "NETWORK=TESTNET ./buildApkRelease.sh",
+    "testnet:ios": "export NETWORK=TESTNET; yarn build:ios"
   },
   "dependencies": {
+    "@react-native-clipboard/clipboard": "^1.11.1",
     "@react-native-community/checkbox": "^0.5.13",
     "@react-native-masked-view/masked-view": "^0.2.8",
     "@react-navigation/bottom-tabs": "^6.4.0",
@@ -103,8 +127,7 @@
     "typescript": "^4.8.4"
   },
   "resolutions": {
-    "@types/react": "^17",
-    "@types/react-dom": "^17"
+    "@types/react": "^17"
   },
   "jest": {
     "preset": "react-native",

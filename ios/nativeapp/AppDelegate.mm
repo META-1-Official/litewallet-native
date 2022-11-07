@@ -5,6 +5,7 @@
 #import <React/RCTRootView.h>
 
 #import <React/RCTAppSetupUtils.h>
+#import "RNSplashScreen.h"
 
 #if RCT_NEW_ARCH_ENABLED
 #import <React/CoreModulesPlugins.h>
@@ -44,7 +45,7 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 #endif
 
   NSDictionary *initProps = [self prepareInitialProps];
-  UIView *rootView = RCTAppSetupDefaultRootView(bridge, @"meta1wallet", initProps);
+  UIView *rootView = RCTAppSetupDefaultRootView(bridge, @"nativeapp", initProps);
 
   if (@available(iOS 13.0, *)) {
     rootView.backgroundColor = [UIColor systemBackgroundColor];
@@ -57,6 +58,7 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  [RNSplashScreen show];
   return YES;
 }
 

@@ -72,5 +72,4 @@ dist/*
 dist
 crash
 
-# Enviroment variables
 .env
