@@ -42,31 +42,3 @@ index 345e3e2..c362dab 100644
  				SWIFT_VERSION = 5.0;
  				VERSIONING_SYSTEM = "apple-generic";
  			};
-diff --git a/ios/Pods/Pods.xcodeproj/project.pbxproj b/ios/Pods/Pods.xcodeproj/project.pbxproj
-index b9bf7da..e5af7fe 100644
---- a/ios/Pods/Pods.xcodeproj/project.pbxproj
-+++ b/ios/Pods/Pods.xcodeproj/project.pbxproj
-@@ -27077,9 +27077,9 @@
- 			buildSettings = {
- 				CODE_SIGN_IDENTITY = "Apple Development";
- 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
--				CODE_SIGN_STYLE = Automatic;
-+				CODE_SIGN_STYLE = Manual;
- 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/React-Core-60309c9c";
--				DEVELOPMENT_TEAM = "";
-+				DEVELOPMENT_TEAM = BL96N576T8;
- 				IBSC_MODULE = React;
- 				INFOPLIST_FILE = "Target Support Files/React-Core-60309c9c/ResourceBundle-AccessibilityResources-React-Core-60309c9c-Info.plist";
- 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
-@@ -27099,9 +27099,9 @@
- 			buildSettings = {
- 				CODE_SIGN_IDENTITY = "Apple Development";
- 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
--				CODE_SIGN_STYLE = Automatic;
-+				CODE_SIGN_STYLE = Manual;
- 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/React-Core-60309c9c";
--				DEVELOPMENT_TEAM = "";
-+				DEVELOPMENT_TEAM = BL96N576T8;
- 				IBSC_MODULE = React;
- 				INFOPLIST_FILE = "Target Support Files/React-Core-60309c9c/ResourceBundle-AccessibilityResources-React-Core-60309c9c-Info.plist";
- 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
