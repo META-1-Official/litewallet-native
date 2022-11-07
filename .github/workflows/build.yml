@@ -8,7 +8,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install npm dependencies
         run: |
-          yarn install
+          yarn install --frozen-lockfile
       - name: Install bundler and fastlane
         run: |
           sudo gem install bundler
