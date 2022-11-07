@@ -9,3 +9,6 @@ gem 'fastlane'
 
 plugins_path = File.join(File.dirname(__FILE__), 'fastlane', 'Pluginfile')
 eval_gemfile(plugins_path) if File.exist?(plugins_path)
+
+fastlane_ios = File.join(File.dirname(__FILE__), 'ios', 'fastlane', 'Pluginfile')
+eval_gemfile(fastlane_ios) if File.exist?(fastlane_ios)

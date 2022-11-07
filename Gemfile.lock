@@ -155,6 +155,8 @@ GEM
       xcodeproj (>= 1.13.0, < 2.0.0)
       xcpretty (~> 0.3.0)
       xcpretty-travis-formatter (>= 0.0.3)
+    fastlane-plugin-diawi (2.1.0)
+      rest-client (>= 2.0.0)
     fastlane-plugin-increment_version_code (0.4.3)
     fastlane-plugin-increment_version_name (0.0.10)
     fastlane-plugin-load_json (0.0.1)
@@ -201,6 +203,7 @@ GEM
       os (>= 0.9, < 2.0)
       signet (>= 0.16, < 2.a)
     highline (2.0.3)
+    http-accept (1.7.0)
     http-cookie (1.0.5)
       domain_name (~> 0.5)
     httpclient (2.8.3)
@@ -210,6 +213,9 @@ GEM
     json (2.6.2)
     jwt (2.5.0)
     memoist (0.16.2)
+    mime-types (3.4.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2022.0105)
     mini_magick (4.11.0)
     mini_mime (1.1.2)
     minitest (5.16.3)
@@ -229,6 +235,11 @@ GEM
       declarative (< 0.1.0)
       trailblazer-option (>= 0.1.1, < 0.2.0)
       uber (< 0.2.0)
+    rest-client (2.1.0)
+      http-accept (>= 1.7.0, < 2.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
     retriable (3.1.2)
     rexml (3.2.5)
     rouge (2.0.7)
@@ -282,6 +293,7 @@ PLATFORMS
 DEPENDENCIES
   cocoapods (~> 1.11, >= 1.11.2)
   fastlane
+  fastlane-plugin-diawi
   fastlane-plugin-increment_version_code
   fastlane-plugin-increment_version_name
   fastlane-plugin-load_json
