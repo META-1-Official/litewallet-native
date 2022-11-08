@@ -29,6 +29,9 @@ buildscript {
 }
 
 allprojects {
+    ext {
+      kotlinVersion = "1.5.32"
+    }
     repositories {
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
