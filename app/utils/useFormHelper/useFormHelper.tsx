@@ -34,7 +34,8 @@ type Props = {
   rules?: UseControllerProps<any>['rules'];
   isDebounced?: boolean;
 } & Omit<TextInputProps, 'theme'>;
-export function Input({ name, control, rules, isDebounced = true, ...props }: Props) {
+
+export function Input({ name, control, rules, isDebounced = false, ...props }: Props) {
   const {
     field,
     fieldState: { error },
