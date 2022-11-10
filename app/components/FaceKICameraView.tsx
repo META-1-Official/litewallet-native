@@ -46,22 +46,26 @@ const FaceKiCameraView = ({ email }: Props) => {
     if (camera?.current) {
       const capture = await takePhoto(camera.current);
       setPhoto(capture);
-      dispatch(faceKIVerify({ image: capture.path, email }))
-        .unwrap()
-        .then(promiseResolvedValue => {
-          if (promiseResolvedValue.status === 'error') {
+      try {
+        dispatch(faceKIVerify({ image: capture.path, email }))
+          .unwrap()
+          .then(promiseResolvedValue => {
+            if (promiseResolvedValue.status === 'error') {
+              setPhoto(undefined);
+              console.log('Photo has been removed!');
+            } else {
+              nav.navigate('FaceKISuccess');
+              setTimeout(() => setPhoto(undefined), 200);
+            }
+          })
+          .catch(promiseRejectedValue => {
+            console.log('Something went wrong!', promiseRejectedValue);
             setPhoto(undefined);
             console.log('Photo has been removed!');
-          } else {
-            nav.navigate('FaceKISuccess');
-            setTimeout(() => setPhoto(undefined), 200);
-          }
-        })
-        .catch(promiseRejectedValue => {
-          console.log('Something went wrong!', promiseRejectedValue);
-          setPhoto(undefined);
-          console.log('Photo has been removed!');
-        });
+          });
+      } catch (err) {
+        console.error('!ERROR: ', err);
+      }
     } else {
       console.warn('Camera is not available');
     }
