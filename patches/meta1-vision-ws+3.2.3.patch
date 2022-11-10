@@ -1,5 +1,5 @@
 diff --git a/node_modules/meta1-vision-ws/lib/ChainConfig.js b/node_modules/meta1-vision-ws/lib/ChainConfig.js
-index 94e4341..a6cfe3f 100644
+index 94e4341..2b34a87 100644
 --- a/node_modules/meta1-vision-ws/lib/ChainConfig.js
 +++ b/node_modules/meta1-vision-ws/lib/ChainConfig.js
 @@ -1 +1,45 @@
@@ -26,7 +26,7 @@ index 94e4341..a6cfe3f 100644
 +    },
 +    META1DEV2: {
 +      core_asset: 'META1',
-+      address_prefix: 'META1',
++      address_prefix: 'DEV11',
 +      chain_id: '1e265722cb8d0f5e3b5a48c524f4ccdb517f52a12cd17cdda9ea3749e9434b44',
 +    },
 +    META1TEST: {
