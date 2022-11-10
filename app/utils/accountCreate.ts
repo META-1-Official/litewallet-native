@@ -1,7 +1,7 @@
 //@ts-ignore
 import { ChainValidation, FetchChain, PrivateKey, TransactionBuilder } from 'meta1-vision-js';
 import { NETWORK } from '@env';
-import config from '../config';
+import config, { Network } from '../config';
 
 export function generateKeyFromPassword(
   accountName: any,
@@ -74,7 +74,7 @@ export default async function createAccountWithPassword(
   firstName: any,
 ) {
   const milkFaucet = async () => {
-    const PREFIX = NETWORK === 'TESTNET' ? 'DEV11' : 'META1';
+    const PREFIX = NETWORK === Network.META1 ? 'META1' : 'DEV11';
     let rawRes = await fetch(config.faucetAddress + '/api/v1/accounts', {
       method: 'post',
       mode: 'cors',

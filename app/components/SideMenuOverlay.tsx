@@ -1,4 +1,5 @@
 import { NETWORK } from '@env';
+import { Network } from '../config';
 import { DrawerContentComponentProps } from '@react-navigation/drawer/src/types';
 import React from 'react';
 import { Image, SafeAreaView, TouchableOpacity, View } from 'react-native';
@@ -108,7 +109,7 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
           onPress={() => navigation.jumpTo('__ExploreAssets')}
         />
         <ListItem title="Help" icon={HelpCircle} onPress={() => navigation.navigate('__Help')} />
-        {process.env.NODE_ENV === 'production' && NETWORK !== 'TESTNET' ? null : (
+        {process.env.NODE_ENV === 'production' && NETWORK === Network.META1 ? null : (
           <ListItem
             title="Debug Sandbox"
             icon={Activity}

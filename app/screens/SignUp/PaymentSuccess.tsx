@@ -28,23 +28,23 @@ export const PaymentSuccess = ({ navigation }: Props) => {
           if (user.status?.isPayed || user.status?.isPayedByCrypto) {
             console.log('Payments: ', user.pays);
             // todo: check for user.pays.find((el) => el.customerId === user.status.facekiID
-            dispatch(
-              registerAccount({
-                accountName,
-                passKey,
-                mobile,
-                email,
-                firstName,
-                lastName,
-              }),
-            )
+            const args = {
+              accountName,
+              passKey,
+              mobile,
+              email,
+              firstName,
+              lastName,
+            };
+            dispatch(registerAccount(args))
               .unwrap()
               .then(registrationStatus => {
                 if (registrationStatus) {
                   authorize(accountName, passKey);
                 }
               })
-              .catch(() => {
+              .catch(error => {
+                console.error(error);
                 dispatch(clearESignature());
                 navigation.goBack();
                 Toast.show({

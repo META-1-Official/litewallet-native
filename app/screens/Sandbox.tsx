@@ -8,6 +8,7 @@ import { useShowModal } from '../components/SuccessModal';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { NETWORK } from '@env';
+import { Network } from '../config';
 import RNRestart from 'react-native-restart';
 import { CountryPicker } from '../components/CountryPicker';
 import { getToken, signUp } from '../services/litewalletApi';
@@ -67,7 +68,7 @@ const Sandbox = () => {
       <SafeAreaView>
         <Text style={{ fontSize: 24, fontWeight: 'bold' }}> Sandbox </Text>
         <Text> Node env: {process.env.NODE_ENV}</Text>
-        <Text> isTestnet: {(NETWORK === 'TESTNET').toString()}</Text>
+        <Text> isTestnet: {(NETWORK !== Network.META1).toString()}</Text>
         <Text> Options: {JSON.stringify(Options(), null, 4)}</Text>
         <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
           <RoundedButton title="Show modal" onPress={() => nav.navigate('SbxModal')} />

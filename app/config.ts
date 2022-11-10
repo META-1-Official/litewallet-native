@@ -14,7 +14,7 @@ enum URLs {
 
 type NetworkConfig = Record<URLs, string>;
 
-enum Network {
+export enum Network {
   META1 = 'META1',
   META1DEV = 'META1DEV',
   META1DEV2 = 'META1DEV2',
