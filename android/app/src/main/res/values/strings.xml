@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">nativeapp</string>
+    <string name="app_name">META1</string>
+    <string name="splash_img_desc">splash</string>
 </resources>
