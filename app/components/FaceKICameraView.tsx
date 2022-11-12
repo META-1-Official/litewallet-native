@@ -10,10 +10,6 @@ import Loader from './Loader';
 import RoundedButton from './RoundedButton';
 
 interface Props {
-  firstName: string;
-  lastName: string;
-  accountName: string;
-  mobile: string;
   email: string;
   privateKey: string;
 }
@@ -34,7 +30,7 @@ const takePhoto = async (camera: Camera) => {
   });
 };
 
-const FaceKiCameraView = ({ email }: Props) => {
+const FaceKiCameraView = ({ email, privateKey }: Props) => {
   const nav = useNavigation<RootNavigationProp>();
   const dispatch = useAppDispatch();
   const devices = useCameraDevices();
@@ -47,7 +43,7 @@ const FaceKiCameraView = ({ email }: Props) => {
       const capture = await takePhoto(camera.current);
       setPhoto(capture);
       try {
-        dispatch(faceKIVerify({ image: capture.path, email }))
+        dispatch(faceKIVerify({ image: capture.path, email, privateKey }))
           .unwrap()
           .then(promiseResolvedValue => {
             if (promiseResolvedValue.status === 'error') {

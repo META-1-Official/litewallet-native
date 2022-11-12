@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import * as WebBrowser from '@toruslabs/react-native-web-browser';
 import Toast from 'react-native-toast-message';
 import config from '../../config';
-import { createUser, getToken, getUser, signDocument } from '../../services/eSignature';
+import { createUser, getToken, getUser, signDocument } from '../../services/eSignature.services';
 import migrationService from '../../services/migration.service';
 import createAccountWithPassword from '../../utils/accountCreate';
 
@@ -33,7 +33,7 @@ export const eSignatureProceed = createAsyncThunk(
     mobile,
   }: ESignatureProceedProps) => {
     const redirectUrl = 'io.meta1.appbeta://auth';
-    const faceKIID = email + privateKey;
+    const faceKIID = `usr_${email}_${privateKey}`;
     console.log('CreateUser service has started');
     const user = await createUser(email, faceKIID);
     console.log('CreateUser service has finished');

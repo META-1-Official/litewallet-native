@@ -17,6 +17,7 @@ export interface EnrollUserParams extends VerifyParams, RemoveUserParams {}
 export interface FaceKIVerifyParams {
   image: string;
   email: string;
+  privateKey: string;
 }
 
 const faceKIAPI = {
@@ -31,6 +32,7 @@ const faceKIAPI = {
     const response = await axios.post(baseUrl + '/face/attribute', formData, {
       headers: { 'content-type': 'multipart/form-data' },
     });
+    console.log('Liveliness service end', response.data);
     return response.data;
   },
 
@@ -46,6 +48,7 @@ const faceKIAPI = {
     const response = await axios.post(baseUrl + '/enroll_user', formData, {
       headers: { 'content-type': 'multipart/form-data' },
     });
+    console.log('EnrollUser service start', response.data);
     return response.data;
   },
 
@@ -60,6 +63,7 @@ const faceKIAPI = {
     const response = await axios.post(baseUrl + '/verify_user', formData, {
       headers: { 'content-type': 'multipart/form-data' },
     });
+    console.log('VerifyUser service end', response.data);
     return response.data;
   },
 
@@ -69,9 +73,12 @@ const faceKIAPI = {
   },
 
   removeUser: async ({ name }: RemoveUserParams) => {
+    console.log('RemoveUser service start');
     const formData = new FormData();
     formData.append('name', name);
+    console.log('RemoveUser service appending form data');
     const response = await axios.post(baseUrl + '/remove_user', formData);
+    console.log('RemoveUser service end', response.data);
     return response.data;
   },
 

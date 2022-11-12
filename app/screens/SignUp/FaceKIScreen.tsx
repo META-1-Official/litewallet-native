@@ -38,16 +38,7 @@ const FaceKIScreen: React.FC<Props> = ({ navigation }) => {
       }}
     >
       {!isCameraAvailable && <Loader />}
-      {isCameraAvailable && (
-        <FaceKiCameraView
-          mobile={mobile}
-          privateKey={privateKey}
-          accountName={accountName}
-          email={email}
-          firstName={firstName}
-          lastName={lastName}
-        />
-      )}
+      {isCameraAvailable && <FaceKiCameraView privateKey={privateKey} email={email} />}
     </View>
   );
 };
