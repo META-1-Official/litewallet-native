@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react';
 import { View, Text, Platform, Image } from 'react-native';
 import { Camera, PhotoFile, useCameraDevices } from 'react-native-vision-camera';
 import { RootNavigationProp } from '../AuthNav';
-import { useAppDispatch } from '../hooks';
+import { useAppDispatch, useAppSelector } from '../hooks';
 import { faceKIVerify } from '../store/faceKI/faceKI.actions';
 import styles from './FaceKICameraView.styles';
 import Loader from './Loader';
@@ -37,13 +37,15 @@ const FaceKiCameraView = ({ email, privateKey }: Props) => {
   const device = devices.front || devices.back || devices.external || devices.unspecified;
   const [photo, setPhoto] = useState<PhotoFile | undefined>();
   const camera = useRef<Camera>(null);
+  const { accountName } = useAppSelector(state => state.signIn);
+  const isSigning = !!accountName;
 
   const verifyHandler = async () => {
     if (camera?.current) {
       const capture = await takePhoto(camera.current);
       setPhoto(capture);
       try {
-        dispatch(faceKIVerify({ image: capture.path, email, privateKey }))
+        dispatch(faceKIVerify({ image: capture.path, email, privateKey, isSigning, accountName }))
           .unwrap()
           .then(promiseResolvedValue => {
             if (promiseResolvedValue.status === 'error') {

@@ -1,7 +1,15 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { SafeAreaView, View, Image, Dimensions, TextInput, Animated } from 'react-native';
+import {
+  SafeAreaView,
+  View,
+  Image,
+  Dimensions,
+  TextInput,
+  Animated,
+  TextInputProps,
+} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { personAsset, personIconAsset } from '../../assets';
 import { RootStackParamList } from '../AuthNav';
@@ -83,7 +91,7 @@ const LinkWalletScreen: React.FC<Props> = ({ navigation }) => {
             rules={{ required, validate: { knownAccount } }}
             name="account_name"
             label="Account Name"
-            render={props => (
+            render={(props: TextInputProps) => (
               <View key={123} style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Image
                   source={personIconAsset}

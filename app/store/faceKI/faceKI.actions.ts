@@ -54,9 +54,10 @@ const somethingWentWrong = (error: string) => {
   });
 };
 
+// todo: split to two different actions
 export const faceKIVerify = createAsyncThunk(
   'signUp/faceKIVerify',
-  async ({ image, email, privateKey }: FaceKIVerifyParams) => {
+  async ({ image, email, accountName, privateKey, isSigning }: FaceKIVerifyParams) => {
     console.log('Start with email, privateKey, image', email, privateKey, image);
     if (image.length === 0 || email.length === 0) {
       Toast.show({
@@ -64,6 +65,24 @@ export const faceKIVerify = createAsyncThunk(
         text1: 'Name or Email is empty!',
         text2: 'Please try to put name or email again.',
       });
+    }
+    if (isSigning) {
+      const kycProfile = await getUser(email);
+      if (kycProfile.member1Name !== accountName) {
+        console.error('Wallet not found!');
+        Toast.show({
+          type: 'error',
+          text1: 'Wallet not found!',
+        });
+        if (!kycProfile.member1Name) {
+          console.error('Email and wallet name are not matched.', kycProfile);
+          Toast.show({
+            type: 'error',
+            text1: 'Email and wallet name are not matched.',
+          });
+        }
+        return { status: 'error', image: '' };
+      }
     }
     const livelinessStatus = await faceKIAPI.livelinessCheck({ image });
     if (livelinessStatus.data.liveness === 'Spoof') {
@@ -85,6 +104,28 @@ export const faceKIVerify = createAsyncThunk(
       });
       const verifyStatus = await faceKIAPI.verifyUser({ image });
       if (verifyStatus.status === 'Verify OK') {
+        if (isSigning) {
+          const userEmailList = verifyStatus.name?.split(',');
+          if (userEmailList.includes(email)) {
+            Toast.show({
+              type: 'success',
+              text1: verifyStatus.status,
+              text2: 'You have been verified!',
+            });
+            return {
+              status: 'success',
+              image: Platform.OS === 'android' ? `file://${image}` : image,
+            };
+          } else {
+            Toast.show({
+              type: 'error',
+              text1: verifyStatus.status,
+              text2:
+                'FaceKi verification passed but you are using different email. Please use right email',
+            });
+            return { status: 'error', image: '' };
+          }
+        }
         console.log('!!!', verifyStatus.name, email);
         Toast.show({
           type: 'success',
@@ -116,11 +157,18 @@ export const faceKIVerify = createAsyncThunk(
           }
         }
       } else {
-        Toast.show({
-          type: 'info',
-          text1: verifyStatus.status,
-        });
-        return await enroll(image, email);
+        if (isSigning) {
+          Toast.show({
+            type: 'error',
+            text1: 'We can not verify you because you never enrolled with your face yet.',
+          });
+        } else {
+          Toast.show({
+            type: 'info',
+            text1: verifyStatus.status,
+          });
+          return await enroll(image, email);
+        }
       }
     }
     return { status: 'error', image: '' };

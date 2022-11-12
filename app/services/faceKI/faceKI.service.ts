@@ -18,6 +18,8 @@ export interface FaceKIVerifyParams {
   image: string;
   email: string;
   privateKey: string;
+  accountName?: string;
+  isSigning?: boolean;
 }
 
 const faceKIAPI = {

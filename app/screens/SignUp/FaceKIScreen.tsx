@@ -13,7 +13,6 @@ type Props = NativeStackScreenProps<RootStackParamList, 'FaceKI'>;
 const FaceKIScreen: React.FC<Props> = ({ navigation }) => {
   const dispatch = useAppDispatch();
 
-  const { firstName, lastName, mobile, accountName } = useAppSelector(state => state.signUp);
   const { privateKey, email } = useAppSelector(state => state.web3);
 
   const cameraPermission = useCameraPermission();
