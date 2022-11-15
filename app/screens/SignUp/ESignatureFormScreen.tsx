@@ -5,10 +5,11 @@ import { SafeAreaView, ScrollView, View } from 'react-native';
 import SignatureView, { SignatureViewRef } from 'react-native-signature-canvas';
 import { RootStackParamList } from '../../AuthNav';
 import RoundedButton from '../../components/RoundedButton';
+import { eSignatureSign } from '../../store/eSignature/eSignature.actions';
 import { required } from '../../utils/useFormHelper/rules';
 import styles, { webStyle } from './ESignatureFormScreen.styles';
 import { Heading } from '../../components/typography';
-import { useAppSelector } from '../../hooks';
+import { useAppSelector, useAppDispatch } from '../../hooks';
 import { Input } from '../../utils/useFormHelper/useFormHelper';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ESignatureForm'>;
@@ -16,11 +17,13 @@ type Props = NativeStackScreenProps<RootStackParamList, 'ESignatureForm'>;
 import config from '../../config';
 
 export const ESignatureFormScreen: React.FC<Props> = () => {
+  const dispatch = useAppDispatch();
   console.log(config);
   const signatureRef = useRef<SignatureViewRef>(null);
   const [scrollEnabled, setScrollEnabled] = useState(true);
   const { firstName, lastName, mobile, accountName } = useAppSelector(state => state.signUp);
   const { email } = useAppSelector(state => state.web3);
+  const { token } = useAppSelector(state => state.eSignature);
 
   const {
     control,
@@ -40,7 +43,8 @@ export const ESignatureFormScreen: React.FC<Props> = () => {
     },
   });
 
-  const handleConfirm = handleSubmit(() => {
+  const handleConfirm = handleSubmit(formState => {
+    dispatch(eSignatureSign({ token, payload: { ...formState } }));
     signatureRef.current?.readSignature();
   });
 

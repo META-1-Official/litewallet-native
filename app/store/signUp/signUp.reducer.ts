@@ -1,10 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {
-  eSignatureProceed,
-  eSignatureSign,
-  getAccountPaymentStatus,
-  registerAccount,
-} from './signUp.actions';
+import { eSignatureProceed, getAccountPaymentStatus, registerAccount } from './signUp.actions';
 
 interface Step1 {
   firstName: string;
@@ -29,30 +24,11 @@ export interface SignUpState extends Step1 {
   };
 }
 
-const initialState: SignUpState = {
-  firstName: '',
-  lastName: '',
-  mobile: '',
-  accountName: '',
-  eSignatureStatus: '',
-  eSignaturePending: false,
-  paymentStatus: undefined,
-  registerStatus: undefined,
-  isMigration: false,
-  password: '',
-};
-// todo: remove this and uncomment previous
 // const initialState: SignUpState = {
-//   firstName: 'Aleksandr',
-//   lastName: 'Ufimtsev',
-//   mobile: '+79061977035',
-//   accountName: 'fimak-test1',
-//   email: 'fimak@bk.ru',
-//   privateKey: '0cb7a3e24fa9ae0bb63f6a5b6617928744c9ff3d2ef5f81b691bfd28d2d614b0',
-//   passKey: 'P5JH6J2R5npYndUADjEYBnQwgS4pUk6RCmCcDxY3pYpL6HBB3m5e',
-//   web3Pending: false,
-//   faceKIStatus: '',
-//   image: '',
+//   firstName: '',
+//   lastName: '',
+//   mobile: '',
+//   accountName: '',
 //   eSignatureStatus: '',
 //   eSignaturePending: false,
 //   paymentStatus: undefined,
@@ -60,6 +36,19 @@ const initialState: SignUpState = {
 //   isMigration: false,
 //   password: '',
 // };
+// todo: remove this and uncomment previous
+const initialState: SignUpState = {
+  firstName: 'Aleksandr',
+  lastName: 'Ufimtsev',
+  mobile: '9061977035',
+  accountName: 'fimak-test1',
+  eSignatureStatus: '',
+  eSignaturePending: false,
+  paymentStatus: undefined,
+  registerStatus: undefined,
+  isMigration: false,
+  password: '',
+};
 
 export const signUpSlice = createSlice({
   name: 'signUp',
@@ -97,9 +86,6 @@ export const signUpSlice = createSlice({
     builder.addCase(registerAccount.fulfilled, (state, action) => {
       console.log('Registration reducer, payload: ', action.payload);
       state.registerStatus = action.payload;
-    });
-    builder.addCase(eSignatureSign.fulfilled, () => {
-      console.log('Done yeah!');
     });
   },
 });

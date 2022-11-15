@@ -3,6 +3,7 @@ import faceKIReducer from './faceKI/faceKI.reducer';
 import signInReducer from './signIn/signIn.reducer';
 import signUpReducer from './signUp/signUp.reducer';
 import web3Reducer from './web3/web3.reducer';
+import eSignature from './eSignature/eSignature.reducer';
 
 export const createStore = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const createStore = configureStore({
     signUp: signUpReducer,
     web3: web3Reducer,
     faceKI: faceKIReducer,
+    eSignature: eSignature,
   },
 });
 

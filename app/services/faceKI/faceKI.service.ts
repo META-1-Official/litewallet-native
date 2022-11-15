@@ -79,7 +79,9 @@ const faceKIAPI = {
     const formData = new FormData();
     formData.append('name', name);
     console.log('RemoveUser service appending form data');
-    const response = await axios.post(baseUrl + '/remove_user', formData);
+    const response = await axios.post(baseUrl + '/remove_user', formData, {
+      headers: { 'content-type': 'multipart/form-data' },
+    });
     console.log('RemoveUser service end', response.data);
     return response.data;
   },

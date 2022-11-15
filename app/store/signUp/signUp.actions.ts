@@ -2,9 +2,10 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import * as WebBrowser from '@toruslabs/react-native-web-browser';
 import Toast from 'react-native-toast-message';
 import config from '../../config';
-import { createUser, getToken, getUser, signDocument } from '../../services/eSignature.services';
+import { createUser, getToken, getUser } from '../../services/eSignature.services';
 import migrationService from '../../services/migration.service';
 import createAccountWithPassword from '../../utils/accountCreate';
+import { setToken } from '../eSignature/eSignature.reducer';
 
 interface AccountData {
   email: string;
@@ -24,14 +25,10 @@ interface RegisterAccountProps extends AccountData {
 
 export const eSignatureProceed = createAsyncThunk(
   'signup/eSignatureProceed',
-  async ({
-    email,
-    privateKey,
-    firstName,
-    lastName,
-    accountName,
-    mobile,
-  }: ESignatureProceedProps) => {
+  async (
+    { email, privateKey, firstName, lastName, accountName, mobile }: ESignatureProceedProps,
+    { dispatch },
+  ) => {
     const redirectUrl = 'io.meta1.appbeta://auth';
     const faceKIID = `usr_${email}_${privateKey}`;
     console.log('CreateUser service has started');
@@ -59,6 +56,7 @@ export const eSignatureProceed = createAsyncThunk(
       }
       if (response.headers.authorization) {
         token = response.headers.authorization;
+        dispatch(setToken(token));
       }
     }
     const phoneNumber = mobile.replace(/\s/g, '');
@@ -92,13 +90,6 @@ export const registerAccount = createAsyncThunk(
       lastName,
       firstName,
     );
-  },
-);
-
-export const eSignatureSign = createAsyncThunk(
-  'signUp/signDocument',
-  ({ token, payload }: any) => {
-    return signDocument({ token, payload });
   },
 );
 

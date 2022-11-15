@@ -154,6 +154,7 @@ export const faceKIVerify = createAsyncThunk(
             }
           } catch (error) {
             somethingWentWrong(error as string);
+            throw error;
           }
         }
       } else {

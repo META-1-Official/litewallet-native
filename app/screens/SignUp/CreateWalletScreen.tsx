@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
-import { SafeAreaView, Text, TextInput, View } from 'react-native';
+import { SafeAreaView, Text, TextInput, TextInputProps, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { RootStackParamList } from '../../AuthNav';
 import LoaderPopover from '../../components/LoaderPopover';
@@ -44,10 +44,10 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
   } = useForm({
     mode: 'onChange',
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      mobile: '',
-      accountName: '',
+      firstName: 'Tom',
+      lastName: 'Sawyer',
+      mobile: '+11111111111',
+      accountName: 'tom-sawyer',
     },
   });
 
@@ -153,7 +153,7 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
                   handleAccountNameValidation,
                 },
               }}
-              render={props => (
+              render={(props: TextInputProps) => (
                 <TextInput {...props} onChangeText={t => props.onChangeText?.(t.toLowerCase())} />
               )}
             />
