@@ -1,29 +1,22 @@
-export interface Response {
-  data: {
-    age: number;
-    angles: {
-      pitch: number;
-      roll: number;
-      yaw: number;
-    };
-    attr: {
-      left_eye_open: number;
-      mouth_close: number;
-      right_eye_open: number;
-      wear_glasses: number;
-    };
-    box: {
-      h: number;
-      w: number;
-      x: number;
-      y: number;
-    };
-    gender: number;
-    liveness: 'Spoof';
-    mask: number;
-    result: 'No face detected';
-  };
-  status: 'ok';
+export enum Liveness {
+  Spoof = 'Spoof',
+  Genuine = 'Genuine',
+}
+
+export enum Enrollment {
+  EnrollOk = 'Enroll OK',
+  SpoofDetected = 'Spoof Detected',
+  FaceNotDetected = 'Face not Detected',
+}
+
+export enum Verify {
+  VerifyOk = 'Verify OK',
+  SpoofDetected = 'Spoof Detected',
+}
+
+export enum FaceDetection {
+  FaceDetected = 'Face detected',
+  FaceNotDetected = 'No face detected',
 }
 
 export interface FaceAttributes {
@@ -46,19 +39,21 @@ export interface FaceAttributes {
     y: number;
   };
   gender: number;
-  liveness: 'Spoof' | 'Genuine';
+  liveness: Liveness;
   mask: number;
-  result: 'Face detected' | 'No face detected';
+  result: FaceDetection;
 }
 
-export interface VerifyStatus {
-  name: string;
-  score: number;
-  status: 'Spoof Detected' | 'Verify OK';
+export interface VerifyResponse {
+  data: {
+    name: string;
+    score: number;
+    status: Verify;
+  };
 }
 
-export interface EnrollStatus {
-  status: 'Face not Detected' | 'Enroll OK';
+export interface EnrollResponse {
+  status: Enrollment;
 }
 
 export interface FaceKIState {
@@ -68,4 +63,9 @@ export interface FaceKIState {
   score?: number;
   userStatus?: 'Spoof Detected' | 'Face not Detected';
   status: 'pending' | 'success' | 'error' | undefined;
+}
+
+export interface FaceKILivenessResponse {
+  data: FaceAttributes;
+  status: 'ok';
 }

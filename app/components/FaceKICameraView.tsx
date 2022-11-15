@@ -4,7 +4,7 @@ import { View, Text, Platform, Image } from 'react-native';
 import { Camera, PhotoFile, useCameraDevices } from 'react-native-vision-camera';
 import { RootNavigationProp } from '../AuthNav';
 import { useAppDispatch, useAppSelector } from '../hooks';
-import { faceKIVerify } from '../store/faceKI/faceKI.actions';
+import { faceKIVerifyOnSignup } from '../store/faceKI/faceKI.actions';
 import styles from './FaceKICameraView.styles';
 import Loader from './Loader';
 import RoundedButton from './RoundedButton';
@@ -45,7 +45,9 @@ const FaceKiCameraView = ({ email, privateKey }: Props) => {
       const capture = await takePhoto(camera.current);
       setPhoto(capture);
       try {
-        dispatch(faceKIVerify({ image: capture.path, email, privateKey, isSigning, accountName }))
+        dispatch(
+          faceKIVerifyOnSignup({ image: capture.path, email, privateKey, isSigning, accountName }),
+        )
           .unwrap()
           .then(promiseResolvedValue => {
             if (promiseResolvedValue.status === 'error') {
