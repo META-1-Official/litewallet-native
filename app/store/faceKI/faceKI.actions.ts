@@ -126,7 +126,7 @@ export const faceKIVerify = createAsyncThunk(
             return { status: 'error', image: '' };
           }
         }
-        console.log('!!!', verifyStatus.name, email);
+        console.log('FaceKi verify:', verifyStatus.name, email);
         Toast.show({
           type: 'success',
           text1: verifyStatus.status,

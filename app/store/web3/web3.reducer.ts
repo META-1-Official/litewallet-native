@@ -10,9 +10,16 @@ interface Web3State {
   pending: boolean;
 }
 
+// const initialState: Web3State = {
+//   email: '',
+//   privateKey: '',
+//   passKey: '',
+//   pending: false,
+// };
+// todo: remove this and uncomment previous
 const initialState: Web3State = {
-  email: '',
-  privateKey: '',
+  email: 'test-testov@yopmail.com',
+  privateKey: '2c6dfc4701886bcd9f40ce0392ba1eb0f3fcbc2cc169adf424f1ca9bc1bbd1f7',
   passKey: '',
   pending: false,
 };
@@ -22,6 +29,7 @@ const web3Slice = createSlice({
   initialState,
   reducers: {
     clearWeb3AuthData: () => {
+      console.log('Clear web3AuthState');
       return { ...initialState };
     },
   },

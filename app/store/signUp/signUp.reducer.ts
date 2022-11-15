@@ -38,10 +38,10 @@ export interface SignUpState extends Step1 {
 // };
 // todo: remove this and uncomment previous
 const initialState: SignUpState = {
-  firstName: 'Aleksandr',
-  lastName: 'Ufimtsev',
-  mobile: '9061977035',
-  accountName: 'fimak-test1',
+  firstName: 'Test',
+  lastName: 'Testov',
+  mobile: '1111111111',
+  accountName: 'test-t01',
   eSignatureStatus: '',
   eSignaturePending: false,
   paymentStatus: undefined,

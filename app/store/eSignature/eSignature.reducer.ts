@@ -26,11 +26,14 @@ const eSignatureSlice = createSlice({
     setToken: (state, action: PayloadAction<string>) => {
       state.token = action.payload;
     },
-    clearESignatureState: () => ({ ...initialState }),
+    clearESignatureState: () => {
+      console.log('Clear ESignatureState');
+      return { ...initialState };
+    },
   },
   extraReducers: builder => {
     builder.addCase(eSignatureSign.fulfilled, () => {
-      console.log('Done yeah!');
+      console.log('ESignatureSign fulfilled!');
     });
   },
 });

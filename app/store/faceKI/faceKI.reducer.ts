@@ -18,6 +18,7 @@ const faceKISlice = createSlice({
   initialState,
   reducers: {
     clearFaceKI: () => {
+      console.log('Clear faceKIState');
       return { ...initialState };
     },
   },

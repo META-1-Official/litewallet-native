@@ -23,6 +23,7 @@ const signInSlice = createSlice({
       state.accountName = action.payload;
     },
     clearSignInInfo: () => {
+      console.log('Clear signInState');
       return { ...initialState };
     },
   },

@@ -36,6 +36,12 @@ type Props = NativeStackScreenProps<RootStackParamList, 'CreateWallet'>;
 const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
   const dispatch = useAppDispatch();
   const { privateKey } = useAppSelector(state => state.web3);
+  const {
+    firstName,
+    lastName,
+    mobile,
+    accountName: userAccountName,
+  } = useAppSelector(state => state.signUp);
 
   const {
     control,
@@ -44,10 +50,10 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
   } = useForm({
     mode: 'onChange',
     defaultValues: {
-      firstName: 'Tom',
-      lastName: 'Sawyer',
-      mobile: '+11111111111',
-      accountName: 'tom-sawyer',
+      firstName,
+      lastName,
+      mobile,
+      accountName: userAccountName,
     },
   });
 
