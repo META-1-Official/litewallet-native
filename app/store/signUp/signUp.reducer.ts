@@ -24,24 +24,11 @@ export interface SignUpState extends Step1 {
   };
 }
 
-// const initialState: SignUpState = {
-//   firstName: '',
-//   lastName: '',
-//   mobile: '',
-//   accountName: '',
-//   eSignatureStatus: '',
-//   eSignaturePending: false,
-//   paymentStatus: undefined,
-//   registerStatus: undefined,
-//   isMigration: false,
-//   password: '',
-// };
-// todo: remove this and uncomment previous
 const initialState: SignUpState = {
-  firstName: 'Test',
-  lastName: 'Testov',
-  mobile: '1111111111',
-  accountName: 'test-t01',
+  firstName: '',
+  lastName: '',
+  mobile: '',
+  accountName: '',
   eSignatureStatus: '',
   eSignaturePending: false,
   paymentStatus: undefined,
@@ -49,6 +36,19 @@ const initialState: SignUpState = {
   isMigration: false,
   password: '',
 };
+// todo: remove this and uncomment previous
+// const initialState: SignUpState = {
+//   firstName: 'Test',
+//   lastName: 'Testov',
+//   mobile: '+1 111 111 1111',
+//   accountName: 'test-t01',
+//   eSignatureStatus: '',
+//   eSignaturePending: false,
+//   paymentStatus: undefined,
+//   registerStatus: undefined,
+//   isMigration: false,
+//   password: '',
+// };
 
 export const signUpSlice = createSlice({
   name: 'signUp',
