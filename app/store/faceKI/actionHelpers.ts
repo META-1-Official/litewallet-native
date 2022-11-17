@@ -2,12 +2,23 @@ import Toast from 'react-native-toast-message';
 import { FaceKIVerifyParams } from '../../services/faceKI/faceKI.service';
 import { FaceAttributes, VerifyResponse } from '../../services/faceKI/types';
 
-export const handleParamsError = ({ image, email, privateKey }: FaceKIVerifyParams) => {
-  console.log('Start with email, privateKey, image', email, privateKey, image);
+export const handleParamsError = ({
+  image,
+  accountName,
+  email,
+  privateKey,
+}: FaceKIVerifyParams) => {
+  console.log(
+    'Start with accountName, email, privateKey, image',
+    accountName,
+    email,
+    privateKey,
+    image,
+  );
   Toast.show({
     type: 'error',
-    text1: 'Image or Email is empty!',
-    text2: 'Please try to put image or email again.',
+    text1: 'AccountName, Email or image is empty!',
+    text2: 'Please try to put accountName, email or image again.',
   });
 };
 
@@ -80,5 +91,34 @@ export const somethingWentWrong = (error: string) => {
     type: 'error',
     text1: 'Something went wrong!',
     text2: 'Please try again!',
+  });
+};
+
+export const handleEmailNotMatchedWithUser = () => {
+  console.error('Email and wallet name are not matched!');
+  Toast.show({
+    type: 'error',
+    text1: 'Email and wallet name are not matched!',
+    text2: 'Please try again!',
+  });
+};
+
+export const handleVerifyError = () => {
+  console.error(
+    'Bio-metric verification failed for this email. Please use an email that has been linked to your face.',
+  );
+  Toast.show({
+    type: 'error',
+    text1: 'Bio-metric verification failed for this email.',
+    text2: 'Please use an email that has been linked to your biometric verification / enrollment.',
+  });
+};
+
+export const handleNeverBeenEnrolled = () => {
+  console.error('We can not verify you because you have never been enrolled with your face.');
+  Toast.show({
+    type: 'error',
+    text1: 'We can not verify you because you have never been enrolled with your face.',
+    text2: 'Please try to signup!',
   });
 };
