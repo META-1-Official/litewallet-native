@@ -135,6 +135,7 @@ export const faceKIVerifyOnSignIn = createAsyncThunk(
         handleEmailNotMatchedWithUser();
         return ERROR_STATE;
       }
+      // todo: handle this case
     }
     // Check liveliness
     const livelinessStatus = await faceKIAPI.livelinessCheck({ image });

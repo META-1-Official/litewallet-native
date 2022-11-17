@@ -40,7 +40,7 @@ export const FaceKISuccessScreen: React.FC<Props> = ({ navigation }) => {
           console.error(error);
         });
     } else {
-      navigation.navigate('ESignature');
+      navigation.navigate('Passkey');
     }
   };
 

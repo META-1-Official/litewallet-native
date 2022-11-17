@@ -78,10 +78,10 @@ export const handleEnrollError = () => {
 };
 
 export const handleVerifyOk = (response: VerifyResponse) => {
-  console.log('FaceKi verify:', response.data.name);
+  console.log('FaceKi verify:', response.name);
   Toast.show({
     type: 'success',
-    text1: response.data.status,
+    text1: response.status,
     text2: 'You have been verified!',
   });
 };

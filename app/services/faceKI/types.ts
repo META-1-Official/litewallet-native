@@ -45,11 +45,9 @@ export interface FaceAttributes {
 }
 
 export interface VerifyResponse {
-  data: {
-    name: string;
-    score: number;
-    status: Verify;
-  };
+  name: string;
+  score: number;
+  status: Verify;
 }
 
 export interface EnrollResponse {
