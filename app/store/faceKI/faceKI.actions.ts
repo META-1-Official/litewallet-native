@@ -1,6 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Platform } from 'react-native';
-import Toast from 'react-native-toast-message';
 import { createUser, getUser } from '../../services/eSignature.services';
 import faceKIAPI, { FaceKIVerifyParams } from '../../services/faceKI/faceKI.service';
 import { Enrollment, Liveness, Verify } from '../../services/faceKI/types';
@@ -42,7 +41,7 @@ export const faceKIVerifyOnSignup = createAsyncThunk(
         // Verify
         const verifyStatus = await faceKIAPI.verifyUser({ image });
         if (verifyStatus.status !== Verify.VerifyOk) {
-          // Get user
+          // Get user if verify failed
           const kycProfile = await getUser(email);
           if (kycProfile) {
             handleUsedEmail();

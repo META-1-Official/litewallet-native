@@ -10,9 +10,11 @@ export const createUser = async (email: string, facekiID: string) => {
 };
 
 export const getUser = async (email: string) => {
+  console.log('GetUser service start');
   const response = await axios.get(`${config.E_SIGNATURE_API_URL}/apiewallet/users`, {
     params: { email },
   });
+  console.log('GetUser service end', response.data);
   return response.data;
 };
 

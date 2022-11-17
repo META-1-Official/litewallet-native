@@ -43,6 +43,7 @@ export const handleSpoof = (faceAttributes: FaceAttributes) => {
 };
 
 export const handleFaceAttributes = (faceAttributes: FaceAttributes) => {
+  console.log('Liveliness successful: ', faceAttributes.liveness, faceAttributes.result);
   Toast.show({
     type: 'info',
     text1: faceAttributes.liveness,

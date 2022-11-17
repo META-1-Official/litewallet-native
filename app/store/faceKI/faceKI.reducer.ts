@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { faceKIVerifyOnSignup } from './faceKI.actions';
+import { faceKIVerifyOnSignup, faceKIVerifyOnSignIn } from './faceKI.actions';
 
 interface SignInState {
   faceKIStatus: string;
@@ -14,7 +14,7 @@ const initialState: SignInState = {
 };
 
 const faceKISlice = createSlice({
-  name: 'signIn',
+  name: 'faceKI',
   initialState,
   reducers: {
     clearFaceKI: () => {
@@ -31,6 +31,17 @@ const faceKISlice = createSlice({
       state.image = action.payload.image;
     });
     builder.addCase(faceKIVerifyOnSignup.rejected, state => {
+      state.faceKIStatus = 'error';
+      state.image = '';
+    });
+    builder.addCase(faceKIVerifyOnSignIn.pending, state => {
+      state.pending = true;
+    });
+    builder.addCase(faceKIVerifyOnSignIn.fulfilled, (state, action) => {
+      state.faceKIStatus = action.payload.status;
+      state.image = action.payload.image;
+    });
+    builder.addCase(faceKIVerifyOnSignIn.rejected, state => {
       state.faceKIStatus = 'error';
       state.image = '';
     });
