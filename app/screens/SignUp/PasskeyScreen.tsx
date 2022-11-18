@@ -38,30 +38,38 @@ export const PasskeyScreen = ({ navigation }: Props) => {
 
   // todo: fix type of appState
   const handleAppStateChange = (nextAppState: any) => {
+    console.log('AppState change action');
     if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
-      console.log('App has come to the foreground!');
+      console.log('App has come to the foreground!', appState.current);
     }
     appState.current = nextAppState;
     setAppStateVisible(appState.current);
-    console.log('AppState', appState.current);
+    console.log('AppState current: ', appState.current);
   };
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', handleAppStateChange);
-    console.log('!subscription');
+    console.log('Subscription on appState change');
     return () => {
-      console.log('!subscription remove');
+      console.log('Subscription on appState change removed');
       subscription.remove();
     };
   }, []);
 
   useEffect(() => {
-    console.log('AppState and eSignatureStatus: ', appStateVisible, eSignatureStatus);
-    if (Platform.OS === 'android' && appStateVisible === 'active' && eSignatureStatus) {
-      console.log('!subscription success');
+    console.log('AppState visibility:', appStateVisible);
+    console.log('ESignatureStatus: ', eSignatureStatus);
+    console.log('ESignaturePending: ', eSignaturePending);
+    if (
+      Platform.OS === 'android' &&
+      appStateVisible === 'active' &&
+      eSignatureStatus === 'dismiss' &&
+      !eSignaturePending
+    ) {
+      console.log('Action onVisible');
       navigation.navigate('PaymentSuccess');
     }
-  }, [appStateVisible, eSignatureStatus]);
+  }, [appStateVisible, eSignaturePending, eSignatureStatus]);
 
   const handleCheckBox = (id: number) => {
     setCheckBoxesState(prevState => {

@@ -18,9 +18,9 @@ const initialState: Web3State = {
 };
 // todo: remove this and uncomment previous
 // const initialState: Web3State = {
-//   email: 'test-testov@yopmail.com',
-//   privateKey: '2c6dfc4701886bcd9f40ce0392ba1eb0f3fcbc2cc169adf424f1ca9bc1bbd1f7',
-//   passKey: '',
+//   email: 'rocky-marciano@yopmail.com',
+//   privateKey: '27177f7fda95c27eee70874eea228b36866d86341c9ba4912f29bdd781c2f128',
+//   passKey: 'P5KZ427FkUnt2r3pD6AxR4tsVoLfCPfHLH3dFPaBUqZNSpUGZp8W',
 //   pending: false,
 // };
 
@@ -47,6 +47,7 @@ const web3Slice = createSlice({
         key.normalize_brainKey(`${action.payload.email}${action.payload.privateKey}`),
       ).toWif()}`;
       state.pending = false;
+      console.log('PassKey: ', state.passKey);
     });
   },
 });

@@ -28,6 +28,7 @@ export const getToken = async (email: string) => {
       params: { email },
     },
   );
+  console.log('eSignature token: ', headers?.authorization);
   return { data, headers };
 };
 

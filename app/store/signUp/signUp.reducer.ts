@@ -11,6 +11,7 @@ interface Step1 {
 }
 
 export interface SignUpState extends Step1 {
+  // todo: move it to eSignature reducer
   eSignatureStatus: string; // 'cancel' | 'dismiss'
   eSignaturePending: boolean;
   // todo: fix type of payment status
@@ -38,10 +39,10 @@ const initialState: SignUpState = {
 };
 // todo: remove this and uncomment previous
 // const initialState: SignUpState = {
-//   firstName: 'Test',
-//   lastName: 'Testov',
-//   mobile: '+1 111 111 1111',
-//   accountName: 'test-t01',
+//   firstName: 'Rocky',
+//   lastName: 'Marciano',
+//   mobile: '+11111111111',
+//   accountName: 'rocky-marciano',
 //   eSignatureStatus: '',
 //   eSignaturePending: false,
 //   paymentStatus: undefined,
@@ -62,6 +63,7 @@ export const signUpSlice = createSlice({
       state.isMigration = action.payload.isMigration;
       state.password = action.payload.password;
     },
+    // todo: move it to eSignature reducer
     clearESignature: state => {
       state.eSignatureStatus = '';
     },
@@ -71,13 +73,18 @@ export const signUpSlice = createSlice({
     },
   },
   extraReducers: builder => {
+    // todo: move it to eSignature reducer
     builder.addCase(eSignatureProceed.pending, state => {
       state.eSignaturePending = true;
     });
+    // todo: move it to eSignature reducer
     builder.addCase(eSignatureProceed.fulfilled, (state, action) => {
       console.log('E-signature reducer, payload: ', action.payload);
       state.eSignaturePending = false;
       state.eSignatureStatus = action.payload.type;
+    });
+    builder.addCase(eSignatureProceed.rejected, state => {
+      state.eSignaturePending = false;
     });
     builder.addCase(getAccountPaymentStatus.fulfilled, (state, action) => {
       console.log('PaymentStatus reducer, payload: ', action.payload);

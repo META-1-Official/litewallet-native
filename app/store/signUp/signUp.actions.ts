@@ -23,6 +23,7 @@ interface RegisterAccountProps extends AccountData {
   passKey: string;
 }
 
+// todo: move it to eSignature actions
 export const eSignatureProceed = createAsyncThunk(
   'signup/eSignatureProceed',
   async (
@@ -46,7 +47,7 @@ export const eSignatureProceed = createAsyncThunk(
       if (response.data.result === 'done') {
         Toast.show({
           type: 'info',
-          text1: 'User has been authorised',
+          text1: 'User get token of eSignature',
         });
       } else {
         Toast.show({
@@ -61,8 +62,16 @@ export const eSignatureProceed = createAsyncThunk(
     }
     const phoneNumber = mobile.replace(/\s/g, '');
     const encodedEmail = encodeURIComponent(email);
-    return await WebBrowser.openBrowserAsync(
+    // return await WebBrowser.openBrowserAsync(
+    //   `${config.E_SIGNATURE_API_URL}/e-sign?email=${encodedEmail}&firstName${firstName}&lastName=${lastName}&phoneNumber=${phoneNumber}&walletName=${accountName}&token=${token}&redirectUrl=${redirectUrl}`,
+    // );
+    console.log(
+      'eSignature URL: ',
       `${config.E_SIGNATURE_API_URL}/e-sign?email=${encodedEmail}&firstName${firstName}&lastName=${lastName}&phoneNumber=${phoneNumber}&walletName=${accountName}&token=${token}&redirectUrl=${redirectUrl}`,
+    );
+    return await WebBrowser.openAuthSessionAsync(
+      `${config.E_SIGNATURE_API_URL}/e-sign?email=${encodedEmail}&firstName${firstName}&lastName=${lastName}&phoneNumber=${phoneNumber}&walletName=${accountName}&token=${token}&redirectUrl=${redirectUrl}`,
+      redirectUrl,
     );
   },
 );

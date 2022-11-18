@@ -28,6 +28,7 @@ export const PaymentSuccess = ({ navigation }: Props) => {
           if (user.status?.isPayed || user.status?.isPayedByCrypto) {
             console.log('Payments: ', user.pays);
             // todo: check for user.pays.find((el) => el.customerId === user.status.facekiID
+            // todo: update | now we don't need to find payment because 1 email = 1 payment
             const args = {
               accountName,
               passKey,
@@ -36,6 +37,7 @@ export const PaymentSuccess = ({ navigation }: Props) => {
               firstName,
               lastName,
             };
+            console.log('Account registration!');
             dispatch(registerAccount(args))
               .unwrap()
               .then(registrationStatus => {
