@@ -62,17 +62,11 @@ export const eSignatureProceed = createAsyncThunk(
     }
     const phoneNumber = mobile.replace(/\s/g, '');
     const encodedEmail = encodeURIComponent(email);
-    // return await WebBrowser.openBrowserAsync(
-    //   `${config.E_SIGNATURE_API_URL}/e-sign?email=${encodedEmail}&firstName${firstName}&lastName=${lastName}&phoneNumber=${phoneNumber}&walletName=${accountName}&token=${token}&redirectUrl=${redirectUrl}`,
-    // );
-    console.log(
-      'eSignature URL: ',
-      `${config.E_SIGNATURE_API_URL}/e-sign?email=${encodedEmail}&firstName${firstName}&lastName=${lastName}&phoneNumber=${phoneNumber}&walletName=${accountName}&token=${token}&redirectUrl=${redirectUrl}`,
-    );
-    return await WebBrowser.openAuthSessionAsync(
-      `${config.E_SIGNATURE_API_URL}/e-sign?email=${encodedEmail}&firstName${firstName}&lastName=${lastName}&phoneNumber=${phoneNumber}&walletName=${accountName}&token=${token}&redirectUrl=${redirectUrl}`,
-      redirectUrl,
-    );
+    const url = `${
+      config.E_SIGNATURE_API_URL
+    }/e-sign?email=${encodedEmail}&firstName${firstName}&lastName=${lastName}&phoneNumber=${phoneNumber}&walletName=${accountName}&token=${token}&redirectUrl=${redirectUrl}&isMobile=${true}`;
+    console.log('eSignature URL: ', url);
+    return await WebBrowser.openAuthSessionAsync(url, redirectUrl);
   },
 );
 
