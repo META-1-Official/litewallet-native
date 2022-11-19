@@ -124,6 +124,7 @@ export const faceKIVerifyOnSignIn = createAsyncThunk(
       handleParamsError({ image, accountName, email, privateKey });
       return ERROR_STATE;
     }
+    console.log('!!!!!!!!!!SIGNIN');
     // Get user
     const kycProfile = await getUser(email);
     if (!kycProfile?.member1Name) {
@@ -146,7 +147,7 @@ export const faceKIVerifyOnSignIn = createAsyncThunk(
       handleFaceAttributes(livelinessStatus.data);
       // Verify
       const verifyStatus = await faceKIAPI.verifyUser({ image });
-      if (verifyStatus.status !== Verify.VerifyOk) {
+      if (verifyStatus.status === Verify.VerifyOk) {
         const userEmailList = verifyStatus.name.split(',');
         if (userEmailList.includes(email)) {
           return successState(image);
