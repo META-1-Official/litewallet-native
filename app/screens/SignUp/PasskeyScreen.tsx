@@ -12,6 +12,8 @@ import { eSignatureProceed } from '../../store/signUp/signUp.actions';
 import { SvgIcons } from '../../../assets';
 import styles from './PasskeyScreen.styles';
 
+const ESIGNATURE_STATUSES = ['dismiss', 'success'];
+
 type Props = NativeStackScreenProps<RootStackParamList, 'Passkey'>;
 
 export const PasskeyScreen = ({ navigation }: Props) => {
@@ -63,7 +65,7 @@ export const PasskeyScreen = ({ navigation }: Props) => {
     if (
       Platform.OS === 'android' &&
       appStateVisible === 'active' &&
-      eSignatureStatus === 'dismiss' &&
+      ESIGNATURE_STATUSES.includes(eSignatureStatus) &&
       !eSignaturePending
     ) {
       console.log('Action onVisible');
