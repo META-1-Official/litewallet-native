@@ -68,7 +68,7 @@ export const signUpSlice = createSlice({
       state.eSignatureStatus = '';
     },
     clearSignUpState: () => {
-      console.log('Clearing signUp state!!!');
+      console.log('Clearing signUp state!');
       return { ...initialState };
     },
   },

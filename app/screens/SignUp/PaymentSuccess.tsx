@@ -18,6 +18,17 @@ export const PaymentSuccess = ({ navigation }: Props) => {
   const { accountName, mobile, lastName, firstName } = useAppSelector(state => state.signUp);
   const { email, passKey } = useAppSelector(state => state.web3);
 
+  const handleRegistrationIssue = (message: string) => {
+    dispatch(clearESignature());
+    navigation.goBack();
+    console.error(message);
+    Toast.show({
+      type: 'error',
+      text1: "Account hasn't been created!",
+      text2: message,
+    });
+  };
+
   // check payment status
   useEffect(() => {
     dispatch(getAccountPaymentStatus(email))
@@ -29,6 +40,7 @@ export const PaymentSuccess = ({ navigation }: Props) => {
             console.log('Payments: ', user.pays);
             // todo: check for user.pays.find((el) => el.customerId === user.status.facekiID
             // todo: update | now we don't need to find payment because 1 email = 1 payment
+            console.log('Account registration!');
             const args = {
               accountName,
               passKey,
@@ -37,41 +49,23 @@ export const PaymentSuccess = ({ navigation }: Props) => {
               firstName,
               lastName,
             };
-            console.log('Account registration!');
             dispatch(registerAccount(args))
               .unwrap()
               .then(registrationStatus => {
                 if (registrationStatus) {
+                  // todo: don't do the auth just show the paperWallet
                   authorize(accountName, passKey);
                 }
               })
               .catch(error => {
                 console.error(error);
-                dispatch(clearESignature());
-                navigation.goBack();
-                Toast.show({
-                  type: 'error',
-                  text1: "Account hasn't been created!",
-                  text2: 'Something went wrong!',
-                });
+                handleRegistrationIssue("Account hasn't been created!");
               });
           } else {
-            dispatch(clearESignature());
-            navigation.goBack();
-            Toast.show({
-              type: 'error',
-              text1: "Account hasn't been created!",
-              text2: 'Please pay 1$ for account',
-            });
+            handleRegistrationIssue('Please pay 1$ for account');
           }
         } else {
-          dispatch(clearESignature());
-          navigation.goBack();
-          Toast.show({
-            type: 'error',
-            text1: "Account hasn't been created!",
-            text2: 'Please sign the document',
-          });
+          handleRegistrationIssue('Please sign the document');
         }
       });
   }, []);
