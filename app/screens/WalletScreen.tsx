@@ -15,11 +15,11 @@ import { useAssets } from '../services/meta1Api';
 import Loader from '../components/Loader';
 import AppHeader from '../components/AppHeaer';
 import TradeScreen from './TradeScreen';
-import ReciveScreen from './ReciveScreen';
+import ReceiveScreen from './ReceiveScreen';
 import SendScreen from './SendScreen';
 
 const WalletScreen = () => {
-  const [showZeroBalance, setShowZeroBalacnce] = useState(false);
+  const [showZeroBalance, setShowZeroBalance] = useState(false);
   const allAssets = useAssets();
   const { accountName, isMigration, password } = useAppSelector(state => state.signUp);
 
@@ -84,7 +84,7 @@ const WalletScreen = () => {
           >
             HIDE 0 BALANCE WALLET
           </Text>
-          <MaterialToggle onChange={v => setShowZeroBalacnce(v)} />
+          <MaterialToggle onChange={v => setShowZeroBalance(v)} />
         </View>
       </View>
       <PortfolioListing showZeroBallance={showZeroBalance} />
@@ -118,7 +118,7 @@ function WalletScreenStack() {
       />
       <Stack.Screen name="Wallet__Trade" component={TradeScreen} />
       <Stack.Screen name="Wallet__Send" component={SendScreen} />
-      <Stack.Screen name="Wallet__Receive" component={ReciveScreen} />
+      <Stack.Screen name="Wallet__Receive" component={ReceiveScreen} />
     </Stack.Navigator>
   );
 }

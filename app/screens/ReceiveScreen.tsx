@@ -38,7 +38,7 @@ const Backdrop = () => (
 const INDICATOR_HEIGHT = 47;
 const INDICATOR_WIDTH = width * 0.8;
 
-const ReciveScreen: React.FC<{}> = () => {
+const ReceiveScreen: React.FC<{}> = () => {
   const nav = useNavigation<WalletNavigationProp>();
   const accountName = useStore(state => state.accountName);
   const [selected, open] = useAssetPicker({
@@ -314,4 +314,4 @@ const ReciveScreen: React.FC<{}> = () => {
     </SafeAreaView>
   );
 };
-export default ReciveScreen;
+export default ReceiveScreen;
