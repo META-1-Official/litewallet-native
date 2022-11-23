@@ -40,14 +40,55 @@ export const faceKIVerifyOnSignup = createAsyncThunk(
         handleFaceAttributes(livelinessStatus.data);
         // Verify
         const verifyStatus = await faceKIAPI.verifyUser({ image });
-        if (verifyStatus.status !== Verify.VerifyOk) {
-          // Get user if verify failed
+        if (verifyStatus.status === Verify.VerifyOk) {
+          // Check if email exists in emailList of verified user
+          const userEmailList = verifyStatus.name?.split(',');
+          if (userEmailList.includes(email)) {
+            handleVerifyOk(verifyStatus);
+            return successState(image);
+          } else {
+            // Get user if email is not in email list
+            const kycProfile = await getUser(email);
+            if (kycProfile) {
+              handleUsedEmail();
+              return ERROR_STATE;
+            } else {
+              // Add email to emailList for current user
+              const emailList = `${verifyStatus.name},${email}`;
+              // Enroll new user with updated name | updating p1
+              const enrollStatus = await faceKIAPI.enrollUser({ image, name: emailList });
+              if (enrollStatus.status !== Enrollment.EnrollOk) {
+                handleEnrollError();
+                return ERROR_STATE;
+              } else {
+                // Remove user with previous name | updating p2
+                const removingStatus = await faceKIAPI.removeUser(verifyStatus.name);
+                if (!removingStatus) {
+                  somethingWentWrong(`User has been removed. RemovingStatus: ${removingStatus}`);
+                  return ERROR_STATE;
+                }
+                // Create new eSignature user with current email
+                const faceKIID = `usr_${email}_${privateKey}`;
+                const userCreationStatus = await createUser(email, faceKIID);
+                if (userCreationStatus.result) {
+                  // Success | User created
+                  handleEnrollOk(userCreationStatus.status);
+                  return successState(image);
+                } else {
+                  somethingWentWrong("User hasn't been created on eSignature.");
+                  return ERROR_STATE;
+                }
+              }
+            }
+          }
+        } else {
+          // Verification has failed | Get eSignature user to check if email is used
           const kycProfile = await getUser(email);
           if (kycProfile) {
             handleUsedEmail();
             return ERROR_STATE;
-          }
-          // Enroll user
+          } // else
+          // Enroll new user with new email
           const enrollStatus = await faceKIAPI.enrollUser({ image, name: email });
           if (enrollStatus.status === Enrollment.EnrollOk) {
             // Create new user in ESignature
@@ -64,53 +105,6 @@ export const faceKIVerifyOnSignup = createAsyncThunk(
           }
           handleEnrollError();
           return ERROR_STATE;
-        } else {
-          // Check email in emailList of verified user
-          const userEmailList = verifyStatus.name?.split(',');
-          if (userEmailList.includes(email)) {
-            handleVerifyOk(verifyStatus);
-            return successState(image);
-          } else {
-            // Get user if email is not in email list
-            const kycProfile = await getUser(email);
-            if (kycProfile) {
-              handleUsedEmail();
-              return ERROR_STATE;
-            } else {
-              // Add email to emailList for current user
-              const emailList = `${verifyStatus.name},${email}`;
-              // Remove current user with previous name | updating
-              const removingStatus = await faceKIAPI.removeUser(verifyStatus.name);
-              if (!removingStatus) {
-                somethingWentWrong(`User has been removed. RemovingStatus: ${removingStatus}`);
-                return ERROR_STATE;
-              } else {
-                // Enroll user
-                const enrollStatus = await faceKIAPI.enrollUser({ image, name: emailList });
-                if (enrollStatus.status !== Enrollment.EnrollOk) {
-                  handleEnrollError();
-                  return ERROR_STATE;
-                } else {
-                  // Update user with new email
-                  const faceKIID = `usr_${email}_${privateKey}`;
-                  const userCreationStatus = await createUser(email, faceKIID);
-                  if (!userCreationStatus.result) {
-                    // todo: Fix because - in that case we lost our user
-                    // Remove user from ESignature
-                    const removingStatus2 = await faceKIAPI.removeUser(verifyStatus.name);
-                    somethingWentWrong(
-                      `User has been removed. RemovingStatus: ${removingStatus2}`,
-                    );
-                    return ERROR_STATE;
-                  } else {
-                    // Success | User created
-                    handleEnrollOk(userCreationStatus.status);
-                    return successState(image);
-                  }
-                }
-              }
-            }
-          }
         }
       }
     }
