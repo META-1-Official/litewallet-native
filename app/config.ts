@@ -4,7 +4,6 @@ enum URLs {
   META1_CONNECTION_URL = 'META1_CONNECTION_URL',
   faucetAddress = 'faucetAddress',
   liteWalletApiHost = 'liteWalletApiHost',
-  liteWalletOldApiHost = 'liteWalletOldApiHost',
   GatewayUrl = 'GatewayUrl',
   API_URL = 'API_URL',
   WEB3_CLIENT_ID = 'WEB3_CLIENT_ID',
@@ -28,7 +27,6 @@ const config: Config = {
     META1_CONNECTION_URL: 'wss://api.meta-exchange.vision/ws',
     faucetAddress: 'https://faucet.meta-exchange.vision/faucet',
     liteWalletApiHost: 'https://litewallet.cryptomailsvc.io',
-    liteWalletOldApiHost: 'https://litewallet.cryptomailsvc.io',
     GatewayUrl: 'https://gateway.api.meta-exchange.vision',
     API_URL: 'https://api.meta-exchange.vision',
     WEB3_CLIENT_ID:
@@ -40,7 +38,6 @@ const config: Config = {
     META1_CONNECTION_URL: 'wss://api.dev.meta-exchange.vision/ws',
     faucetAddress: 'https://faucet.dev.meta-exchange.vision/faucet',
     liteWalletApiHost: 'https://litewallet.dev.cryptomailsvc.io',
-    liteWalletOldApiHost: 'https://litewallet.dev.cryptomailsvc.io',
     GatewayUrl: 'https://gateway.dev.meta-exchange.vision',
     API_URL: 'https://api.meta-exchange.vision',
     WEB3_CLIENT_ID:
@@ -52,7 +49,6 @@ const config: Config = {
     META1_CONNECTION_URL: 'wss://api.dev2.meta-exchange.vision/ws',
     faucetAddress: 'https://faucet.dev2.meta-exchange.vision/faucet',
     liteWalletApiHost: 'https://litewallet.dev2.cryptomailsvc.io',
-    liteWalletOldApiHost: 'https://litewallet.dev.cryptomailsvc.io',
     GatewayUrl: 'https://gateway.dev2.meta-exchange.vision',
     API_URL: 'https://api.meta-exchange.vision',
     WEB3_CLIENT_ID:
@@ -64,7 +60,6 @@ const config: Config = {
     META1_CONNECTION_URL: 'wss://api.test.meta-exchange.vision/ws',
     faucetAddress: 'https://faucet.test.meta-exchange.vision/faucet',
     liteWalletApiHost: 'https://litewallet.test.cryptomailsvc.io',
-    liteWalletOldApiHost: 'https://litewallet.test.cryptomailsvc.io',
     GatewayUrl: 'https://gateway.test.meta-exchange.vision',
     API_URL: 'https://api.test.meta-exchange.vision',
     WEB3_CLIENT_ID:

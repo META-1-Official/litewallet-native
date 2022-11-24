@@ -9,7 +9,7 @@ class MigrationServices {
 
   constructor() {
     this.api = axios.create({
-      baseURL: config.liteWalletOldApiHost,
+      baseURL: config.liteWalletApiHost,
     });
   }
 
