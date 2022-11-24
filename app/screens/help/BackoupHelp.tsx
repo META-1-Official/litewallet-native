@@ -9,8 +9,8 @@ export default function BackupHelp() {
       <Paragraph>
         It is recommended to make regular backups of your Local Wallet even though in most cases a
         single backup may be sufficient. Please note that in order to recover from a backup you
-        will also need to provide the passphrase (password) because backups are encrypted. Hence,
-        if you either lose your wallet or your passphrase you will be unable to access any of your
+        will also need to provide the passphrase (passkey) because backups are encrypted. Hence, if
+        you either lose your wallet or your passphrase you will be unable to access any of your
         funds again! You can create a backup from <Link>Settings {'->'} Backup.</Link>
       </Paragraph>
       <Spacer />
@@ -18,8 +18,8 @@ export default function BackupHelp() {
         {'>'} Store this backup in at least two secure locations only accessible by you
       </Paragraph>
       <Paragraph>
-        {'>'} The backup is encrypted with your passphrase/password so do not store your password
-        in the same location
+        {'>'} The backup is encrypted with your passphrase/passkey so do not store your passkey in
+        the same location
       </Paragraph>
       <Heading>Advanced Users Only</Heading>
       <Heading>Brainkey</Heading>

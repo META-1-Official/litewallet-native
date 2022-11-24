@@ -12,13 +12,13 @@ function PasswordInput(props: RenderProps) {
       <Key width={24} height={32} color="#333" strokeWidth={1.5} />
       <TextInput
         {...props}
-        {...tid('CreateWallet/password')}
+        {...tid('CreateWallet/passkey')}
         autoCapitalize={'none'}
         autoCorrect={false}
         style={[props.style, { maxWidth: '88%', paddingRight: 8, paddingLeft: 8 }]}
         secureTextEntry={visible}
       />
-      <TouchableOpacity {...tid('CreateWallet/copyPassword')} onPress={() => setVisible(!visible)}>
+      <TouchableOpacity {...tid('CreateWallet/copyPasskey')} onPress={() => setVisible(!visible)}>
         <View
           style={{
             backgroundColor: colors.BrandYellow,

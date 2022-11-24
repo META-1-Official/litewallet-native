@@ -89,7 +89,7 @@ export default function CreatePaperWallet() {
         />
       </View>
       <View style={{ marginTop: 24 }}>
-        <Text style={{ color: colors.BrandYellow }}>Password</Text>
+        <Text style={{ color: colors.BrandYellow }}>Passkey</Text>
         <TextInput
           {...tid('CreatePaperWallet/password')}
           value={password}
