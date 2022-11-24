@@ -60,28 +60,33 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
   const [migratable, setMigratable] = useState(false);
   const checkMigrationAvailability = async (accountName: string): Promise<boolean | string> => {
     const { data } = await migrationService.checkTransferableAccount(accountName);
-    setMigratable(data?.found);
-    return true;
+    return data.found;
   };
 
   const handleAccountNameValidation = async (accountName: string) => {
     const premiumName = await checkPremiumName(accountName);
     if (typeof premiumName === 'string') {
       return premiumName;
+    } else {
+      const validName = await checkAccountName(accountName);
+      if (typeof validName === 'string') {
+        return validName;
+      } else {
+        const freeName = await checkFreeName(accountName);
+        if (typeof freeName === 'string') {
+          return freeName;
+        } else {
+          const migrationAvailability = await checkMigrationAvailability(accountName);
+          if (typeof migrationAvailability === 'string') {
+            setMigratable(true);
+            return migrationAvailability;
+          } else {
+            setMigratable(false);
+          }
+          return true;
+        }
+      }
     }
-    const validName = await checkAccountName(accountName);
-    if (typeof validName === 'string') {
-      return validName;
-    }
-    const freeName = await checkFreeName(accountName);
-    if (typeof freeName === 'string') {
-      return freeName;
-    }
-    const migrationAvailability = await checkMigrationAvailability(accountName);
-    if (typeof migrationAvailability === 'string') {
-      return migrationAvailability;
-    }
-    return true;
   };
 
   const handleSubmitForm = handleSubmit(formState => {
