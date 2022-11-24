@@ -1,5 +1,5 @@
 app_identifier("io.meta1.appbeta") # The bundle identifier of your app
-apple_id("atpo4ta@gmail.com") # Your Apple email address
+apple_id("fimak@bk.ru") # Your Apple email address
 
 itc_team_id("124919954") # App Store Connect Team ID
 team_id("BL96N576T8") # Developer Portal Team ID
