@@ -64,6 +64,7 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   const handleAccountNameValidation = async (accountName: string) => {
+    setMigratable(false);
     const premiumName = await checkPremiumName(accountName);
     if (typeof premiumName === 'string') {
       return premiumName;
@@ -74,14 +75,12 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
       } else {
         const freeName = await checkFreeName(accountName);
         if (typeof freeName === 'string') {
+          setMigratable(false);
           return freeName;
         } else {
           const migrationAvailability = await checkMigrationAvailability(accountName);
-          if (typeof migrationAvailability === 'string') {
-            setMigratable(true);
-            return migrationAvailability;
-          } else {
-            setMigratable(false);
+          if (migrationAvailability) {
+            setMigratable(!!migrationAvailability);
           }
           return true;
         }
