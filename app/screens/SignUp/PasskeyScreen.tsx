@@ -11,6 +11,7 @@ import { eSignatureProceed } from '../../store/signUp/signUp.actions';
 
 import { SvgIcons } from '../../../assets';
 import styles from './PasskeyScreen.styles';
+import Toast from 'react-native-toast-message';
 
 const ESIGNATURE_STATUSES = ['dismiss', 'success'];
 
@@ -83,6 +84,10 @@ export const PasskeyScreen = ({ navigation }: Props) => {
 
   const handleCopy = () => {
     Clipboard.setString(passKey);
+    Toast.show({
+      type: 'info',
+      text1: 'Passkey has copied',
+    });
   };
 
   const isEveryCheckBoxesValid = useMemo(() => {
