@@ -23,17 +23,25 @@ export const PasskeyScreen = ({ navigation }: Props) => {
     useAppSelector(state => state.signUp);
   const { email, passKey, privateKey } = useAppSelector(state => state.web3);
 
+  const [isCopied, setIsCopied] = useState(false);
   const [checkboxesState, setCheckBoxesState] = useState([false, false, false, false, false]);
 
   const handleNext = () => {
-    dispatch(eSignatureProceed({ firstName, lastName, mobile, email, accountName, privateKey }))
-      .unwrap()
-      .then(promiseResult => {
-        if (Platform.OS === 'ios') {
-          console.log('PromiseResult: ', promiseResult);
-          navigation.navigate('PaymentSuccess');
-        }
+    if (isCopied) {
+      dispatch(eSignatureProceed({ firstName, lastName, mobile, email, accountName, privateKey }))
+        .unwrap()
+        .then(promiseResult => {
+          if (Platform.OS === 'ios') {
+            console.log('PromiseResult: ', promiseResult);
+            navigation.navigate('PaymentSuccess');
+          }
+        });
+    } else {
+      Toast.show({
+        type: 'info',
+        text1: 'Please keep your Passkey in a safe place!',
       });
+    }
   };
 
   const appState = useRef(AppState.currentState);
@@ -84,6 +92,7 @@ export const PasskeyScreen = ({ navigation }: Props) => {
 
   const handleCopy = () => {
     Clipboard.setString(passKey);
+    setIsCopied(true);
     Toast.show({
       type: 'info',
       text1: 'Passkey has copied',
@@ -111,7 +120,7 @@ export const PasskeyScreen = ({ navigation }: Props) => {
           </Text>
 
           <View style={styles.inputWrapper}>
-            <TextInput style={styles.input} value={passKey} />
+            <TextInput style={styles.input} value={passKey} onFocus={handleCopy} />
             <Pressable style={styles.btnCopy} onPress={handleCopy}>
               <SvgIcons.Copy width={20} />
             </Pressable>
