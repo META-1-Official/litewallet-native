@@ -23,8 +23,8 @@ export const handleParamsError = ({
 };
 
 export const handleSpoof = (faceAttributes: FaceAttributes) => {
-  const toClose = 'You are too close to the camera.';
-  const tryAgain = 'Liveliness is spoof try again!';
+  const toClose = 'Validation Failed, You are too close to the camera.';
+  const tryAgain = 'Try changing your position or background.';
   if (faceAttributes.box.h > 120) {
     Toast.show({
       type: 'error',
@@ -35,8 +35,8 @@ export const handleSpoof = (faceAttributes: FaceAttributes) => {
   } else {
     Toast.show({
       type: 'error',
-      text1: faceAttributes.liveness,
-      text2: faceAttributes.result,
+      text1: 'Validation Failed',
+      text2: 'Try changing your position or background.',
     });
     console.error(faceAttributes.liveness, faceAttributes.result, tryAgain);
   }
