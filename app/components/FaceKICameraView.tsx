@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useRef, useState } from 'react';
-import { View, Text, Platform, Image } from 'react-native';
+import { View, Text, Platform, Image, ImageBackground } from 'react-native';
 import { Camera, PhotoFile, useCameraDevices } from 'react-native-vision-camera';
 import { RootNavigationProp } from '../AuthNav';
 import { useAppDispatch, useAppSelector } from '../hooks';
@@ -8,6 +8,7 @@ import { faceKIVerifyOnSignup, faceKIVerifyOnSignIn } from '../store/faceKI/face
 import styles from './FaceKICameraView.styles';
 import Loader from './Loader';
 import RoundedButton from './RoundedButton';
+import { faceFrameAsset } from '../../assets/';
 
 interface Props {
   email: string;
@@ -110,6 +111,7 @@ const FaceKiCameraView = ({ email, privateKey }: Props) => {
             photo={true}
             preset={Platform.OS === 'android' ? 'medium' : 'high'}
           />
+          <ImageBackground source={faceFrameAsset} resizeMode="cover" style={styles.faceFrame} />
           <View style={{ position: 'absolute', top: 20 }}>
             <Text style={{ color: '#fff', fontSize: 22, textAlign: 'center', lineHeight: 30 }}>
               Bio-Metric 2 Factor Authentication

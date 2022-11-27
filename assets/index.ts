@@ -10,6 +10,8 @@ export const tosIconAsset = require('./tos.png');
 export const personIconAsset = require('./personIcon.png');
 export const goldAsset = require('./gold.jpg');
 
+export const faceFrameAsset = require('./face-frame.png');
+
 export const loaderGif = require('./loader.gif');
 export const SvgIcons = {
   fundAccount: require('./icons/fund-account.svg').default as any,

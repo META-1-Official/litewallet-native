@@ -13,6 +13,13 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '115%',
   },
+  faceFrame: {
+    top: 0,
+    left: 0,
+    position: 'absolute',
+    width: '100%',
+    height: '115%',
+  },
   frame: {
     width: 320,
     height: 400,
