@@ -1,6 +1,7 @@
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import { configureStore, ThunkAction, Action, combineReducers } from '@reduxjs/toolkit';
+import createDebugger from 'redux-flipper';
 import faceKIReducer from './faceKI/faceKI.reducer';
 import signInReducer from './signIn/signIn.reducer';
 import signUpReducer from './signUp/signUp.reducer';
@@ -22,6 +23,7 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, reducers);
 
+// todo: remove debugger dependency from production build
 export const createStore = configureStore({
   reducer: persistedReducer,
   devTools: true,
@@ -30,7 +32,7 @@ export const createStore = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }),
+    }).concat(createDebugger()),
 });
 
 export type AppDispatch = typeof createStore.dispatch;
