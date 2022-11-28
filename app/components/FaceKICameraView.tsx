@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useRef, useState } from 'react';
 import { View, Text, Platform, Image, ImageBackground } from 'react-native';
-import { Camera, PhotoFile, useCameraDevices } from 'react-native-vision-camera';
+import { Camera, PhotoFile, sortFormats, useCameraDevices } from 'react-native-vision-camera';
 import { RootNavigationProp } from '../AuthNav';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { faceKIVerifyOnSignup, faceKIVerifyOnSignIn } from '../store/faceKI/faceKI.actions';
@@ -109,7 +109,7 @@ const FaceKiCameraView = ({ email, privateKey }: Props) => {
             device={device}
             isActive={true}
             photo={true}
-            preset={Platform.OS === 'android' ? 'medium' : 'high'}
+            // preset={Platform.OS === 'android' ? 'medium' : 'high'}
           />
           <ImageBackground source={faceFrameAsset} resizeMode="cover" style={styles.faceFrame} />
           <View style={{ position: 'absolute', top: 20 }}>
