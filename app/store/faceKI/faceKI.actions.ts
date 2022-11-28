@@ -55,18 +55,18 @@ export const faceKIVerifyOnSignup = createAsyncThunk(
             } else {
               // Add email to emailList for current user
               const emailList = `${verifyStatus.name},${email}`;
+              // Remove user with previous name | updating p1 | !Danger!
+              const removingStatus = await faceKIAPI.removeUser(verifyStatus.name);
+              if (!removingStatus) {
+                somethingWentWrong(`User has been removed. RemovingStatus: ${removingStatus}`);
+                return ERROR_STATE;
+              }
               // Enroll new user with updated name | updating p1
               const enrollStatus = await faceKIAPI.enrollUser({ image, name: emailList });
               if (enrollStatus.status !== Enrollment.EnrollOk) {
                 handleEnrollError();
                 return ERROR_STATE;
               } else {
-                // Remove user with previous name | updating p2
-                const removingStatus = await faceKIAPI.removeUser(verifyStatus.name);
-                if (!removingStatus) {
-                  somethingWentWrong(`User has been removed. RemovingStatus: ${removingStatus}`);
-                  return ERROR_STATE;
-                }
                 // Create new eSignature user with current email
                 const faceKIID = `usr_${email}_${privateKey}`;
                 const userCreationStatus = await createUser(email, faceKIID);
