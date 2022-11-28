@@ -45,6 +45,7 @@ const AuthNav = () => {
         header: AppHeader,
       }}
     >
+      <Stack.Screen name="PaymentSuccess" component={PaymentSuccess} />
       <Stack.Screen
         name="Home"
         options={{
@@ -67,7 +68,7 @@ const AuthNav = () => {
       <Stack.Screen name="ESignature" component={ESignatureScreen} />
       <Stack.Screen name="ESignatureForm" component={ESignatureFormScreen} />
       <Stack.Screen name="Passkey" component={PasskeyScreen} />
-      <Stack.Screen name="PaymentSuccess" component={PaymentSuccess} />
+      {/*<Stack.Screen name="PaymentSuccess" component={PaymentSuccess} />*/}
       <Stack.Screen name="LinkWallet" component={LinkWalletScreen} />
       <Stack.Screen name="ImportWallet" component={ImportWalletScreen} />
       <Stack.Screen

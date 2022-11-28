@@ -18,9 +18,9 @@ const initialState: Web3State = {
 };
 // todo: remove this and uncomment previous
 // const initialState: Web3State = {
-//   email: 'rocky-marciano@yopmail.com',
-//   privateKey: '27177f7fda95c27eee70874eea228b36866d86341c9ba4912f29bdd781c2f128',
-//   passKey: 'P5KZ427FkUnt2r3pD6AxR4tsVoLfCPfHLH3dFPaBUqZNSpUGZp8W',
+//   email: 'user-x05@yopmail.com',
+//   privateKey: '0953d9d3b8caa0adf3ce0ca7994b94ec248ad1c85beb81952cd3027d2bf014b0',
+//   passKey: 'P5JVKxNTmQ358XjFHW5RYZ3DSRtXLrr3PycHkPgJ8mvZQ4bMzNAj',
 //   pending: false,
 // };
 

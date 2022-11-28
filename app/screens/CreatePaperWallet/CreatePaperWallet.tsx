@@ -19,7 +19,8 @@ function isPassPk(password: string): boolean {
     return false;
   }
 }
-async function getAccountKeys({
+
+export async function getAccountKeys({
   accountName: account,
   password,
 }: AccountWithPassword): Promise<KeysT | undefined> {

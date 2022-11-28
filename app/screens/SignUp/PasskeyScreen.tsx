@@ -7,9 +7,14 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { RootStackParamList } from '../../AuthNav';
 import RoundedButton from '../../components/RoundedButton';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { eSignatureProceed } from '../../store/signUp/signUp.actions';
+import {
+  eSignatureProceed,
+  getAccountPaymentStatus,
+  registerAccount,
+} from '../../store/signUp/signUp.actions';
 
 import { SvgIcons } from '../../../assets';
+import { clearESignature } from '../../store/signUp/signUp.reducer';
 import styles from './PasskeyScreen.styles';
 import Toast from 'react-native-toast-message';
 
@@ -26,15 +31,67 @@ export const PasskeyScreen = ({ navigation }: Props) => {
   const [isCopied, setIsCopied] = useState(false);
   const [checkboxesState, setCheckBoxesState] = useState([false, false, false, false, false]);
 
+  const handleRegistrationIssue = (message: string) => {
+    dispatch(clearESignature());
+    console.error(message);
+    Toast.show({
+      type: 'error',
+      text1: message,
+    });
+  };
+
+  const getPaymentDetails = () => {
+    dispatch(getAccountPaymentStatus(email))
+      .unwrap()
+      .then(user => {
+        console.log('User: ', user);
+        if (user && user.status?.isSign) {
+          if (user.status?.isPayed || user.status?.isPayedByCrypto) {
+            handleCheckBox(4);
+            console.log('Payments: ', user.pays);
+          } else {
+            handleRegistrationIssue('Please pay 1$ for account');
+          }
+        } else {
+          handleRegistrationIssue('Please sign the document');
+        }
+      });
+  };
+
+  const handleSign = () => {
+    dispatch(eSignatureProceed({ firstName, lastName, mobile, email, accountName, privateKey }))
+      .unwrap()
+      .then(promiseResult => {
+        if (Platform.OS === 'ios') {
+          console.log('Handle Sign PromiseResult: ', promiseResult);
+          getPaymentDetails();
+        }
+      });
+  };
+
   const handleNext = () => {
     if (isCopied) {
-      dispatch(eSignatureProceed({ firstName, lastName, mobile, email, accountName, privateKey }))
+      console.log('Account registration!');
+      dispatch(
+        registerAccount({
+          accountName,
+          passKey,
+          mobile,
+          email,
+          firstName,
+          lastName,
+        }),
+      )
         .unwrap()
-        .then(promiseResult => {
-          if (Platform.OS === 'ios') {
-            console.log('PromiseResult: ', promiseResult);
+        .then(registrationStatus => {
+          if (registrationStatus) {
+            console.error('Account has been registered!');
             navigation.navigate('PaymentSuccess');
           }
+        })
+        .catch(error => {
+          console.error(error);
+          handleRegistrationIssue("Account hasn't been created!");
         });
     } else {
       Toast.show({
@@ -78,7 +135,7 @@ export const PasskeyScreen = ({ navigation }: Props) => {
       !eSignaturePending
     ) {
       console.log('Action onVisible');
-      navigation.navigate('PaymentSuccess');
+      getPaymentDetails();
     }
   }, [appStateVisible, eSignaturePending, eSignatureStatus]);
 
@@ -180,11 +237,7 @@ export const PasskeyScreen = ({ navigation }: Props) => {
             </Text>
           </View>
           <View style={[styles.checkboxRow, { justifyContent: 'space-between' }]}>
-            <CheckBox
-              boxType="square"
-              value={checkboxesState[4]}
-              onValueChange={() => handleCheckBox(4)}
-            />
+            <CheckBox boxType="square" value={checkboxesState[4]} onValueChange={handleSign} />
             <Text style={styles.checkboxText}>Sign META Association Membership Agreement</Text>
           </View>
         </View>

@@ -1,84 +1,110 @@
+import Clipboard from '@react-native-clipboard/clipboard';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useEffect } from 'react';
-import { SafeAreaView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
 import Toast from 'react-native-toast-message';
+import { SvgIcons } from '../../../assets';
 import { RootStackParamList } from '../../AuthNav';
-import Loader from '../../components/Loader';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useNewLoaderModal } from '../../components/LoaderModal';
+import RoundedButton from '../../components/RoundedButton';
+import { useAppSelector } from '../../hooks';
 import { useStore } from '../../store';
-import { getAccountPaymentStatus, registerAccount } from '../../store/signUp/signUp.actions';
-import { clearESignature } from '../../store/signUp/signUp.reducer';
+import { catchError } from '../../utils';
+import { KeysT, savePdf } from '../CreatePaperWallet';
+import RenderPdf from '../CreatePaperWallet/RenderPdf';
+import styles from './PaymentSuccess.styles';
+import { getAccountKeys } from '../CreatePaperWallet/CreatePaperWallet';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'PaymentSuccess'>;
 
 export const PaymentSuccess = ({ navigation }: Props) => {
-  const dispatch = useAppDispatch();
-  // todo: move it to actions
   const authorize = useStore(state => state.authorize);
-  const { accountName, mobile, lastName, firstName } = useAppSelector(state => state.signUp);
-  const { email, passKey } = useAppSelector(state => state.web3);
+  const { accountName } = useAppSelector(state => state.signUp);
+  const { passKey } = useAppSelector(state => state.web3);
 
-  const handleRegistrationIssue = (message: string) => {
-    dispatch(clearESignature());
-    navigation.goBack();
-    console.error(message);
+  const [, setIsCopied] = useState(false);
+  const handleCopy = () => {
+    Clipboard.setString(passKey);
+    setIsCopied(true);
     Toast.show({
-      type: 'error',
-      text1: "Account hasn't been created!",
-      text2: message,
+      type: 'info',
+      text1: 'Passkey has copied',
     });
   };
 
-  // check payment status
+  const [keys, setKeys] = useState<KeysT | undefined>(undefined);
+  const [document, setDoc] = useState('');
+  const loader = useNewLoaderModal();
+
   useEffect(() => {
-    dispatch(getAccountPaymentStatus(email))
-      .unwrap()
-      .then(user => {
-        console.log('User: ', user);
-        if (user && user.status?.isSign) {
-          if (user.status?.isPayed || user.status?.isPayedByCrypto) {
-            console.log('Payments: ', user.pays);
-            // todo: check for user.pays.find((el) => el.customerId === user.status.facekiID
-            // todo: update | now we don't need to find payment because 1 email = 1 payment
-            console.log('Account registration!');
-            const args = {
-              accountName,
-              passKey,
-              mobile,
-              email,
-              firstName,
-              lastName,
-            };
-            dispatch(registerAccount(args))
-              .unwrap()
-              .then(registrationStatus => {
-                if (registrationStatus) {
-                  // todo: don't do the auth just show the paperWallet
-                  authorize(accountName, passKey);
-                }
-              })
-              .catch(error => {
-                console.error(error);
-                handleRegistrationIssue("Account hasn't been created!");
-              });
-          } else {
-            handleRegistrationIssue('Please pay 1$ for account');
-          }
-        } else {
-          handleRegistrationIssue('Please sign the document');
-        }
-      });
-  }, []);
+    if (document) {
+      savePdf(document);
+    }
+  }, [document]);
+
+  const save = async () => {
+    catchError(async () => {
+      const _keys = await getAccountKeys({ accountName, password: passKey });
+      setKeys(_keys);
+      if (document) {
+        savePdf(document);
+        return;
+      }
+      loader.open();
+    });
+  };
+
+  const handleDownloadPaperWallet = async () => {
+    await save();
+  };
+
+  const handleCreateWallet = () => {
+    authorize(accountName, passKey);
+  };
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        justifyContent: 'space-between',
-        backgroundColor: '#fff',
-      }}
-    >
-      <Loader />
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Congratulations!</Text>
+        <Text style={styles.subtitle}>You are now a META 1 Member! Click Submit to Continue</Text>
+      </View>
+
+      <View style={styles.passKeyForm}>
+        <View style={styles.inputWrapper}>
+          <TextInput style={styles.input} value={passKey} onFocus={handleCopy} />
+          <Pressable style={styles.btnCopy} onPress={handleCopy}>
+            <SvgIcons.Copy width={20} />
+          </Pressable>
+        </View>
+
+        <View style={styles.importantInfo}>
+          <View>
+            <Text style={styles.importantInfoTitle}>Important information</Text>
+            <Text style={styles.importantInfoDescription}>
+              If you forget your passkey you will NOT be able to access your wallet or your funds.
+              We are NO LONGER able to restore, reset, or redistribute lost coins, or help with
+              lost passkeys. Please MAKE SURE you copy your wallet name and passkey.
+            </Text>
+          </View>
+        </View>
+      </View>
+
+      <RenderPdf
+        keys={keys}
+        onReady={d => {
+          setDoc(d);
+          loader.close();
+        }}
+      />
+
+      <View style={styles.buttonGroup}>
+        <RoundedButton
+          styles={{ flex: 1 }}
+          title="Download paper wallet"
+          onPress={handleDownloadPaperWallet}
+        />
+        <RoundedButton styles={{ flex: 1 }} title="Submit" onPress={handleCreateWallet} />
+      </View>
     </SafeAreaView>
   );
 };

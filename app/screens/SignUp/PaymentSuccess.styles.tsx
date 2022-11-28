@@ -1,22 +1,16 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
-    justifyContent: 'space-between',
     backgroundColor: '#fff',
   },
-  contentContainerStyle: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    paddingLeft: 30,
-    paddingRight: 30,
-  },
-  header: {},
+  header: { paddingHorizontal: 20 },
   title: { fontSize: 30, fontWeight: 'bold' },
   subtitle: { fontSize: 18, paddingTop: 5 },
+  passKeyForm: {
+    paddingHorizontal: 20,
+  },
   inputWrapper: {
     flexDirection: 'row',
     marginTop: 20,
@@ -47,15 +41,6 @@ const styles = StyleSheet.create({
   },
   importantInfoTitle: { fontSize: 22 },
   importantInfoDescription: { fontSize: 15, paddingTop: 15 },
-  checkboxGroup: {
-    flex: 1,
-    flexDirection: 'column',
-    marginTop: 35,
-    width: '100%',
-    flexGrow: 0.75,
-  },
-  checkboxRow: { flex: 1, flexDirection: 'row' },
-  checkboxText: { marginLeft: 20, flex: 1 },
   buttonGroup: { position: 'absolute', bottom: 0, width: '100%' },
 });
 

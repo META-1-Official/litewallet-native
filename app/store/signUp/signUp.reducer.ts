@@ -39,10 +39,10 @@ const initialState: SignUpState = {
 };
 // todo: remove this and uncomment previous
 // const initialState: SignUpState = {
-//   firstName: 'Rocky',
-//   lastName: 'Marciano',
-//   mobile: '+11111111111',
-//   accountName: 'rocky-marciano',
+//   firstName: 'User',
+//   lastName: 'Test',
+//   mobile: '+10000000005',
+//   accountName: 'user-x05',
 //   eSignatureStatus: '',
 //   eSignaturePending: false,
 //   paymentStatus: undefined,
