@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/core';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, Platform, Image, ImageBackground } from 'react-native';
-import { Camera, PhotoFile, sortFormats, useCameraDevices } from 'react-native-vision-camera';
+import { Camera, CameraDevice, PhotoFile, useCameraDevices } from 'react-native-vision-camera';
 import { RootNavigationProp } from '../AuthNav';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { faceKIVerifyOnSignup, faceKIVerifyOnSignIn } from '../store/faceKI/faceKI.actions';
@@ -34,12 +34,26 @@ const takePhoto = async (camera: Camera) => {
 const FaceKiCameraView = ({ email, privateKey }: Props) => {
   const nav = useNavigation<RootNavigationProp>();
   const dispatch = useAppDispatch();
+  const [cameraDevice, setCameraDevice] = useState<CameraDevice | undefined>();
   const devices = useCameraDevices();
-  const device = devices.front || devices.back || devices.external || devices.unspecified;
+  const device =
+    cameraDevice || devices.front || devices.back || devices.external || devices.unspecified;
   const [photo, setPhoto] = useState<PhotoFile | undefined>();
   const camera = useRef<Camera>(null);
   const { accountName } = useAppSelector(state => state.signIn);
   const isSigning = !!accountName;
+
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      Camera.getAvailableCameraDevices().then(availableDevices => {
+        const frontDevices = availableDevices.filter(dev => dev.position === 'front');
+        const wideAngleCamera = frontDevices.filter(dev =>
+          dev.devices.includes('ultra-wide-angle-camera'),
+        );
+        setCameraDevice(wideAngleCamera[0]);
+      });
+    }
+  });
 
   const verifyHandler = async () => {
     if (camera?.current) {
@@ -109,7 +123,7 @@ const FaceKiCameraView = ({ email, privateKey }: Props) => {
             device={device}
             isActive={true}
             photo={true}
-            // preset={Platform.OS === 'android' ? 'medium' : 'high'}
+            preset={Platform.OS === 'android' ? 'medium' : 'high'}
           />
           <ImageBackground source={faceFrameAsset} resizeMode="cover" style={styles.faceFrame} />
           <View style={{ position: 'absolute', top: 20 }}>
