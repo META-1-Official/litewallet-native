@@ -131,9 +131,9 @@ export const PasskeyScreen = ({ navigation }: Props) => {
           <View>
             <Text style={styles.importantInfoTitle}>Important information</Text>
             <Text style={styles.importantInfoDescription}>
-              If you forget your password phrase you will be unable to access your account and your
-              funds. We cannot reset or restore your password! Memorise or white your username and
-              password!
+              If you forget your passkey you will NOT be able to access your wallet or your funds.
+              We are NO LONGER able to restore, reset, or redistribute lost coins, or help with
+              lost passkeys. Please MAKE SURE you copy your wallet name and passkey.
             </Text>
           </View>
         </View>
