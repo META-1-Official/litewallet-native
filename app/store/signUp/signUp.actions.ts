@@ -64,7 +64,7 @@ export const eSignatureProceed = createAsyncThunk(
     const encodedEmail = encodeURIComponent(email);
     const url = `${
       config.E_SIGNATURE_API_URL
-    }/e-sign?email=${encodedEmail}&firstName${firstName}&lastName=${lastName}&phoneNumber=${phoneNumber}&walletName=${accountName}&token=${token}&redirectUrl=${redirectUrl}&isMobile=${true}`;
+    }/e-sign?email=${encodedEmail}&firstName=${firstName}&lastName=${lastName}&phoneNumber=${phoneNumber}&walletName=${accountName}&token=${token}&redirectUrl=${redirectUrl}&isMobile=${true}`;
     console.log('eSignature URL: ', url);
     return await WebBrowser.openAuthSessionAsync(url, redirectUrl);
   },
