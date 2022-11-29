@@ -156,8 +156,7 @@ const FaceKiCameraView = ({ email, privateKey }: Props) => {
                 paddingBottom: 20,
               }}
             >
-              Next, we will setup your Biometric two factor authentication, to ensure the security
-              of your wallet
+              Please authenticate your biometrics to complete {isSigning ? 'log in.' : 'sign up.'}
             </Text>
             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
               <RoundedButton styles={{ flex: 1 }} title="Cancel" onPress={() => nav.goBack()} />

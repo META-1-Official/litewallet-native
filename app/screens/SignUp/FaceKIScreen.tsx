@@ -1,12 +1,15 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { RootStackParamList } from '../../AuthNav';
 import FaceKiCameraView from '../../components/FaceKICameraView';
 import Loader from '../../components/Loader';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import useCameraPermission from '../../hooks/useCameraPermission';
 import { clearFaceKI } from '../../store/faceKI/faceKI.reducer';
+
+const CAMERA_PERMISSION_STATUS_AUTHORIZED = 'authorized';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'FaceKI'>;
 
@@ -16,13 +19,11 @@ const FaceKIScreen: React.FC<Props> = ({ navigation }) => {
   const { privateKey, email } = useAppSelector(state => state.web3);
 
   const cameraPermission = useCameraPermission();
-  const isCameraAvailable = cameraPermission === 'authorized';
+  const isCameraAvailable = cameraPermission === CAMERA_PERMISSION_STATUS_AUTHORIZED;
 
-  useEffect(() => {
-    return navigation.addListener('focus', () => {
-      dispatch(clearFaceKI());
-    });
-  }, [navigation]);
+  useFocusEffect(() => {
+    dispatch(clearFaceKI());
+  });
 
   return (
     <View

@@ -1,6 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useRef } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ContentSlider, { Backdrop } from '../components/ContentSlider';
 import RoundedButton from '../components/RoundedButton';
@@ -20,15 +21,13 @@ const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
   const LinkWalletPress = () => navigation.navigate('LinkWallet');
   const scrollX = useRef(new Animated.Value(0)).current;
 
-  useEffect(() => {
-    return navigation.addListener('focus', () => {
-      console.log('Wiping store...');
-      dispatch(clearSignUpState());
-      dispatch(clearWeb3AuthData());
-      dispatch(clearFaceKI());
-      dispatch(clearSignInInfo());
-    });
-  }, [navigation]);
+  useFocusEffect(() => {
+    console.log('Wiping store...');
+    dispatch(clearSignUpState());
+    dispatch(clearWeb3AuthData());
+    dispatch(clearFaceKI());
+    dispatch(clearSignInInfo());
+  });
 
   return (
     <SafeAreaView
