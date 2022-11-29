@@ -6,7 +6,6 @@ import FaceKiCameraView from '../../components/FaceKICameraView';
 import Loader from '../../components/Loader';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import useCameraPermission from '../../hooks/useCameraPermission';
-import { faceKIAuth } from '../../store/faceKI/faceKI.actions';
 import { clearFaceKI } from '../../store/faceKI/faceKI.reducer';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'FaceKI'>;
@@ -22,7 +21,6 @@ const FaceKIScreen: React.FC<Props> = ({ navigation }) => {
   useEffect(() => {
     return navigation.addListener('focus', () => {
       dispatch(clearFaceKI());
-      dispatch(faceKIAuth());
     });
   }, [navigation]);
 

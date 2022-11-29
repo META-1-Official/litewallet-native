@@ -1,17 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { faceKIVerifyOnSignup, faceKIVerifyOnSignIn, faceKIAuth } from './faceKI.actions';
+import { faceKIVerifyOnSignup, faceKIVerifyOnSignIn } from './faceKI.actions';
 
 interface FaceKIState {
   faceKIStatus: string;
   image: string;
-  authToken: string;
   pending: boolean;
 }
 
 const initialState: FaceKIState = {
   faceKIStatus: '',
   image: '',
-  authToken: '',
   pending: false,
 };
 
@@ -21,13 +19,10 @@ const faceKISlice = createSlice({
   reducers: {
     clearFaceKI: state => {
       console.log('Clear faceKIState');
-      return { ...initialState, authToken: state.authToken };
+      return { ...initialState };
     },
   },
   extraReducers: builder => {
-    builder.addCase(faceKIAuth.fulfilled, (state, action) => {
-      state.authToken = action.payload.token;
-    });
     builder.addCase(faceKIVerifyOnSignup.pending, state => {
       state.pending = true;
     });

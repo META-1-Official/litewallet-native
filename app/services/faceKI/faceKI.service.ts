@@ -20,8 +20,8 @@ export interface FaceKIVerifyParams {
 }
 
 export interface AuthParams {
-  clientSecret: string;
-  password: string;
+  clientSecret?: string;
+  password?: string;
 }
 
 class FaceKIServices {
@@ -29,12 +29,12 @@ class FaceKIServices {
   private readonly clientSecret;
   private readonly password;
 
-  constructor(secrets: AuthParams) {
+  constructor(secrets?: AuthParams) {
     this.api = axios.create({
       baseURL: config.FACE_KI_API_URL,
     });
-    this.clientSecret = secrets.clientSecret;
-    this.password = secrets.password;
+    this.clientSecret = secrets?.clientSecret;
+    this.password = secrets?.password;
   }
 
   generateToken = async () => {
@@ -110,4 +110,4 @@ class FaceKIServices {
   };
 }
 
-export default new FaceKIServices(config.secrets.faceKi);
+export default new FaceKIServices();

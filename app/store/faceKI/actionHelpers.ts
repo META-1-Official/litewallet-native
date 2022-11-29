@@ -22,14 +22,6 @@ export const handleParamsError = ({
   });
 };
 
-export const handleFaceKIAuthenticationError = () => {
-  Toast.show({
-    type: 'error',
-    text1: 'FaceKI Authentication error',
-  });
-  console.error('FaceKI authentication error');
-};
-
 export const handleSpoof = (faceAttributes: FaceAttributes) => {
   const toClose = 'Validation Failed, You are too close to the camera.';
   const tryAgain = 'Try changing your position or background.';

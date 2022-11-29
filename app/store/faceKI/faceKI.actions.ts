@@ -23,13 +23,10 @@ const successState = (image: string) => ({
   image: Platform.OS === 'android' ? `file://${image}` : image,
 });
 
-export const faceKIAuth = createAsyncThunk('faceKI/auth', async () => {
-  return await FaceKIService.generateToken();
-});
-
 export const faceKIVerifyOnSignup = createAsyncThunk(
   'faceKI/Verify/signUp',
   async ({ image, email, privateKey }: FaceKIVerifyParams) => {
+    console.log('SignUp verification');
     // Check params
     if (image.length === 0 || email.length === 0) {
       handleParamsError({ image, email, privateKey });
@@ -118,11 +115,11 @@ export const faceKIVerifyOnSignup = createAsyncThunk(
 export const faceKIVerifyOnSignIn = createAsyncThunk(
   'faceKI/Verify/signIn',
   async ({ image, email, privateKey, accountName }: FaceKIVerifyParams) => {
+    console.log('SignIn verification');
     if (image.length === 0 || email.length === 0 || accountName?.length === 0) {
       handleParamsError({ image, accountName, email, privateKey });
       return ERROR_STATE;
     }
-    console.log('!!!!!!!!!!SIGNIN');
     // Get user
     const kycProfile = await getUser(email);
     if (!kycProfile?.member1Name) {
