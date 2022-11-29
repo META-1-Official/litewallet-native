@@ -1,4 +1,4 @@
-import { NETWORK, FACE_KI_CLIENT_SECRET, FACE_KI_PASSWORD } from '@env';
+import { NETWORK } from '@env';
 
 enum URLs {
   META1_CONNECTION_URL = 'META1_CONNECTION_URL',
