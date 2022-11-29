@@ -53,7 +53,7 @@ const FaceKiCameraView = ({ email, privateKey }: Props) => {
         setCameraDevice(wideAngleCamera[0]);
       });
     }
-  });
+  }, []);
 
   const verifyHandler = async () => {
     if (camera?.current) {

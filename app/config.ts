@@ -1,4 +1,4 @@
-import { NETWORK } from '@env';
+import { NETWORK, FACE_KI_CLIENT_SECRET, FACE_KI_PASSWORD } from '@env';
 
 enum URLs {
   META1_CONNECTION_URL = 'META1_CONNECTION_URL',
@@ -69,4 +69,11 @@ const config: Config = {
   },
 };
 
-export default { ...config[NETWORK as Network] };
+const secrets = {
+  faceKi: {
+    clientSecret: FACE_KI_CLIENT_SECRET,
+    password: FACE_KI_PASSWORD,
+  },
+};
+
+export default { ...config[NETWORK as Network], secrets };

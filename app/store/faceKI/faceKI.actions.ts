@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Platform } from 'react-native';
 import { createUser, getUser } from '../../services/eSignature.services';
-import faceKIAPI, { FaceKIVerifyParams } from '../../services/faceKI/faceKI.service';
+import FaceKIService, { FaceKIVerifyParams } from '../../services/faceKI/faceKI.service';
 import { Enrollment, Liveness, Verify } from '../../services/faceKI/types';
 import {
   handleParamsError,
@@ -23,8 +23,12 @@ const successState = (image: string) => ({
   image: Platform.OS === 'android' ? `file://${image}` : image,
 });
 
+export const faceKIAuth = createAsyncThunk('faceKI/auth', async () => {
+  return await FaceKIService.generateToken();
+});
+
 export const faceKIVerifyOnSignup = createAsyncThunk(
-  'signUp/faceKIVerify',
+  'faceKI/Verify/signUp',
   async ({ image, email, privateKey }: FaceKIVerifyParams) => {
     // Check params
     if (image.length === 0 || email.length === 0) {
@@ -32,14 +36,14 @@ export const faceKIVerifyOnSignup = createAsyncThunk(
       return ERROR_STATE;
     } else {
       // Check liveliness
-      const livelinessStatus = await faceKIAPI.livelinessCheck({ image });
+      const livelinessStatus = await FaceKIService.livelinessCheck({ image });
       if (livelinessStatus.data.liveness !== Liveness.Genuine) {
         handleSpoof(livelinessStatus.data);
         return ERROR_STATE;
       } else {
         handleFaceAttributes(livelinessStatus.data);
         // Verify
-        const verifyStatus = await faceKIAPI.verifyUser({ image });
+        const verifyStatus = await FaceKIService.verifyUser({ image });
         if (verifyStatus.status === Verify.VerifyOk) {
           // Check if email exists in emailList of verified user
           const userEmailList = verifyStatus.name?.split(',');
@@ -56,13 +60,13 @@ export const faceKIVerifyOnSignup = createAsyncThunk(
               // Add email to emailList for current user
               const emailList = `${verifyStatus.name},${email}`;
               // Enroll new user with updated name | updating p1
-              const enrollStatus = await faceKIAPI.enrollUser({ image, name: emailList });
+              const enrollStatus = await FaceKIService.enrollUser({ image, name: emailList });
               if (enrollStatus.status !== Enrollment.EnrollOk) {
                 handleEnrollError();
                 return ERROR_STATE;
               } else {
                 // Remove user with previous name | updating p1 | !Danger!
-                const removingStatus = await faceKIAPI.removeUser({ name: verifyStatus.name });
+                const removingStatus = await FaceKIService.removeUser({ name: verifyStatus.name });
                 if (!removingStatus) {
                   somethingWentWrong(`User has been removed. RemovingStatus: ${removingStatus}`);
                   return ERROR_STATE;
@@ -89,7 +93,7 @@ export const faceKIVerifyOnSignup = createAsyncThunk(
             return ERROR_STATE;
           } // else
           // Enroll new user with new email
-          const enrollStatus = await faceKIAPI.enrollUser({ image, name: email });
+          const enrollStatus = await FaceKIService.enrollUser({ image, name: email });
           if (enrollStatus.status === Enrollment.EnrollOk) {
             // Create new user in ESignature
             const faceKIID = `usr_${email}_${privateKey}`;
@@ -99,7 +103,7 @@ export const faceKIVerifyOnSignup = createAsyncThunk(
               return successState(image);
             }
             // Remove user from ESignature
-            const removingStatus = await faceKIAPI.removeUser(verifyStatus.name);
+            const removingStatus = await FaceKIService.removeUser(verifyStatus.name);
             somethingWentWrong(`User has been removed. RemovingStatus: ${removingStatus}`);
             return ERROR_STATE;
           }
@@ -112,7 +116,7 @@ export const faceKIVerifyOnSignup = createAsyncThunk(
 );
 
 export const faceKIVerifyOnSignIn = createAsyncThunk(
-  'signIn/faceKIVerify',
+  'faceKI/Verify/signIn',
   async ({ image, email, privateKey, accountName }: FaceKIVerifyParams) => {
     if (image.length === 0 || email.length === 0 || accountName?.length === 0) {
       handleParamsError({ image, accountName, email, privateKey });
@@ -133,14 +137,14 @@ export const faceKIVerifyOnSignIn = createAsyncThunk(
       // todo: handle this case
     }
     // Check liveliness
-    const livelinessStatus = await faceKIAPI.livelinessCheck({ image });
+    const livelinessStatus = await FaceKIService.livelinessCheck({ image });
     if (livelinessStatus.data.liveness !== Liveness.Genuine) {
       handleSpoof(livelinessStatus.data);
       return ERROR_STATE;
     } else {
       handleFaceAttributes(livelinessStatus.data);
       // Verify
-      const verifyStatus = await faceKIAPI.verifyUser({ image });
+      const verifyStatus = await FaceKIService.verifyUser({ image });
       if (verifyStatus.status === Verify.VerifyOk) {
         const userEmailList = verifyStatus.name.split(',');
         if (userEmailList.includes(email)) {

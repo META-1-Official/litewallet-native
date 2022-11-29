@@ -1,8 +1,6 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
 import config from '../../config';
-
-const baseUrl = config.FACE_KI_API_URL;
 
 export interface VerifyParams {
   image: string;
@@ -21,8 +19,34 @@ export interface FaceKIVerifyParams {
   accountName?: string;
 }
 
-const faceKIAPI = {
-  livelinessCheck: async ({ image }: VerifyParams) => {
+export interface AuthParams {
+  clientSecret: string;
+  password: string;
+}
+
+class FaceKIServices {
+  private api: AxiosInstance;
+  private readonly clientSecret;
+  private readonly password;
+
+  constructor(secrets: AuthParams) {
+    this.api = axios.create({
+      baseURL: config.FACE_KI_API_URL,
+    });
+    this.clientSecret = secrets.clientSecret;
+    this.password = secrets.password;
+  }
+
+  generateToken = async () => {
+    console.log('Generate token start');
+    const params = { client_secret: this.clientSecret, password: this.password };
+    const { data } = await this.api.post('/face/auth', params);
+    this.api.defaults.headers['x-access-token'] = data.token;
+    console.log('Generate token end', data.token);
+    return data;
+  };
+
+  livelinessCheck = async ({ image }: VerifyParams) => {
     console.log('Liveliness service start');
     const formData = new FormData();
     formData.append('image', {
@@ -30,14 +54,14 @@ const faceKIAPI = {
       name: image.split('/').reverse()[0],
       type: 'image/jpeg',
     });
-    const response = await axios.post(baseUrl + '/face/attribute', formData, {
+    const response = await this.api.post('/face/attribute', formData, {
       headers: { 'content-type': 'multipart/form-data' },
     });
     console.log('Liveliness service end', response.data);
     return response.data;
-  },
+  };
 
-  enrollUser: async ({ image, name }: EnrollUserParams) => {
+  enrollUser = async ({ image, name }: EnrollUserParams) => {
     console.log('EnrollUser service start');
     const formData = new FormData();
     formData.append('image', {
@@ -46,14 +70,14 @@ const faceKIAPI = {
       type: 'image/jpeg',
     });
     formData.append('name', name);
-    const response = await axios.post(baseUrl + '/enroll_user', formData, {
+    const response = await this.api.post('/enroll_user', formData, {
       headers: { 'content-type': 'multipart/form-data' },
     });
     console.log('EnrollUser service start', response.data);
     return response.data;
-  },
+  };
 
-  verifyUser: async ({ image }: VerifyParams) => {
+  verifyUser = async ({ image }: VerifyParams) => {
     console.log('VerifyUser service start');
     const formData = new FormData();
     formData.append('image', {
@@ -61,34 +85,29 @@ const faceKIAPI = {
       name: image.split('/').reverse()[0],
       type: 'image/jpeg',
     });
-    const response = await axios.post(baseUrl + '/verify_user', formData, {
+    const response = await this.api.post('/verify_user', formData, {
       headers: { 'content-type': 'multipart/form-data' },
     });
     console.log('VerifyUser service end', response.data);
     return response.data;
-  },
+  };
 
-  userList: async () => {
-    const response = await axios.post(baseUrl + '/user_list');
+  userList = async () => {
+    const response = await this.api.post('/user_list');
     return response.data;
-  },
+  };
 
-  removeUser: async ({ name }: RemoveUserParams) => {
+  removeUser = async ({ name }: RemoveUserParams) => {
     console.log('RemoveUser service start');
     const formData = new FormData();
     formData.append('name', name);
     console.log('RemoveUser service appending form data');
-    const response = await axios.post(baseUrl + '/remove_user', formData, {
+    const response = await this.api.post('/remove_user', formData, {
       headers: { 'content-type': 'multipart/form-data' },
     });
     console.log('RemoveUser service end', response.data);
     return response.data;
-  },
+  };
+}
 
-  removeAllUsers: async () => {
-    const response = await axios.post(baseUrl + '/remove_all');
-    return response.data;
-  },
-};
-
-export default faceKIAPI;
+export default new FaceKIServices(config.secrets.faceKi);
