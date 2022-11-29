@@ -5,7 +5,7 @@ import { promptPromise } from '../utils';
 import config from '../config';
 import { useStore } from '../store';
 
-const HOST = config.liteWalletApiHost;
+const HOST = config.LITE_WALLET_API_URL;
 
 enum Method {
   _getUserData = '/getUserData',

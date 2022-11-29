@@ -75,7 +75,7 @@ export default async function createAccountWithPassword(
 ) {
   const milkFaucet = async () => {
     const PREFIX = NETWORK === Network.META1 ? 'META1' : 'DEV11';
-    let rawRes = await fetch(config.faucetAddress + '/api/v1/accounts', {
+    let rawRes = await fetch(config.FAUCET_URL + '/api/v1/accounts', {
       method: 'post',
       mode: 'cors',
       headers: {
@@ -98,7 +98,7 @@ export default async function createAccountWithPassword(
     });
     const json = await rawRes.json();
     console.log('Register Called');
-    console.log(config.faucetAddress + '/api/v1/accounts');
+    console.log(config.FAUCET_URL + '/api/v1/accounts');
     console.log(json);
     return json;
   };

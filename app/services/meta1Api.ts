@@ -297,7 +297,7 @@ export const placeLimitOrder = async (accountInfo: AccountWithPassword, orderInf
 };
 
 const checkAvailabilityOfAddress = async (asset: string) => {
-  const res = await fetch(`${config.GatewayUrl}/api-gateways/${asset}`, {
+  const res = await fetch(`${config.GATEWAY_URL}/api-gateways/${asset}`, {
     credentials: 'omit',
     headers: {
       'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:84.0) Gecko/20100101 Firefox/84.0',
@@ -320,7 +320,7 @@ const checkAvailabilityOfAddress = async (asset: string) => {
 };
 
 export const depositAddress = async (accountName: string, asset: string) => {
-  const res = await fetch(`${config.GatewayUrl}/api/wallet/init/${asset}`, {
+  const res = await fetch(`${config.GATEWAY_URL}/api/wallet/init/${asset}`, {
     credentials: 'omit',
     headers: {
       'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:84.0) Gecko/20100101 Firefox/84.0',
