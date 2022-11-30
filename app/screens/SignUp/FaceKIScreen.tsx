@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { RootStackParamList } from '../../AuthNav';
@@ -13,7 +13,7 @@ const CAMERA_PERMISSION_STATUS_AUTHORIZED = 'authorized';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'FaceKI'>;
 
-const FaceKIScreen: React.FC<Props> = ({ navigation }) => {
+const FaceKIScreen: React.FC<Props> = () => {
   const dispatch = useAppDispatch();
 
   const { privateKey, email } = useAppSelector(state => state.web3);

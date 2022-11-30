@@ -2,46 +2,17 @@ import React from 'react';
 import { Image, SafeAreaView, Text, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScrollView } from 'react-native-gesture-handler';
-import Toast from 'react-native-toast-message';
 import { RootStackParamList } from '../../AuthNav';
 import RoundedButton from '../../components/RoundedButton';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { useStore } from '../../store';
-import { login } from '../../store/signIn/signIn.actions';
+import { useAppSelector } from '../../hooks';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'FaceKISuccess'>;
 
 export const FaceKISuccessScreen: React.FC<Props> = ({ navigation }) => {
-  const dispatch = useAppDispatch();
-  const { email } = useAppSelector(state => state.web3);
   const { image } = useAppSelector(state => state.faceKI);
-  const { accountName } = useAppSelector(state => state.signIn);
-  const isSigning = !!accountName;
-  const authorize = useStore(state => state.authorize);
 
   const handleNext = () => {
-    if (isSigning) {
-      dispatch(login({ accountName, email }))
-        .unwrap()
-        .then(loginDetails => {
-          Toast.show({
-            type: 'success',
-            text1: 'Logged in successfully!',
-          });
-          console.log('loginDetails: ', loginDetails);
-          authorize(accountName, undefined);
-        })
-        .catch(error => {
-          Toast.show({
-            type: 'error',
-            text1: 'Something went wrong!',
-            text2: 'Try to login again.',
-          });
-          console.error(error);
-        });
-    } else {
-      navigation.navigate('Passkey');
-    }
+    navigation.navigate('Passkey');
   };
 
   return (

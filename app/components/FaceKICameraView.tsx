@@ -1,10 +1,13 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, Platform, Image, ImageBackground } from 'react-native';
+import Toast from 'react-native-toast-message';
 import { Camera, CameraDevice, PhotoFile, useCameraDevices } from 'react-native-vision-camera';
 import { RootNavigationProp } from '../AuthNav';
 import { useAppDispatch, useAppSelector } from '../hooks';
+import { useStore } from '../store';
 import { faceKIVerifyOnSignup, faceKIVerifyOnSignIn } from '../store/faceKI/faceKI.actions';
+import { login } from '../store/signIn/signIn.actions';
 import styles from './FaceKICameraView.styles';
 import Loader from './Loader';
 import RoundedButton from './RoundedButton';
@@ -40,8 +43,10 @@ const FaceKiCameraView = ({ email, privateKey }: Props) => {
     cameraDevice || devices.front || devices.back || devices.external || devices.unspecified;
   const [photo, setPhoto] = useState<PhotoFile | undefined>();
   const camera = useRef<Camera>(null);
+  const { passKey } = useAppSelector(state => state.web3);
   const { accountName } = useAppSelector(state => state.signIn);
   const isSigning = !!accountName;
+  const authorize = useStore(state => state.authorize);
 
   useEffect(() => {
     if (Platform.OS === 'android') {
@@ -54,6 +59,23 @@ const FaceKiCameraView = ({ email, privateKey }: Props) => {
       });
     }
   }, []);
+
+  const loginHandler = () => {
+    dispatch(login({ accountName, email }))
+      .unwrap()
+      .then(loginDetails => {
+        console.log('Logged in successfully! loginDetails: ', loginDetails);
+        authorize(accountName, passKey);
+      })
+      .catch(error => {
+        Toast.show({
+          type: 'error',
+          text1: 'Something went wrong!',
+          text2: 'Try to login again.',
+        });
+        console.error(error);
+      });
+  };
 
   const verifyHandler = async () => {
     if (camera?.current) {
@@ -74,8 +96,12 @@ const FaceKiCameraView = ({ email, privateKey }: Props) => {
               setPhoto(undefined);
               console.log('Photo has been removed!');
             } else {
-              nav.navigate('FaceKISuccess');
-              setTimeout(() => setPhoto(undefined), 200);
+              if (isSigning) {
+                loginHandler();
+              } else {
+                nav.navigate('FaceKISuccess');
+                setTimeout(() => setPhoto(undefined), 200);
+              }
             }
           })
           .catch(promiseRejectedValue => {
