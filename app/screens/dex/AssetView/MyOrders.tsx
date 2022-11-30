@@ -430,10 +430,13 @@ const RenderRow =
 
     const buyPrice = filled.length ? meanFilled : sellAmt / buyAmt;
     const sellPrice = Math.max(buyAmt / sellAmt, sellAmt / buyAmt);
+    // todo: verify padding here
     return (
       <View
         style={{
           flexDirection: 'row',
+          justifyContent: 'space-around',
+          paddingRight: '5%',
         }}
         key={`OrderHistorical_${k}`}
       >

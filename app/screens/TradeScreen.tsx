@@ -586,7 +586,7 @@ const styles = StyleSheet.create({
   listView: { padding: 16, borderBottomWidth: 2, borderBottomColor: '#eceef0' },
   rowJustifyBetween: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
   },
   listHeading: {
     fontSize: 16,
