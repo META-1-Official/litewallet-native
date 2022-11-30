@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import { configureStore, ThunkAction, Action, combineReducers } from '@reduxjs/toolkit';
-import createDebugger from 'redux-flipper';
 import faceKIReducer from './faceKI/faceKI.reducer';
 import signInReducer from './signIn/signIn.reducer';
 import signUpReducer from './signUp/signUp.reducer';
@@ -32,7 +31,7 @@ export const createStore = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(createDebugger()),
+    }),
 });
 
 export type AppDispatch = typeof createStore.dispatch;
