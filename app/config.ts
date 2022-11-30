@@ -41,7 +41,7 @@ const config: Config = {
     GATEWAY_URL: 'https://gateway.dev.meta-exchange.vision',
     API_URL: 'https://api.meta-exchange.vision',
     WEB3_CLIENT_ID:
-      'BENfRWt5wyCFCi-nKzu6gIlPABHbvgub3lhZUhUp_r4XD2xmdph0MZMaXY89xnfPVs9wMao5vlBiA6dtP-4H1i0',
+      'BFL8Z_Awr3p_ZVGiNUp1CIK8C28p0CC9WJRxw_GWEMWLJvOgJmpTJ8Xl8jbxYvzKhabmENF0GRbxE9EadEJ5T6g',
     FACE_KI_API_URL: 'https://biometric.dev.cryptomailsvc.io',
     E_SIGNATURE_API_URL: 'https://e-sign.dev.cryptomailsvc.io',
   },
@@ -52,7 +52,7 @@ const config: Config = {
     GATEWAY_URL: 'https://gateway.dev2.meta-exchange.vision',
     API_URL: 'https://api.meta-exchange.vision',
     WEB3_CLIENT_ID:
-      'BENfRWt5wyCFCi-nKzu6gIlPABHbvgub3lhZUhUp_r4XD2xmdph0MZMaXY89xnfPVs9wMao5vlBiA6dtP-4H1i0',
+      'BFL8Z_Awr3p_ZVGiNUp1CIK8C28p0CC9WJRxw_GWEMWLJvOgJmpTJ8Xl8jbxYvzKhabmENF0GRbxE9EadEJ5T6g',
     FACE_KI_API_URL: 'https://biometric.dev.cryptomailsvc.io',
     E_SIGNATURE_API_URL: 'https://e-sign.dev.cryptomailsvc.io',
   },
