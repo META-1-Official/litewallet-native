@@ -1,0 +1,40 @@
+diff --git a/ios/nativeapp.xcodeproj/project.pbxproj b/ios/nativeapp.xcodeproj/project.pbxproj
+index ee4be4e..4fd68bf 100644
+--- a/ios/nativeapp.xcodeproj/project.pbxproj
++++ b/ios/nativeapp.xcodeproj/project.pbxproj
+@@ -488,7 +488,7 @@
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+ 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+ 				CLANG_ENABLE_MODULES = YES;
+-				CODE_SIGN_IDENTITY = "Apple Development";
++				CODE_SIGN_IDENTITY = "iPhone Developer";
+ 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+ 				CODE_SIGN_STYLE = Manual;
+ 				CURRENT_PROJECT_VERSION = 1;
+@@ -508,7 +508,7 @@
+ 				);
+ 				PRODUCT_BUNDLE_IDENTIFIER = io.meta1.appbeta;
+ 				PRODUCT_NAME = META1;
+-				PROVISIONING_PROFILE_SPECIFIER = "";
++				PROVISIONING_PROFILE_SPECIFIER = "match Development io.meta1.appbeta";
+ 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development io.meta1.appbeta";
+ 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+ 				SWIFT_VERSION = 5.0;
+@@ -523,7 +523,7 @@
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+ 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+ 				CLANG_ENABLE_MODULES = YES;
+-				CODE_SIGN_IDENTITY = "Apple Development";
++				CODE_SIGN_IDENTITY = "iPhone Developer";
+ 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+ 				CODE_SIGN_STYLE = Manual;
+ 				CURRENT_PROJECT_VERSION = 1;
+@@ -542,7 +542,7 @@
+ 				);
+ 				PRODUCT_BUNDLE_IDENTIFIER = io.meta1.appbeta;
+ 				PRODUCT_NAME = META1;
+-				PROVISIONING_PROFILE_SPECIFIER = "";
++				PROVISIONING_PROFILE_SPECIFIER = "match Development io.meta1.appbeta";
+ 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development io.meta1.appbeta";
+ 				SWIFT_VERSION = 5.0;
+ 				VERSIONING_SYSTEM = "apple-generic";
