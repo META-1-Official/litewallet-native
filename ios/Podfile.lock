@@ -421,16 +421,16 @@ PODS:
   - RNScreens (3.18.2):
     - React-Core
     - React-RCTImage
-  - RNSentry (4.8.0):
+  - RNSentry (3.4.3):
     - React-Core
-    - Sentry (= 7.29.0)
+    - Sentry (= 7.11.0)
   - RNSVG (13.5.0):
     - React-Core
   - RNVectorIcons (9.2.0):
     - React-Core
-  - Sentry (7.29.0):
-    - Sentry/Core (= 7.29.0)
-  - Sentry/Core (7.29.0)
+  - Sentry (7.11.0):
+    - Sentry/Core (= 7.11.0)
+  - Sentry/Core (7.11.0)
   - SocketRocket (0.6.0)
   - VisionCamera (2.15.2):
     - React
@@ -716,10 +716,10 @@ SPEC CHECKSUMS:
   RNGestureHandler: 62232ba8f562f7dea5ba1b3383494eb5bf97a4d3
   RNReanimated: 2a91e85fcd343f8af3c58d3425b99fdd285590a5
   RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
-  RNSentry: db7fd7b66efda28885e4e904a8b5e7349aec61c1
+  RNSentry: 85f6525b5fe8d2ada065858026b338605b3c09da
   RNSVG: 38ca962c970dbce1ca38991a5aebf26d163f9efb
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
-  Sentry: 4272663eb0eda312024d795ca3f5a562a8ce5e18
+  Sentry: 0c5cd63d714187b4a39c331c1f0eb04ba7868341
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   VisionCamera: 4cfd685b1e671fea4aa0400905ab397f0e972210
   Yoga: eca980a5771bf114c41a754098cd85e6e0d90ed7
