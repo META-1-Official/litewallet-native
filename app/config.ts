@@ -31,7 +31,7 @@ const config: Config = {
     API_URL: 'https://api.meta-exchange.vision',
     WEB3_CLIENT_ID:
       'BENfRWt5wyCFCi-nKzu6gIlPABHbvgub3lhZUhUp_r4XD2xmdph0MZMaXY89xnfPVs9wMao5vlBiA6dtP-4H1i0',
-    FACE_KI_API_URL: 'https://biometric.dev.cryptomailsvc.io',
+    FACE_KI_API_URL: 'https://litewallet.cryptomailsvc.io',
     E_SIGNATURE_API_URL: 'https://humankyc.cryptomailsvc.io',
   },
   META1DEV: {
@@ -42,7 +42,7 @@ const config: Config = {
     API_URL: 'https://api.meta-exchange.vision',
     WEB3_CLIENT_ID:
       'BFL8Z_Awr3p_ZVGiNUp1CIK8C28p0CC9WJRxw_GWEMWLJvOgJmpTJ8Xl8jbxYvzKhabmENF0GRbxE9EadEJ5T6g',
-    FACE_KI_API_URL: 'https://biometric.dev.cryptomailsvc.io',
+    FACE_KI_API_URL: 'https://litewallet.dev.cryptomailsvc.io',
     E_SIGNATURE_API_URL: 'https://e-sign.dev.cryptomailsvc.io',
   },
   META1DEV2: {
@@ -53,7 +53,7 @@ const config: Config = {
     API_URL: 'https://api.meta-exchange.vision',
     WEB3_CLIENT_ID:
       'BFL8Z_Awr3p_ZVGiNUp1CIK8C28p0CC9WJRxw_GWEMWLJvOgJmpTJ8Xl8jbxYvzKhabmENF0GRbxE9EadEJ5T6g',
-    FACE_KI_API_URL: 'https://biometric.dev.cryptomailsvc.io',
+    FACE_KI_API_URL: 'https://litewallet.dev2.cryptomailsvc.io',
     E_SIGNATURE_API_URL: 'https://e-sign.dev.cryptomailsvc.io',
   },
   META1TEST: {
@@ -64,7 +64,7 @@ const config: Config = {
     API_URL: 'https://api.test.meta-exchange.vision',
     WEB3_CLIENT_ID:
       'BENfRWt5wyCFCi-nKzu6gIlPABHbvgub3lhZUhUp_r4XD2xmdph0MZMaXY89xnfPVs9wMao5vlBiA6dtP-4H1i0',
-    FACE_KI_API_URL: 'https://biometric.test.cryptomailsvc.io',
+    FACE_KI_API_URL: 'https://litewallet.test.cryptomailsvc.io',
     E_SIGNATURE_API_URL: 'https://e-sign.test.cryptomailsvc.io',
   },
 };
