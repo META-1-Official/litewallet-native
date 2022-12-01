@@ -5,7 +5,7 @@ import { Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { SvgIcons } from '../../../assets';
 import { RootStackParamList } from '../../AuthNav';
-import { useNewLoaderModal } from '../../components/LoaderModal';
+import LoaderPopover from '../../components/LoaderPopover';
 import RoundedButton from '../../components/RoundedButton';
 import { useAppSelector } from '../../hooks';
 import { useStore } from '../../store';
@@ -17,10 +17,12 @@ import { getAccountKeys } from '../CreatePaperWallet/CreatePaperWallet';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'PaymentSuccess'>;
 
-export const PaymentSuccess = ({ navigation }: Props) => {
+export const PaymentSuccess = ({}: Props) => {
   const authorize = useStore(state => state.authorize);
   const { accountName } = useAppSelector(state => state.signUp);
   const { passKey } = useAppSelector(state => state.web3);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const [, setIsCopied] = useState(false);
   const handleCopy = () => {
@@ -34,7 +36,6 @@ export const PaymentSuccess = ({ navigation }: Props) => {
 
   const [keys, setKeys] = useState<KeysT | undefined>(undefined);
   const [document, setDoc] = useState('');
-  const loader = useNewLoaderModal();
 
   useEffect(() => {
     if (document) {
@@ -50,7 +51,7 @@ export const PaymentSuccess = ({ navigation }: Props) => {
         savePdf(document);
         return;
       }
-      loader.open();
+      setIsLoading(true);
     });
   };
 
@@ -93,7 +94,7 @@ export const PaymentSuccess = ({ navigation }: Props) => {
         keys={keys}
         onReady={d => {
           setDoc(d);
-          loader.close();
+          setIsLoading(false);
         }}
       />
 
@@ -105,6 +106,7 @@ export const PaymentSuccess = ({ navigation }: Props) => {
         />
         <RoundedButton styles={{ flex: 1 }} title="Submit" onPress={handleCreateWallet} />
       </View>
+      <LoaderPopover loading={isLoading} />
     </SafeAreaView>
   );
 };
