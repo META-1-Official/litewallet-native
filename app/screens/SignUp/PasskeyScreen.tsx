@@ -244,7 +244,6 @@ export const PasskeyScreen = ({ navigation }: Props) => {
 
         <View style={styles.buttonGroup}>
           <RoundedButton
-            styles={{ flex: 1 }}
             title="Next"
             disabled={!isEveryCheckBoxesValid || eSignaturePending}
             onPress={handleNext}

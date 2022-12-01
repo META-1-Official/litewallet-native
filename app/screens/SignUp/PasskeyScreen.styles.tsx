@@ -7,7 +7,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   contentContainerStyle: {
-    flex: 1,
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -18,6 +17,7 @@ const styles = StyleSheet.create({
   title: { fontSize: 30, fontWeight: 'bold' },
   subtitle: { fontSize: 18, paddingTop: 5 },
   inputWrapper: {
+    width: '100%',
     flexDirection: 'row',
     marginTop: 20,
     marginBottom: 20,
@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   importantInfo: {
+    width: '100%',
     backgroundColor: '#FFF2F2',
     borderColor: '#FF2F2F',
     borderWidth: 1,
@@ -52,11 +53,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     marginTop: 35,
     width: '100%',
-    flexGrow: 0.75,
+    flexGrow: 1,
   },
   checkboxRow: { flex: 1, flexDirection: 'row' },
   checkboxText: { marginLeft: 20, flex: 1 },
-  buttonGroup: { position: 'absolute', bottom: 0, width: '100%' },
+  buttonGroup: { position: 'relative', bottom: 0, width: '100%' },
 });
 
 export default styles;
