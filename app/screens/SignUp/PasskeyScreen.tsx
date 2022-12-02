@@ -5,6 +5,7 @@ import { AppState, Platform, Pressable, SafeAreaView, Text, TextInput, View } fr
 import CheckBox from '@react-native-community/checkbox';
 import { ScrollView } from 'react-native-gesture-handler';
 import { RootStackParamList } from '../../AuthNav';
+import LoaderPopover from '../../components/LoaderPopover';
 import RoundedButton from '../../components/RoundedButton';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import {
@@ -30,6 +31,7 @@ export const PasskeyScreen = ({ navigation }: Props) => {
 
   const [isCopied, setIsCopied] = useState(false);
   const [checkboxesState, setCheckBoxesState] = useState([false, false, false, false, false]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     dispatch(getAccountPaymentStatus(email))
@@ -44,7 +46,7 @@ export const PasskeyScreen = ({ navigation }: Props) => {
   }, []);
 
   const handleRegistrationIssue = (message: string) => {
-    dispatch(clearESignature());
+    // dispatch(clearESignature());
     console.error(message);
     Toast.show({
       type: 'error',
@@ -84,6 +86,7 @@ export const PasskeyScreen = ({ navigation }: Props) => {
   };
 
   const handleNext = () => {
+    setIsLoading(true);
     if (isCopied) {
       console.log('Account registration!');
       dispatch(
@@ -99,13 +102,15 @@ export const PasskeyScreen = ({ navigation }: Props) => {
         .unwrap()
         .then(registrationStatus => {
           if (registrationStatus) {
-            console.error('Account has been registered!');
+            console.log('Account has been registered!');
             navigation.navigate('PaymentSuccess');
+            setIsLoading(false);
           }
         })
         .catch(error => {
           console.error(error);
           handleRegistrationIssue("Account hasn't been created!");
+          setIsLoading(false);
         });
     } else {
       Toast.show({
@@ -259,11 +264,12 @@ export const PasskeyScreen = ({ navigation }: Props) => {
         <View style={styles.buttonGroup}>
           <RoundedButton
             title="Next"
-            disabled={!isEveryCheckBoxesValid || eSignaturePending}
+            disabled={isLoading || !isEveryCheckBoxesValid || eSignaturePending}
             onPress={handleNext}
             pending={eSignaturePending}
           />
         </View>
+        <LoaderPopover loading={isLoading} />
       </ScrollView>
     </SafeAreaView>
   );
