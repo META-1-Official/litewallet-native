@@ -39,25 +39,26 @@ export const PaymentSuccess = ({}: Props) => {
 
   useEffect(() => {
     if (document) {
-      savePdf(document);
+      savePdf(document).then(() => {
+        setIsLoading(false);
+      });
     }
   }, [document]);
 
   const save = async () => {
-    catchError(async () => {
+    await catchError(async () => {
       const _keys = await getAccountKeys({ accountName, password: passKey });
       setKeys(_keys);
       if (document) {
-        savePdf(document);
-        return;
+        await savePdf(document);
       }
+      setIsLoading(false);
     });
   };
 
   const handleDownloadPaperWallet = async () => {
     setIsLoading(true);
     await save();
-    setIsLoading(false);
   };
 
   const handleCreateWallet = () => {
