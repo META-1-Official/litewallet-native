@@ -41,7 +41,7 @@ export const faceKIVerifyOnSignup = createAsyncThunk(
         handleFaceAttributes(livelinessStatus.data);
         // Verify
         const verifyStatus = await FaceKIService.verifyUser({ image });
-        if (verifyStatus.status === Verify.VerifyOk) {
+        if (verifyStatus.status === Verify.VerifyOk && Number(verifyStatus.score) === 1) {
           // Check if email exists in emailList of verified user
           const userEmailList = verifyStatus.name?.split(',');
           if (userEmailList.includes(email)) {
@@ -142,7 +142,7 @@ export const faceKIVerifyOnSignIn = createAsyncThunk(
       handleFaceAttributes(livelinessStatus.data);
       // Verify
       const verifyStatus = await FaceKIService.verifyUser({ image });
-      if (verifyStatus.status === Verify.VerifyOk) {
+      if (verifyStatus.status === Verify.VerifyOk && Number(verifyStatus.score) === 1) {
         const userEmailList = verifyStatus.name.split(',');
         if (userEmailList.includes(email)) {
           return successState(image);
