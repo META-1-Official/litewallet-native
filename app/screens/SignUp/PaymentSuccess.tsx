@@ -51,12 +51,13 @@ export const PaymentSuccess = ({}: Props) => {
         savePdf(document);
         return;
       }
-      setIsLoading(true);
     });
   };
 
   const handleDownloadPaperWallet = async () => {
+    setIsLoading(true);
     await save();
+    setIsLoading(false);
   };
 
   const handleCreateWallet = () => {

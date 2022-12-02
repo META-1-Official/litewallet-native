@@ -31,6 +31,18 @@ export const PasskeyScreen = ({ navigation }: Props) => {
   const [isCopied, setIsCopied] = useState(false);
   const [checkboxesState, setCheckBoxesState] = useState([false, false, false, false, false]);
 
+  useEffect(() => {
+    dispatch(getAccountPaymentStatus(email))
+      .unwrap()
+      .then(user => {
+        if (user && user.status?.isSign) {
+          if (user.status?.isPayed || user.status?.isPayedByCrypto) {
+            handleCheckBox(4, true);
+          }
+        }
+      });
+  }, []);
+
   const handleRegistrationIssue = (message: string) => {
     dispatch(clearESignature());
     console.error(message);
@@ -47,7 +59,7 @@ export const PasskeyScreen = ({ navigation }: Props) => {
         console.log('User: ', user);
         if (user && user.status?.isSign) {
           if (user.status?.isPayed || user.status?.isPayedByCrypto) {
-            handleCheckBox(4);
+            handleCheckBox(4, true);
             console.log('Payments: ', user.pays);
           } else {
             handleRegistrationIssue('Please pay 1$ for account');
@@ -59,14 +71,16 @@ export const PasskeyScreen = ({ navigation }: Props) => {
   };
 
   const handleSign = () => {
-    dispatch(eSignatureProceed({ firstName, lastName, mobile, email, accountName, privateKey }))
-      .unwrap()
-      .then(promiseResult => {
-        if (Platform.OS === 'ios') {
-          console.log('Handle Sign PromiseResult: ', promiseResult);
-          getPaymentDetails();
-        }
-      });
+    if (!checkboxesState[4]) {
+      dispatch(eSignatureProceed({ firstName, lastName, mobile, email, accountName, privateKey }))
+        .unwrap()
+        .then(promiseResult => {
+          if (Platform.OS === 'ios') {
+            console.log('Handle Sign PromiseResult: ', promiseResult);
+            getPaymentDetails();
+          }
+        });
+    }
   };
 
   const handleNext = () => {
@@ -139,10 +153,10 @@ export const PasskeyScreen = ({ navigation }: Props) => {
     }
   }, [appStateVisible, eSignaturePending, eSignatureStatus]);
 
-  const handleCheckBox = (id: number) => {
+  const handleCheckBox = (id: number, value: boolean = false) => {
     setCheckBoxesState(prevState => {
       const newState = [...prevState];
-      newState[id] = !newState[id];
+      newState[id] = value || !newState[id];
       return newState;
     });
   };
