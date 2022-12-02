@@ -59,12 +59,6 @@ export const faceKIVerifyOnSignup = createAsyncThunk(
               // Enroll new user with updated name | updating p1
               const enrollStatus = await FaceKIService.enrollUser({ image, name: emailList });
               if (enrollStatus.status !== Enrollment.EnrollOk) {
-                // Remove user with new name | updating p1 | !Danger!
-                const removingStatus = await FaceKIService.removeUser({ name: emailList });
-                if (!removingStatus) {
-                  somethingWentWrong(`User has been removed. RemovingStatus: ${removingStatus}`);
-                  return ERROR_STATE;
-                }
                 handleEnrollError();
                 return ERROR_STATE;
               } else {
