@@ -10,12 +10,12 @@ import {
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Loader from '../../components/Loader';
-import { getHistoryForAsset, useAssets } from '../../services/meta1Api';
+import useAssetsOnFocus from '../../hooks/useAssets';
+import { getHistoryForAsset } from '../../services/meta1Api';
 import { LineChart, Grid } from 'react-native-svg-charts';
 import { DexTSP } from '.';
 import { dexAssetView } from './AssetView/AssetViewStore';
 import { tid } from '../../utils';
-
 const { width } = Dimensions.get('window');
 
 const Chart: React.FC<{ symbol: string; color: string }> = ({ symbol, color }) => {
@@ -26,7 +26,7 @@ const Chart: React.FC<{ symbol: string; color: string }> = ({ symbol, color }) =
       await getHistoryForAsset(symbol).then(d => !noop && setData(d));
     }
     fn();
-    // eslint-disable-next-line prettier/prettier
+
     return () => {
       noop = true;
     };
@@ -45,11 +45,11 @@ const Chart: React.FC<{ symbol: string; color: string }> = ({ symbol, color }) =
 };
 
 const DexHome: React.FC<DexTSP> = ({ navigation }) => {
-  const accountAssets = useAssets();
-  if (!accountAssets) {
+  const allAssets = useAssetsOnFocus();
+  if (!allAssets) {
     return <Loader bgc="#000" />;
   }
-  const assets = accountAssets!.assetsWithBalance;
+  const assets = allAssets!.assetsWithBalance;
   return (
     <SafeAreaView
       style={{
@@ -60,7 +60,7 @@ const DexHome: React.FC<DexTSP> = ({ navigation }) => {
       <ScrollView style={{ marginHorizontal: 'auto' }}>
         <Text style={{ color: '#ccc' }}> Portfolio Balance</Text>
         <Text style={{ color: '#fff', fontSize: 32, fontWeight: '700' }}>
-          ${accountAssets?.accountTotal.toFixed(2)}
+          ${allAssets?.accountTotal.toFixed(2)}
         </Text>
         <Text style={{ color: '#fff', fontSize: 21, marginTop: 18 }}> Crypto on META1</Text>
         <View
@@ -110,7 +110,9 @@ const DexHome: React.FC<DexTSP> = ({ navigation }) => {
                       alignItems: 'flex-end',
                     }}
                   >
-                    <Text style={{ color: '#fff', fontSize: 15 }}>${e.usdt_value.toFixed(2)}</Text>
+                    <Text style={{ color: '#fff', fontSize: 15 }}>
+                      ${String(e.usdt_value).slice(0, 8)}
+                    </Text>
                     <Text style={{ color: e.delta >= 0 ? '#419e7f' : '#b02a27' }}>
                       {e.delta >= 0 ? '+ ' : '- '}
                       {Math.abs(e.delta)}%
