@@ -16,13 +16,9 @@ export const eSignatureUpdateWalletName = createAsyncThunk(
   async ({ email, accountName }: any) => {
     const kycProfile = await getUser(email);
     const walletNameList = kycProfile.member1Name.split(',');
-    console.log('Update action', walletNameList, accountName);
     if (!walletNameList.includes(accountName)) {
-      console.log('Сейчас запуститься апдейт1');
       const token = (await getToken(email)).headers.authorization as string;
-      console.log('Сейчас запуститься апдейт2');
       const newMember1Name = `${kycProfile.member1Name},${accountName}`;
-      console.log('Сейчас запуститься апдейт3');
       return updateUser(email, { member1Name: newMember1Name }, token);
     }
     return true;
