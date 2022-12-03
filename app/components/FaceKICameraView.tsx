@@ -44,8 +44,10 @@ const FaceKiCameraView = ({ email, privateKey }: Props) => {
   const [photo, setPhoto] = useState<PhotoFile | undefined>();
   const camera = useRef<Camera>(null);
   const { passKey } = useAppSelector(state => state.web3);
-  const accountName = useAppSelector(state => state.signIn.accountName) as string;
-  const isSigning = !!accountName;
+  const { accountName: signUpAccountName } = useAppSelector(state => state.signUp);
+  const { accountName: signInAccountName } = useAppSelector(state => state.signIn);
+  const isSigning = !!signInAccountName;
+  const accountName = signInAccountName || signUpAccountName;
   const authorize = useStore(state => state.authorize);
 
   useEffect(() => {

@@ -49,15 +49,18 @@ export const faceKIVerifyOnSignup = createAsyncThunk(
           const userEmailList = verifyStatus.name?.split(',');
           if (userEmailList.includes(email)) {
             if (kycProfile.member1Name) {
-              // Check if user accountName exist in kycProfile.member1Name
               const kycProfileWalletList = kycProfile.member1Name.split(',');
-              if (kycProfileWalletList.includes(accountName)) {
-                handleUsedWallet();
-                return ERROR_STATE;
-              }
-              // Else | update kycProfile with new wallet name
+              // todo: remove this condition in case of issue - when wallet doesn't exist in blockchain but exist in kycProfile
+              // Check if user accountName exist in kycProfile.member1Name
+              // if (kycProfileWalletList.includes(accountName)) {
+              // handleUsedWallet();
+              // return ERROR_STATE;
+              // }
+              const newMember1Name = kycProfileWalletList.includes(accountName)
+                ? kycProfile.member1Name
+                : kycProfileWalletList.push(accountName).join(',');
+              // Update kycProfile with new wallet name
               const token = (await getToken(email)).headers.authorization as string;
-              const newMember1Name = `${kycProfile.member1Name},${accountName}`;
               const updateStatus = await updateUser(email, { member1Name: newMember1Name }, token);
               if (updateStatus) {
                 handleVerifyOk(verifyStatus);
