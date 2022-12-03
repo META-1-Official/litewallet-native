@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, Platform, Image, ImageBackground } from 'react-native';
+import { View, Text, Platform, ImageBackground } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { Camera, CameraDevice, PhotoFile, useCameraDevices } from 'react-native-vision-camera';
 import { RootNavigationProp } from '../AuthNav';
@@ -123,24 +123,6 @@ const FaceKiCameraView = ({ email, privateKey }: Props) => {
     return <Text>Camera is not ready. Loading...</Text>;
   }
 
-  if (photo) {
-    return (
-      <>
-        <Image
-          style={{
-            width: '100%',
-            height: '115%',
-            position: 'absolute',
-          }}
-          source={{
-            uri: Platform.OS === 'android' ? `file://${photo.path}` : photo?.path,
-          }}
-        />
-        <Loader />
-      </>
-    );
-  }
-
   return (
     <View style={styles.container}>
       {!photo && (
@@ -193,6 +175,7 @@ const FaceKiCameraView = ({ email, privateKey }: Props) => {
           </View>
         </>
       )}
+      {photo && <Loader />}
     </View>
   );
 };
