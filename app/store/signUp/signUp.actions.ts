@@ -81,7 +81,7 @@ export const registerAccount = createAsyncThunk(
   'signUp/registerAccount',
   async ({ accountName, passKey, mobile, email, firstName, lastName }: RegisterAccountProps) => {
     console.log('CreateAccountWithPassword service started!');
-    return await createAccountWithPassword(
+    return createAccountWithPassword(
       accountName,
       passKey,
       false,

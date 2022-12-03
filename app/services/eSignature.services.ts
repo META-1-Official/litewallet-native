@@ -14,11 +14,15 @@ export const updateUser = async (
   payload: { member1Name: string },
   token: string,
 ) => {
-  const { data } = await axios.patch(`${config.E_SIGNATURE_API_URL}/apiwallet/users`, payload, {
-    headers: {
-      authorization: token,
+  const { data } = await axios.patch(
+    `${config.E_SIGNATURE_API_URL}/apiewallet/users/update?email=${email}`,
+    payload,
+    {
+      headers: {
+        authorization: token,
+      },
     },
-  });
+  );
   return data;
 };
 

@@ -8,6 +8,8 @@ import { RootStackParamList } from '../../AuthNav';
 import LoaderPopover from '../../components/LoaderPopover';
 import RoundedButton from '../../components/RoundedButton';
 import { useAppDispatch, useAppSelector } from '../../hooks';
+import { getToken, updateUser } from '../../services/eSignature.services';
+import { eSignatureUpdateWalletName } from '../../store/eSignature/eSignature.actions';
 import {
   eSignatureProceed,
   getAccountPaymentStatus,
@@ -86,8 +88,8 @@ export const PasskeyScreen = ({ navigation }: Props) => {
   };
 
   const handleNext = () => {
-    setIsLoading(true);
     if (isCopied) {
+      setIsLoading(true);
       console.log('Account registration!');
       dispatch(
         registerAccount({
@@ -101,12 +103,14 @@ export const PasskeyScreen = ({ navigation }: Props) => {
       )
         .unwrap()
         .then(registrationStatus => {
+          console.log('RegistrationStatus:', registrationStatus);
           if (registrationStatus) {
-            // const member1Name = registrationStatus.member1Name ? `${registrationStatus.member1Name}` : '';
-            console.log('Account has been registered!');
+            dispatch(eSignatureUpdateWalletName({ email, accountName }));
+
+            console.log('Account has been registered!', registrationStatus);
             navigation.navigate('PaymentSuccess');
-            setIsLoading(false);
           }
+          setIsLoading(false);
         })
         .catch(error => {
           console.error(error);

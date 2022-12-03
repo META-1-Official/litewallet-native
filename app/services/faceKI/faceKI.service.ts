@@ -99,8 +99,7 @@ class FaceKIServices {
 
   removeUser = async ({ name }: RemoveUserParams) => {
     console.log('RemoveUser service start');
-    console.log('RemoveUser service appending form data');
-    const response = await this.api.post('/remove_user', { name }, {});
+    const response = await this.api.post('/remove_user', { name });
     console.log('RemoveUser service end', response.data);
     return response.data;
   };

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Platform } from 'react-native';
-import { createUser, getToken, getUser, updateUser } from '../../services/eSignature.services';
+import { createUser, getUser } from '../../services/eSignature.services';
 import FaceKIService, { FaceKIVerifyParams } from '../../services/faceKI/faceKI.service';
 import { Enrollment, Liveness, Verify } from '../../services/faceKI/types';
 import {
@@ -15,7 +15,6 @@ import {
   handleEmailNotMatchedWithUser,
   handleNeverBeenEnrolled,
   handleVerifyError,
-  handleUsedWallet,
 } from './actionHelpers';
 
 const ERROR_STATE = { status: 'error', image: '' };
@@ -26,7 +25,7 @@ const successState = (image: string) => ({
 
 export const faceKIVerifyOnSignup = createAsyncThunk(
   'faceKI/Verify/signUp',
-  async ({ image, email, privateKey, accountName }: FaceKIVerifyParams) => {
+  async ({ image, email, privateKey }: FaceKIVerifyParams) => {
     console.log('SignUp verification');
     // Check params
     if (image.length === 0 || email.length === 0) {
@@ -43,37 +42,14 @@ export const faceKIVerifyOnSignup = createAsyncThunk(
         // Verify
         const verifyStatus = await FaceKIService.verifyUser({ image });
         if (verifyStatus.status === Verify.VerifyOk && Number(verifyStatus.score) === 1) {
-          // Get user data in case of user verified successfully
-          const kycProfile = await getUser(email);
           // Check if email exists in emailList of verified user
           const userEmailList = verifyStatus.name?.split(',');
           if (userEmailList.includes(email)) {
-            if (kycProfile.member1Name) {
-              const kycProfileWalletList = kycProfile.member1Name.split(',');
-              // todo: remove this condition in case of issue - when wallet doesn't exist in blockchain but exist in kycProfile
-              // Check if user accountName exist in kycProfile.member1Name
-              // if (kycProfileWalletList.includes(accountName)) {
-              // handleUsedWallet();
-              // return ERROR_STATE;
-              // }
-              const newMember1Name = kycProfileWalletList.includes(accountName)
-                ? kycProfile.member1Name
-                : kycProfileWalletList.push(accountName).join(',');
-              // Update kycProfile with new wallet name
-              const token = (await getToken(email)).headers.authorization as string;
-              const updateStatus = await updateUser(email, { member1Name: newMember1Name }, token);
-              if (updateStatus) {
-                handleVerifyOk(verifyStatus);
-                return successState(image);
-              }
-              somethingWentWrong('Updating kyc profile failed');
-              return ERROR_STATE;
-            }
-            // Else if kycProfile doesn't exist
-            somethingWentWrong("KycProfile doesn't exist");
-            return ERROR_STATE;
+            handleVerifyOk(verifyStatus);
+            return successState(image);
           } else {
-            // Check user existence in case user email is not in email list
+            // Get user if email is not in email list
+            const kycProfile = await getUser(email);
             if (kycProfile) {
               handleUsedEmail();
               return ERROR_STATE;
