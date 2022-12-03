@@ -102,6 +102,7 @@ export const PasskeyScreen = ({ navigation }: Props) => {
         .unwrap()
         .then(registrationStatus => {
           if (registrationStatus) {
+            // const member1Name = registrationStatus.member1Name ? `${registrationStatus.member1Name}` : '';
             console.log('Account has been registered!');
             navigation.navigate('PaymentSuccess');
             setIsLoading(false);

@@ -9,6 +9,17 @@ export const createUser = async (email: string, facekiID: string) => {
   return response.data;
 };
 
+export const updateUser = async (
+  email: string,
+  payload: { member1Name: string },
+  token: string,
+) => {
+  const { data } = await axios.patch(`${config.E_SIGNATURE_API_URL}/apiwallet/users`, payload, {
+    headers: { authorization: token },
+  });
+  return data;
+};
+
 export const getUser = async (email: string) => {
   console.log('GetUser service start');
   const response = await axios.get(`${config.E_SIGNATURE_API_URL}/apiewallet/users`, {

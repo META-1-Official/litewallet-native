@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Platform } from 'react-native';
-import { createUser, getUser } from '../../services/eSignature.services';
+import { createUser, getToken, getUser, updateUser } from '../../services/eSignature.services';
 import FaceKIService, { FaceKIVerifyParams } from '../../services/faceKI/faceKI.service';
 import { Enrollment, Liveness, Verify } from '../../services/faceKI/types';
 import {
@@ -15,6 +15,7 @@ import {
   handleEmailNotMatchedWithUser,
   handleNeverBeenEnrolled,
   handleVerifyError,
+  handleUsedWallet,
 } from './actionHelpers';
 
 const ERROR_STATE = { status: 'error', image: '' };
@@ -25,7 +26,7 @@ const successState = (image: string) => ({
 
 export const faceKIVerifyOnSignup = createAsyncThunk(
   'faceKI/Verify/signUp',
-  async ({ image, email, privateKey }: FaceKIVerifyParams) => {
+  async ({ image, email, privateKey, accountName }: FaceKIVerifyParams) => {
     console.log('SignUp verification');
     // Check params
     if (image.length === 0 || email.length === 0) {
@@ -42,14 +43,34 @@ export const faceKIVerifyOnSignup = createAsyncThunk(
         // Verify
         const verifyStatus = await FaceKIService.verifyUser({ image });
         if (verifyStatus.status === Verify.VerifyOk && Number(verifyStatus.score) === 1) {
+          // Get user data in case of user verified successfully
+          const kycProfile = await getUser(email);
           // Check if email exists in emailList of verified user
           const userEmailList = verifyStatus.name?.split(',');
           if (userEmailList.includes(email)) {
-            handleVerifyOk(verifyStatus);
-            return successState(image);
+            if (kycProfile.member1Name) {
+              // Check if user accountName exist in kycProfile.member1Name
+              const kycProfileWalletList = kycProfile.member1Name.split(',');
+              if (kycProfileWalletList.includes(accountName)) {
+                handleUsedWallet();
+                return ERROR_STATE;
+              }
+              // Else | update kycProfile with new wallet name
+              const token = (await getToken(email)).headers.authorization as string;
+              const newMember1Name = `${kycProfile.member1Name},${accountName}`;
+              const updateStatus = await updateUser(email, { member1Name: newMember1Name }, token);
+              if (updateStatus) {
+                handleVerifyOk(verifyStatus);
+                return successState(image);
+              }
+              somethingWentWrong('Updating kyc profile failed');
+              return ERROR_STATE;
+            }
+            // Else if kycProfile doesn't exist
+            somethingWentWrong("KycProfile doesn't exist");
+            return ERROR_STATE;
           } else {
-            // Get user if email is not in email list
-            const kycProfile = await getUser(email);
+            // Check user existence in case user email is not in email list
             if (kycProfile) {
               handleUsedEmail();
               return ERROR_STATE;
@@ -126,8 +147,8 @@ export const faceKIVerifyOnSignIn = createAsyncThunk(
       handleEmailNotMatchedWithUser();
       return ERROR_STATE;
     } else {
-      const userEmailList = kycProfile.member1Name.split(',');
-      if (!userEmailList.includes(accountName)) {
+      const kycProfileWalletList = kycProfile.member1Name.split(',');
+      if (!kycProfileWalletList.includes(accountName)) {
         handleEmailNotMatchedWithUser();
         return ERROR_STATE;
       }

@@ -51,12 +51,21 @@ export const handleFaceAttributes = (faceAttributes: FaceAttributes) => {
   });
 };
 
+export const handleUsedWallet = () => {
+  console.error('Current pair of email and wallet name has already been created.');
+  Toast.show({
+    type: 'error',
+    text1: 'Current pair of email and wallet name has already been created.',
+    text2: 'Please use different wallet name for wallet creation.',
+  });
+};
+
 export const handleUsedEmail = () => {
   console.error('This email has already been used for another wallet.');
   Toast.show({
     type: 'error',
-    text1: 'This email has already been used for another wallet.',
-    text2: 'Please use different email for new wallet creation.',
+    text1: 'This email has already been used by another person.',
+    text2: 'Please use different email for wallet creation.',
   });
 };
 
