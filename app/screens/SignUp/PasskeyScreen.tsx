@@ -120,7 +120,7 @@ export const PasskeyScreen = ({ navigation }: Props) => {
     } else {
       Toast.show({
         type: 'info',
-        text1: 'Please keep your Passkey in a safe place!',
+        text1: 'Please copy your passkey to continue!',
       });
     }
   };
