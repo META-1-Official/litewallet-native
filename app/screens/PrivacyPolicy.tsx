@@ -186,7 +186,7 @@ export function TOSScreen() {
       <View style={{ paddingLeft: 18, paddingTop: 8 }}>
         <Paragraph>a. Access to the META Exchange and associated features</Paragraph>
         <Paragraph>b. Access to the META Wallet and associated features </Paragraph>
-        <Paragraph>c. Access to the META Investment Bank and its DeFi services </Paragraph>
+        <Paragraph>c. Access to the META Vault and its DeFi services </Paragraph>
         <Paragraph>d. Access to acquire META 1 Coin and other digital assets </Paragraph>
         <Paragraph>e. Access to Universal Law and provided services</Paragraph>
         <Paragraph>
