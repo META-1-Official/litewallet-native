@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
 #### [INDEV](https://github.com/META-1-Official/litewallet-native/)
+
+> 4 Dec 2022
+- New signIn and signUp flows
+  - Update react-native to version 0.70
+  - Implementing web3 auth (torus)
+  - Implementing biometric verification (face-ki)
+  - Integrating with eSignature for signing and payment
+  - New signUp flow
+  - New signIn flow
+
 > 14 May 2022
 - QA Fixes 2 [`#29`](https://github.com/META-1-Official/litewallet-native/pull/29)
   - Fixed keyboard hiding on Link wallet screen on android
