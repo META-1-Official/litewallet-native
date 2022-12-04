@@ -2,6 +2,7 @@ import assert from 'assert';
 import { zip, zipObject } from 'lodash';
 import QRCode from 'qrcode';
 import { useEffect, useState } from 'react';
+import Toast from 'react-native-toast-message';
 import create from 'zustand';
 import { excludeIndex } from '../utils';
 import config from '../config';
@@ -33,6 +34,10 @@ export const Connect = async () => {
     await Meta1.connect(config.META1_CONNECTION_URL);
     setLoading(false);
   } catch (e) {
+    Toast.show({
+      type: 'error',
+      text1: 'Blockchain connection error',
+    });
     console.log(e);
   }
   // A hack to patch into websocket status update callback
