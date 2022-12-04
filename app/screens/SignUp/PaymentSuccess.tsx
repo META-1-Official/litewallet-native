@@ -35,30 +35,40 @@ export const PaymentSuccess = ({}: Props) => {
   };
 
   const [keys, setKeys] = useState<KeysT | undefined>(undefined);
-  const [document, setDoc] = useState('');
+  const [document, setDocument] = useState('');
+  const [readyToLogin, setReadToLogin] = useState(false);
 
   useEffect(() => {
     if (document) {
       savePdf(document).then(() => {
+        console.log('PDF saved from effect');
         setIsLoading(false);
       });
     }
   }, [document]);
+
+  const handleDocumentReady = (doc: any) => {
+    setDocument(doc);
+  };
 
   const save = async () => {
     await catchError(async () => {
       const _keys = await getAccountKeys({ accountName, password: passKey });
       setKeys(_keys);
       if (document) {
-        await savePdf(document);
+        savePdf(document).then(() => {
+          console.log('PDF saved from save function');
+          setIsLoading(false);
+        });
       }
-      setIsLoading(false);
     });
   };
 
-  const handleDownloadPaperWallet = async () => {
+  const handleDownloadPaperWallet = () => {
     setIsLoading(true);
-    await save();
+    save().then(() => {
+      setReadToLogin(true);
+    });
   };
 
   const handleCreateWallet = () => {
@@ -92,21 +102,21 @@ export const PaymentSuccess = ({}: Props) => {
         </View>
       </View>
 
-      <RenderPdf
-        keys={keys}
-        onReady={d => {
-          setDoc(d);
-          setIsLoading(false);
-        }}
-      />
+      <RenderPdf keys={keys} onReady={handleDocumentReady} />
 
       <View style={styles.buttonGroup}>
         <RoundedButton
           styles={{ flex: 1 }}
           title="Download paper wallet"
+          disabled={isLoading}
           onPress={handleDownloadPaperWallet}
         />
-        <RoundedButton styles={{ flex: 1 }} title="Submit" onPress={handleCreateWallet} />
+        <RoundedButton
+          styles={{ flex: 1 }}
+          title="Submit"
+          onPress={handleCreateWallet}
+          disabled={!readyToLogin}
+        />
       </View>
       <LoaderPopover loading={isLoading} />
     </SafeAreaView>
