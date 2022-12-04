@@ -134,9 +134,7 @@ export const useAsset = ({
     const totalCost = 35e-5 + Number(amount) * Number(asset.symbol === 'META1');
     if (meta1.amount - totalCost <= 0) {
       throw new Error(
-        `Not enough META1 left to pay transaction fees. This transaction requires ${totalCost} ${
-          asset.symbol
-        } (${35e-5} META1 fee)`,
+        `Not enough META1 left to pay transaction fees. This transaction requires ${34e-5} META1 fee`,
       );
     }
     return;
