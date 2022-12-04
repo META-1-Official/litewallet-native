@@ -10,9 +10,9 @@ import PortfolioListing from '../../components/PortfolioListing';
 import { useStore } from '../../store';
 import { colors } from '../../styles/colors';
 import { tid } from '../../utils';
-import { useAssets } from '../../services/meta1Api';
 import { getHistory } from '../../services/litewalletApi';
 import { dexAssetView } from './AssetView/AssetViewStore';
+import useAssetsOnFocus from '../../hooks/useAssetsOnFocus';
 
 const GRAPH_INTERVAL = {
   '1D': 1,
@@ -69,7 +69,7 @@ const DexFund: React.FC<DexTSP> = ({ navigation }) => {
   const [showZeroBalance, setShowZeroBalance] = useState(false);
   const [chartData, setChartData] = useState<number[]>([0, 0]);
   const accountName = useStore(s => s.accountName);
-  const accountAssets = useAssets();
+  const accountAssets = useAssetsOnFocus();
   const accountTotal = accountAssets?.accountTotal || 0;
   useEffect(() => {
     getHistory({

@@ -1,6 +1,6 @@
 import { useFocusEffect } from '@react-navigation/native';
-import { useState } from 'react';
-import { AccountBalanceT, useAssetsStore } from '../services/meta1Api';
+import { useCallback, useState } from 'react';
+import { AccountBalanceT, fetchAccountBalances, useAssetsStore } from '../services/meta1Api';
 import { useStore } from '../store';
 
 const useAssetsOnFocus = () => {
@@ -13,9 +13,15 @@ const useAssetsOnFocus = () => {
       console.log('Assets fetched!');
     });
   }
-  useFocusEffect(() => {
-    setAssets(userAssets);
-  });
+  useFocusEffect(
+    useCallback(() => {
+      (async () => {
+        const res = await fetchAccountBalances(accountName);
+        console.log('Fetching callback');
+        setAssets(res!);
+      })();
+    }, []),
+  );
   return assets;
 };
 
