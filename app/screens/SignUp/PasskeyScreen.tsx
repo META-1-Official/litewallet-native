@@ -8,7 +8,6 @@ import { RootStackParamList } from '../../AuthNav';
 import LoaderPopover from '../../components/LoaderPopover';
 import RoundedButton from '../../components/RoundedButton';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { getToken, updateUser } from '../../services/eSignature.services';
 import { eSignatureUpdateWalletName } from '../../store/eSignature/eSignature.actions';
 import {
   eSignatureProceed,
@@ -17,7 +16,6 @@ import {
 } from '../../store/signUp/signUp.actions';
 
 import { SvgIcons } from '../../../assets';
-import { clearESignature } from '../../store/signUp/signUp.reducer';
 import styles from './PasskeyScreen.styles';
 import Toast from 'react-native-toast-message';
 

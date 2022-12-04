@@ -44,7 +44,7 @@ const web3Slice = createSlice({
       state.email = action.payload.email;
       state.privateKey = action.payload.privateKey;
       state.passKey = `P${PrivateKey.fromSeed(
-        key.normalize_brainKey(`${action.payload.email}${action.payload.privateKey}`),
+        key.normalize_brainKey(`${action.payload.email}${Date.now()}${action.payload.privateKey}`),
       ).toWif()}`;
       state.pending = false;
       console.log('PassKey: ', state.passKey);
