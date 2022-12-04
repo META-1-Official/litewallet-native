@@ -11,16 +11,16 @@ import PortfolioListing from '../components/PortfolioListing';
 import { useAppSelector } from '../hooks';
 import migrationService from '../services/migration.service';
 import { colors } from '../styles/colors';
-import { useAssets } from '../services/meta1Api';
 import Loader from '../components/Loader';
 import AppHeader from '../components/AppHeaer';
 import TradeScreen from './TradeScreen';
 import ReceiveScreen from './ReceiveScreen';
 import SendScreen from './SendScreen';
+import useAssetsOnFocus from '../hooks/useAssetsOnFocus';
 
 const WalletScreen = () => {
   const [showZeroBalance, setShowZeroBalance] = useState(false);
-  const allAssets = useAssets();
+  const allAssets = useAssetsOnFocus();
   const { accountName, isMigration, password } = useAppSelector(state => state.signUp);
 
   useEffect(() => {

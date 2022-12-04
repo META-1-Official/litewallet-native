@@ -14,6 +14,7 @@ import { grey200, grey600 } from 'react-native-paper/src/styles/colors';
 import { BrandYellow } from '../styles/colors';
 import { tid } from '../utils';
 import { AssetBalanceT, refreshAssets, useAssets } from '../services/meta1Api';
+import useAssetsOnFocus from '../hooks/useAssetsOnFocus';
 
 const { width } = Dimensions.get('screen');
 
@@ -60,7 +61,7 @@ const PortfolioListing: React.FC<Props> = ({ showZeroBallance, colors, usdPrimar
     textSecondary: grey600,
   };
   const curColor = colors || defaultColors;
-  const accountBallance = useAssets();
+  const accountBallance = useAssetsOnFocus();
   const portfolioAssets = accountBallance!.assetsWithBalance;
   const assets = showZeroBallance ? portfolioAssets : portfolioAssets.filter(e => e.amount > 0);
   const sorted = assets.sort((a, b) => b.total_value - a.total_value);

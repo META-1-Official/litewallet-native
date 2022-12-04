@@ -4,7 +4,13 @@ import { AccountBalanceT, fetchAccountBalances, useAssetsStore } from '../servic
 import { useStore } from '../store';
 
 const useAssetsOnFocus = () => {
-  const [assets, setAssets] = useState<AccountBalanceT>();
+  const [assets, setAssets] = useState<AccountBalanceT>({
+    assetsWithBalance: [],
+    accountTotal: 0,
+    totalChange: 0,
+    changePercent: 0,
+    find: () => null,
+  });
   const accountName = useStore(state => state.accountName);
   const userAssets = useAssetsStore(state => state.userAssets);
   const fetch = useAssetsStore(state => state.fetchUserAssets);
