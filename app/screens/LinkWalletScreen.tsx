@@ -27,7 +27,7 @@ import { Input } from '../utils/useFormHelper/useFormHelper';
 const { width, height } = Dimensions.get('screen');
 const knownAccount: RuleFn = async text => {
   const acc = await getAccount(text).catch(console.debug);
-  return !!acc || 'Account not found';
+  return !!acc || 'Wallet not found';
 };
 
 type Props = NativeStackScreenProps<RootStackParamList, 'LinkWallet'>;

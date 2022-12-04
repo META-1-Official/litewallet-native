@@ -64,7 +64,7 @@ export const PasskeyScreen = ({ navigation }: Props) => {
             handleCheckBox(4, true);
             console.log('Payments: ', user.pays);
           } else {
-            handleRegistrationIssue('Please pay 1$ for account');
+            handleRegistrationIssue('Please pay 1$ for wallet');
           }
         } else {
           handleRegistrationIssue('Please sign the document');
@@ -88,7 +88,7 @@ export const PasskeyScreen = ({ navigation }: Props) => {
   const handleNext = () => {
     if (isCopied) {
       setIsLoading(true);
-      console.log('Account registration!');
+      console.log('Wallet registration!');
       dispatch(
         registerAccount({
           accountName,
@@ -105,14 +105,14 @@ export const PasskeyScreen = ({ navigation }: Props) => {
           if (registrationStatus) {
             dispatch(eSignatureUpdateWalletName({ email, accountName }));
 
-            console.log('Account has been registered!', registrationStatus);
+            console.log('Wallet has been registered!', registrationStatus);
             navigation.navigate('PaymentSuccess');
           }
           setIsLoading(false);
         })
         .catch(error => {
           console.error(error);
-          handleRegistrationIssue("Account hasn't been created!");
+          handleRegistrationIssue("Wallet hasn't been created!");
           setIsLoading(false);
         });
     } else {

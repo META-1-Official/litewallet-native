@@ -200,7 +200,7 @@ const MainSettingsScreen = () => {
           >
             @{accountName}
           </Text>
-          <Text style={{ fontSize: 16, color: '#aaa' }}>Current Account</Text>
+          <Text style={{ fontSize: 16, color: '#aaa' }}>Current Wallet</Text>
         </View>
         <View
           style={{

@@ -100,7 +100,7 @@ export const useAsset = ({
     if (asset.symbol === 'META1' && Number(amount) === getMax()) {
       throw new Error(
         `Insufficient balance: prevented the swap of Max amount of META1.
-        META1 coin is required to pay network fees, otherwise your account can become unusable`,
+        META1 coin is required to pay network fees, otherwise your wallet can become unusable`,
       );
     }
 
@@ -123,7 +123,7 @@ export const useAsset = ({
     if (asset.symbol === 'META1' && Number(amount) === getMax()) {
       throw new Error(
         `Insufficient balance: prevented the send of Max amount of META1. 
-        META1 coin is required to pay network fees, otherwise your account can become unusable`,
+        META1 coin is required to pay network fees, otherwise your wallet can become unusable`,
       );
     }
 

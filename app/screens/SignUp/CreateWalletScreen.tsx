@@ -19,7 +19,7 @@ import { Input, PhoneInput } from '../../utils/useFormHelper/useFormHelper';
 
 const checkFreeName = async (accountName: string) => {
   const acc = await getAccount(accountName).catch(console.debug);
-  return !acc || 'This account name has already taken';
+  return !acc || 'This wallet name has already taken';
 };
 
 const checkPremiumName = (accountName: string) =>
@@ -169,8 +169,7 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
           {migratable && (
             <>
               <Text style={{ marginBottom: 8 }}>
-                We found account with the same name in our old blockchain. Do you want to import
-                it?
+                We found wallet with the same name in our old blockchain. Do you want to import it?
               </Text>
               <RoundedButton
                 title="Import wallet"

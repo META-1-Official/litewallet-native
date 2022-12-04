@@ -116,7 +116,7 @@ const SendScreen: React.FC<{}> = () => {
                   fontWeight: '500',
                   color: '#000',
                 }}
-                placeholder="Enter Account Name"
+                placeholder="Enter Wallet Name"
                 placeholderTextColor="#888"
                 value={toAccount}
                 autoCapitalize={'none'}
@@ -441,7 +441,7 @@ interface PVProps {
 
 const PasswordView = ({ darkMode, password, setPassword }: PVProps) => (
   <View style={{ padding: 16 }}>
-    <Text style={styles.SectionTitleDex}>Password</Text>
+    <Text style={styles.SectionTitleDex}>Passkey</Text>
     <TextInput
       {...tid('SendScreen/password')}
       style={{ fontSize: 18, fontWeight: '500', color: darkMode ? '#fff' : '#000' }}
@@ -476,11 +476,11 @@ const makeSendFn =
         }
 
         if (!toAccount) {
-          throw new Error("To account can't be empty");
+          throw new Error("To wallet can't be empty");
         }
 
         if (!(await getAccount(toAccount))) {
-          throw new Error(`Account ${toAccount} not found`);
+          throw new Error(`Wallet ${toAccount} not found`);
         }
 
         standalone.isAffordableForSend();
@@ -601,7 +601,7 @@ export const DexSend: React.FC<DexProps> = props => {
                     fontWeight: '500',
                     color: '#fff',
                   }}
-                  placeholder="Enter Account Name"
+                  placeholder="Enter Wallet Name"
                   placeholderTextColor="#fff"
                   value={toAccount}
                   autoCapitalize={'none'}

@@ -107,7 +107,7 @@ export default async function createAccountWithPassword(
   const active_private = generateKeyFromPassword(account_name, 'active', password).privKey;
   const memo_private = generateKeyFromPassword(account_name, 'memo', password).privKey;
 
-  console.log('create account:', account_name);
+  console.log('create wallet:', account_name);
   console.log('new active pubkey', active_private.toPublicKey().toPublicKeyString());
   console.log('new owner pubkey', owner_private.toPublicKey().toPublicKeyString());
   console.log('new memo pubkey', memo_private.toPublicKey().toPublicKeyString());

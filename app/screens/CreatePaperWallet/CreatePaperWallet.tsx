@@ -75,7 +75,7 @@ export default function CreatePaperWallet() {
       </View>
 
       <View>
-        <Text style={{ color: colors.BrandYellow }}>Account Name</Text>
+        <Text style={{ color: colors.BrandYellow }}>Wallet Name</Text>
         <TextInput
           {...tid('CreatePaperWallet/accountName')}
           value={accountName}

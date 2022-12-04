@@ -40,7 +40,7 @@ export const WalletNav: React.FC<DrawerScreenProps<DexDrawerParamList>> = ({ nav
             Wallet: SvgIcons.wallet,
             DEX: SvgIcons.trading,
             Settings: SvgIcons.settings,
-            'Fund Account': SvgIcons.fundAccount,
+            'Fund Wallet': SvgIcons.fundAccount,
           };
 
           if (!(route.name in Name2Icon)) {
@@ -65,7 +65,7 @@ export const WalletNav: React.FC<DrawerScreenProps<DexDrawerParamList>> = ({ nav
           options={{
             tabBarAccessibilityLabel: 'Tab/FundAccount',
           }}
-          name="Fund Account"
+          name="Fund Wallet"
           component={FundAccount}
         />
       )}

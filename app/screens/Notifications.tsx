@@ -67,7 +67,7 @@ export default function Notifications() {
           return (
             <View key={e.id} style={{ margin: 12 }}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={HeadingText}>{e.userId ? 'Account activity' : 'Price alert'}</Text>
+                <Text style={HeadingText}>{e.userId ? 'Wallet activity' : 'Price alert'}</Text>
                 <Circle
                   width={8}
                   height={8}

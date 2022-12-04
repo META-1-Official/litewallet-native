@@ -170,7 +170,7 @@ export async function fetchAccountBalances(accountName: string): Promise<Account
   const account = await getAccount(accountName);
 
   if (!account) {
-    console.warn('Api did not return requested account', accountName);
+    console.warn('Api did not return requested wallet', accountName);
     throw new Error('ACCOUNT_NOT_FOUND');
   }
 

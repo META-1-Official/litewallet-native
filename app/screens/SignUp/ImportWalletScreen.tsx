@@ -71,7 +71,7 @@ const ImportWalletScreen: React.FC<Props> = ({ navigation }) => {
           dispatch(getWeb3User({ provider: undefined }));
         }
       } else {
-        Alert.alert('This account is not able to be migrated');
+        Alert.alert('This wallet is not able to be migrated');
       }
     } else {
       Alert.alert('Private Key is invalid!');
