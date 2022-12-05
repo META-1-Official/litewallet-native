@@ -11,6 +11,7 @@ import { SvgIcons } from '../assets';
 import { DexStackHeader } from './components/DexHeader';
 import Loader from './components/Loader';
 import { OverlayContent } from './components/SideMenuOverlay';
+import useAppDispatch from './hooks/useAppDispatch';
 import { DexStack } from './screens/dex';
 import ExploreAssets from './screens/ExploreAssets';
 import FundAccount from './screens/FundAccountScreen';
@@ -19,8 +20,8 @@ import Sandbox from './screens/Sandbox';
 import SettingsScreen from './screens/SettingsScreen';
 import WalletScreen from './screens/WalletScreen';
 import { useStore } from './store';
+import { getAccountData } from './store/wallet/wallet.actions';
 import { colors } from './styles/colors';
-import { loadAvatar } from './services/litewalletApi';
 
 const Tab = createBottomTabNavigator();
 
@@ -129,9 +130,11 @@ const RenderOnTop = ({ route, navigation }: ROTProps) => {
 };
 
 export const DexNav: React.FC = () => {
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
-    loadAvatar().then(url => useStore.getState().setAvatar(url));
-  });
+    dispatch(getAccountData());
+  }, []);
 
   const DrawerNav = () => (
     <View style={{ flex: 1 }}>

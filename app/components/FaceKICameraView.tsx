@@ -43,7 +43,6 @@ const FaceKiCameraView = ({ email, privateKey }: Props) => {
     cameraDevice || devices.front || devices.back || devices.external || devices.unspecified;
   const [photo, setPhoto] = useState<PhotoFile | undefined>();
   const camera = useRef<Camera>(null);
-  const { passKey } = useAppSelector(state => state.web3);
   const { accountName: signUpAccountName } = useAppSelector(state => state.signUp);
   const { accountName: signInAccountName } = useAppSelector(state => state.signIn);
   const isSigning = !!signInAccountName;
@@ -67,7 +66,7 @@ const FaceKiCameraView = ({ email, privateKey }: Props) => {
       .unwrap()
       .then(loginDetails => {
         console.log('Logged in successfully! loginDetails: ', loginDetails);
-        authorize(accountName, passKey);
+        authorize(accountName, email, loginDetails.token);
       })
       .catch(error => {
         Toast.show({

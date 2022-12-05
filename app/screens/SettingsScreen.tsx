@@ -8,7 +8,10 @@ import React from 'react';
 import { Alert, Image, Platform, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import { ArrowLeft, ChevronRight } from 'react-native-feather';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { useOptions, useStore } from '../store';
+import useAppDispatch from '../hooks/useAppDispatch';
+import useAppSelector from '../hooks/useAppSelector';
+import { useOptions } from '../store';
+import { getAccountData } from '../store/wallet/wallet.actions';
 import { colors } from '../styles/colors';
 import { tid } from '../utils';
 import { removeAvatar, uploadAvatar } from '../services/litewalletApi';
@@ -100,7 +103,7 @@ const SwitchLanguage = () => {
   );
 };
 
-const upload = async () => {
+const upload = async (dispatch: any) => {
   try {
     const result = await launchImageLibrary({
       mediaType: 'photo',
@@ -116,6 +119,7 @@ const upload = async () => {
     }
 
     await uploadAvatar(photo);
+    dispatch(getAccountData());
   } catch (e) {
     if (isError(e)) {
       console.warn(e.message);
@@ -127,12 +131,13 @@ const upload = async () => {
 };
 
 const AvatarGroup = () => {
+  const dispatch = useAppDispatch();
   return (
     <View>
       <Text style={{ color: '#fff', fontSize: 26, fontWeight: '600', marginBottom: 8 }}>
         Avatar
       </Text>
-      <ListItem text="Upload" onPress={upload} />
+      <ListItem text="Upload" onPress={() => upload(dispatch)} />
       <ListItem text="Remove" color="#E03616" onPress={removeAvatar} />
     </View>
   );
@@ -180,7 +185,7 @@ const Divider = () => {
 };
 
 const MainSettingsScreen = () => {
-  const { accountName, avatarUrl } = useStore();
+  const { accountName, avatarUrl } = useAppSelector(state => state.wallet);
   return (
     <SafeAreaView style={{ margin: 18 }}>
       <View

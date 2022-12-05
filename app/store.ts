@@ -10,7 +10,7 @@ interface AppState {
   authorized: boolean;
   avatarUrl: string;
   token: string;
-  authorize: (accountName: string, password?: string) => void;
+  authorize: (accountName: string, password?: string, email?: string, token?: string) => void;
   logout: () => void;
   setToken: (token: string) => void;
   setAvatar: (url: string) => void;
@@ -23,21 +23,23 @@ export const useStore = create<AppState>(
     set =>
       ({
         accountName: '',
+        email: '',
         password: '',
         authorized: false,
         avatarUrl: '',
-        authorize: (accountName, password) => {
+        authorize: (accountName, email, token) => {
           set({
             accountName: accountName,
             authorized: true,
-            password: password ? password : '',
+            token: token,
           });
           signUp({ accountName }).catch(e => console.warn(e));
         },
         token: '',
         setToken: (token: string) => set({ token }),
         setAvatar: (url: string) => set({ avatarUrl: url }),
-        logout: () => set({ accountName: '', authorized: false, password: '', avatarUrl: '' }),
+        logout: () =>
+          set({ accountName: '', authorized: false, password: '', avatarUrl: '', token: '' }),
         loading: true,
         setLoading: (loading: boolean) => set({ loading }),
       } as AppState),

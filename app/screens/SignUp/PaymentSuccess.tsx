@@ -7,8 +7,9 @@ import { SvgIcons } from '../../../assets';
 import { RootStackParamList } from '../../AuthNav';
 import LoaderPopover from '../../components/LoaderPopover';
 import RoundedButton from '../../components/RoundedButton';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useStore } from '../../store';
+import { login } from '../../store/signIn/signIn.actions';
 import { catchError } from '../../utils';
 import { KeysT, savePdf } from '../CreatePaperWallet';
 import RenderPdf from '../CreatePaperWallet/RenderPdf';
@@ -18,9 +19,10 @@ import { getAccountKeys } from '../CreatePaperWallet/CreatePaperWallet';
 type Props = NativeStackScreenProps<RootStackParamList, 'PaymentSuccess'>;
 
 export const PaymentSuccess = ({}: Props) => {
+  const dispatch = useAppDispatch();
   const authorize = useStore(state => state.authorize);
   const { accountName } = useAppSelector(state => state.signUp);
-  const { passKey } = useAppSelector(state => state.web3);
+  const { passKey, email } = useAppSelector(state => state.web3);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -72,7 +74,11 @@ export const PaymentSuccess = ({}: Props) => {
   };
 
   const handleCreateWallet = () => {
-    authorize(accountName, passKey);
+    dispatch(login({ accountName, email }))
+      .unwrap()
+      .then(loginDetails => {
+        authorize(accountName, email, loginDetails.token);
+      });
   };
 
   return (

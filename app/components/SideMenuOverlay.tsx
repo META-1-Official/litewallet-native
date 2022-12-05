@@ -3,9 +3,10 @@
 import { DrawerContentComponentProps } from '@react-navigation/drawer/src/types';
 import React from 'react';
 import { Image, SafeAreaView, TouchableOpacity, View } from 'react-native';
-import { Activity, ArrowLeft, HelpCircle, PieChart } from 'react-native-feather';
+import { ArrowLeft, HelpCircle, PieChart } from 'react-native-feather';
 import { Text } from 'react-native-paper';
 import { SvgIcons } from '../../assets';
+import useAppSelector from '../hooks/useAppSelector';
 import { useStore } from '../store';
 import { tid } from '../utils';
 
@@ -28,7 +29,7 @@ const ListItem: React.FC<ListItemProps> = ({ title, icon, onPress, rawIcon }) =>
 };
 
 export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
-  const { accountName, avatarUrl } = useStore();
+  const { accountName, avatarUrl } = useAppSelector(state => state.wallet);
   const logout = useStore(state => state.logout);
   return (
     <SafeAreaView style={{ padding: 12 }}>

@@ -5,14 +5,16 @@ import faceKIReducer from './faceKI/faceKI.reducer';
 import signInReducer from './signIn/signIn.reducer';
 import signUpReducer from './signUp/signUp.reducer';
 import web3Reducer from './web3/web3.reducer';
-import eSignature from './eSignature/eSignature.reducer';
+import eSignatureReducer from './eSignature/eSignature.reducer';
+import walletReducer from './wallet/wallet.reducers';
 
 const reducers = combineReducers({
   signIn: signInReducer,
   signUp: signUpReducer,
   web3: web3Reducer,
   faceKI: faceKIReducer,
-  eSignature: eSignature,
+  eSignature: eSignatureReducer,
+  wallet: walletReducer,
 });
 
 const persistConfig = {
