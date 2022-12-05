@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import config from '../../config';
 import { login } from '../signIn/signIn.actions';
-import { getAccountData } from './wallet.actions';
+import { deleteAvatar, getAccountData } from './wallet.actions';
 
 export interface WalletState {
   accountName: string;
@@ -41,6 +41,9 @@ const walletSlice = createSlice({
     });
     builder.addCase(getAccountData.fulfilled, (state, action) => {
       state.avatarUrl = `${config.LITE_WALLET_API_URL}/public/${action.payload.message.userAvatar}`;
+    });
+    builder.addCase(deleteAvatar.fulfilled, state => {
+      state.avatarUrl = '';
     });
   },
 });

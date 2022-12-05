@@ -10,8 +10,8 @@ import { ArrowLeft, ChevronRight } from 'react-native-feather';
 import { launchImageLibrary } from 'react-native-image-picker';
 import useAppDispatch from '../hooks/useAppDispatch';
 import useAppSelector from '../hooks/useAppSelector';
-import { useOptions } from '../store';
-import { getAccountData } from '../store/wallet/wallet.actions';
+import { useOptions, useStore } from '../store';
+import { deleteAvatar, getAccountData } from '../store/wallet/wallet.actions';
 import { colors } from '../styles/colors';
 import { tid } from '../utils';
 import { removeAvatar, uploadAvatar } from '../services/litewalletApi';
@@ -132,13 +132,33 @@ const upload = async (dispatch: any) => {
 
 const AvatarGroup = () => {
   const dispatch = useAppDispatch();
+  const setAvatar = useStore(state => state.setAvatar);
+  const handleDeleteAvatar = () => {
+    Alert.alert('Remove avatar', 'Are you sure you want to continue', [
+      {
+        text: 'Cancel',
+        onPress: () => false,
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: () =>
+          dispatch(deleteAvatar())
+            .unwrap()
+            .then(() => {
+              setAvatar('');
+            }),
+      },
+    ]);
+  };
+
   return (
     <View>
       <Text style={{ color: '#fff', fontSize: 26, fontWeight: '600', marginBottom: 8 }}>
         Avatar
       </Text>
       <ListItem text="Upload" onPress={() => upload(dispatch)} />
-      <ListItem text="Remove" color="#E03616" onPress={removeAvatar} />
+      <ListItem text="Remove" color="#E03616" onPress={handleDeleteAvatar} />
     </View>
   );
 };

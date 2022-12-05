@@ -39,6 +39,11 @@ class LiteWalletServices {
     });
     return data;
   };
+
+  deleteAvatar = async (accountName: string) => {
+    const { data } = await this.api.post('/deleteAvatar', { login: accountName });
+    return data;
+  };
 }
 
 export default new LiteWalletServices();

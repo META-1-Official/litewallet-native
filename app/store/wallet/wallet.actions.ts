@@ -13,3 +13,14 @@ export const getAccountData = createAsyncThunk<any, undefined>(
     return await litewalletServices.getUserData(accountName);
   },
 );
+
+export const deleteAvatar = createAsyncThunk<any, undefined>(
+  'wallet/deleteAvatar',
+  async (_, thunkAPI) => {
+    const rootState = thunkAPI.getState() as RootState;
+    const accountName = rootState.wallet.accountName;
+    const email = rootState.wallet.email;
+    await thunkAPI.dispatch(login({ accountName, email }));
+    return await litewalletServices.deleteAvatar(accountName);
+  },
+);
