@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, View, Text, Alert } from 'react-native';
+import { SafeAreaView, View, Text } from 'react-native';
 import {
   createStackNavigator,
   StackNavigationProp,

@@ -39,7 +39,7 @@ const initialState: SignUpState = {
   eSignaturePending: false,
   paymentStatus: undefined,
   registerStatus: undefined,
-  isMigration: true,
+  isMigration: false,
   password: '',
 };
 // todo: remove this and uncomment previous
