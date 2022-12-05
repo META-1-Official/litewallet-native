@@ -1,5 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { eSignatureProceed, getAccountPaymentStatus, registerAccount } from './signUp.actions';
+import {
+  eSignatureProceed,
+  getAccountPaymentStatus,
+  migrateAccount,
+  registerAccount,
+} from './signUp.actions';
 
 interface Step1 {
   firstName: string;
@@ -34,7 +39,7 @@ const initialState: SignUpState = {
   eSignaturePending: false,
   paymentStatus: undefined,
   registerStatus: undefined,
-  isMigration: false,
+  isMigration: true,
   password: '',
 };
 // todo: remove this and uncomment previous
@@ -93,6 +98,9 @@ export const signUpSlice = createSlice({
     builder.addCase(registerAccount.fulfilled, (state, action) => {
       console.log('Registration reducer, payload: ', action.payload);
       state.registerStatus = action.payload;
+    });
+    builder.addCase(migrateAccount.fulfilled, (state, action) => {
+      state.isMigration = Boolean(action.payload.error);
     });
   },
 });

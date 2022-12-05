@@ -5,11 +5,13 @@ import {
   StackNavigationProp,
   StackScreenProps,
 } from '@react-navigation/stack';
+import Toast from 'react-native-toast-message';
 import MaterialToggle from '../components/MaterialToggle';
 import PortfolioHeader from '../components/PortfolioHeader';
 import PortfolioListing from '../components/PortfolioListing';
 import { useAppSelector } from '../hooks';
-import migrationService from '../services/migration.service';
+import useAppDispatch from '../hooks/useAppDispatch';
+import { migrateAccount } from '../store/signUp/signUp.actions';
 import { colors } from '../styles/colors';
 import Loader from '../components/Loader';
 import AppHeader from '../components/AppHeaer';
@@ -19,24 +21,38 @@ import SendScreen from './SendScreen';
 import useAssetsOnFocus from '../hooks/useAssetsOnFocus';
 
 const WalletScreen = () => {
+  const dispatch = useAppDispatch();
   const [showZeroBalance, setShowZeroBalance] = useState(false);
   const allAssets = useAssetsOnFocus();
   const { accountName, isMigration, password } = useAppSelector(state => state.signUp);
+  console.log('migration', isMigration);
 
   useEffect(() => {
-    // todo: move to custom hook
-    (async () => {
-      if (isMigration) {
-        const migrationResp = await migrationService.migrate(accountName, password as string);
-        console.log('Migration: ', accountName, password);
-        console.log('Migration response: ', migrationResp);
-        if (migrationResp) {
-          Alert.alert('Migration done!');
-        } else {
-          Alert.alert('Something went wrong!');
-        }
-      }
-    })();
+    if (isMigration) {
+      dispatch(migrateAccount({ accountName, password }))
+        .unwrap()
+        .then(migration => {
+          if (!migration.error) {
+            Toast.show({
+              type: 'success',
+              text1: 'Migration done!',
+            });
+          } else {
+            Toast.show({
+              type: 'error',
+              text1: 'Migration failed!',
+              text2: 'Something went wrong!',
+            });
+          }
+        })
+        .catch(() => {
+          Toast.show({
+            type: 'error',
+            text1: 'Migration failed!',
+            text2: 'Something went wrong!',
+          });
+        });
+    }
   }, []);
 
   if (allAssets === null) {
