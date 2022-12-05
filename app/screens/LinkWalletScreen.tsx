@@ -80,7 +80,7 @@ const LinkWalletScreen: React.FC<Props> = ({ navigation }) => {
           />
           <Heading style={{ marginBottom: 8 }}>META Lite Wallet</Heading>
           <TextSecondary style={{ marginBottom: 18, fontSize: 15 }}>
-            Type your wallet 'Wallet Name' in the box below and click the 'Link META Wallet' button
+            Enter your wallet name in the box below and click "Link META Wallet"
           </TextSecondary>
           <Input
             control={control}
@@ -89,7 +89,7 @@ const LinkWalletScreen: React.FC<Props> = ({ navigation }) => {
             }}
             rules={{ required, validate: { knownAccount } }}
             name="account_name"
-            label="Wallet Name"
+            label="Link META Wallet"
             render={(props: TextInputProps) => (
               <View key={123} style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Image
