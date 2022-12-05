@@ -102,7 +102,9 @@ export const PaymentSuccess = ({}: Props) => {
             <Text style={styles.importantInfoDescription}>
               If you forget your passkey you will NOT be able to access your wallet or your funds.
               We are NO LONGER able to restore, reset, or redistribute lost coins, or help with
-              lost passkeys. Please MAKE SURE you copy your wallet name and passkey.
+              lost passkeys. Please MAKE SURE you copy your wallet name and passkey on to your
+              computer and then transfer it to an offline storage location for easy access like a
+              USB drive! Check our passkey storage tips knowledge article for more info.
             </Text>
           </View>
         </View>

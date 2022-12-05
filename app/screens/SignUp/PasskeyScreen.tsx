@@ -1,7 +1,16 @@
 import Clipboard from '@react-native-clipboard/clipboard';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { AppState, Platform, Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
+import {
+  AppState,
+  Platform,
+  Pressable,
+  SafeAreaView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import { ScrollView } from 'react-native-gesture-handler';
 import { RootStackParamList } from '../../AuthNav';
@@ -212,7 +221,9 @@ export const PasskeyScreen = ({ navigation }: Props) => {
             <Text style={styles.importantInfoDescription}>
               If you forget your passkey you will NOT be able to access your wallet or your funds.
               We are NO LONGER able to restore, reset, or redistribute lost coins, or help with
-              lost passkeys. Please MAKE SURE you copy your wallet name and passkey.
+              lost passkeys. Please MAKE SURE you copy your wallet name and passkey on to your
+              computer and then transfer it to an offline storage location for easy access like a
+              USB drive! Check our passkey storage tips knowledge article for more info.
             </Text>
           </View>
         </View>
