@@ -99,13 +99,14 @@ const ImportWalletScreen: React.FC<Props> = ({ navigation }) => {
           />
           <Heading style={{ marginBottom: 8 }}>Import META Wallet</Heading>
           <TextSecondary style={{ marginBottom: 18, fontSize: 15 }}>
-            To import your wallet please enter your Meta Wallet private passkey in the input below
+            To import your original wallet from the LEGACY META Blockchain please enter your
+            passkey for that wallet below.
           </TextSecondary>
           <Input
             control={control}
             rules={{ required }}
             name="password"
-            label="Passkey"
+            label="Passkey or owner private key"
             style={{
               paddingHorizontal: 32,
             }}
