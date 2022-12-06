@@ -8,6 +8,7 @@ import { RootStackParamList } from '../../AuthNav';
 import LoaderPopover from '../../components/LoaderPopover';
 import RoundedButton from '../../components/RoundedButton';
 import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useStore } from '../../store';
 import { login } from '../../store/signIn/signIn.actions';
 import { authorize } from '../../store/wallet/wallet.reducers';
 import { catchError } from '../../utils';
@@ -20,6 +21,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'PaymentSuccess'>;
 
 export const PaymentSuccess = ({}: Props) => {
   const dispatch = useAppDispatch();
+  const auth = useStore(state => state.authorize);
   const { accountName } = useAppSelector(state => state.signUp);
   const { passKey, email } = useAppSelector(state => state.web3);
 
@@ -77,6 +79,7 @@ export const PaymentSuccess = ({}: Props) => {
       .unwrap()
       .then(loginDetails => {
         dispatch(authorize({ accountName, email, token: loginDetails.token }));
+        auth();
       });
   };
 
