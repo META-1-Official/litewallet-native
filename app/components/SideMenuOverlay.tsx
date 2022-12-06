@@ -6,8 +6,9 @@ import { Image, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import { ArrowLeft, HelpCircle, PieChart } from 'react-native-feather';
 import { Text } from 'react-native-paper';
 import { SvgIcons } from '../../assets';
+import useAppDispatch from '../hooks/useAppDispatch';
 import useAppSelector from '../hooks/useAppSelector';
-import { useStore } from '../store';
+import { logout } from '../store/wallet/wallet.reducers';
 import { tid } from '../utils';
 
 interface ListItemProps {
@@ -29,8 +30,8 @@ const ListItem: React.FC<ListItemProps> = ({ title, icon, onPress, rawIcon }) =>
 };
 
 export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
+  const dispatch = useAppDispatch();
   const { accountName, avatarUrl } = useAppSelector(state => state.wallet);
-  const logout = useStore(state => state.logout);
   return (
     <SafeAreaView style={{ padding: 12 }}>
       <View>
@@ -120,7 +121,7 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
       </View>
       <TouchableOpacity
         {...tid('SideMenu/SignOut')}
-        onPress={() => logout()}
+        onPress={() => dispatch(logout())}
         style={{
           margin: 4,
           marginTop: 18,

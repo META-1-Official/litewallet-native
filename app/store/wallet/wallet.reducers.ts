@@ -46,6 +46,9 @@ const walletSlice = createSlice({
       state.email = action.payload.email || '';
       state.token = action.payload.token || '';
     },
+    logout: () => {
+      return { ...initialState };
+    },
   },
   extraReducers: builder => {
     builder.addCase(login.pending, state => {
@@ -73,5 +76,5 @@ const walletSlice = createSlice({
   },
 });
 
-export const { authorize } = walletSlice.actions;
+export const { authorize, logout } = walletSlice.actions;
 export default walletSlice.reducer;
