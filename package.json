@@ -144,5 +144,9 @@
     "moduleNameMapper": {
       "@sentry/react-native": "<rootDir>/__mocks__/sentry-react-native.ts"
     }
+  },
+  "engines": {
+    "node": ">=16.15.0",
+    "yarn": ">=1.22.18"
   }
 }
