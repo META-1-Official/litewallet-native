@@ -41,7 +41,7 @@ export const FaceKISuccessScreen: React.FC<Props> = ({ navigation }) => {
             overflow: 'hidden',
           }}
         >
-          <Image style={{ width: '100%', height: '100%' }} source={{ uri: image }} />
+          <Image style={{ width: '100%', height: '100%' }} source={{ uri: image || undefined }} />
         </View>
         <View style={{}}>
           <Text

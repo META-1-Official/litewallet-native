@@ -48,7 +48,7 @@ export const OverlayContent: React.FC<DrawerContentComponentProps> = ({ navigati
         }}
       >
         <Image
-          source={{ uri: avatarUrl }}
+          source={{ uri: avatarUrl || undefined }}
           style={{
             width: 80,
             height: 80,

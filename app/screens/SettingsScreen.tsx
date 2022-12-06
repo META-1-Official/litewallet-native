@@ -231,7 +231,7 @@ const MainSettingsScreen = () => {
           }}
         >
           <Image
-            source={{ uri: avatarUrl }}
+            source={{ uri: avatarUrl || undefined }}
             style={{
               width: 65,
               height: 65,
