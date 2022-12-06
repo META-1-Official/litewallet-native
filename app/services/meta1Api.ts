@@ -4,10 +4,13 @@ import QRCode from 'qrcode';
 import { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
 import create from 'zustand';
+import useAppDispatch from '../hooks/useAppDispatch';
 import useAppSelector from '../hooks/useAppSelector';
+import { useStore } from '../store';
+import { setLoading } from '../store/wallet/wallet.reducers';
 import { excludeIndex } from '../utils';
 import config from '../config';
-import { useStore } from '../store';
+import { createStore } from '../store/createStore';
 import {
   BucketSizeT,
   default as Meta1,
@@ -25,15 +28,14 @@ import { setupOnStatusCallbackHook } from '../utils/meta1wsHook';
 // Number of milliseconds in one year
 const YY = 3.154e10;
 
-const setLoading = useStore.getState().setLoading;
-//const logout = useStore.getState().logout;
 let once = false;
 
 export const Connect = async () => {
+  const dispatch = useAppDispatch();
   try {
     console.log('URL:', config.META1_CONNECTION_URL);
     await Meta1.connect(config.META1_CONNECTION_URL);
-    setLoading(false);
+    dispatch(setLoading(false));
   } catch (e) {
     Toast.show({
       type: 'error',
@@ -403,7 +405,7 @@ export async function getAddressForAccountAsset(accountName: string, symbol: str
 }
 
 export const refreshAssets = () => {
-  const { accountName } = useStore.getState();
+  const { accountName } = createStore.getState().wallet;
   const fetch = useAssetsStore.getState().fetchUserAssets;
   return fetch(accountName);
 };

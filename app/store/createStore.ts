@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import { configureStore, ThunkAction, Action, combineReducers } from '@reduxjs/toolkit';
+import configReducer from './config/config.reducer';
 import faceKIReducer from './faceKI/faceKI.reducer';
 import signInReducer from './signIn/signIn.reducer';
 import signUpReducer from './signUp/signUp.reducer';
@@ -15,6 +16,7 @@ const reducers = combineReducers({
   faceKI: faceKIReducer,
   eSignature: eSignatureReducer,
   wallet: walletReducer,
+  config: configReducer,
 });
 
 const persistConfig = {

@@ -13,6 +13,7 @@ export interface WalletState {
   notifications?: Notification[];
   isAuthorized: boolean;
   pending: boolean;
+  loading: boolean;
 }
 
 const initialState: WalletState = {
@@ -24,6 +25,7 @@ const initialState: WalletState = {
   notifications: undefined,
   isAuthorized: false,
   pending: false,
+  loading: true,
 };
 // todo: remove this and uncomment previous
 // const initialState: WalletState = {
@@ -45,6 +47,12 @@ const walletSlice = createSlice({
       state.accountName = action.payload.accountName || '';
       state.email = action.payload.email || '';
       state.token = action.payload.token || '';
+    },
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+    },
+    logout: () => {
+      return { ...initialState };
     },
   },
   extraReducers: builder => {
@@ -73,5 +81,5 @@ const walletSlice = createSlice({
   },
 });
 
-export const { authorize } = walletSlice.actions;
+export const { authorize, setLoading, logout } = walletSlice.actions;
 export default walletSlice.reducer;

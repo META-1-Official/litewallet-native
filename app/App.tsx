@@ -13,7 +13,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider as PaperProvider } from 'react-native-paper';
 import SplashScreen from 'react-native-splash-screen';
 
-import { Options, useOptions, useStore } from './store';
+import { Options, useOptions } from './store';
 import { Connect } from './services/meta1Api';
 import { DexNav } from './WalletNav';
 import Loader from './components/Loader';
@@ -95,11 +95,12 @@ function App() {
   const navigationRef = useNavigationContainerRef();
   const routePrefixRef = useRef<string | undefined>();
 
-  const authorized = useStore(state => state.authorized);
+  const appState = createStore.getState();
+  const authorized = appState.wallet.isAuthorized;
 
   const CurrentNav = authorized ? DexNav : AuthNav;
 
-  const loading = useStore(state => state.loading);
+  const loading = appState.wallet.loading;
   if (loading) {
     return <Loader />;
   }

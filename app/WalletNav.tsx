@@ -12,6 +12,7 @@ import { DexStackHeader } from './components/DexHeader';
 import Loader from './components/Loader';
 import { OverlayContent } from './components/SideMenuOverlay';
 import useAppDispatch from './hooks/useAppDispatch';
+import useAppSelector from './hooks/useAppSelector';
 import { DexStack } from './screens/dex';
 import ExploreAssets from './screens/ExploreAssets';
 import FundAccount from './screens/FundAccountScreen';
@@ -19,14 +20,13 @@ import HelpStack from './screens/help';
 import Sandbox from './screens/Sandbox';
 import SettingsScreen from './screens/SettingsScreen';
 import WalletScreen from './screens/WalletScreen';
-import { useStore } from './store';
 import { getAccountData } from './store/wallet/wallet.actions';
 import { colors } from './styles/colors';
 
 const Tab = createBottomTabNavigator();
 
 export const WalletNav: React.FC<DrawerScreenProps<DexDrawerParamList>> = ({ navigation }) => {
-  const loading = useStore(state => state.loading);
+  const loading = useAppSelector(state => state.wallet.loading);
   if (loading) {
     return <Loader />;
   }

@@ -1,5 +1,4 @@
 import config from '../app/config';
-import { useStore } from '../app/store';
 import {
   fetchAccountBalances,
   fetchAllAssets,
@@ -31,15 +30,15 @@ const consoleLogHook = async (fn: () => any) => {
 };
 
 describe('Meta1 api tests', () => {
-  beforeAll(async () => {
-    await consoleLogHook(async () => await Meta1.connect(config.META1_CONNECTION_URL));
-    useStore.subscribe(
-      loading => {
-        expect(loading).toBeFalsy();
-      },
-      state => state.loading,
-    );
-  });
+  // beforeAll(async () => {
+  //   await consoleLogHook(async () => await Meta1.connect(config.META1_CONNECTION_URL));
+  //   useStore.subscribe(
+  //     loading => {
+  //       expect(loading).toBeFalsy();
+  //     },
+  //     state => state.loading,
+  //   );
+  // });
 
   afterAll(async () => {
     await consoleLogHook(async () => await Meta1.disconnect());

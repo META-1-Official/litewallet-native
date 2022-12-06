@@ -23,7 +23,6 @@ import { useNewLoaderModal } from '../components/LoaderModal';
 import { useShowModal } from '../components/SuccessModal';
 import { Heading, TextSecondary } from '../components/typography';
 import useAppSelector from '../hooks/useAppSelector';
-import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { catchError, ensure, getPassword, shadow, style, tid } from '../utils';
 import {
