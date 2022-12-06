@@ -5,6 +5,7 @@ import Toast from 'react-native-toast-message';
 import { Camera, CameraDevice, PhotoFile, useCameraDevices } from 'react-native-vision-camera';
 import { RootNavigationProp } from '../AuthNav';
 import { useAppDispatch, useAppSelector } from '../hooks';
+import { useStore } from '../store';
 import { faceKIVerifyOnSignup, faceKIVerifyOnSignIn } from '../store/faceKI/faceKI.actions';
 import { login } from '../store/signIn/signIn.actions';
 import { authorize } from '../store/wallet/wallet.reducers';
@@ -37,6 +38,7 @@ const takePhoto = async (camera: Camera) => {
 const FaceKiCameraView = ({ email, privateKey }: Props) => {
   const nav = useNavigation<RootNavigationProp>();
   const dispatch = useAppDispatch();
+  const auth = useStore(state => state.authorize);
   const [cameraDevice, setCameraDevice] = useState<CameraDevice | undefined>();
   const devices = useCameraDevices();
   const device =
@@ -66,6 +68,7 @@ const FaceKiCameraView = ({ email, privateKey }: Props) => {
       .then(loginDetails => {
         console.log('Logged in successfully! loginDetails: ', loginDetails);
         dispatch(authorize({ accountName, email, token: loginDetails.token }));
+        auth();
       })
       .catch(error => {
         Toast.show({
