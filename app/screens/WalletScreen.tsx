@@ -25,7 +25,6 @@ const WalletScreen = () => {
   const [showZeroBalance, setShowZeroBalance] = useState(false);
   const allAssets = useAssetsOnFocus();
   const { accountName, isMigration, password } = useAppSelector(state => state.signUp);
-  console.log('migration', isMigration);
 
   useEffect(() => {
     if (isMigration) {

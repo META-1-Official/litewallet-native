@@ -63,18 +63,18 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   const handleAccountNameValidation = async (accountName: string) => {
-    setMigratable(false);
-    const migrationAvailability = await checkMigrationAvailability(accountName);
-    if (migrationAvailability) {
-      return true;
+    const freeName = await checkFreeName(accountName);
+    if (typeof freeName === 'string') {
+      return freeName;
     } else {
-      const validName = await checkAccountName(accountName);
-      if (typeof validName === 'string') {
-        return validName;
+      setMigratable(false);
+      const migrationAvailability = await checkMigrationAvailability(accountName);
+      if (migrationAvailability) {
+        return true;
       } else {
-        const freeName = await checkFreeName(accountName);
-        if (typeof freeName === 'string') {
-          return freeName;
+        const validName = await checkAccountName(accountName);
+        if (typeof validName === 'string') {
+          return validName;
         } else {
           const premiumName = await checkPremiumName(accountName);
           if (typeof premiumName === 'string') {
@@ -85,6 +85,29 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
       }
     }
   };
+  // const handleAccountNameValidation = async (accountName: string) => {
+  //   setMigratable(false);
+  //   const migrationAvailability = await checkMigrationAvailability(accountName);
+  //   if (migrationAvailability) {
+  //     return true;
+  //   } else {
+  //     const validName = await checkAccountName(accountName);
+  //     if (typeof validName === 'string') {
+  //       return validName;
+  //     } else {
+  //       const freeName = await checkFreeName(accountName);
+  //       if (typeof freeName === 'string') {
+  //         return freeName;
+  //       } else {
+  //         const premiumName = await checkPremiumName(accountName);
+  //         if (typeof premiumName === 'string') {
+  //           return premiumName;
+  //         }
+  //         return true;
+  //       }
+  //     }
+  //   }
+  // };
 
   const handleSubmitForm = handleSubmit(formState => {
     dispatch(step1Save(formState));
