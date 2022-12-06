@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Alert, LogBox, Linking, Platform } from 'react-native';
 import 'react-native-gesture-handler';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import { Provider } from 'react-redux';
 import { persistStore } from 'redux-persist';
@@ -23,6 +21,7 @@ import * as Sentry from '@sentry/react-native';
 import { setJSExceptionHandler } from 'react-native-exception-handler';
 import RNRestart from 'react-native-restart';
 import { SENTRY_DSN } from '@env';
+import { Alert, LogBox } from 'react-native';
 
 import AuthNav from './AuthNav';
 import { createStore } from './store/createStore';
@@ -52,7 +51,17 @@ useOptions.persist.rehydrate().then(() => {
 setJSExceptionHandler((e, _fatal) => {
   console.log('GEH', e);
   if (e.message === 'ACCOUNT_NOT_FOUND') {
-    RNRestart.Restart();
+    // RNRestart.Restart();
+    Alert.alert('Connection lost', 'Application restart is required to reconnect', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Ok',
+        onPress: () => RNRestart.Restart(),
+      },
+    ]);
   }
 }, true);
 
@@ -84,44 +93,14 @@ async function EnableSentryPrompt() {
 
 const persistor = persistStore(createStore);
 
-const PERSISTENCE_KEY = 'NAVIGATION_STATE_V1';
-
 function App() {
   LogBox.ignoreAllLogs();
   const [dark, setDark] = useState(false);
-
   useEffect(() => {
     SplashScreen.hide();
     Connect();
     EnableSentryPrompt();
   }, []);
-
-  const [isReady, setIsReady] = useState(false);
-  const [initialState, setInitialState] = useState();
-
-  useEffect(() => {
-    const restoreState = async () => {
-      try {
-        const initialUrl = await Linking.getInitialURL();
-
-        if (Platform.OS !== 'web' && initialUrl == null) {
-          // Only restore state if there's no deep link and we're not on web
-          const savedStateString = await AsyncStorage.getItem(PERSISTENCE_KEY);
-          const state = savedStateString ? JSON.parse(savedStateString) : undefined;
-
-          if (state !== undefined) {
-            setInitialState(state);
-          }
-        }
-      } finally {
-        setIsReady(true);
-      }
-    };
-
-    if (!isReady) {
-      restoreState();
-    }
-  }, [isReady]);
 
   const navigationRef = useNavigationContainerRef();
   const routePrefixRef = useRef<string | undefined>();
@@ -131,7 +110,7 @@ function App() {
   const CurrentNav = authorized ? DexNav : AuthNav;
 
   const loading = useStore(state => state.loading);
-  if (loading || !isReady) {
+  if (loading) {
     return <Loader />;
   }
 
@@ -142,7 +121,6 @@ function App() {
           <SafeAreaProvider>
             <NavigationContainer
               ref={navigationRef}
-              initialState={initialState}
               theme={{
                 ...DefaultTheme,
                 colors: {
@@ -154,9 +132,7 @@ function App() {
                 routingInstrumentation.registerNavigationContainer(navigationRef);
                 routePrefixRef.current = navigationRef.getCurrentRoute()?.name?.split('_').at(0);
               }}
-              onStateChange={state => {
-                AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state));
-
+              onStateChange={() => {
                 const oldPrefix = routePrefixRef.current;
                 const currentRouteName = navigationRef.getCurrentRoute()?.name;
                 // Unprefixed route
