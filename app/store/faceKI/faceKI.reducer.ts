@@ -12,6 +12,12 @@ const initialState: FaceKIState = {
   image: '',
   pending: false,
 };
+// todo: remove this and uncomment previous
+// const initialState: FaceKIState = {
+//   faceKIStatus: 'Enroll OK',
+//   image: '',
+//   pending: false,
+// };
 
 const faceKISlice = createSlice({
   name: 'faceKI',

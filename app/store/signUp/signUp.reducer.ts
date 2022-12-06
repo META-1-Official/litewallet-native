@@ -46,8 +46,8 @@ const initialState: SignUpState = {
 // const initialState: SignUpState = {
 //   firstName: 'User',
 //   lastName: 'Test',
-//   mobile: '+10000000005',
-//   accountName: 'user-x05',
+//   mobile: '+10000000010',
+//   accountName: 'user-x23',
 //   eSignatureStatus: '',
 //   eSignaturePending: false,
 //   paymentStatus: undefined,

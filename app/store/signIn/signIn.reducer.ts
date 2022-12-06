@@ -14,6 +14,13 @@ const initialState: SignInState = {
   isAuthorized: false,
   pending: false,
 };
+// todo: remove this and uncomment previous
+// const initialState: SignInState = {
+//   accountName: 'user-x23',
+//   token: '',
+//   isAuthorized: true,
+//   pending: false,
+// };
 
 const signInSlice = createSlice({
   name: 'signIn',

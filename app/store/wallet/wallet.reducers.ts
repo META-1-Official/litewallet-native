@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import config from '../../config';
 import { Notification } from '../../services/litewallet.services';
 import { login } from '../signIn/signIn.actions';
@@ -25,11 +25,28 @@ const initialState: WalletState = {
   isAuthorized: false,
   pending: false,
 };
+// todo: remove this and uncomment previous
+// const initialState: WalletState = {
+//   accountName: 'user-x21',
+//   email: 'user-x21@yopmail.com',
+//   password: '',
+//   token: '',
+//   avatarUrl: '',
+//   notifications: undefined,
+//   isAuthorized: true,
+//   pending: false,
+// };
 
 const walletSlice = createSlice({
   name: 'wallet',
   initialState,
-  reducers: {},
+  reducers: {
+    authorize: (state, action: PayloadAction<Partial<WalletState>>) => {
+      state.accountName = action.payload.accountName || '';
+      state.email = action.payload.email || '';
+      state.token = action.payload.token || '';
+    },
+  },
   extraReducers: builder => {
     builder.addCase(login.pending, state => {
       state.pending = true;
@@ -56,5 +73,5 @@ const walletSlice = createSlice({
   },
 });
 
-export const {} = walletSlice.actions;
+export const { authorize } = walletSlice.actions;
 export default walletSlice.reducer;

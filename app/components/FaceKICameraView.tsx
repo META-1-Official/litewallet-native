@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../hooks';
 import { useStore } from '../store';
 import { faceKIVerifyOnSignup, faceKIVerifyOnSignIn } from '../store/faceKI/faceKI.actions';
 import { login } from '../store/signIn/signIn.actions';
+import { authorize } from '../store/wallet/wallet.reducers';
 import styles from './FaceKICameraView.styles';
 import Loader from './Loader';
 import RoundedButton from './RoundedButton';
@@ -37,6 +38,7 @@ const takePhoto = async (camera: Camera) => {
 const FaceKiCameraView = ({ email, privateKey }: Props) => {
   const nav = useNavigation<RootNavigationProp>();
   const dispatch = useAppDispatch();
+  const auth = useStore(state => state.authorize);
   const [cameraDevice, setCameraDevice] = useState<CameraDevice | undefined>();
   const devices = useCameraDevices();
   const device =
@@ -47,7 +49,6 @@ const FaceKiCameraView = ({ email, privateKey }: Props) => {
   const { accountName: signInAccountName } = useAppSelector(state => state.signIn);
   const isSigning = !!signInAccountName;
   const accountName = signInAccountName || signUpAccountName;
-  const authorize = useStore(state => state.authorize);
 
   useEffect(() => {
     if (Platform.OS === 'android') {
@@ -66,7 +67,8 @@ const FaceKiCameraView = ({ email, privateKey }: Props) => {
       .unwrap()
       .then(loginDetails => {
         console.log('Logged in successfully! loginDetails: ', loginDetails);
-        authorize(accountName, email, loginDetails.token);
+        dispatch(authorize({ accountName, email, token: loginDetails.token }));
+        auth();
       })
       .catch(error => {
         Toast.show({
