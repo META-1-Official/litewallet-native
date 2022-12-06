@@ -95,7 +95,8 @@ function App() {
   const navigationRef = useNavigationContainerRef();
   const routePrefixRef = useRef<string | undefined>();
 
-  const authorized = useStore(state => state.authorized);
+  const appState = createStore.getState();
+  const authorized = appState.wallet.isAuthorized;
 
   const CurrentNav = authorized ? DexNav : AuthNav;
 
