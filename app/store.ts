@@ -4,40 +4,24 @@ import { persist } from 'zustand/middleware';
 import Omit from 'lodash.omit';
 
 interface AppState {
-  accountName: string;
-  password: string;
   authorized: boolean;
-  avatarUrl: string;
-  token: string;
-  authorize: (accountName: string, password?: string, email?: string, token?: string) => void;
+  authorize: () => void;
   logout: () => void;
-  setToken: (token: string) => void;
-  setAvatar: (url: string) => void;
   loading: boolean;
-  setLoading: (v: boolean) => void;
+  setLoading: (loading: boolean) => void;
 }
 
-export const useStore = create<AppState>(
-  persist(
+export const useStore = create(
+  persist<AppState>(
     set =>
       ({
-        accountName: '',
-        email: '',
-        password: '',
         authorized: false,
-        avatarUrl: '',
-        authorize: (accountName, email, token) => {
+        authorize: () => {
           set({
-            accountName: accountName,
             authorized: true,
-            token: token,
           });
         },
-        token: '',
-        setToken: (token: string) => set({ token }),
-        setAvatar: (url: string) => set({ avatarUrl: url }),
-        logout: () =>
-          set({ accountName: '', authorized: false, password: '', avatarUrl: '', token: '' }),
+        logout: () => set({ authorized: false }),
         loading: true,
         setLoading: (loading: boolean) => set({ loading }),
       } as AppState),
