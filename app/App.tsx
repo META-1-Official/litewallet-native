@@ -51,17 +51,7 @@ useOptions.persist.rehydrate().then(() => {
 setJSExceptionHandler((e, _fatal) => {
   console.log('GEH', e);
   if (e.message === 'ACCOUNT_NOT_FOUND') {
-    // RNRestart.Restart();
-    Alert.alert('Connection lost', 'Application restart is required to reconnect', [
-      {
-        text: 'Cancel',
-        style: 'cancel',
-      },
-      {
-        text: 'Ok',
-        onPress: () => RNRestart.Restart(),
-      },
-    ]);
+    RNRestart.Restart();
   }
 }, true);
 
