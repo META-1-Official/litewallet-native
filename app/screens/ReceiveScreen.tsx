@@ -13,7 +13,7 @@ import {
   Platform,
 } from 'react-native';
 import { useAssetPicker } from '../components/AssetSelectModal';
-import { useStore } from '../store';
+import useAppSelector from '../hooks/useAppSelector';
 import { colors } from '../styles/colors';
 import { shadow, tid } from '../utils';
 import { AddrT, getAddressForAccountAsset } from '../services/meta1Api';
@@ -40,7 +40,7 @@ const INDICATOR_WIDTH = width * 0.8;
 
 const ReceiveScreen: React.FC<{}> = () => {
   const nav = useNavigation<WalletNavigationProp>();
-  const accountName = useStore(state => state.accountName);
+  const accountName = useAppSelector(state => state.wallet.accountName);
   const [selected, open] = useAssetPicker({
     title: 'Receive',
     onClose: () => nav.goBack(),

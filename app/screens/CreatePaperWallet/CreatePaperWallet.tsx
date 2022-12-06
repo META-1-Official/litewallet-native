@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useNewLoaderModal } from '../../components/LoaderModal';
-import { useStore } from '../../store';
+import useAppSelector from '../../hooks/useAppSelector';
 import { colors } from '../../styles/colors';
 import { catchError, tid } from '../../utils';
 import { generateKeyFromPassword } from '../../utils/accountCreate';
@@ -39,7 +39,7 @@ export async function getAccountKeys({
 }
 
 export default function CreatePaperWallet() {
-  const { accountName } = useStore();
+  const { accountName } = useAppSelector(state => state.wallet);
   const [password, setPassword] = useState('');
   const [keys, setKeys] = useState<KeysT | undefined>(undefined);
   const [document, setDoc] = useState('');

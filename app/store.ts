@@ -2,7 +2,6 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
 import Omit from 'lodash.omit';
-import { signUp } from './services/litewalletApi';
 
 interface AppState {
   accountName: string;
@@ -33,7 +32,6 @@ export const useStore = create<AppState>(
             authorized: true,
             token: token,
           });
-          signUp({ accountName }).catch(e => console.warn(e));
         },
         token: '',
         setToken: (token: string) => set({ token }),

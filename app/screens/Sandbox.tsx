@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { useNewLoaderModal } from '../components/LoaderModal';
-import { Options, useOptions, useStore } from '../store';
+import useAppSelector from '../hooks/useAppSelector';
+import { Options, useOptions } from '../store';
 import { catchError, Timeout } from '../utils';
 import RoundedButton from '../components/RoundedButton';
 import { useShowModal } from '../components/SuccessModal';
@@ -11,16 +12,16 @@ import { NETWORK } from '@env';
 import { Network } from '../config';
 import RNRestart from 'react-native-restart';
 import { CountryPicker } from '../components/CountryPicker';
-import { getToken, signUp } from '../services/litewalletApi';
+import liteWalletServices from '../services/litewallet.services';
 
 const resolves = (ms: number) => new Promise<void>(resolve => setTimeout(() => resolve(), ms));
 const rejects = (ms: number) => new Promise<void>((_, reject) => setTimeout(() => reject(), ms));
 
 export const useCreateOrder = (exec: any) => {
   const loader = useNewLoaderModal();
-  const { accountName, password } = useStore();
+  const { accountName, email } = useAppSelector(state => state.wallet);
   const modal = useShowModal();
-  console.log(accountName, password);
+  console.log(accountName, email);
   const fn = () => async () => {
     loader.open();
     const to = await Timeout(exec(5000), 'Sheesh');
@@ -61,7 +62,7 @@ const Sandbox = () => {
   const ok = useCreateOrder(resolves);
   const err = useCreateOrder(rejects);
   const [country, setCountry] = useState('none');
-  const { accountName, password } = useStore();
+  const { accountName, email } = useAppSelector(state => state.wallet);
   const { firstTimeSet } = useOptions();
   return (
     <>
@@ -95,10 +96,8 @@ const Sandbox = () => {
           <RoundedButton
             title="Login"
             onPress={() =>
-              getToken({
-                accountName,
-                password,
-              })
+              liteWalletServices
+                .login(accountName, email)
                 .then(e => console.log(e))
                 .catch(e => console.log(e))
             }
@@ -106,9 +105,8 @@ const Sandbox = () => {
           <RoundedButton
             title="SignuUp"
             onPress={() =>
-              signUp({
-                accountName,
-              })
+              liteWalletServices
+                .login(accountName, email)
                 .then(e => console.log(e))
                 .catch(e => console.log(e))
             }

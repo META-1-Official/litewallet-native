@@ -13,8 +13,8 @@ import Backdrop from '../components/Backdrop';
 import { List } from '../components/List';
 import Loader from '../components/Loader';
 import RoundedButton from '../components/RoundedButton';
+import useAppSelector from '../hooks/useAppSelector';
 import liteWalletServices from '../services/litewallet.services';
-import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { catchError, tid, useScroll } from '../utils';
 import {
@@ -43,7 +43,7 @@ const refresh = throttle(() => {
 
 const SendScreen: React.FC<{}> = () => {
   const [toAccount, setToAccount] = useState('');
-  const accountName = useStore(state => state.accountName);
+  const accountName = useAppSelector(state => state.wallet.accountName);
   const { password, setPassword } = usePasswordView();
 
   const assets = useAssets();
@@ -467,7 +467,7 @@ type DexProps = DexSSP & {
 const makeSendFn =
   (modal: ShowModalFn, onStart: () => void, onEnd: () => void) =>
   (password: string, standalone: StandaloneAsset, toAccount: string) => {
-    const accountName = useStore.getState().accountName;
+    const accountName = useAppSelector(state => state.wallet.accountName);
     onStart();
     catchError(
       async () => {
@@ -515,7 +515,7 @@ const makeSendFn =
 export const DexSend: React.FC<DexProps> = props => {
   const nav = useNavigation();
   const [toAccount, setToAccount] = useState('');
-  const accountName = useStore(state => state.accountName);
+  const accountName = useAppSelector(state => state.wallet.accountName);
   const { password, setPassword } = usePasswordView();
 
   const assets = useAssets();

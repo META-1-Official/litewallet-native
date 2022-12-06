@@ -1,6 +1,16 @@
 import axios, { AxiosInstance } from 'axios';
+import { Platform } from 'react-native';
 import { Asset } from 'react-native-image-picker';
 import config from '../config';
+
+export interface Notification {
+  id: number;
+  content: string;
+  type: 'USER' | 'GLOBAl';
+  userId: number | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 class LiteWalletServices {
   private api: AxiosInstance;
@@ -29,10 +39,11 @@ class LiteWalletServices {
 
   saveAvatar = async (accountName: string, image: Asset) => {
     const formData = new FormData();
+    formData.append('login', accountName);
     formData.append('image', {
-      uri: `file://${image}`,
+      uri: Platform.OS === 'ios' ? image.uri!.replace('file://', '') : image.uri!,
       name: image.fileName,
-      type: 'image/jpeg',
+      type: image.type || 'image/jpeg',
     });
     const { data } = await this.api.post('/saveAvatar', formData, {
       headers: { 'content-type': 'multipart/form-data' },
@@ -42,6 +53,16 @@ class LiteWalletServices {
 
   deleteAvatar = async (accountName: string) => {
     const { data } = await this.api.post('/deleteAvatar', { login: accountName });
+    return data;
+  };
+
+  getNotifications = async (accountName: string) => {
+    const { data } = await this.api.post('/getNotifications', { accountName });
+    return data as Notification;
+  };
+
+  getHistory = async (accountName: string, skipSize: number) => {
+    const { data } = await this.api.post('/getHistory', { accountName, skip_size: skipSize });
     return data;
   };
 }

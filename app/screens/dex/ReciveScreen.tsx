@@ -16,7 +16,7 @@ import { ArrowLeft, Info, Search } from 'react-native-feather';
 import { SvgXml } from 'react-native-svg';
 import { DexSSP } from '.';
 import Loader from '../../components/Loader';
-import { useStore } from '../../store';
+import useAppSelector from '../../hooks/useAppSelector';
 import { colors } from '../../styles/colors';
 import { tid } from '../../utils';
 import {
@@ -76,7 +76,7 @@ type AddressViewProps = {
 } & DexSSP;
 const { width } = Dimensions.get('screen');
 const AddressView: React.FC<AddressViewProps> = ({ asset }) => {
-  const accountName = useStore(state => state.accountName);
+  const accountName = useAppSelector(state => state.wallet.accountName);
   const [compoundAddress, setCA] = useState<AddrT | null>(null);
   const [err, setErr] = useState(false);
 

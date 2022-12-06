@@ -22,6 +22,7 @@ import Loader from '../components/Loader';
 import { useNewLoaderModal } from '../components/LoaderModal';
 import { useShowModal } from '../components/SuccessModal';
 import { Heading, TextSecondary } from '../components/typography';
+import useAppSelector from '../hooks/useAppSelector';
 import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { catchError, ensure, getPassword, shadow, style, tid } from '../utils';
@@ -371,8 +372,8 @@ const mkPerformSwap = (
   onBeforeSwap: () => void,
   onAfterSwap: () => void,
   onFail: () => void,
+  accountName: string,
 ) => {
-  const { accountName } = useStore.getState();
   const update = useAssetsStore.getState().fetchUserAssets;
 
   const getAccountInfo = async () => ({
@@ -454,9 +455,12 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
 
   const loader = useNewLoaderModal();
 
+  const { accountName } = useAppSelector(state => state.wallet);
+
   //FIXME: Bruh moment, just checking every half a second if we can proceed
   const [disabled, setDisabled] = useState(false);
   const [errors, setErrors] = useState([]);
+
   useEffect(() => setDisabled(errors.length !== 0), [errors]);
   if (allAssets === null || !availableAssets || !pair) {
     refresh();
@@ -476,6 +480,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
       });
     },
     () => loader.close(),
+    accountName,
   );
 
   const DarkMode: React.FC = ({ children }) => <>{darkMode ? children : null}</>;

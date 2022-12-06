@@ -11,7 +11,7 @@ import {
   View,
 } from 'react-native';
 import { ProgressCircle } from 'react-native-svg-charts';
-import { useStore } from '../../../store';
+import useAppSelector from '../../../hooks/useAppSelector';
 import { colors } from '../../../styles/colors';
 import { catchError, getPassword, inFuture, tid } from '../../../utils';
 import {
@@ -105,7 +105,7 @@ const _amtToReadable = (amt: AmountT, userAssets: AccountBalanceT | null) => {
 
 type HistoryEntry = Exclude<ReturnType<FullHistoryOrder['get']>, undefined>;
 export const OpenOrdersPage = () => {
-  const { accountName, password } = useStore();
+  const { accountName, password } = useAppSelector(state => state.wallet);
   const { userAssets } = useAssetsStore();
   const account = useAccount(accountName, password);
 
@@ -193,7 +193,7 @@ export const OpenOrdersPage = () => {
 
 export const MyOrders: React.FC<AssetViewTSP> = () => {
   const { assetA, assetB } = useAVStore(x => x);
-  const { accountName, password } = useStore();
+  const { accountName, password } = useAppSelector(state => state.wallet);
   const { userAssets } = useAssetsStore();
   const account = useAccount(accountName, password);
   const { tab, lt, rt, offsetX } = useTabs();

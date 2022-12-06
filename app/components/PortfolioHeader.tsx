@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import useAppSelector from '../hooks/useAppSelector';
 import { AccountBalanceT } from '../services/meta1Api';
-import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { ArrowDown, ArrowUp } from 'react-native-feather';
 import { shadow, tid } from '../utils';
@@ -80,7 +80,7 @@ const ButtonGroup = () => {
   );
 };
 const PortfolioHeader: React.FC<Props> = ({ protfolioAssets }) => {
-  const accountName = useStore(state => state.accountName);
+  const accountName = useAppSelector(state => state.wallet.accountName);
   return (
     <View style={styles.container}>
       <Text style={styles.accountName}>@{accountName}</Text>

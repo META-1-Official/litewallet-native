@@ -3,8 +3,8 @@ import React, { useReducer } from 'react';
 import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Minus, Plus } from 'react-native-feather';
 import { SvgIcons } from '../../../assets';
+import useAppSelector from '../../hooks/useAppSelector';
 import { useAVStore } from '../../screens/dex/AssetView/AssetViewStore';
-import { useStore } from '../../store';
 import { colors } from '../../styles/colors';
 import { catchError, getPassword, tid, Timeout } from '../../utils';
 import { placeLimitOrder, useAssets, useAssetsStore } from '../../services/meta1Api';
@@ -177,7 +177,7 @@ export enum OrderType {
 
 export const useCreateOrder = (toGive: any, toGet: any, type: OrderType) => {
   const loaderModal = useNewLoaderModal();
-  const { accountName } = useStore();
+  const { accountName } = useAppSelector(state => state.wallet);
   const successModal = useShowModal();
 
   const getAccountInfo = async () => ({

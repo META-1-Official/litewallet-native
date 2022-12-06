@@ -1,7 +1,7 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
 import { AccountBalanceT, fetchAccountBalances, useAssetsStore } from '../services/meta1Api';
-import { useStore } from '../store';
+import useAppSelector from './useAppSelector';
 
 const useAssetsOnFocus = () => {
   const [assets, setAssets] = useState<AccountBalanceT>({
@@ -11,7 +11,7 @@ const useAssetsOnFocus = () => {
     changePercent: 0,
     find: () => null,
   });
-  const accountName = useStore(state => state.accountName);
+  const accountName = useAppSelector(state => state.wallet.accountName);
   const userAssets = useAssetsStore(state => state.userAssets);
   const fetch = useAssetsStore(state => state.fetchUserAssets);
   if (!userAssets.assetsWithBalance.length) {

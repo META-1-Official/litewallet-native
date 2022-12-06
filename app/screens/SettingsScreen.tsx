@@ -4,17 +4,16 @@ import {
   StackNavigationProp,
   StackScreenProps,
 } from '@react-navigation/stack';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Alert, Image, Platform, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import { ArrowLeft, ChevronRight } from 'react-native-feather';
 import { launchImageLibrary } from 'react-native-image-picker';
 import useAppDispatch from '../hooks/useAppDispatch';
 import useAppSelector from '../hooks/useAppSelector';
-import { useOptions, useStore } from '../store';
-import { deleteAvatar, getAccountData } from '../store/wallet/wallet.actions';
+import { useOptions } from '../store';
+import { deleteAvatar, getAccountData, uploadAvatar } from '../store/wallet/wallet.actions';
 import { colors } from '../styles/colors';
 import { tid } from '../utils';
-import { removeAvatar, uploadAvatar } from '../services/litewalletApi';
 import { isError } from '../utils/errorUtils';
 import CreatePaperWallet from './CreatePaperWallet';
 import Notifications from './Notifications';
@@ -112,14 +111,13 @@ const upload = async (dispatch: any) => {
       quality: 0.2,
     });
 
-    const photo = result.assets?.[0]!;
+    const image = result.assets?.[0]!;
     console.log(result);
     if (result.didCancel) {
       return;
     }
 
-    await uploadAvatar(photo);
-    dispatch(getAccountData());
+    dispatch(uploadAvatar({ image }));
   } catch (e) {
     if (isError(e)) {
       console.warn(e.message);
@@ -132,7 +130,6 @@ const upload = async (dispatch: any) => {
 
 const AvatarGroup = () => {
   const dispatch = useAppDispatch();
-  const setAvatar = useStore(state => state.setAvatar);
   const handleDeleteAvatar = () => {
     Alert.alert('Remove avatar', 'Are you sure you want to continue', [
       {
@@ -142,12 +139,7 @@ const AvatarGroup = () => {
       },
       {
         text: 'OK',
-        onPress: () =>
-          dispatch(deleteAvatar())
-            .unwrap()
-            .then(() => {
-              setAvatar('');
-            }),
+        onPress: () => dispatch(deleteAvatar()),
       },
     ]);
   };
@@ -205,7 +197,13 @@ const Divider = () => {
 };
 
 const MainSettingsScreen = () => {
+  const dispatch = useAppDispatch();
   const { accountName, avatarUrl } = useAppSelector(state => state.wallet);
+
+  useEffect(() => {
+    dispatch(getAccountData());
+  }, []);
+
   return (
     <SafeAreaView style={{ margin: 18 }}>
       <View

@@ -4,6 +4,7 @@ import QRCode from 'qrcode';
 import { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
 import create from 'zustand';
+import useAppSelector from '../hooks/useAppSelector';
 import { excludeIndex } from '../utils';
 import config from '../config';
 import { useStore } from '../store';
@@ -408,7 +409,7 @@ export const refreshAssets = () => {
 };
 
 export const useAssets = () => {
-  const accountName = useStore(state => state.accountName);
+  const accountName = useAppSelector(state => state.wallet.accountName);
   const userAssets = useAssetsStore(state => state.userAssets);
   const fetch = useAssetsStore(state => state.fetchUserAssets);
   if (!userAssets.assetsWithBalance.length) {

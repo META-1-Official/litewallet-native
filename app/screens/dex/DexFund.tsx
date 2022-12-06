@@ -7,10 +7,11 @@ import Loader from '../../components/Loader';
 import MaterialToggle from '../../components/MaterialToggle';
 import { ProfitIndicator } from '../../components/PortfolioHeader';
 import PortfolioListing from '../../components/PortfolioListing';
-import { useStore } from '../../store';
+import useAppDispatch from '../../hooks/useAppDispatch';
+import useAppSelector from '../../hooks/useAppSelector';
 import { colors } from '../../styles/colors';
 import { tid } from '../../utils';
-import { getHistory } from '../../services/litewalletApi';
+import { getHistory } from '../../store/wallet/wallet.actions';
 import { dexAssetView } from './AssetView/AssetViewStore';
 import useAssetsOnFocus from '../../hooks/useAssetsOnFocus';
 
@@ -65,17 +66,21 @@ const Chart = ({ data }: { data: number[] }) => {
 };
 const MAX_SAMPLES = 500;
 const DexFund: React.FC<DexTSP> = ({ navigation }) => {
+  const dispatch = useAppDispatch();
   const [curInterval, setCurInterval] = useState<GRAPH_INTERVAL_KEYS>('1D');
   const [showZeroBalance, setShowZeroBalance] = useState(false);
   const [chartData, setChartData] = useState<number[]>([0, 0]);
-  const accountName = useStore(s => s.accountName);
+  const accountName = useAppSelector(state => state.wallet.accountName);
   const accountAssets = useAssetsOnFocus();
   const accountTotal = accountAssets?.accountTotal || 0;
   useEffect(() => {
-    getHistory({
-      accountName,
-      skip_size: GRAPH_INTERVAL[curInterval],
-    })
+    dispatch(
+      getHistory({
+        accountName,
+        skipSize: GRAPH_INTERVAL[curInterval],
+      }),
+    )
+      .unwrap()
       .then(e => {
         if (!e.data) {
           setChartData([0, accountTotal]);

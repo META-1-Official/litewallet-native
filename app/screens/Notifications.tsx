@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { RefreshControl, SafeAreaView, ScrollView, Text, TextStyle, View } from 'react-native';
 import { Circle, TrendingUp } from 'react-native-feather';
-import { useStore } from '../store';
+import useAppDispatch from '../hooks/useAppDispatch';
 import { colors } from '../styles/colors';
 import { useAssets } from '../services/meta1Api';
-import { getNotifications, Notification } from '../services/litewalletApi';
+import { getNotifications } from '../store/wallet/wallet.actions';
+import { Notification } from '../services/litewallet.services';
 
 export default function Notifications() {
+  const dispatch = useAppDispatch();
   const [refreshing, setRefreshing] = React.useState(false);
   const [notifData, setNotifData] = useState<Notification[]>([]);
-  const accountName = useStore(e => e.accountName);
   const accountAssets = useAssets();
 
   const update = (alive: boolean) =>
-    getNotifications({ accountName })
+    dispatch(getNotifications())
+      .unwrap()
       .then(e => alive && setNotifData(e.reverse()))
       .then(() => alive && setRefreshing(false))
       .catch(err => console.error(err));
