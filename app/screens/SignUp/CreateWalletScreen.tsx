@@ -206,11 +206,13 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
           )}
         </View>
         <View>
-          <RoundedButton
-            title="Create wallet"
-            onPress={handleSubmitForm}
-            disabled={isSubmitting}
-          />
+          {!migratable && (
+            <RoundedButton
+              title="Create wallet"
+              onPress={handleSubmitForm}
+              disabled={isSubmitting}
+            />
+          )}
         </View>
       </ScrollView>
       <LoaderPopover loading={isSubmitting} />
