@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import {
   Platform,
   SafeAreaView,
@@ -15,7 +15,7 @@ import Loader from '../components/Loader';
 import RoundedButton from '../components/RoundedButton';
 import useAppSelector from '../hooks/useAppSelector';
 import liteWalletServices from '../services/litewallet.services';
-import { useStore } from '../store';
+import { createStore } from '../store/createStore';
 import { colors } from '../styles/colors';
 import { catchError, tid, useScroll } from '../utils';
 import {
@@ -53,6 +53,27 @@ const SendScreen: React.FC<{}> = () => {
   const suc = useShowModal();
   const loader = useNewLoaderModal();
   const scroll = useScroll();
+
+  const [isAccountValid, setIsAccountValid] = useState(false);
+  const [isAmountValid, setIsAmountValid] = useState(false);
+  console.log(isAmountValid);
+
+  useEffect(() => {
+    if (anAsset) {
+      if (+anAsset?.amount <= +anAsset?.asset.amount) {
+        setIsAmountValid(true);
+      } else {
+        setIsAmountValid(false);
+      }
+    }
+  }, [anAsset]);
+
+  const handleChangeAccountName = (name: string) => {
+    setToAccount(name);
+    getAccount(name).then(result => {
+      setIsAccountValid(!!result);
+    });
+  };
 
   const sendFn = makeSendFn(
     suc,
@@ -115,14 +136,14 @@ const SendScreen: React.FC<{}> = () => {
                 style={{
                   fontSize: 18,
                   fontWeight: '500',
-                  color: '#000',
+                  color: isAccountValid ? '#000' : 'red',
                 }}
                 placeholder="Enter Wallet Name"
                 placeholderTextColor="#888"
                 value={toAccount}
                 autoCapitalize={'none'}
                 autoCorrect={false}
-                onChangeText={t => setToAccount(t)}
+                onChangeText={handleChangeAccountName}
               />
             </View>
           </View>
@@ -137,7 +158,7 @@ const SendScreen: React.FC<{}> = () => {
         >
           <View style={{ padding: 16 }}>
             <Text style={styles.SectionTitle}>Amount {anAsset.asset.symbol}</Text>
-            <AmountInput asset={anAsset} />
+            <AmountInput asset={anAsset} isValid={isAmountValid} />
           </View>
         </List>
         <List
@@ -156,7 +177,11 @@ const SendScreen: React.FC<{}> = () => {
             marginHorizontal: 64,
           }}
         >
-          <RoundedButton onPress={() => sendFn(password, anAsset, toAccount)} title="Confirm" />
+          <RoundedButton
+            onPress={() => sendFn(password, anAsset, toAccount)}
+            disabled={!isAccountValid || !isAmountValid}
+            title="Confirm"
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -277,7 +302,15 @@ const amountReducer =
     }
   };
 
-const AmountInput = ({ asset, darkMode }: { asset: StandaloneAsset; darkMode?: boolean }) => {
+const AmountInput = ({
+  asset,
+  darkMode,
+  isValid = true,
+}: {
+  asset: StandaloneAsset;
+  darkMode?: boolean;
+  isValid?: boolean;
+}) => {
   const [state, dispatch] = useReducer(amountReducer(asset), {
     amt: '0.00',
     usd: '0.00',
@@ -302,7 +335,7 @@ const AmountInput = ({ asset, darkMode }: { asset: StandaloneAsset; darkMode?: b
                 width: '85%',
                 fontSize: 20,
                 fontWeight: '500',
-                color: '#000',
+                color: isValid ? '#000' : 'red',
               }}
               onChangeText={t => dispatch({ type: UpdateType.COIN, payload: t })}
               keyboardType="numeric"
@@ -468,7 +501,7 @@ type DexProps = DexSSP & {
 const makeSendFn =
   (modal: ShowModalFn, onStart: () => void, onEnd: () => void) =>
   (password: string, standalone: StandaloneAsset, toAccount: string) => {
-    const accountName = useStore.getState().accountName;
+    const accountName = createStore.getState().wallet.accountName;
     onStart();
     catchError(
       async () => {
@@ -526,6 +559,28 @@ export const DexSend: React.FC<DexProps> = props => {
   const loader = useNewLoaderModal();
   const scroll = useScroll();
   scroll.contentContainerStyle.paddingBottom = 420; // Nice.
+
+  const [isAccountValid, setIsAccountValid] = useState(false);
+  const [isAmountValid, setIsAmountValid] = useState(false);
+  console.log(isAmountValid);
+
+  useEffect(() => {
+    if (anAsset) {
+      if (+anAsset?.amount <= +anAsset?.asset.amount) {
+        setIsAmountValid(true);
+      } else {
+        setIsAmountValid(false);
+      }
+    }
+  }, [anAsset]);
+
+  const handleChangeAccountName = (name: string) => {
+    setToAccount(name);
+    getAccount(name).then(result => {
+      setIsAccountValid(!!result);
+    });
+  };
+
   const sendFn = makeSendFn(
     (text, _onClose) =>
       suc(text, () => {
@@ -600,14 +655,14 @@ export const DexSend: React.FC<DexProps> = props => {
                   style={{
                     fontSize: 18,
                     fontWeight: '500',
-                    color: '#fff',
+                    color: isAccountValid ? '#fff' : 'red',
                   }}
                   placeholder="Enter Wallet Name"
                   placeholderTextColor="#fff"
                   value={toAccount}
                   autoCapitalize={'none'}
                   autoCorrect={false}
-                  onChangeText={t => setToAccount(t)}
+                  onChangeText={handleChangeAccountName}
                 />
               </View>
             </View>
@@ -623,7 +678,7 @@ export const DexSend: React.FC<DexProps> = props => {
             <View style={{ padding: 16 }}>
               <Text style={styles.SectionTitleDex}>Amount {anAsset.asset.symbol}</Text>
               {/* HERE */}
-              <AmountInput asset={anAsset} darkMode />
+              <AmountInput asset={anAsset} darkMode isValid={isAmountValid} />
             </View>
           </List>
           <List
