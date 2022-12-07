@@ -65,10 +65,10 @@ const walletSlice = createSlice({
       state.pending = false;
     });
     builder.addCase(getAccountData.fulfilled, (state, action) => {
-      state.avatarUrl = `${config.LITE_WALLET_API_URL}/public/${action.payload.message.userAvatar}`;
+      state.avatarUrl = `${config.LITE_WALLET_API_URL}/public/${action.payload?.message?.userAvatar}`;
     });
     builder.addCase(uploadAvatar.fulfilled, (state, action) => {
-      state.avatarUrl = `${config.LITE_WALLET_API_URL}/public/${action.payload.message}`;
+      state.avatarUrl = `${config.LITE_WALLET_API_URL}/public/${action.payload?.message}`;
     });
     builder.addCase(deleteAvatar.fulfilled, state => {
       state.avatarUrl = '';
