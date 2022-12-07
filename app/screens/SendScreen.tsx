@@ -15,6 +15,7 @@ import Loader from '../components/Loader';
 import RoundedButton from '../components/RoundedButton';
 import useAppSelector from '../hooks/useAppSelector';
 import liteWalletServices from '../services/litewallet.services';
+import { useStore } from '../store';
 import { colors } from '../styles/colors';
 import { catchError, tid, useScroll } from '../utils';
 import {
@@ -467,7 +468,7 @@ type DexProps = DexSSP & {
 const makeSendFn =
   (modal: ShowModalFn, onStart: () => void, onEnd: () => void) =>
   (password: string, standalone: StandaloneAsset, toAccount: string) => {
-    const accountName = useAppSelector(state => state.wallet.accountName);
+    const accountName = useStore.getState().accountName;
     onStart();
     catchError(
       async () => {
