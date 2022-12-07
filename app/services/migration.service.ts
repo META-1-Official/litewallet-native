@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 // @ts-ignore
-import { PrivateKey, Signature } from 'meta1-vision-js';
+import { Login, PrivateKey, Signature } from 'meta1-vision-js';
 
 import config from '../config';
 
@@ -15,10 +15,25 @@ class MigrationServices {
 
   // todo: move it out to helpers
   buildSignature = async (accountName: string, password: string) => {
-    const signerPkey = PrivateKey.fromWif(password);
-    const publicKey = signerPkey.toPublicKey().toString();
-    const signature = Signature.sign(accountName, signerPkey).toHex();
-    return { accountName, publicKey, signature };
+    try {
+      const signerPkey = PrivateKey.fromWif(password);
+      const publicKey = signerPkey.toPublicKey().toString();
+      const signature = Signature.sign(accountName, signerPkey).toHex();
+      return { accountName, publicKey, signature };
+    } catch (err) {
+      const account = await Login.generateKeys(
+        accountName,
+        password,
+        ['owner'],
+        process.env.REACT_APP_KEY_PREFIX,
+      );
+      console.log('account', account);
+      const ownerPrivateKey = account.privKeys.owner.toWif();
+      const publicKey = account.pubKeys.owner;
+      const signerPkey = PrivateKey.fromWif(ownerPrivateKey);
+      const signature = Signature.sign(accountName, signerPkey).toHex();
+      return { accountName, publicKey, signature };
+    }
   };
 
   checkTransferableAccount = async (accountName: string) => {
