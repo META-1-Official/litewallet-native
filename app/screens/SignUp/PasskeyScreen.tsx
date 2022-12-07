@@ -2,13 +2,13 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
+  ActivityIndicator,
   AppState,
   Platform,
   Pressable,
   SafeAreaView,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
@@ -28,14 +28,21 @@ import { SvgIcons } from '../../../assets';
 import styles from './PasskeyScreen.styles';
 import Toast from 'react-native-toast-message';
 
-const ESIGNATURE_STATUSES = ['dismiss', 'success'];
+const E_SIGNATURE_STATUSES = ['dismiss', 'success'];
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Passkey'>;
 
 export const PasskeyScreen = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
-  const { firstName, lastName, mobile, accountName, eSignatureStatus, eSignaturePending } =
-    useAppSelector(state => state.signUp);
+  const {
+    firstName,
+    lastName,
+    mobile,
+    accountName,
+    eSignatureStatus,
+    eSignaturePending,
+    pending,
+  } = useAppSelector(state => state.signUp);
   const { email, passKey, privateKey } = useAppSelector(state => state.web3);
 
   const [isCopied, setIsCopied] = useState(false);
@@ -162,7 +169,7 @@ export const PasskeyScreen = ({ navigation }: Props) => {
     if (
       Platform.OS === 'android' &&
       appStateVisible === 'active' &&
-      ESIGNATURE_STATUSES.includes(eSignatureStatus) &&
+      E_SIGNATURE_STATUSES.includes(eSignatureStatus) &&
       !eSignaturePending
     ) {
       console.log('Action onVisible');
@@ -270,7 +277,15 @@ export const PasskeyScreen = ({ navigation }: Props) => {
             </Text>
           </View>
           <View style={[styles.checkboxRow, { justifyContent: 'space-between' }]}>
-            <CheckBox boxType="square" value={checkboxesState[4]} onValueChange={handleSign} />
+            {pending && <ActivityIndicator />}
+            {!pending && (
+              <CheckBox
+                boxType="square"
+                value={checkboxesState[4]}
+                onValueChange={handleSign}
+                disabled={pending || checkboxesState[4]}
+              />
+            )}
             <Text style={styles.checkboxText}>Sign META Association Membership Agreement</Text>
           </View>
         </View>

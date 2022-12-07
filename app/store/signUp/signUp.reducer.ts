@@ -28,6 +28,7 @@ export interface SignUpState extends Step1 {
     owner_key: string;
     referrer: string;
   };
+  pending: boolean;
 }
 
 const initialState: SignUpState = {
@@ -41,6 +42,7 @@ const initialState: SignUpState = {
   registerStatus: undefined,
   isMigration: false,
   password: '',
+  pending: false,
 };
 // todo: remove this and uncomment previous
 // const initialState: SignUpState = {
@@ -91,9 +93,16 @@ export const signUpSlice = createSlice({
     builder.addCase(eSignatureProceed.rejected, state => {
       state.eSignaturePending = false;
     });
+    builder.addCase(getAccountPaymentStatus.pending, state => {
+      state.pending = true;
+    });
     builder.addCase(getAccountPaymentStatus.fulfilled, (state, action) => {
       console.log('PaymentStatus reducer, payload: ', action.payload);
       state.paymentStatus = action.payload;
+      state.pending = false;
+    });
+    builder.addCase(getAccountPaymentStatus.rejected, state => {
+      state.pending = false;
     });
     builder.addCase(registerAccount.fulfilled, (state, action) => {
       console.log('Registration reducer, payload: ', action.payload);
