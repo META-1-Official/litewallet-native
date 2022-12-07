@@ -56,7 +56,6 @@ const SendScreen: React.FC<{}> = () => {
 
   const [isAccountValid, setIsAccountValid] = useState(false);
   const [isAmountValid, setIsAmountValid] = useState(false);
-  console.log(isAmountValid);
 
   useEffect(() => {
     if (anAsset) {
