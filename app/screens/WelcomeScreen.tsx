@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import ContentSlider, { Backdrop } from '../components/ContentSlider';
 import RoundedButton from '../components/RoundedButton';
 import { useAppDispatch } from '../hooks';
+import { clearESignatureState } from '../store/eSignature/eSignature.reducer';
 import { clearFaceKI } from '../store/faceKI/faceKI.reducer';
 import { clearSignInInfo } from '../store/signIn/signIn.reducer';
 import { clearSignUpState } from '../store/signUp/signUp.reducer';
@@ -23,10 +24,11 @@ const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
 
   useFocusEffect(() => {
     console.log('Wiping store...');
-    dispatch(clearSignUpState());
-    dispatch(clearWeb3AuthData());
+    dispatch(clearESignatureState());
     dispatch(clearFaceKI());
     dispatch(clearSignInInfo());
+    dispatch(clearSignUpState());
+    dispatch(clearWeb3AuthData());
   });
 
   return (
