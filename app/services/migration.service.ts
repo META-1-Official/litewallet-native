@@ -25,7 +25,7 @@ class MigrationServices {
         accountName,
         password,
         ['owner'],
-        process.env.REACT_APP_KEY_PREFIX,
+        config.APP_KEY_PREFIX,
       );
       console.log('account', account);
       const ownerPrivateKey = account.privKeys.owner.toWif();

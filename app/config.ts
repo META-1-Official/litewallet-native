@@ -9,6 +9,7 @@ enum URLs {
   WEB3_CLIENT_ID = 'WEB3_CLIENT_ID',
   FACE_KI_API_URL = 'FACE_KI_API_URL',
   E_SIGNATURE_API_URL = 'E_SIGNATURE_API_URL',
+  APP_KEY_PREFIX = 'APP_KEY_PREFIX',
 }
 
 type NetworkConfig = Record<URLs, string>;
@@ -33,6 +34,7 @@ const config: Config = {
       'BENfRWt5wyCFCi-nKzu6gIlPABHbvgub3lhZUhUp_r4XD2xmdph0MZMaXY89xnfPVs9wMao5vlBiA6dtP-4H1i0',
     FACE_KI_API_URL: 'https://litewallet.cryptomailsvc.io',
     E_SIGNATURE_API_URL: 'https://humankyc.cryptomailsvc.io',
+    APP_KEY_PREFIX: 'META1',
   },
   META1DEV: {
     META1_CONNECTION_URL: 'wss://api.dev.meta-exchange.vision/ws',
@@ -44,6 +46,7 @@ const config: Config = {
       'BFL8Z_Awr3p_ZVGiNUp1CIK8C28p0CC9WJRxw_GWEMWLJvOgJmpTJ8Xl8jbxYvzKhabmENF0GRbxE9EadEJ5T6g',
     FACE_KI_API_URL: 'https://litewallet.dev.cryptomailsvc.io',
     E_SIGNATURE_API_URL: 'https://e-sign.dev.cryptomailsvc.io',
+    APP_KEY_PREFIX: 'DEV11',
   },
   META1DEV2: {
     META1_CONNECTION_URL: 'wss://api.dev2.meta-exchange.vision/ws',
@@ -55,6 +58,7 @@ const config: Config = {
       'BFL8Z_Awr3p_ZVGiNUp1CIK8C28p0CC9WJRxw_GWEMWLJvOgJmpTJ8Xl8jbxYvzKhabmENF0GRbxE9EadEJ5T6g',
     FACE_KI_API_URL: 'https://litewallet.dev2.cryptomailsvc.io',
     E_SIGNATURE_API_URL: 'https://e-sign.dev.cryptomailsvc.io',
+    APP_KEY_PREFIX: 'DEV11',
   },
   META1TEST: {
     META1_CONNECTION_URL: 'wss://api.test.meta-exchange.vision/ws',
@@ -66,6 +70,7 @@ const config: Config = {
       'BENfRWt5wyCFCi-nKzu6gIlPABHbvgub3lhZUhUp_r4XD2xmdph0MZMaXY89xnfPVs9wMao5vlBiA6dtP-4H1i0',
     FACE_KI_API_URL: 'https://litewallet.test.cryptomailsvc.io',
     E_SIGNATURE_API_URL: 'https://e-sign.test.cryptomailsvc.io',
+    APP_KEY_PREFIX: 'TEST0',
   },
 };
 
