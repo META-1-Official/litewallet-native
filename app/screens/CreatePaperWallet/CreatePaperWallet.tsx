@@ -5,7 +5,7 @@ import useAppSelector from '../../hooks/useAppSelector';
 import { colors } from '../../styles/colors';
 import { catchError, tid } from '../../utils';
 import { generateKeyFromPassword } from '../../utils/accountCreate';
-import { AccountWithPassword, _login } from '../../services/meta1Api';
+import { AccountWithPassword, _login, getAccount } from '../../services/meta1Api';
 import RenderPdf, { KeysT } from './RenderPdf';
 import { savePdf } from './SavePdf';
 //@ts-ignore
