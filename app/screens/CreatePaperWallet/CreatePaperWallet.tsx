@@ -5,7 +5,7 @@ import useAppSelector from '../../hooks/useAppSelector';
 import { colors } from '../../styles/colors';
 import { catchError, tid } from '../../utils';
 import { generateKeyFromPassword } from '../../utils/accountCreate';
-import { AccountWithPassword, _login } from '../../services/meta1Api';
+import { AccountWithPassword, _login, getAccount } from '../../services/meta1Api';
 import RenderPdf, { KeysT } from './RenderPdf';
 import { savePdf } from './SavePdf';
 //@ts-ignore
@@ -21,21 +21,57 @@ function isPassPk(password: string): boolean {
 }
 
 export async function getAccountKeys({
-  accountName: account,
+  accountName,
   password,
 }: AccountWithPassword): Promise<KeysT | undefined> {
-  await _login(account, password);
+  await _login(accountName, password);
 
   if (isPassPk(password)) {
-    throw new Error('Creating paper wallet from private key is not allowed');
+    let account = (await getAccount(accountName)).account;
+    let passwordKeys = {};
+    const fromWif = PrivateKey.fromWif(password);
+    const key = {
+        privKey: fromWif ? fromWif.toWif() : fromWif,
+        pubKey: fromWif.toPublicKey().toString()
+    };
+     
+    ['active', 'owner', 'memo'].forEach((role) => {
+      if (role === 'memo') {
+        if (account['options']['memo_key'] == key.pubKey)
+          passwordKeys[role] = key;
+        else {
+          passwordKeys[role] = {
+            pubKey: account['options']['memo_key'],
+            privKey: ''
+          };
+        }
+      } else {
+        account[role]['key_auths'].forEach((auth) => {
+          if (auth[0] == key.pubKey)
+            passwordKeys[role] = key;
+          else {
+            passwordKeys[role] = {
+              pubKey: auth[0],
+              privKey: ''
+            };
+          }
+        });
+      }
+    });
+    return {
+      ownerKeys: passwordKeys['owner'],
+      activeKeys: passwordKeys['active'],
+      memoKeys: passwordKeys['memo'],
+      accountName: accountName,
+    }
+  } else {
+    return {
+      ownerKeys: generateKeyFromPassword(accountName, 'owner', password, true),
+      activeKeys: generateKeyFromPassword(accountName, 'active', password, true),
+      memoKeys: generateKeyFromPassword(accountName, 'memo', password, true),
+      accountName: accountName,
+    };
   }
-
-  return {
-    ownerKeys: generateKeyFromPassword(account, 'owner', password, true),
-    activeKeys: generateKeyFromPassword(account, 'active', password, true),
-    memoKeys: generateKeyFromPassword(account, 'memo', password, true),
-    accountName: account,
-  };
 }
 
 export default function CreatePaperWallet() {
