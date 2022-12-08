@@ -26,6 +26,7 @@ import { colors } from './styles/colors';
 const Tab = createBottomTabNavigator();
 
 export const WalletNav: React.FC<DrawerScreenProps<DexDrawerParamList>> = ({ navigation }) => {
+  const dispatch = useAppDispatch();
   const loading = useStore(state => state.loading);
   if (loading) {
     return <Loader />;
@@ -84,7 +85,15 @@ export const WalletNav: React.FC<DrawerScreenProps<DexDrawerParamList>> = ({ nav
         name="Settings"
         options={{
           tabBarButton: props => {
-            return <Pressable {...props} onPress={() => navigation.openDrawer()} />;
+            return (
+              <Pressable
+                {...props}
+                onPress={() => {
+                  dispatch(getAccountData());
+                  navigation.openDrawer();
+                }}
+              />
+            );
           },
           tabBarAccessibilityLabel: 'Tab/Settings',
         }}
