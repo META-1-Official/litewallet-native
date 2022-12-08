@@ -16,12 +16,21 @@ import { dexAssetView } from './AssetView/AssetViewStore';
 import useAssetsOnFocus from '../../hooks/useAssetsOnFocus';
 
 const GRAPH_INTERVAL = {
-  '1D': 1,
-  '1W': 7,
-  '1M': 31,
-  '1Y': 365,
+  '1D': 3600,
+  '1W': 3600 * 7,
+  '1M': 3600 * 7 * 30,
+  '1Y': 3600 * 7 * 30 * 365,
   All: 0,
 };
+
+const GRAPH_TIMESTAMP_BEFORE = {
+  '1D': 24*60*60*1000,
+  '1W': 24*60*60*1000 * 7,
+  '1M': 24*60*60*1000 * 30,
+  '1Y': 24*60*60*1000 * 365,
+  All: 0,
+};
+
 type GRAPH_INTERVAL_KEYS = keyof typeof GRAPH_INTERVAL;
 
 const { width, height } = Dimensions.get('screen');
@@ -74,10 +83,13 @@ const DexFund: React.FC<DexTSP> = ({ navigation }) => {
   const accountAssets = useAssetsOnFocus();
   const accountTotal = accountAssets?.accountTotal || 0;
   useEffect(() => {
+    var fromDate = new Date();
+    fromDate.setTime(fromDate.getTime() - GRAPH_TIMESTAMP_BEFORE[curInterval]);
     dispatch(
       getHistory({
         accountName,
         skipSize: GRAPH_INTERVAL[curInterval],
+        from: fromDate.toISOString(),
       }),
     )
       .unwrap()
@@ -102,12 +114,15 @@ const DexFund: React.FC<DexTSP> = ({ navigation }) => {
 
         setChartData(data);
       })
-      .catch(e => console.error(e));
+      .catch(e => {
+        console.error(e)
+      });
   }, [curInterval, accountName, accountTotal]);
 
   if (!accountAssets) {
     return <Loader bgc="#000" />;
   }
+
   return (
     <SafeAreaView style={{ backgroundColor: '#000', height: '100%' }}>
       <View style={{ marginHorizontal: 12 }}>

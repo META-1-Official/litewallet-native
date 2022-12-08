@@ -49,13 +49,13 @@ export const getNotifications = createAsyncThunk<any, undefined>(
   },
 );
 
-export const getHistory = createAsyncThunk<any, { accountName: string; skipSize: number }>(
+export const getHistory = createAsyncThunk<any, { accountName: string, skipSize: number, from: string }>(
   'wallet/getHistory',
-  async ({ accountName, skipSize }, thunkAPI) => {
+  async ({ accountName, skipSize, from }, thunkAPI) => {
     const rootState = thunkAPI.getState() as RootState;
     const currentAccountName = rootState.wallet.accountName;
     const email = rootState.wallet.email;
     await thunkAPI.dispatch(login({ accountName: currentAccountName, email }));
-    return await liteWalletServices.getHistory(accountName, skipSize);
+    return await liteWalletServices.getHistory(accountName, skipSize, from);
   },
 );
