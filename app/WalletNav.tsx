@@ -17,7 +17,7 @@ import ExploreAssets from './screens/ExploreAssets';
 import FundAccount from './screens/FundAccountScreen';
 import HelpStack from './screens/help';
 import Sandbox from './screens/Sandbox';
-import SettingsScreen from './screens/SettingsScreen';
+import SettingsScreen from './screens/SettingsScreen/SettingsScreen';
 import WalletScreen from './screens/WalletScreen';
 import { useStore } from './store';
 import { getAccountData } from './store/wallet/wallet.actions';
