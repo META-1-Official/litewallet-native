@@ -14,12 +14,12 @@ class MigrationServices {
   }
 
   // todo: move it out to helpers
-  buildSignature = async (accountName: string, password: string) => {
+  buildSignature = async (accountName: string, password: string, is4Migration: boolean) => {
     try {
       const signerPkey = PrivateKey.fromWif(password);
       const publicKey = signerPkey.toPublicKey().toString();
       const signature = Signature.sign(accountName, signerPkey).toHex();
-      return { accountName, publicKey, signature };
+      return { accountName, publicKey, signature, is4Migration};
     } catch (err) {
       const account = await Login.generateKeys(
         accountName,
@@ -27,12 +27,11 @@ class MigrationServices {
         ['owner'],
         config.APP_KEY_PREFIX,
       );
-      console.log('account', account);
       const ownerPrivateKey = account.privKeys.owner.toWif();
       const publicKey = account.pubKeys.owner;
       const signerPkey = PrivateKey.fromWif(ownerPrivateKey);
       const signature = Signature.sign(accountName, signerPkey).toHex();
-      return { accountName, publicKey, signature };
+      return { accountName, publicKey, signature , is4Migration};
     }
   };
 
@@ -48,7 +47,7 @@ class MigrationServices {
 
   validateSignature = async (accountName: string, password: string) => {
     try {
-      const payload = await this.buildSignature(accountName, password);
+      const payload = await this.buildSignature(accountName, password, true);
       const { data } = await this.api.post('/validateSignature', payload);
       return data;
     } catch (e) {
