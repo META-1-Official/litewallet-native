@@ -34,9 +34,9 @@ const inject = (keys: KeysT) => {
   const r = `
   setTimeout(function() { createPaperWalletAsPDF(JSON.parse('${JSON.stringify(
     keys,
-  )}')) }, 10000); true;
+  )}')) }, 1000); true;
   `;
-  console.log(r);
+  // console.log(r);
   return r;
 };
 
