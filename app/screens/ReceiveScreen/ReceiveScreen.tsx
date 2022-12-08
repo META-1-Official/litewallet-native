@@ -71,6 +71,37 @@ const ReceiveScreen: React.FC<{}> = () => {
     return <SafeAreaView />;
   }
 
+  const RealAddress = () => (
+    <RawWrapper
+      shareMsg={realAddress?.addr || ''}
+      width={width}
+      height={height}
+      selected={selected}
+    >
+      <RealAddressView realAddress={realAddress} width={width} />
+    </RawWrapper>
+  );
+
+  const UserNameDepositeView = () => (
+    <RawWrapper shareMsg={accountName} width={width} height={height} selected={selected}>
+      <UsernameDepositView accountName={accountName} />
+    </RawWrapper>
+  );
+
+  const scrollToOffset = () => {
+    flatListRef.current?.scrollToOffset({
+      animated: true,
+      offset: 0,
+    });
+  };
+
+  const scrollToIndex = () => {
+    flatListRef.current?.scrollToIndex({
+      animated: true,
+      index: 1,
+    });
+  };
+
   return (
     <SafeAreaView>
       <Backdrop />
@@ -114,15 +145,7 @@ const ReceiveScreen: React.FC<{}> = () => {
           elevation: 10,
         }}
       >
-        <TouchableOpacity
-          {...tid('Recive/Pils/Address')}
-          onPress={() => {
-            flatListRef.current?.scrollToOffset({
-              animated: true,
-              offset: 0,
-            });
-          }}
-        >
+        <TouchableOpacity {...tid('Recive/Pils/Address')} onPress={scrollToOffset}>
           <View
             style={{
               padding: 12,
@@ -142,15 +165,7 @@ const ReceiveScreen: React.FC<{}> = () => {
             </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity
-          {...tid('Recive/Pils/Username')}
-          onPress={() => {
-            flatListRef.current?.scrollToIndex({
-              animated: true,
-              index: 1,
-            });
-          }}
-        >
+        <TouchableOpacity {...tid('Recive/Pils/Username')} onPress={scrollToIndex}>
           <View
             style={{
               padding: 12,
@@ -168,23 +183,7 @@ const ReceiveScreen: React.FC<{}> = () => {
       <View>
         <Animated.FlatList
           ref={flatListRef}
-          data={[
-            () => (
-              <RawWrapper
-                shareMsg={realAddress?.addr || ''}
-                width={width}
-                height={height}
-                selected={selected}
-              >
-                <RealAddressView realAddress={realAddress} width={width} />
-              </RawWrapper>
-            ),
-            () => (
-              <RawWrapper shareMsg={accountName} width={width} height={height} selected={selected}>
-                <UsernameDepositView accountName={accountName} />
-              </RawWrapper>
-            ),
-          ]}
+          data={[RealAddress, UserNameDepositeView]}
           renderItem={E => <E.item key={`List_${E.index}`} />}
           horizontal
           scrollEventThrottle={32}
