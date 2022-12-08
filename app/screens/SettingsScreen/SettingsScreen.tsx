@@ -156,6 +156,7 @@ const AvatarGroup = () => {
 };
 
 const OtherGroup = () => {
+  // @ts-ignore
   const { sentryEnabled, sentryEnabledSet } = useOptions();
   const showAlert = () => {
     Alert.alert('Restart', 'Application restart is required to apply changes', [
