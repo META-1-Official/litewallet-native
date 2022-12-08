@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  ActivityIndicator,
   Animated,
   Dimensions,
   SafeAreaView,
@@ -8,18 +7,18 @@ import {
   Text,
   TouchableOpacity,
   View,
-  ViewStyle,
-  Share,
   Platform,
 } from 'react-native';
-import { useAssetPicker } from '../components/AssetSelectModal';
-import useAppSelector from '../hooks/useAppSelector';
-import { colors } from '../styles/colors';
-import { shadow, tid } from '../utils';
-import { AddrT, getAddressForAccountAsset } from '../services/meta1Api';
-import { SvgXml } from 'react-native-svg';
+import { useAssetPicker } from '../../components/AssetSelectModal';
+import useAppSelector from '../../hooks/useAppSelector';
+import { colors } from '../../styles/colors';
+import { tid } from '../../utils';
+import { AddrT, getAddressForAccountAsset } from '../../services/meta1Api';
 import { useNavigation } from '@react-navigation/core';
-import { WalletNavigationProp } from './WalletScreen';
+import { WalletNavigationProp } from '../WalletScreen';
+import RawWrapper from './RawWrapper';
+import RealAddressView from './RealAddressView';
+import UsernameDepositView from './UsernameDepositView';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -48,15 +47,16 @@ const ReceiveScreen: React.FC<{}> = () => {
   });
   const [realAddress, setRealAddress] = useState<AddrT | null>(null);
 
+  const fetchAddress = useCallback(async () => {
+    if (selected) {
+      const res = await getAddressForAccountAsset(accountName, selected.symbol);
+      setRealAddress(res);
+    }
+  }, [accountName, selected?.symbol]);
+
   useEffect(() => {
-    const fn = async () => {
-      if (selected) {
-        const res = await getAddressForAccountAsset(accountName, selected.symbol);
-        setRealAddress(res);
-      }
-    };
-    fn();
-  }, [accountName, selected]);
+    fetchAddress();
+  }, [accountName, selected?.symbol]);
 
   const scrollX = useRef(new Animated.Value(0)).current;
   const left = scrollX.interpolate({
@@ -71,120 +71,6 @@ const ReceiveScreen: React.FC<{}> = () => {
     return <SafeAreaView />;
   }
 
-  const RealAddressView = () => {
-    if (!realAddress) {
-      return (
-        <View>
-          <ActivityIndicator />
-        </View>
-      );
-    }
-
-    if (realAddress.addr === '') {
-      return (
-        <View>
-          <Text>Failed to get address</Text>
-        </View>
-      );
-    } else {
-      return (
-        <View
-          style={{
-            alignItems: 'center',
-          }}
-        >
-          <SvgXml xml={realAddress.qr} width={width * 0.6} height={width * 0.6} />
-          <Text style={{ textAlign: 'center', padding: 12 }}>{realAddress.addr}</Text>
-        </View>
-      );
-    }
-  };
-  const RawWraper: React.FC<{ style?: ViewStyle; shareMsg: string }> = ({
-    style,
-    shareMsg,
-    children,
-  }) => {
-    return (
-      <View
-        style={{
-          ...shadow.D3,
-          height: height * 0.55,
-          width: width * 0.8,
-          backgroundColor: '#fff',
-          marginRight: 12,
-          borderRadius: 18,
-          padding: 24,
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          ...style,
-        }}
-      >
-        <Text
-          style={{
-            fontSize: 16,
-            fontWeight: '500',
-          }}
-        >
-          Deposit {selected.symbol}
-        </Text>
-        {children}
-        <TouchableOpacity
-          {...tid('Recive/CopyAddress')}
-          onPress={() => {
-            if (shareMsg) {
-              Share.share({ message: shareMsg });
-            }
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: '500',
-              color: colors.BrandYellow,
-            }}
-          >
-            Copy or share address
-          </Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
-
-  const UsernameDepositView = () => {
-    return (
-      <View
-        style={{
-          alignItems: 'center',
-        }}
-      >
-        <View
-          style={{
-            ...shadow.D3,
-            width: 100,
-            height: 100,
-            borderRadius: 100,
-            backgroundColor: '#fff',
-            padding: 8,
-            margin: 32,
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 72,
-              textAlign: 'center',
-              color: colors.BrandYellow,
-            }}
-          >
-            {accountName[0]}
-          </Text>
-        </View>
-        <Text style={{ fontSize: 28, marginBottom: 16 }}>@{accountName}</Text>
-        <Text style={{ textAlign: 'center', fontSize: 16 }}>
-          Accept From Other META1 Wallet Users
-        </Text>
-      </View>
-    );
-  };
   return (
     <SafeAreaView>
       <Backdrop />
@@ -284,14 +170,19 @@ const ReceiveScreen: React.FC<{}> = () => {
           ref={flatListRef}
           data={[
             () => (
-              <RawWraper shareMsg={realAddress?.addr || ''}>
-                <RealAddressView />
-              </RawWraper>
+              <RawWrapper
+                shareMsg={realAddress?.addr || ''}
+                width={width}
+                height={height}
+                selected={selected}
+              >
+                <RealAddressView realAddress={realAddress} width={width} />
+              </RawWrapper>
             ),
             () => (
-              <RawWraper shareMsg={accountName}>
-                <UsernameDepositView />
-              </RawWraper>
+              <RawWrapper shareMsg={accountName} width={width} height={height} selected={selected}>
+                <UsernameDepositView accountName={accountName} />
+              </RawWrapper>
             ),
           ]}
           renderItem={E => <E.item key={`List_${E.index}`} />}
