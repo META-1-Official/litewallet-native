@@ -59,7 +59,7 @@ const SendScreen: React.FC<{}> = () => {
 
   useEffect(() => {
     if (anAsset) {
-      if (+anAsset?.amount <= +anAsset?.asset.amount) {
+      if (+anAsset?.amount <= +anAsset?.asset.amount && +anAsset?.amount !== 0) {
         setIsAmountValid(true);
       } else {
         setIsAmountValid(false);
@@ -92,6 +92,8 @@ const SendScreen: React.FC<{}> = () => {
       </SafeAreaView>
     );
   }
+
+  const isDisabled = !isAccountValid || !isAmountValid || !(password.length >= 52);
 
   return (
     <SafeAreaView>
@@ -178,7 +180,7 @@ const SendScreen: React.FC<{}> = () => {
         >
           <RoundedButton
             onPress={() => sendFn(password, anAsset, toAccount)}
-            disabled={!isAccountValid || !isAmountValid}
+            disabled={isDisabled}
             title="Confirm"
           />
         </View>
@@ -603,6 +605,8 @@ export const DexSend: React.FC<DexProps> = props => {
     );
   }
   const Header = props.hdr;
+  const isDisabled = !isAccountValid || !isAmountValid || !(password.length >= 52);
+
   return (
     <>
       <Header {...props} title={`Send ${anAsset.asset.symbol}`} />
@@ -693,11 +697,12 @@ export const DexSend: React.FC<DexProps> = props => {
 
           <TouchableOpacity
             {...tid('SendScreen/Send')}
+            disabled={isDisabled}
             onPress={() => sendFn(password, anAsset, toAccount)}
           >
             <View
               style={{
-                backgroundColor: colors.BrandYellow,
+                backgroundColor: isDisabled ? colors.dotGray : colors.BrandYellow,
                 alignItems: 'center',
                 padding: 18,
                 margin: 24,
