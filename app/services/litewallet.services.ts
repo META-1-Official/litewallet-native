@@ -61,8 +61,8 @@ class LiteWalletServices {
     return data as Notification;
   };
 
-  getHistory = async (accountName: string, skipSize: number) => {
-    const { data } = await this.api.post('/getHistory', { accountName, skip_size: skipSize });
+  getHistory = async (accountName: string, skipSize: number, from: string) => {
+    const { data } = await this.api.post('/getHistory', { accountName, skip_size: skipSize, from });
     return data;
   };
 }
