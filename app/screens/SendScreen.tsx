@@ -93,7 +93,7 @@ const SendScreen: React.FC<{}> = () => {
     );
   }
 
-  const isDisabled = !isAccountValid || !isAmountValid || !(password.length >= 52);
+  const isDisabled = !isAccountValid || !isAmountValid || !password;
 
   return (
     <SafeAreaView>
@@ -605,7 +605,7 @@ export const DexSend: React.FC<DexProps> = props => {
     );
   }
   const Header = props.hdr;
-  const isDisabled = !isAccountValid || !isAmountValid || !(password.length >= 51);
+  const isDisabled = !isAccountValid || !isAmountValid || !password;
 
   return (
     <>
