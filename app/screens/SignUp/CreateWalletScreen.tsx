@@ -1,4 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { debounce } from 'debounce';
 import React, { useState } from 'react';
 import { SafeAreaView, Text, TextInput, TextInputProps, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -45,6 +46,7 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
     control,
     handleSubmit,
     formState: { isSubmitting },
+    setError,
   } = useForm({
     mode: 'onChange',
     defaultValues: {
@@ -63,6 +65,7 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   const handleAccountNameValidation = async (accountName: string) => {
+    setMigratable(false);
     const freeName = await checkFreeName(accountName);
     if (typeof freeName === 'string') {
       return freeName;
@@ -85,29 +88,17 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
       }
     }
   };
-  // const handleAccountNameValidation = async (accountName: string) => {
-  //   setMigratable(false);
-  //   const migrationAvailability = await checkMigrationAvailability(accountName);
-  //   if (migrationAvailability) {
-  //     return true;
-  //   } else {
-  //     const validName = await checkAccountName(accountName);
-  //     if (typeof validName === 'string') {
-  //       return validName;
-  //     } else {
-  //       const freeName = await checkFreeName(accountName);
-  //       if (typeof freeName === 'string') {
-  //         return freeName;
-  //       } else {
-  //         const premiumName = await checkPremiumName(accountName);
-  //         if (typeof premiumName === 'string') {
-  //           return premiumName;
-  //         }
-  //         return true;
-  //       }
-  //     }
-  //   }
-  // };
+
+  const errorHandling = debounce(
+    (text: string) =>
+      handleAccountNameValidation(text).then(result => {
+        console.log('Hello', result);
+        if (typeof result === 'string') {
+          setError('accountName', { type: 'onChange', message: result });
+        }
+      }),
+    500,
+  );
 
   const handleSubmitForm = handleSubmit(formState => {
     dispatch(step1Save(formState));
@@ -180,12 +171,15 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
               autoCorrect={false}
               rules={{
                 required,
-                validate: {
-                  handleAccountNameValidation,
-                },
               }}
               render={(props: TextInputProps) => (
-                <TextInput {...props} onChangeText={t => props.onChangeText?.(t.toLowerCase())} />
+                <TextInput
+                  {...props}
+                  onChangeText={text => {
+                    props.onChangeText?.(text.toLowerCase());
+                    errorHandling(text);
+                  }}
+                />
               )}
             />
           </View>

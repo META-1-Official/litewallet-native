@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useController, UseControllerProps } from 'react-hook-form';
 import { StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
 import { DefaultTheme, HelperText } from 'react-native-paper';
-import debounce from 'debounce';
 import { tid } from '..';
 import { colors } from '../../styles/colors';
 import _get from 'lodash.get';
@@ -35,7 +34,7 @@ type Props = {
   isDebounced?: boolean;
 } & Omit<TextInputProps, 'theme'>;
 
-export function Input({ name, control, rules, isDebounced = false, ...props }: Props) {
+export function Input({ name, control, rules, ...props }: Props) {
   const {
     field,
     fieldState: { error },
@@ -56,7 +55,7 @@ export function Input({ name, control, rules, isDebounced = false, ...props }: P
         theme={theme}
         {...tid(`useFrom/Input/${name}`)}
         value={field.value}
-        onChangeText={isDebounced ? debounce(field.onChange, 300) : field.onChange}
+        onChangeText={field.onChange}
       />
       <HelperText padding="none" type="error" visible={!!error}>
         {error?.message}
