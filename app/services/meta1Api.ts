@@ -48,7 +48,7 @@ export const Connect = async () => {
   setupOnStatusCallbackHook(s => {
     if (s !== 'open' && !once) {
       once = true;
-      throw new Error('ACCOUNT_NOT_FOUND');
+      // throw new Error('ACCOUNT_NOT_FOUND'); Source of issue with redirection
       // Alert.alert('Server connection lost', '', [
       //   { text: 'Restart', onPress: () => RNRestart.Restart() },
       // ]);

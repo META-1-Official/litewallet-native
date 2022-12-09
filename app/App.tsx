@@ -86,6 +86,7 @@ const persistor = persistStore(createStore);
 function App() {
   LogBox.ignoreAllLogs();
   const [dark, setDark] = useState(false);
+
   useEffect(() => {
     SplashScreen.hide();
     Connect();
