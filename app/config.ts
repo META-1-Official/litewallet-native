@@ -1,4 +1,4 @@
-import { NETWORK } from '@env';
+import { NETWORK, TORUS_CLIENT_ID } from '@env';
 
 enum URLs {
   META1_CONNECTION_URL = 'META1_CONNECTION_URL',
@@ -25,15 +25,14 @@ type Config = Record<Network, NetworkConfig>;
 
 const config: Config = {
   META1: {
-    META1_CONNECTION_URL: 'wss://api.meta-exchange.vision/ws',
+    META1_CONNECTION_URL: 'wss://maia.meta-exchange.vision/ws',
     FAUCET_URL: 'https://faucet.meta-exchange.vision/faucet',
     LITE_WALLET_API_URL: 'https://litewallet.cryptomailsvc.io',
     GATEWAY_URL: 'https://gateway.api.meta-exchange.vision',
-    API_URL: 'https://api.meta-exchange.vision',
-    WEB3_CLIENT_ID:
-      'BENfRWt5wyCFCi-nKzu6gIlPABHbvgub3lhZUhUp_r4XD2xmdph0MZMaXY89xnfPVs9wMao5vlBiA6dtP-4H1i0',
+    API_URL: 'https://maia.meta-exchange.vision',
+    WEB3_CLIENT_ID: TORUS_CLIENT_ID,
     FACE_KI_API_URL: 'https://litewallet.cryptomailsvc.io',
-    E_SIGNATURE_API_URL: 'https://humankyc.cryptomailsvc.io',
+    E_SIGNATURE_API_URL: 'https://e-sign.cryptomailsvc.io',
     APP_KEY_PREFIX: 'META1',
   },
   META1DEV: {
