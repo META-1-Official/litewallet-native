@@ -51,7 +51,7 @@ useOptions.persist.rehydrate().then(() => {
 setJSExceptionHandler((e, _fatal) => {
   console.log('GEH', e);
   if (e.message === 'ACCOUNT_NOT_FOUND') {
-    RNRestart.Restart();
+    // RNRestart.Restart();
   }
 }, true);
 
