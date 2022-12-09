@@ -92,7 +92,6 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
   const errorHandling = debounce(
     (text: string) =>
       handleAccountNameValidation(text).then(result => {
-        console.log('Hello', result);
         if (typeof result === 'string') {
           setError('accountName', { type: 'onChange', message: result });
         }
