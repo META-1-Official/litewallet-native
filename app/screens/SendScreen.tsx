@@ -605,7 +605,7 @@ export const DexSend: React.FC<DexProps> = props => {
     );
   }
   const Header = props.hdr;
-  const isDisabled = !isAccountValid || !isAmountValid || !(password.length >= 52);
+  const isDisabled = !isAccountValid || !isAmountValid || !(password.length >= 51);
 
   return (
     <>
