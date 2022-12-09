@@ -170,6 +170,9 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
               autoCorrect={false}
               rules={{
                 required,
+                validate: {
+                  handleAccountNameValidation,
+                },
               }}
               render={(props: TextInputProps) => (
                 <TextInput
