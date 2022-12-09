@@ -262,9 +262,7 @@ export const PasskeyScreen = ({ navigation }: Props) => {
               value={checkboxesState[2]}
               onValueChange={() => handleCheckBox(2)}
             />
-            <Text style={styles.checkboxText}>
-              I have written down or otherwise stored my passkey
-            </Text>
+            <Text style={styles.checkboxText}>I have copied and stored my passkey</Text>
           </View>
           <View style={styles.checkboxRow}>
             <CheckBox
