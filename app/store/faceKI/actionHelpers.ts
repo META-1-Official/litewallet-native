@@ -129,6 +129,6 @@ export const handleNeverBeenEnrolled = () => {
   Toast.show({
     type: 'error',
     text1: 'We can not verify you because you have never been enrolled with your face.',
-    text2: 'Please try to signup!',
+    text2: 'Please enroll first via signup process.',
   });
 };

@@ -12,6 +12,7 @@ export enum Enrollment {
 export enum Verify {
   VerifyOk = 'Verify OK',
   SpoofDetected = 'Spoof Detected',
+  NoUsers = 'No Users',
 }
 
 export enum FaceDetection {
