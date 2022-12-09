@@ -24,10 +24,10 @@ const GRAPH_INTERVAL = {
 };
 
 const GRAPH_TIMESTAMP_BEFORE = {
-  '1D': 24*60*60*1000,
-  '1W': 24*60*60*1000 * 7,
-  '1M': 24*60*60*1000 * 30,
-  '1Y': 24*60*60*1000 * 365,
+  '1D': 24 * 60 * 60 * 1000,
+  '1W': 24 * 60 * 60 * 1000 * 7,
+  '1M': 24 * 60 * 60 * 1000 * 30,
+  '1Y': 24 * 60 * 60 * 1000 * 365,
   All: 0,
 };
 
@@ -115,7 +115,7 @@ const DexFund: React.FC<DexTSP> = ({ navigation }) => {
         setChartData(data);
       })
       .catch(e => {
-        console.error(e)
+        console.error(e);
       });
   }, [curInterval, accountName, accountTotal]);
 
@@ -132,7 +132,7 @@ const DexFund: React.FC<DexTSP> = ({ navigation }) => {
             ${accountAssets?.accountTotal.toFixed(2)}
           </Text>
           <View style={{ marginLeft: 12 }}>
-            <ProfitIndicator change={accountAssets.changePercent} />
+            <ProfitIndicator change={accountAssets.changePercent || 0} />
           </View>
         </View>
 

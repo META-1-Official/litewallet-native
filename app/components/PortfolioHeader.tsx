@@ -81,11 +81,13 @@ const ButtonGroup = () => {
 };
 const PortfolioHeader: React.FC<Props> = ({ protfolioAssets }) => {
   const accountName = useAppSelector(state => state.wallet.accountName);
+
+  console.log(protfolioAssets);
   return (
     <View style={styles.container}>
       <Text style={styles.accountName}>@{accountName}</Text>
       <Text style={styles.accountTotal}>${protfolioAssets!.accountTotal.toFixed(2)}</Text>
-      <ProfitIndicator change={protfolioAssets!.changePercent} />
+      <ProfitIndicator change={protfolioAssets!.changePercent || 0} />
       <ButtonGroup />
     </View>
   );
