@@ -17,7 +17,7 @@ index 94e4341..2b34a87 100644
 +    META1: {
 +      core_asset: 'META1',
 +      address_prefix: 'META1',
-+      chain_id: '9e40bec4c6a1d89e9b1f6f1e539498f33050d66e647de82d2f5e4dfc1ea4fde3',
++      chain_id: '70838c5f7135578c00a8186dc7492fb55e691408a01b6dbb6e6626f6be3119af',
 +    },
 +    META1DEV: {
 +      core_asset: 'META1',
