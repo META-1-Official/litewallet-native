@@ -62,15 +62,13 @@ export const WalletNav: React.FC<DrawerScreenProps<DexDrawerParamList>> = ({ nav
         name="Wallet"
         component={WalletScreen}
       />
-      {Platform.OS !== 'ios' && (
-        <Tab.Screen
-          options={{
-            tabBarAccessibilityLabel: 'Tab/FundAccount',
-          }}
-          name="Fund Wallet"
-          component={FundAccount}
-        />
-      )}
+      <Tab.Screen
+        options={{
+          tabBarAccessibilityLabel: 'Tab/FundAccount',
+        }}
+        name="Fund Wallet"
+        component={FundAccount}
+      />
       <Tab.Screen
         name="DEX"
         options={{
