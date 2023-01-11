@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   AppState,
+  Linking,
   Platform,
   Pressable,
   SafeAreaView,
@@ -204,6 +205,11 @@ export const PasskeyScreen = ({ navigation }: Props) => {
     );
   }, [checkboxesState]);
 
+  const openUrl = () => {
+    const url = 'https://support.meta1coin.vision/password-storage-tips';
+    Linking.openURL(url);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainerStyle}>
@@ -230,7 +236,11 @@ export const PasskeyScreen = ({ navigation }: Props) => {
               We are NO LONGER able to restore, reset, or redistribute lost coins, or help with
               lost passkeys. Please MAKE SURE you copy your wallet name and passkey on to your
               computer and then transfer it to an offline storage location for easy access like a
-              USB drive! Check our passkey storage tips knowledge article for more info.
+              USB drive! Check our passkey storage tips knowledge article for more info{' '}
+              <Text style={{ color: 'blue' }} onPress={openUrl}>
+                here
+              </Text>
+              .
             </Text>
           </View>
         </View>
