@@ -4,10 +4,15 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import useAppDispatch from '../../hooks/useAppDispatch';
 import { deleteAvatar, uploadAvatar } from '../../store/wallet/wallet.actions';
 import { isError } from '../../utils/errorUtils';
+import { getPassword } from '../../utils';
 import ListItem from './ListItem';
 
 const upload = async (dispatch: any) => {
   try {
+    const passwd = await getPassword();
+    if (passwd === null) {
+      return;
+    }
     const result = await launchImageLibrary({
       mediaType: 'photo',
       maxHeight: 500,
@@ -34,7 +39,11 @@ const upload = async (dispatch: any) => {
 
 const AvatarGroup = () => {
   const dispatch = useAppDispatch();
-  const handleDeleteAvatar = () => {
+  const handleDeleteAvatar = async () => {
+    const passwd = await getPassword();
+    if (passwd === null) {
+      return;
+    }
     Alert.alert('Remove avatar', 'Are you sure you want to continue', [
       {
         text: 'Cancel',
