@@ -10,7 +10,7 @@ import ListItem from './ListItem';
 const upload = async (dispatch: any) => {
   try {
     const passwd = await getPassword();
-    if (passwd === null) {
+    if (!passwd) {
       return;
     }
     const result = await launchImageLibrary({
@@ -41,7 +41,7 @@ const AvatarGroup = () => {
   const dispatch = useAppDispatch();
   const handleDeleteAvatar = async () => {
     const passwd = await getPassword();
-    if (passwd === null) {
+    if (!passwd) {
       return;
     }
     Alert.alert('Remove avatar', 'Are you sure you want to continue', [
