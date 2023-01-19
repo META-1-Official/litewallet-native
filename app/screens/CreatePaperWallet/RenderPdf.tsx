@@ -25,12 +25,21 @@ export default function RenderPdf({ keys, onReady }: Props) {
             console.warn(event.nativeEvent.data);
             onReady(event.nativeEvent.data);
           }}
+          onError={syntheticEvent => {
+            const { nativeEvent } = syntheticEvent;
+            console.warn('WebView error: ', nativeEvent);
+          }}
+          onRenderProcessGone={syntheticEvent => {
+            const { nativeEvent } = syntheticEvent;
+            console.warn('WebView Crashed: ', nativeEvent.didCrash);
+          }}
         />
       )}
     </View>
   );
 }
 const inject = (keys: KeysT) => {
+  // console.log('inject', keys);
   const r = `
   setTimeout(function() { createPaperWalletAsPDF(JSON.parse('${JSON.stringify(
     keys,
@@ -48,7 +57,7 @@ const htmlSource = `
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
-    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   </head>
 
   <body
@@ -120,7 +129,9 @@ const htmlSource = `
         };
 
         const gQrcode = (qrcode, rowWidth, rowHeight, currentPage) => {
-          console.log(qrcode);
+          // console.log(qrcode, rowWidth, rowHeight, currentPage);
+          // console.log('jsPDF', jspdf);
+          // console.log('QRCode', QRCode);
           const qr = new QRCode(document.createElement("div"), qrcode);
           const data = qr._el.firstChild.toDataURL();
           pdf.setPage(currentPage);
