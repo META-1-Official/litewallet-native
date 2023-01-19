@@ -25,25 +25,21 @@ export default function RenderPdf({ keys, onReady }: Props) {
             console.warn(event.nativeEvent.data);
             onReady(event.nativeEvent.data);
           }}
-          onError={(syntheticEvent) => {
+          onError={syntheticEvent => {
             const { nativeEvent } = syntheticEvent;
             console.warn('WebView error: ', nativeEvent);
           }}
           onRenderProcessGone={syntheticEvent => {
             const { nativeEvent } = syntheticEvent;
-            console.warn(
-              'WebView Crashed: ',
-              nativeEvent.didCrash,
-            );
+            console.warn('WebView Crashed: ', nativeEvent.didCrash);
           }}
-
         />
       )}
     </View>
   );
 }
 const inject = (keys: KeysT) => {
-  console.log('inject',  keys);
+  // console.log('inject', keys);
   const r = `
   setTimeout(function() { createPaperWalletAsPDF(JSON.parse('${JSON.stringify(
     keys,
@@ -133,9 +129,9 @@ const htmlSource = `
         };
 
         const gQrcode = (qrcode, rowWidth, rowHeight, currentPage) => {
-          console.log(qrcode, rowWidth, rowHeight, currentPage);
-          console.log('jsPDF', jspdf);
-          console.log('QRCode', QRCode);
+          // console.log(qrcode, rowWidth, rowHeight, currentPage);
+          // console.log('jsPDF', jspdf);
+          // console.log('QRCode', QRCode);
           const qr = new QRCode(document.createElement("div"), qrcode);
           const data = qr._el.firstChild.toDataURL();
           pdf.setPage(currentPage);
