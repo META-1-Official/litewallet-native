@@ -238,7 +238,7 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
       // }
 
       const passwd = await getPassword();
-      if (passwd === null) {
+      if (!passwd) {
         return;
       }
 

@@ -461,7 +461,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
   const [errors, setErrors] = useState([]);
 
   useEffect(() => setDisabled(errors.length !== 0), [errors]);
-  if (allAssets === null || !availableAssets || !pair) {
+  if (!allAssets || !availableAssets || !pair) {
     refresh();
     return <Loader />;
   }

@@ -49,7 +49,7 @@ export const getCircularReplacer = () => {
 
 export const dumpObjInterface = (_obj: any) => {
   const _dumpObjIface = (obj: any): string => {
-    if (obj === null) {
+    if (!obj) {
       console.error('Not an object');
       return 'null';
     }

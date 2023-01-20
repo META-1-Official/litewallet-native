@@ -54,7 +54,7 @@ const WalletScreen = () => {
     }
   }, []);
 
-  if (allAssets === null) {
+  if (!allAssets) {
     return <Loader />;
   }
 
