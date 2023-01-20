@@ -1,6 +1,6 @@
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import AppHeader from './components/AppHeaer';
+import AppHeader from './components/AppHeader';
 import { CountryPicker, CountryPickerParams } from './components/CountryPicker';
 import { LoaderModalContent } from './components/LoaderModal';
 import LinkWalletScreen from './screens/LinkWalletScreen';

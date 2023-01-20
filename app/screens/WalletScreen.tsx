@@ -14,7 +14,7 @@ import useAppDispatch from '../hooks/useAppDispatch';
 import { migrateAccount } from '../store/signUp/signUp.actions';
 import { colors } from '../styles/colors';
 import Loader from '../components/Loader';
-import AppHeader from '../components/AppHeaer';
+import AppHeader from '../components/AppHeader';
 import TradeScreen from './TradeScreen';
 import ReceiveScreen from './ReceiveScreen/ReceiveScreen';
 import SendScreen from './SendScreen';
