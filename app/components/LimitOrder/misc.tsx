@@ -187,7 +187,7 @@ export const useCreateOrder = (toGive: any, toGet: any, type: OrderType) => {
 
   const fn = (price: number, amount: number) => async () => {
     const accountInfo = await getAccountInfo();
-    if (accountInfo.password === null) {
+    if (!accountInfo.password) {
       return;
     }
     loaderModal.open();

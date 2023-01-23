@@ -164,7 +164,7 @@ export async function getAccount(accountName: string) {
     .then(res => new Map(res))
     .catch(_ => null);
 
-  if (accounts === null) {
+  if (!accounts) {
     return undefined;
   }
 

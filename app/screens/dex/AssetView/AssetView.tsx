@@ -92,7 +92,7 @@ const AssetViewHeader: React.FC<AssetViewTSP> = ({ navigation }) => {
       return !canceled ? setTicker(v) : 0;
     };
 
-    if (ticker === null) {
+    if (!ticker) {
       setTimeout(fn, 0);
     }
 

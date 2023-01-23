@@ -6,7 +6,7 @@ import config from '../config';
 export interface Notification {
   id: number;
   content: string;
-  type: 'USER' | 'GLOBAl';
+  type: 'USER' | 'GLOBAL';
   userId: number | null;
   createdAt: Date;
   updatedAt: Date;
