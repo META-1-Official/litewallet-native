@@ -40,7 +40,7 @@ const config: Config = {
     FAUCET_URL: 'https://faucet.dev.meta-exchange.vision/faucet',
     LITE_WALLET_API_URL: 'https://litewallet.dev.cryptomailsvc.io',
     GATEWAY_URL: 'https://gateway.dev.meta-exchange.vision',
-    API_URL: 'https://api.meta-exchange.vision',
+    API_URL: 'https://api.dev.meta-exchange.vision',
     WEB3_CLIENT_ID:
       'BFL8Z_Awr3p_ZVGiNUp1CIK8C28p0CC9WJRxw_GWEMWLJvOgJmpTJ8Xl8jbxYvzKhabmENF0GRbxE9EadEJ5T6g',
     FACE_KI_API_URL: 'https://litewallet.dev.cryptomailsvc.io',
@@ -52,7 +52,7 @@ const config: Config = {
     FAUCET_URL: 'https://faucet.dev2.meta-exchange.vision/faucet',
     LITE_WALLET_API_URL: 'https://litewallet.dev2.cryptomailsvc.io',
     GATEWAY_URL: 'https://gateway.dev2.meta-exchange.vision',
-    API_URL: 'https://api.meta-exchange.vision',
+    API_URL: 'https://api.dev2.meta-exchange.vision',
     WEB3_CLIENT_ID:
       'BFL8Z_Awr3p_ZVGiNUp1CIK8C28p0CC9WJRxw_GWEMWLJvOgJmpTJ8Xl8jbxYvzKhabmENF0GRbxE9EadEJ5T6g',
     FACE_KI_API_URL: 'https://litewallet.dev2.cryptomailsvc.io',
