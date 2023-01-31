@@ -29,7 +29,7 @@ const config: Config = {
     FAUCET_URL: 'https://faucet.meta-exchange.vision/faucet',
     LITE_WALLET_API_URL: 'https://litewallet.cryptomailsvc.io',
     GATEWAY_URL: 'https://gateway.api.meta-exchange.vision',
-    API_URL: 'https://maia.meta-exchange.vision',
+    API_URL: 'https://api.meta-exchange.vision',
     WEB3_CLIENT_ID: TORUS_CLIENT_ID,
     FACE_KI_API_URL: 'https://litewallet.cryptomailsvc.io',
     E_SIGNATURE_API_URL: 'https://e-sign.cryptomailsvc.io',
