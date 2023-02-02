@@ -1,15 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { LOGIN_PROVIDER } from '@web3auth/react-native-sdk';
-import { web3Login } from '../../services/web3.services';
+import { SdkLoginParams } from '@web3auth/react-native-sdk/src/types/sdk';
 
-export interface Web3UserParams {
-  provider: keyof typeof LOGIN_PROVIDER;
-}
+import { web3Login } from '../../services/web3.services';
 
 export const getWeb3User = createAsyncThunk(
   'signUp/web3Login',
-  async ({ provider }: Web3UserParams) => {
-    const response = await web3Login(provider);
+  async (options: SdkLoginParams) => {
+    const response = await web3Login(options);
     console.log('getWeb3User: ', response);
     return { email: response?.userInfo?.email || '', privateKey: response.privKey || '' };
   },

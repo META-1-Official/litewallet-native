@@ -1,4 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { LOGIN_PROVIDER } from '@web3auth/react-native-sdk';
 import { debounce } from 'debounce';
 import React, { useState } from 'react';
 import { SafeAreaView, Text, TextInput, TextInputProps, View } from 'react-native';
@@ -54,6 +55,7 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
       lastName,
       mobile,
       accountName: userAccountName,
+      email: '',
     },
   });
 
@@ -102,8 +104,14 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
   const handleSubmitForm = handleSubmit(formState => {
     dispatch(step1Save(formState));
     if (!privateKey) {
-      // @ts-ignore | this hack is required to use form with all providers
-      dispatch(getWeb3User({ provider: undefined }))
+      dispatch(
+        getWeb3User({
+          loginProvider: LOGIN_PROVIDER.EMAIL_PASSWORDLESS,
+          extraLoginOptions: {
+            login_hint: formState.email,
+          },
+        }),
+      )
         .unwrap()
         .then(web3AuthData => {
           if (web3AuthData.privateKey) {
@@ -183,6 +191,17 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
                   }}
                 />
               )}
+            />
+            <Input
+              control={control}
+              name="email"
+              label="Email"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
+              rules={{
+                required,
+              }}
             />
           </View>
           {migratable && (

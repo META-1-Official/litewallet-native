@@ -1,4 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { LOGIN_PROVIDER } from '@web3auth/react-native-sdk';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -11,6 +12,7 @@ import {
   TextInputProps,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { personAsset, personIconAsset } from '../../assets';
 import { RootStackParamList } from '../AuthNav';
 import RoundedButton from '../components/RoundedButton';
@@ -39,14 +41,21 @@ const LinkWalletScreen: React.FC<Props> = ({ navigation }) => {
     defaultValues: {
       account_name: '',
       password: '',
+      email: '',
     },
   });
 
   const handleLogin = handleSubmit(formState => {
-    const { account_name } = formState;
+    const { account_name, email } = formState;
     dispatch(loginStep1(account_name));
-    // @ts-ignore | this hack is required to use form with all providers
-    dispatch(getWeb3User({ provider: undefined }))
+    dispatch(
+      getWeb3User({
+        loginProvider: LOGIN_PROVIDER.EMAIL_PASSWORDLESS,
+        extraLoginOptions: {
+          login_hint: email,
+        },
+      }),
+    )
       .unwrap()
       .then(web3AuthData => {
         if (web3AuthData.privateKey) {
@@ -103,6 +112,28 @@ const LinkWalletScreen: React.FC<Props> = ({ navigation }) => {
                 <TextInput
                   {...props}
                   {...tid('LinkWallet/AccountName')}
+                  autoCapitalize={'none'}
+                  autoCorrect={false}
+                  keyboardType={'email-address'}
+                  style={[props.style, { paddingLeft: 8 }]}
+                />
+              </View>
+            )}
+          />
+          <Input
+            control={control}
+            style={{
+              paddingHorizontal: 32,
+            }}
+            rules={{ required }}
+            name="email"
+            label="Email"
+            render={(props: TextInputProps) => (
+              <View key={123} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Icon name="mail-outline" color="#000" size={48} />
+                <TextInput
+                  {...props}
+                  {...tid('LinkWallet/Email')}
                   autoCapitalize={'none'}
                   autoCorrect={false}
                   keyboardType={'email-address'}
