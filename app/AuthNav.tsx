@@ -5,6 +5,7 @@ import { CountryPicker, CountryPickerParams } from './components/CountryPicker';
 import { LoaderModalContent } from './components/LoaderModal';
 import LinkWalletScreen from './screens/LinkWalletScreen';
 import { PrivacyPolicy, TOSScreen } from './screens/PrivacyPolicy';
+// import AdditionalFormScreen from './screens/SignUp/AdditionalFormScreen';
 import CreateWalletScreen from './screens/SignUp/CreateWalletScreen';
 import ESignatureFormScreen from './screens/SignUp/ESignatureFormScreen';
 import ESignatureScreen from './screens/SignUp/ESignatureScreen';
@@ -22,6 +23,7 @@ export type RootStackParamList = {
   Legal: undefined;
   Privacy: undefined;
   CreateWallet: undefined;
+  // AdditionalForm: undefined;
   FaceKI: undefined;
   FaceKISuccess: undefined;
   Passkey: undefined;
@@ -66,6 +68,7 @@ const AuthNav = () => {
         component={FaceKIScreen}
       />
       <Stack.Screen name="FaceKISuccess" component={FaceKISuccessScreen} />
+      {/*<Stack.Screen name="AdditionalForm" component={AdditionalFormScreen} />*/}
       <Stack.Screen name="ESignature" component={ESignatureScreen} />
       <Stack.Screen name="ESignatureForm" component={ESignatureFormScreen} />
       <Stack.Screen name="Passkey" component={PasskeyScreen} />

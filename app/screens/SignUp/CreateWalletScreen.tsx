@@ -15,7 +15,7 @@ import { lettersOnly, required } from '../../utils/useFormHelper/rules';
 //@ts-ignore todo: fix type
 import { ChainValidation } from 'meta1-vision-js';
 import { useForm } from 'react-hook-form';
-import { Input } from '../../utils/useFormHelper/useFormHelper';
+import { Input, PhoneInput } from '../../utils/useFormHelper/useFormHelper';
 
 const checkFreeName = async (accountName: string) => {
   const acc = await getAccount(accountName).catch(console.debug);
@@ -37,6 +37,7 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
   const {
     firstName,
     lastName,
+    mobile,
     accountName: userAccountName,
   } = useAppSelector(state => state.signUp);
 
@@ -50,6 +51,7 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
     defaultValues: {
       firstName,
       lastName,
+      mobile,
       accountName: userAccountName,
     },
   });
@@ -149,6 +151,7 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
                 rules={{ required, validate: { lettersOnly } }}
               />
             </View>
+            <PhoneInput control={control} name="mobile" />
             <Input
               control={control}
               name="accountName"

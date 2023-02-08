@@ -8,6 +8,10 @@ export const getWeb3User = createAsyncThunk(
   async (options: SdkLoginParams) => {
     const response = await web3Login(options);
     console.log('getWeb3User: ', response);
-    return { email: response?.userInfo?.email || '', privateKey: response.privKey || '' };
+    return {
+      email: response?.userInfo?.email || '',
+      privateKey: response.privKey || '',
+      verifierId: response?.userInfo?.verifierId || '',
+    };
   },
 );

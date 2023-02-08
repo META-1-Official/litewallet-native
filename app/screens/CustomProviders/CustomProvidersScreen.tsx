@@ -29,13 +29,22 @@ type Props = NativeStackScreenProps<RootStackParamList, 'CustomProviders'>;
 
 const CustomProvidersScreen: React.FC<Props> = ({ navigation }) => {
   const dispatch = useAppDispatch();
+  // const { mobile } = useAppSelector(state => state.signUp);
+  // const rawMobile = mobile?.split(/\s+/).join('').replace('+', '');
   const [providers, setProviders] = useState(providersListSmall);
   const isSmall = providers.length === providersListSmall.length;
   const [email, setEmail] = useState('');
+  // const [phone, setPhone] = useState(rawMobile?.slice(-10) || '');
+  // const [countryCode, setCountryCode] = useState(rawMobile?.slice(0, -10) || '1');
   const [phone, setPhone] = useState('');
+  const [countryCode, setCountryCode] = useState('1');
 
   const toggleProviders = () => {
     setProviders(isSmall ? providersList : providersListSmall);
+  };
+
+  const handleChangePhone = (text: string) => {
+    setPhone(String(parseInt(text, 10) || ''));
   };
 
   const handleLogin = (loginProvider: string, login = '') => {
@@ -52,6 +61,20 @@ const CustomProvidersScreen: React.FC<Props> = ({ navigation }) => {
         if (web3AuthData.privateKey) {
           navigation.navigate('FaceKI');
         }
+        // if (web3AuthData.privateKey) {
+        //   navigation.navigate('AdditionalForm');
+        // }
+        //
+        // if (response?.userInfo?.verifierId) {
+        //   if (response.userInfo.verifierId[0] === '+') {
+        //     // check mobile number
+        //     const phoneNumber = response.userInfo.verifierId.slice(1).replace('-', '');
+        //     const eSignatureUser = await getUserByWallet(login);
+        //   } else {
+        //     // check email
+        //   }
+        // }
+        //
       })
       .catch(error => console.error(error));
   };
@@ -82,6 +105,7 @@ const CustomProvidersScreen: React.FC<Props> = ({ navigation }) => {
 
           <Flex direction="column" justifyContent="space-between" w="100%">
             <Input
+              keyboardType="email-address"
               placeholder="Email"
               bg="#fff"
               m={2}
@@ -99,21 +123,25 @@ const CustomProvidersScreen: React.FC<Props> = ({ navigation }) => {
 
           <Flex direction="column" justifyContent="space-between" w="100%">
             <Flex direction="row" justifyContent="space-between" m={2}>
-              <CountryNumber />
+              <CountryNumber setCountryCode={setCountryCode} />
               <Input
+                keyboardType="numeric"
                 placeholder="Eg: 9009009009"
                 bg="#fff"
                 flexGrow={1}
                 marginLeft={2}
-                onChange={e => setPhone(e.nativeEvent.text)}
+                onChange={e => handleChangePhone(e.nativeEvent.text)}
                 value={phone}
+                maxLength={10}
               />
             </Flex>
 
             <Button
               m={2}
               bgColor="#000"
-              onPress={() => handleLogin(LOGIN_PROVIDER.SMS_PASSWORDLESS, phone)}
+              onPress={() =>
+                handleLogin(LOGIN_PROVIDER.SMS_PASSWORDLESS, `+${countryCode}-${phone}`)
+              }
             >
               Continue with Mobile
             </Button>

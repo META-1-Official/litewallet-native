@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { SetStateAction, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { CountryUS, isoToEmoji } from '../../components/CountryPicker/CountryList';
 import { ChevronDown } from 'react-native-feather';
 import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from '../../AuthNav';
 
-const CountryNumber = () => {
+interface CountryNumberProp {
+  setCountryCode: React.Dispatch<SetStateAction<string>>;
+  defaultCode?: string;
+}
+
+const CountryNumber = ({ setCountryCode }: CountryNumberProp) => {
   const [country, setCountry] = useState(CountryUS);
   const navigation = useNavigation<RootNavigationProp>();
   return (
@@ -20,7 +25,14 @@ const CountryNumber = () => {
       }}
     >
       <TouchableOpacity
-        onPress={() => navigation.navigate('CountryPickerModal', { callback: c => setCountry(c) })}
+        onPress={() =>
+          navigation.navigate('CountryPickerModal', {
+            callback: c => {
+              setCountry(c);
+              setCountryCode(c.countryCode);
+            },
+          })
+        }
       >
         <View
           style={{

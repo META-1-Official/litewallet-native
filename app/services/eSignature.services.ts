@@ -35,6 +35,15 @@ export const getUser = async (email: string) => {
   return response.data;
 };
 
+export const getUserByWallet = async (wallet: string) => {
+  console.log('GetUserByWallet service start');
+  const response = await axios.get(`${config.E_SIGNATURE_API_URL}/apiewallet/users/acc`, {
+    params: { acc: wallet },
+  });
+  console.log('GetUserByWallet service end', response.data);
+  return response.data;
+};
+
 export const getToken = async (email: string) => {
   const { data, headers } = await axios.get(
     `${config.E_SIGNATURE_API_URL}/apiewallet/sign/token`,

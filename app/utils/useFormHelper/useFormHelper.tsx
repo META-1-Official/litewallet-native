@@ -6,7 +6,7 @@ import { tid } from '..';
 import { colors } from '../../styles/colors';
 import _get from 'lodash.get';
 import PaperTextInput, {
-  TextInputProps,
+  Props as TextInputProps,
 } from 'react-native-paper/src/components/TextInput/TextInput';
 import { useNavigation } from '@react-navigation/native';
 import { ChevronDown, Eye, EyeOff } from 'react-native-feather';
@@ -180,7 +180,7 @@ export function PhoneInput({ name, control }: CommonProps) {
               _: ruleRef.current,
             },
           }}
-          render={props => {
+          render={(props: any) => {
             onChangeRef.current = props.onChangeText;
             valRef.current = props.value;
             return (
