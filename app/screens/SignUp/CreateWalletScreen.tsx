@@ -1,5 +1,4 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { LOGIN_PROVIDER } from '@web3auth/react-native-sdk';
 import { debounce } from 'debounce';
 import React, { useState } from 'react';
 import { SafeAreaView, Text, TextInput, TextInputProps, View } from 'react-native';
@@ -11,13 +10,12 @@ import { Heading, TextSecondary } from '../../components/typography';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getAccount } from '../../services/meta1Api';
 import migrationService from '../../services/migration.service';
-import { getWeb3User } from '../../store/web3/web3.actions';
 import { step1Save } from '../../store/signUp/signUp.reducer';
 import { lettersOnly, required } from '../../utils/useFormHelper/rules';
 //@ts-ignore todo: fix type
 import { ChainValidation } from 'meta1-vision-js';
 import { useForm } from 'react-hook-form';
-import { Input, PhoneInput } from '../../utils/useFormHelper/useFormHelper';
+import { Input } from '../../utils/useFormHelper/useFormHelper';
 
 const checkFreeName = async (accountName: string) => {
   const acc = await getAccount(accountName).catch(console.debug);
@@ -39,7 +37,6 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
   const {
     firstName,
     lastName,
-    mobile,
     accountName: userAccountName,
   } = useAppSelector(state => state.signUp);
 
@@ -53,9 +50,7 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
     defaultValues: {
       firstName,
       lastName,
-      mobile,
       accountName: userAccountName,
-      email: '',
     },
   });
 
@@ -104,21 +99,7 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
   const handleSubmitForm = handleSubmit(formState => {
     dispatch(step1Save(formState));
     if (!privateKey) {
-      dispatch(
-        getWeb3User({
-          loginProvider: LOGIN_PROVIDER.EMAIL_PASSWORDLESS,
-          extraLoginOptions: {
-            login_hint: formState.email,
-          },
-        }),
-      )
-        .unwrap()
-        .then(web3AuthData => {
-          if (web3AuthData.privateKey) {
-            navigation.navigate('FaceKI');
-          }
-        })
-        .catch(error => console.error(error));
+      navigation.navigate('CustomProviders');
     } else {
       navigation.navigate('FaceKI');
     }
@@ -168,7 +149,6 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
                 rules={{ required, validate: { lettersOnly } }}
               />
             </View>
-            <PhoneInput control={control} name="mobile" />
             <Input
               control={control}
               name="accountName"
@@ -191,17 +171,6 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
                   }}
                 />
               )}
-            />
-            <Input
-              control={control}
-              name="email"
-              label="Email"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-              rules={{
-                required,
-              }}
             />
           </View>
           {migratable && (

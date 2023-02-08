@@ -1,5 +1,5 @@
 import * as WebBrowser from '@toruslabs/react-native-web-browser';
-import Web3Auth, { LOGIN_PROVIDER, OPENLOGIN_NETWORK, State } from '@web3auth/react-native-sdk';
+import Web3Auth, { OPENLOGIN_NETWORK, State } from '@web3auth/react-native-sdk';
 import { SdkLoginParams } from '@web3auth/react-native-sdk/src/types/sdk';
 import config from '../config';
 

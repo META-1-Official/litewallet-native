@@ -11,6 +11,7 @@ import {
 } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider as PaperProvider } from 'react-native-paper';
+import { NativeBaseProvider } from 'native-base';
 import SplashScreen from 'react-native-splash-screen';
 
 import { Options, useOptions, useStore } from './store';
@@ -25,6 +26,7 @@ import { Alert, LogBox } from 'react-native';
 
 import AuthNav from './AuthNav';
 import { createStore } from './store/createStore';
+import theme from './theme';
 
 // Construct a new instrumentation instance. This is needed to communicate between the integration and React
 const routingInstrumentation = new Sentry.ReactNavigationInstrumentation();
@@ -109,38 +111,40 @@ function App() {
     <Provider store={createStore}>
       <PersistGate persistor={persistor}>
         <PaperProvider>
-          <SafeAreaProvider>
-            <NavigationContainer
-              ref={navigationRef}
-              theme={{
-                ...DefaultTheme,
-                colors: {
-                  ...DefaultTheme.colors,
-                  background: dark ? '#000' : DefaultTheme.colors.background,
-                },
-              }}
-              onReady={() => {
-                routingInstrumentation.registerNavigationContainer(navigationRef);
-                routePrefixRef.current = navigationRef.getCurrentRoute()?.name?.split('_').at(0);
-              }}
-              onStateChange={() => {
-                const oldPrefix = routePrefixRef.current;
-                const currentRouteName = navigationRef.getCurrentRoute()?.name;
-                // Unprefixed route
-                if (currentRouteName?.indexOf('_') === -1) {
-                  return;
-                }
-                const prefix = currentRouteName?.split('_').at(0);
-                if (prefix !== oldPrefix) {
-                  setDark(prefix !== 'Wallet');
-                  routePrefixRef.current = prefix;
-                }
-              }}
-            >
-              {<CurrentNav />}
-            </NavigationContainer>
-            <Toast />
-          </SafeAreaProvider>
+          <NativeBaseProvider theme={theme}>
+            <SafeAreaProvider>
+              <NavigationContainer
+                ref={navigationRef}
+                theme={{
+                  ...DefaultTheme,
+                  colors: {
+                    ...DefaultTheme.colors,
+                    background: dark ? '#000' : DefaultTheme.colors.background,
+                  },
+                }}
+                onReady={() => {
+                  routingInstrumentation.registerNavigationContainer(navigationRef);
+                  routePrefixRef.current = navigationRef.getCurrentRoute()?.name?.split('_').at(0);
+                }}
+                onStateChange={() => {
+                  const oldPrefix = routePrefixRef.current;
+                  const currentRouteName = navigationRef.getCurrentRoute()?.name;
+                  // Unprefixed route
+                  if (currentRouteName?.indexOf('_') === -1) {
+                    return;
+                  }
+                  const prefix = currentRouteName?.split('_').at(0);
+                  if (prefix !== oldPrefix) {
+                    setDark(prefix !== 'Wallet');
+                    routePrefixRef.current = prefix;
+                  }
+                }}
+              >
+                {<CurrentNav />}
+              </NavigationContainer>
+              <Toast />
+            </SafeAreaProvider>
+          </NativeBaseProvider>
         </PaperProvider>
       </PersistGate>
     </Provider>

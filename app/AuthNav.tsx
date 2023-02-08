@@ -15,6 +15,7 @@ import Legal from './screens/SignUp/LegalScreen';
 import PasskeyScreen from './screens/SignUp/PasskeyScreen';
 import PaymentSuccess from './screens/SignUp/PaymentSuccess';
 import WelcomeScreen from './screens/WelcomeScreen';
+import CustomProvidersScreen from './screens/CustomProviders/CustomProvidersScreen';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -29,6 +30,7 @@ export type RootStackParamList = {
   PaymentSuccess: undefined;
   ImportWallet: undefined;
   LinkWallet: undefined;
+  CustomProviders: undefined;
   TOS: undefined;
   Loader: undefined;
 } & CountryPickerParams;
@@ -69,6 +71,7 @@ const AuthNav = () => {
       <Stack.Screen name="Passkey" component={PasskeyScreen} />
       <Stack.Screen name="PaymentSuccess" component={PaymentSuccess} />
       <Stack.Screen name="LinkWallet" component={LinkWalletScreen} />
+      <Stack.Screen name="CustomProviders" component={CustomProvidersScreen} />
       <Stack.Screen name="ImportWallet" component={ImportWalletScreen} />
       <Stack.Screen
         name="Loader"
