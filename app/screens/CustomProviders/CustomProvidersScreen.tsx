@@ -1,5 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { MFA_LEVELS } from '@toruslabs/openlogin/src/constants';
 import { LOGIN_PROVIDER } from '@web3auth/react-native-sdk';
+import { SdkLoginParams } from '@web3auth/react-native-sdk/src/types/sdk';
 import React, { useState } from 'react';
 import { Text, View, SafeAreaView, ScrollView } from 'react-native';
 import { RootStackParamList } from '../../AuthNav';
@@ -54,6 +56,7 @@ const CustomProvidersScreen: React.FC<Props> = ({ navigation }) => {
         extraLoginOptions: {
           login_hint: login,
         },
+        mfaLevel: MFA_LEVELS.NONE,
       }),
     )
       .unwrap()

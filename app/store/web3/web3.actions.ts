@@ -3,9 +3,9 @@ import { SdkLoginParams } from '@web3auth/react-native-sdk/src/types/sdk';
 
 import { web3Login } from '../../services/web3.services';
 
-export const getWeb3User = createAsyncThunk(
+export const getWeb3User = createAsyncThunk<any, SdkLoginParams>(
   'signUp/web3Login',
-  async (options: SdkLoginParams) => {
+  async options => {
     const response = await web3Login(options);
     console.log('getWeb3User: ', response);
     return {
