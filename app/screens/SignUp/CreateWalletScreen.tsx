@@ -100,11 +100,7 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
 
   const handleSubmitForm = handleSubmit(formState => {
     dispatch(step1Save(formState));
-    if (!privateKey) {
-      navigation.navigate('CustomProviders');
-    } else {
-      navigation.navigate('FaceKI');
-    }
+    navigation.navigate('CustomProviders');
   });
 
   return (
