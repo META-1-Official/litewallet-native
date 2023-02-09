@@ -91,7 +91,13 @@ const CustomProvidersScreen: React.FC<Props> = ({ navigation }) => {
             <Text>Select how you would like to continue</Text>
           </View>
 
-          <Flex direction="row" wrap="wrap" marginTop={2} marginBottom={2}>
+          <Flex
+            direction="row"
+            marginTop={2}
+            marginBottom={2}
+            wrap="wrap"
+            justifyContent="space-between"
+          >
             {providers.map(item => (
               <Button
                 key={item}
