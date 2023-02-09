@@ -122,7 +122,7 @@ export function PhoneInput({ name, control }: CommonProps) {
   // _pad -> fills the extracted arg to allow ass to add prog argument
   // prog: bool -> is the event rased programmatically, if so don't set the error
   const onChangeText = (s: string) => {
-    const number = String(parseInt(s));
+    const number = s.replace(/^0+/, '');
     setInternal(number);
 
     if (onChangeRef.current) {
