@@ -110,6 +110,8 @@ const CustomProvidersScreen: React.FC<Props> = ({ navigation }) => {
             <Input
               keyboardType="email-address"
               placeholder="Email"
+              autoCapitalize="none"
+              autoComplete="email"
               bg="#fff"
               m={2}
               onChange={e => setEmail(e.nativeEvent.text)}
@@ -118,7 +120,7 @@ const CustomProvidersScreen: React.FC<Props> = ({ navigation }) => {
             <Button
               m={2}
               bgColor="#000"
-              onPress={() => handleLogin(LOGIN_PROVIDER.EMAIL_PASSWORDLESS, email)}
+              onPress={() => handleLogin(LOGIN_PROVIDER.EMAIL_PASSWORDLESS, email.toLowerCase())}
             >
               Continue with Email
             </Button>
