@@ -8,6 +8,9 @@ const resolvedRedirectUrl = 'io.meta1.appbeta://auth';
 const web3auth = new Web3Auth(WebBrowser, {
   clientId: config.WEB3_CLIENT_ID,
   network: OPENLOGIN_NETWORK.TESTNET,
+  whiteLabel: {
+    name: 'META1',
+  },
 });
 
 export const web3Login = (options: SdkLoginParams): Promise<State> => {
