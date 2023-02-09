@@ -122,29 +122,29 @@ const CustomProvidersScreen: React.FC<Props> = ({ navigation }) => {
           </Flex>
 
           <Flex direction="column" justifyContent="space-between" w="100%">
-            <Flex direction="row" justifyContent="space-between" m={2}>
-              <CountryNumber setCountryCode={setCountryCode} />
-              <Input
-                keyboardType="numeric"
-                placeholder="Eg: 9009009009"
-                bg="#fff"
-                flexGrow={1}
-                marginLeft={2}
-                onChange={e => handleChangePhone(e.nativeEvent.text)}
-                value={phone}
-                maxLength={10}
-              />
-            </Flex>
+            {/*  <Flex direction="row" justifyContent="space-between" m={2}>*/}
+            {/*    <CountryNumber setCountryCode={setCountryCode} />*/}
+            {/*    <Input*/}
+            {/*      keyboardType="numeric"*/}
+            {/*      placeholder="Eg: 9009009009"*/}
+            {/*      bg="#fff"*/}
+            {/*      flexGrow={1}*/}
+            {/*      marginLeft={2}*/}
+            {/*      onChange={e => handleChangePhone(e.nativeEvent.text)}*/}
+            {/*      value={phone}*/}
+            {/*      maxLength={10}*/}
+            {/*    />*/}
+            {/*  </Flex>*/}
 
-            <Button
-              m={2}
-              bgColor="#000"
-              onPress={() =>
-                handleLogin(LOGIN_PROVIDER.SMS_PASSWORDLESS, `+${countryCode}-${phone}`)
-              }
-            >
-              Continue with Mobile
-            </Button>
+            {/*  <Button*/}
+            {/*    m={2}*/}
+            {/*    bgColor="#000"*/}
+            {/*    onPress={() =>*/}
+            {/*      handleLogin(LOGIN_PROVIDER.SMS_PASSWORDLESS, `+${countryCode}-${phone}`)*/}
+            {/*    }*/}
+            {/*  >*/}
+            {/*    Continue with Mobile*/}
+            {/*  </Button>*/}
 
             <Button
               onPress={toggleProviders}
