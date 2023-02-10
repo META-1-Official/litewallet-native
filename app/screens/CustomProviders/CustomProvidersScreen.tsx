@@ -43,6 +43,7 @@ const CustomProvidersScreen: React.FC<Props> = ({ navigation }) => {
         loginProvider,
         extraLoginOptions: {
           login_hint: login,
+          // isVerifierIdCaseSensitive
         },
         mfaLevel: MFA_LEVELS.NONE,
       }),
