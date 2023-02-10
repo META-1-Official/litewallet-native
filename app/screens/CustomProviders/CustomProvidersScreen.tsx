@@ -1,13 +1,13 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MFA_LEVELS } from '@toruslabs/openlogin/src/constants';
 import { LOGIN_PROVIDER } from '@web3auth/react-native-sdk';
-import { SdkLoginParams } from '@web3auth/react-native-sdk/src/types/sdk';
+// import { SdkLoginParams } from '@web3auth/react-native-sdk/src/types/sdk';
 import React, { useState } from 'react';
 import { Text, View, SafeAreaView, ScrollView } from 'react-native';
 import { RootStackParamList } from '../../AuthNav';
 import { useAppDispatch } from '../../hooks';
 import { getWeb3User } from '../../store/web3/web3.actions';
-import CountryNumber from './CountryNumber';
+// import CountryNumber from './CountryNumber';
 import styles from './CustomProvidersScreen.styles';
 import { Button, Flex, Input } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -24,18 +24,24 @@ const CustomProvidersScreen: React.FC<Props> = ({ navigation }) => {
   const [providers, setProviders] = useState(providersListSmall);
   const isSmall = providers.length === providersListSmall.length;
   const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState(false);
   // const [phone, setPhone] = useState(rawMobile?.slice(-10) || '');
   // const [countryCode, setCountryCode] = useState(rawMobile?.slice(0, -10) || '1');
-  const [phone, setPhone] = useState('');
-  const [countryCode, setCountryCode] = useState('1');
+  // const [phone, setPhone] = useState('');
+  // const [countryCode, setCountryCode] = useState('1');
 
   const toggleProviders = () => {
     setProviders(isSmall ? providersList : providersListSmall);
   };
 
-  const handleChangePhone = (text: string) => {
-    setPhone(String(parseInt(text, 10) || ''));
+  const handleChangeEmail = (text: string) => {
+    setEmailError(false);
+    setEmail(text);
   };
+
+  // const handleChangePhone = (text: string) => {
+  //   setPhone(String(parseInt(text, 10) || ''));
+  // };
 
   const handleLogin = (loginProvider: string, login = '') => {
     dispatch(
@@ -43,6 +49,7 @@ const CustomProvidersScreen: React.FC<Props> = ({ navigation }) => {
         loginProvider,
         extraLoginOptions: {
           login_hint: login,
+          // isVerifierIdCaseSensitive
         },
         mfaLevel: MFA_LEVELS.NONE,
       }),
@@ -52,22 +59,17 @@ const CustomProvidersScreen: React.FC<Props> = ({ navigation }) => {
         if (web3AuthData.privateKey) {
           navigation.navigate('FaceKI');
         }
-        // if (web3AuthData.privateKey) {
-        //   navigation.navigate('AdditionalForm');
-        // }
-        //
-        // if (response?.userInfo?.verifierId) {
-        //   if (response.userInfo.verifierId[0] === '+') {
-        //     // check mobile number
-        //     const phoneNumber = response.userInfo.verifierId.slice(1).replace('-', '');
-        //     const eSignatureUser = await getUserByWallet(login);
-        //   } else {
-        //     // check email
-        //   }
-        // }
-        //
       })
       .catch(error => console.error(error));
+  };
+
+  const handleLoginWithEmail = () => {
+    const isEmailValid = /^(.*@.*).(.*)$/.test(email);
+    if (isEmailValid) {
+      handleLogin(LOGIN_PROVIDER.EMAIL_PASSWORDLESS, email.toLowerCase());
+    } else {
+      setEmailError(true);
+    }
   };
 
   return (
@@ -108,14 +110,12 @@ const CustomProvidersScreen: React.FC<Props> = ({ navigation }) => {
               autoComplete="email"
               bg="#fff"
               m={2}
-              onChange={e => setEmail(e.nativeEvent.text)}
+              borderColor={emailError ? 'danger.600' : 'muted.200'}
+              onChangeText={handleChangeEmail}
               value={email}
             />
-            <Button
-              m={2}
-              bgColor="#000"
-              onPress={() => handleLogin(LOGIN_PROVIDER.EMAIL_PASSWORDLESS, email.toLowerCase())}
-            >
+            {}
+            <Button m={2} bgColor="#000" onPress={handleLoginWithEmail}>
               Continue with Email
             </Button>
           </Flex>
@@ -129,7 +129,7 @@ const CustomProvidersScreen: React.FC<Props> = ({ navigation }) => {
             {/*      bg="#fff"*/}
             {/*      flexGrow={1}*/}
             {/*      marginLeft={2}*/}
-            {/*      onChange={e => handleChangePhone(e.nativeEvent.text)}*/}
+            {/*      onChangeText={handleChangePhone}*/}
             {/*      value={phone}*/}
             {/*      maxLength={10}*/}
             {/*    />*/}
