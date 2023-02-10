@@ -7,6 +7,7 @@ interface Web3State {
   email: string;
   privateKey: string;
   passKey: string;
+  verifierId: string;
   pending: boolean;
 }
 
@@ -14,6 +15,7 @@ const initialState: Web3State = {
   email: '',
   privateKey: '',
   passKey: '',
+  verifierId: '',
   pending: false,
 };
 // todo: remove this and uncomment previous
@@ -38,6 +40,7 @@ const web3Slice = createSlice({
       state.email = '';
       state.privateKey = '';
       state.passKey = '';
+      state.verifierId = '';
       state.pending = true;
     });
     builder.addCase(getWeb3User.fulfilled, (state, action) => {
@@ -46,6 +49,7 @@ const web3Slice = createSlice({
       state.passKey = `P${PrivateKey.fromSeed(
         key.normalize_brainKey(`${action.payload.email}${Date.now()}${action.payload.privateKey}`),
       ).toWif()}`;
+      state.verifierId = action.payload.verifierId;
       state.pending = false;
       console.log('PassKey: ', state.passKey);
     });

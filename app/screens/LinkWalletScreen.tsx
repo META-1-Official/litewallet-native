@@ -1,5 +1,4 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { LOGIN_PROVIDER } from '@web3auth/react-native-sdk';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -12,7 +11,6 @@ import {
   TextInputProps,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { personAsset, personIconAsset } from '../../assets';
 import { RootStackParamList } from '../AuthNav';
 import RoundedButton from '../components/RoundedButton';
@@ -20,7 +18,6 @@ import { Heading, TextSecondary } from '../components/typography';
 import { useAppDispatch } from '../hooks';
 import useAnimatedKeyboard from '../hooks/useAnimatedKeyboard';
 import { loginStep1 } from '../store/signIn/signIn.reducer';
-import { getWeb3User } from '../store/web3/web3.actions';
 import { tid, useScroll } from '../utils';
 import { getAccount } from '../services/meta1Api';
 import { required, RuleFn } from '../utils/useFormHelper/rules';
@@ -41,28 +38,13 @@ const LinkWalletScreen: React.FC<Props> = ({ navigation }) => {
     defaultValues: {
       account_name: '',
       password: '',
-      email: '',
     },
   });
 
   const handleLogin = handleSubmit(formState => {
-    const { account_name, email } = formState;
+    const { account_name } = formState;
     dispatch(loginStep1(account_name));
-    dispatch(
-      getWeb3User({
-        loginProvider: LOGIN_PROVIDER.EMAIL_PASSWORDLESS,
-        extraLoginOptions: {
-          login_hint: email,
-        },
-      }),
-    )
-      .unwrap()
-      .then(web3AuthData => {
-        if (web3AuthData.privateKey) {
-          navigation.navigate('FaceKI');
-        }
-      })
-      .catch(error => console.error(error));
+    navigation.navigate('CustomProviders');
   });
 
   const offsetY = useAnimatedKeyboard();
@@ -76,7 +58,16 @@ const LinkWalletScreen: React.FC<Props> = ({ navigation }) => {
         backgroundColor: '#fff',
       }}
     >
-      <ScrollView {...scroll} contentContainerStyle={{ paddingBottom: 75 }}>
+      <ScrollView
+        {...scroll}
+        contentContainerStyle={{
+          paddingBottom: 75,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          height: '110%',
+        }}
+      >
         <Animated.View style={{ marginHorizontal: 24, top: offsetY }}>
           <Image
             source={personAsset}
@@ -112,28 +103,6 @@ const LinkWalletScreen: React.FC<Props> = ({ navigation }) => {
                 <TextInput
                   {...props}
                   {...tid('LinkWallet/AccountName')}
-                  autoCapitalize={'none'}
-                  autoCorrect={false}
-                  keyboardType={'email-address'}
-                  style={[props.style, { paddingLeft: 8 }]}
-                />
-              </View>
-            )}
-          />
-          <Input
-            control={control}
-            style={{
-              paddingHorizontal: 32,
-            }}
-            rules={{ required }}
-            name="email"
-            label="Email"
-            render={(props: TextInputProps) => (
-              <View key={123} style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Icon name="mail-outline" color="#000" size={48} />
-                <TextInput
-                  {...props}
-                  {...tid('LinkWallet/Email')}
                   autoCapitalize={'none'}
                   autoCorrect={false}
                   keyboardType={'email-address'}

@@ -9,7 +9,7 @@ import {
 interface Step1 {
   firstName: string;
   lastName: string;
-  mobile: string;
+  mobile?: string;
   accountName: string;
   isMigration?: boolean;
   password?: string;

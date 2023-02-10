@@ -6,7 +6,7 @@ import { tid } from '..';
 import { colors } from '../../styles/colors';
 import _get from 'lodash.get';
 import PaperTextInput, {
-  TextInputProps,
+  Props as TextInputProps,
 } from 'react-native-paper/src/components/TextInput/TextInput';
 import { useNavigation } from '@react-navigation/native';
 import { ChevronDown, Eye, EyeOff } from 'react-native-feather';
@@ -122,10 +122,11 @@ export function PhoneInput({ name, control }: CommonProps) {
   // _pad -> fills the extracted arg to allow ass to add prog argument
   // prog: bool -> is the event rased programmatically, if so don't set the error
   const onChangeText = (s: string) => {
-    setInternal(s);
+    const number = s.replace(/^0+/, '');
+    setInternal(number);
 
     if (onChangeRef.current) {
-      onChangeRef.current(`+${country.countryCode} ${s}`);
+      onChangeRef.current(`+${country.countryCode} ${number}`);
     }
   };
 
@@ -180,7 +181,7 @@ export function PhoneInput({ name, control }: CommonProps) {
               _: ruleRef.current,
             },
           }}
-          render={props => {
+          render={(props: any) => {
             onChangeRef.current = props.onChangeText;
             valRef.current = props.value;
             return (

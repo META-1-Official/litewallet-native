@@ -296,12 +296,8 @@ PODS:
     - React-Core
   - react-native-restart (0.0.24):
     - React-Core
-  - react-native-safe-area-context (4.4.1):
-    - RCT-Folly
-    - RCTRequired
-    - RCTTypeSafety
+  - react-native-safe-area-context (3.3.2):
     - React-Core
-    - ReactCommon/turbomodule/core
   - react-native-splash-screen (3.3.0):
     - React-Core
   - react-native-text-input-mask (3.1.4):
@@ -424,8 +420,8 @@ PODS:
   - RNSentry (3.4.3):
     - React-Core
     - Sentry (= 7.11.0)
-  - RNSVG (13.5.0):
-    - React-Core
+  - RNSVG (12.1.1):
+    - React
   - RNVectorIcons (9.2.0):
     - React-Core
   - Sentry (7.11.0):
@@ -691,7 +687,7 @@ SPEC CHECKSUMS:
   react-native-image-picker: 4bc9ed38c8be255b515d8c88babbaf74973f91a8
   react-native-pdf: 33c622cbdf776a649929e8b9d1ce2d313347c4fa
   react-native-restart: 45c8dca02491980f2958595333cbccd6877cb57e
-  react-native-safe-area-context: 99b24a0c5acd0d5dcac2b1a7f18c49ea317be99a
+  react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   react-native-text-input-mask: 36a546b378fadd2efe1b7484a859d34bc2c80395
   react-native-web-browser: 087b454e1e94b58b40ba73f54251d77486144d19
@@ -717,7 +713,7 @@ SPEC CHECKSUMS:
   RNReanimated: 2a91e85fcd343f8af3c58d3425b99fdd285590a5
   RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
   RNSentry: 85f6525b5fe8d2ada065858026b338605b3c09da
-  RNSVG: 38ca962c970dbce1ca38991a5aebf26d163f9efb
+  RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   Sentry: 0c5cd63d714187b4a39c331c1f0eb04ba7868341
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608

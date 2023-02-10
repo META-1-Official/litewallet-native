@@ -5,6 +5,7 @@ import { CountryPicker, CountryPickerParams } from './components/CountryPicker';
 import { LoaderModalContent } from './components/LoaderModal';
 import LinkWalletScreen from './screens/LinkWalletScreen';
 import { PrivacyPolicy, TOSScreen } from './screens/PrivacyPolicy';
+// import AdditionalFormScreen from './screens/SignUp/AdditionalFormScreen';
 import CreateWalletScreen from './screens/SignUp/CreateWalletScreen';
 import ESignatureFormScreen from './screens/SignUp/ESignatureFormScreen';
 import ESignatureScreen from './screens/SignUp/ESignatureScreen';
@@ -15,12 +16,14 @@ import Legal from './screens/SignUp/LegalScreen';
 import PasskeyScreen from './screens/SignUp/PasskeyScreen';
 import PaymentSuccess from './screens/SignUp/PaymentSuccess';
 import WelcomeScreen from './screens/WelcomeScreen';
+import CustomProvidersScreen from './screens/CustomProviders/CustomProvidersScreen';
 
 export type RootStackParamList = {
   Home: undefined;
   Legal: undefined;
   Privacy: undefined;
   CreateWallet: undefined;
+  // AdditionalForm: undefined;
   FaceKI: undefined;
   FaceKISuccess: undefined;
   Passkey: undefined;
@@ -29,6 +32,7 @@ export type RootStackParamList = {
   PaymentSuccess: undefined;
   ImportWallet: undefined;
   LinkWallet: undefined;
+  CustomProviders: undefined;
   TOS: undefined;
   Loader: undefined;
 } & CountryPickerParams;
@@ -64,11 +68,13 @@ const AuthNav = () => {
         component={FaceKIScreen}
       />
       <Stack.Screen name="FaceKISuccess" component={FaceKISuccessScreen} />
+      {/*<Stack.Screen name="AdditionalForm" component={AdditionalFormScreen} />*/}
       <Stack.Screen name="ESignature" component={ESignatureScreen} />
       <Stack.Screen name="ESignatureForm" component={ESignatureFormScreen} />
       <Stack.Screen name="Passkey" component={PasskeyScreen} />
       <Stack.Screen name="PaymentSuccess" component={PaymentSuccess} />
       <Stack.Screen name="LinkWallet" component={LinkWalletScreen} />
+      <Stack.Screen name="CustomProviders" component={CustomProvidersScreen} />
       <Stack.Screen name="ImportWallet" component={ImportWalletScreen} />
       <Stack.Screen
         name="Loader"
