@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import * as RNSvg from 'react-native-svg';
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -24,7 +25,6 @@ import {
   useAssetsStore,
   _login,
 } from '../../../services/meta1Api';
-import formatDateTime from '../../../utils/formatDateTime';
 import { AssetViewTSP } from './AssetView';
 import { useAVStore } from './AssetViewStore';
 import { LoginRetT } from '../../../utils/meta1dexTypes';
@@ -429,6 +429,8 @@ const RenderRow =
       progress = pays / (isBuy ? sellAmt : buyAmt);
     }
 
+    console.log('Order:', order);
+
     const buyPrice = filled.length ? meanFilled : sellAmt / buyAmt;
     const sellPrice = Math.max(buyAmt / sellAmt, sellAmt / buyAmt);
     // todo: verify padding here
@@ -470,7 +472,9 @@ const RenderRow =
               .toFixed(Math.min(sellingAsset._asset.precision, buyingAsset._asset.precision))
               .slice(0, 10)}
           </Text>
-          <Text style={{ color: '#fff', fontSize: 18 }}>{formatDateTime(order.expiration)}</Text>
+          <Text style={{ color: '#fff', fontSize: 18 }}>
+            {dayjs(order.expiration).subtract(1, 'year').format('YYYY-MM-DD hh:mm:ss')}
+          </Text>
         </View>
         <View style={{ margin: 8 }}>{lastCol(orderStatus, k)}</View>
       </View>
