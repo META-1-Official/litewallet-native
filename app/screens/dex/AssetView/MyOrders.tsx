@@ -24,6 +24,7 @@ import {
   useAssetsStore,
   _login,
 } from '../../../services/meta1Api';
+import formatDateTime from '../../../utils/formatDateTime';
 import { AssetViewTSP } from './AssetView';
 import { useAVStore } from './AssetViewStore';
 import { LoginRetT } from '../../../utils/meta1dexTypes';
@@ -469,6 +470,7 @@ const RenderRow =
               .toFixed(Math.min(sellingAsset._asset.precision, buyingAsset._asset.precision))
               .slice(0, 10)}
           </Text>
+          <Text style={{ color: '#fff', fontSize: 18 }}>{formatDateTime(order.expiration)}</Text>
         </View>
         <View style={{ margin: 8 }}>{lastCol(orderStatus, k)}</View>
       </View>
