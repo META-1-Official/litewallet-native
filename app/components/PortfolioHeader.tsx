@@ -82,7 +82,7 @@ const ButtonGroup = () => {
 const PortfolioHeader: React.FC<Props> = ({ protfolioAssets }) => {
   const accountName = useAppSelector(state => state.wallet.accountName);
 
-  console.log(protfolioAssets);
+  console.log('protfolioAssets:', protfolioAssets);
   return (
     <View style={styles.container}>
       <Text style={styles.accountName}>@{accountName}</Text>

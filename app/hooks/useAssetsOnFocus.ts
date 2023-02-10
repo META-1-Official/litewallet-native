@@ -1,5 +1,5 @@
 import { useFocusEffect } from '@react-navigation/native';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { AccountBalanceT, fetchAccountBalances, useAssetsStore } from '../services/meta1Api';
 import useAppSelector from './useAppSelector';
 
@@ -28,6 +28,14 @@ const useAssetsOnFocus = () => {
       })();
     }, []),
   );
+
+  useEffect(() => {
+    setTimeout(async () => {
+      const res = await fetchAccountBalances(accountName);
+      setAssets(res!);
+    }, 5000);
+  }, [assets]);
+
   return assets;
 };
 
