@@ -11,20 +11,8 @@ import CountryNumber from './CountryNumber';
 import styles from './CustomProvidersScreen.styles';
 import { Button, Flex, Input } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import providersList from '../../constants/providersList';
 
-const providersList = [
-  'google',
-  'facebook',
-  'twitter',
-  'discord',
-  'line',
-  'reddit',
-  'apple',
-  'github',
-  'twitch',
-  'linkedin',
-  'weibo',
-];
 const providersListSmall = providersList.filter((item, index) => index < 6);
 
 type Props = NativeStackScreenProps<RootStackParamList, 'CustomProviders'>;
