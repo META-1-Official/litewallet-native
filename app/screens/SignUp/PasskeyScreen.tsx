@@ -55,7 +55,7 @@ export const PasskeyScreen = ({ navigation }: Props) => {
       .unwrap()
       .then(user => {
         if (user && user.status?.isSign) {
-          if (user.status?.isPayed || user.status?.isPayedByCrypto) {
+          if (user.status?.isPayed || user.status?.isPaidByCrypto) {
             handleCheckBox(4, true);
           }
         }
