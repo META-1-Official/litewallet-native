@@ -1,5 +1,4 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { LOGIN_PROVIDER } from '@web3auth/react-native-sdk';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { SafeAreaView, View, Image, Dimensions, Animated, Alert } from 'react-native';
@@ -12,7 +11,6 @@ import { Heading, TextSecondary } from '../../components/typography';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import useAnimatedKeyboard from '../../hooks/useAnimatedKeyboard';
 import migrationService from '../../services/migration.service';
-import { getWeb3User } from '../../store/web3/web3.actions';
 import { step1Save } from '../../store/signUp/signUp.reducer';
 import { useScroll } from '../../utils';
 import { required } from '../../utils/useFormHelper/rules';
@@ -46,7 +44,6 @@ const ImportWalletScreen: React.FC<Props> = ({ navigation }) => {
     defaultValues: {
       accountName: '',
       password: '',
-      email: '',
     },
   });
 
@@ -54,7 +51,7 @@ const ImportWalletScreen: React.FC<Props> = ({ navigation }) => {
   const scroll = useScroll(true);
 
   const handleImportWallet = handleSubmit(async formState => {
-    const { password, email } = formState;
+    const { password } = formState;
     const response = await migrationService.validateSignature(accountName, password);
     if (response?.isValid) {
       const {
@@ -69,14 +66,7 @@ const ImportWalletScreen: React.FC<Props> = ({ navigation }) => {
           step1Save({ accountName, mobile, firstName, lastName, password, isMigration: true }),
         );
         if (!privateKey) {
-          dispatch(
-            getWeb3User({
-              loginProvider: LOGIN_PROVIDER.EMAIL_PASSWORDLESS,
-              extraLoginOptions: {
-                login_hint: email,
-              },
-            }),
-          );
+          navigation.navigate('CustomProviders');
         }
       } else {
         Alert.alert('This wallet is not able to be migrated');
@@ -110,15 +100,6 @@ const ImportWalletScreen: React.FC<Props> = ({ navigation }) => {
             To import your original wallet from the LEGACY META Blockchain please enter your
             passkey for that wallet below.
           </TextSecondary>
-          <Input
-            control={control}
-            name="email"
-            label="Email"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoCorrect={false}
-            rules={{ required }}
-          />
           <Input
             control={control}
             rules={{ required }}
