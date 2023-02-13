@@ -3,6 +3,7 @@ import { useAssetPicker } from '../components/AssetSelectModal';
 import { AssetBalanceT, useAssetsStore } from '../services/meta1Api';
 import * as Sentry from '@sentry/react-native';
 import { Ticker } from './meta1dexTypes';
+import useAssetsOnFocus from '../hooks/useAssetsOnFocus';
 
 export type theAsset = {
   asset: AssetBalanceT;
@@ -52,6 +53,8 @@ export const useAsset = ({
     title,
     onClose,
   });
+  const assets = useAssetsOnFocus();
+  const meta1 = assets.find('META1');
   const [ticker, setTicker] = useState<Ticker | undefined>(undefined);
   if (!asset) {
     console.log('== DV', defaultValue);
@@ -104,7 +107,6 @@ export const useAsset = ({
       );
     }
 
-    const meta1 = useAssetsStore.getState().userAssets.find('META1');
     if (!meta1) {
       throw new Error('Failed to get META1 asset. Try again later.');
     }
@@ -127,7 +129,6 @@ export const useAsset = ({
       );
     }
 
-    const meta1 = useAssetsStore.getState().userAssets.find('META1');
     if (!meta1) {
       throw new Error('Failed to get META1 asset. Try again later.');
     }
