@@ -16,7 +16,7 @@
     "xcode": "xed -b ios",
     "test": "jest",
     "build": "yarn build:android && yarn build:ios",
-    "build:ios": "cd ios; fastlane nightly",
+    "build:ios": "cd ios; fastlane nightly --env '.env'",
     "build:android": "./buildApkRelease.sh",
     "postinstall": "patch-package; yarn buildChart",
     "buildChart": "$(git rev-parse --show-toplevel)/buildChart.sh",
