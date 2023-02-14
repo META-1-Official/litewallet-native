@@ -33,6 +33,7 @@ import { StandaloneAsset, useAsset } from '../utils/useAsset';
 import throttle from 'lodash.throttle';
 import { ShowModalFn, useShowModal } from '../components/SuccessModal';
 import { useNavigation } from '@react-navigation/native';
+import useAssetsOnFocus from '../hooks/useAssetsOnFocus';
 
 const refresh = throttle(() => {
   console.log('BEGIN Refresh');
@@ -47,7 +48,7 @@ const SendScreen: React.FC<{}> = () => {
   const accountName = useAppSelector(state => state.wallet.accountName);
   const { password, setPassword } = usePasswordView();
 
-  const assets = useAssets();
+  const assets = useAssetsOnFocus();
   const meta1 = assets.find('META1');
   const anAsset = useAsset({ defaultValue: meta1!, title: 'Send' });
   const suc = useShowModal();
@@ -517,7 +518,6 @@ const makeSendFn =
         if (!(await getAccount(toAccount))) {
           throw new Error(`Wallet ${toAccount} not found`);
         }
-
         standalone.isAffordableForSend();
         await sendWithPassword(
           {
@@ -553,7 +553,7 @@ export const DexSend: React.FC<DexProps> = props => {
   const accountName = useAppSelector(state => state.wallet.accountName);
   const { password, setPassword } = usePasswordView();
 
-  const assets = useAssets();
+  const assets = useAssetsOnFocus();
   const meta1 = assets.find('META1');
   const anAsset = useAsset({ defaultValue: meta1!, title: 'Send' });
   const suc = useShowModal();
