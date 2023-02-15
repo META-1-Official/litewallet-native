@@ -22,8 +22,12 @@ const checkFreeName = async (accountName: string) => {
   return !acc || 'This wallet name has already taken';
 };
 
+/**
+ * This regular expression will match any string that starts with a letter, has at least one digit and one dash, and does not end with a dash.
+ * @param accountName
+ */
 const checkPremiumName = (accountName: string) =>
-  (ChainValidation.is_cheap_name(accountName) && /(-)/.test(accountName)) ||
+  /^[a-zA-Z](?=.*\d)(?=.*-)[a-zA-Z\d-]*[a-zA-Z\d]$/.test(accountName) ||
   'This is a premium name which is not supported by this faucet. Please enter a regular name containing least one dash or a number';
 
 const checkAccountName = (accountName: string) =>
@@ -33,7 +37,6 @@ type Props = NativeStackScreenProps<RootStackParamList, 'CreateWallet'>;
 
 const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
   const dispatch = useAppDispatch();
-  const { privateKey } = useAppSelector(state => state.web3);
   const {
     firstName,
     lastName,
