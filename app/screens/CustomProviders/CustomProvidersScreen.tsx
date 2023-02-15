@@ -3,9 +3,10 @@ import { MFA_LEVELS } from '@toruslabs/openlogin/src/constants';
 import { LOGIN_PROVIDER } from '@web3auth/react-native-sdk';
 // import { SdkLoginParams } from '@web3auth/react-native-sdk/src/types/sdk';
 import React, { useState } from 'react';
-import { Text, View, SafeAreaView, ScrollView } from 'react-native';
+import { Animated, Text, View, SafeAreaView, ScrollView } from 'react-native';
 import { RootStackParamList } from '../../AuthNav';
 import { useAppDispatch } from '../../hooks';
+import useAnimatedKeyboard from '../../hooks/useAnimatedKeyboard';
 import { getWeb3User } from '../../store/web3/web3.actions';
 // import CountryNumber from './CountryNumber';
 import styles from './CustomProvidersScreen.styles';
@@ -29,6 +30,7 @@ const CustomProvidersScreen: React.FC<Props> = ({ navigation }) => {
   // const [countryCode, setCountryCode] = useState(rawMobile?.slice(0, -10) || '1');
   // const [phone, setPhone] = useState('');
   // const [countryCode, setCountryCode] = useState('1');
+  const offsetY = useAnimatedKeyboard();
 
   const toggleProviders = () => {
     setProviders(isSmall ? providersList : providersListSmall);
@@ -75,7 +77,7 @@ const CustomProvidersScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <SafeAreaView style={{}}>
       <ScrollView contentContainerStyle={{}}>
-        <View style={styles.Container}>
+        <Animated.View style={{ ...styles.Container, top: isSmall ? 0 : offsetY }}>
           <View style={styles.Header}>
             <Text style={{ fontSize: 25, fontWeight: 'bold' }}>Welcome onboard</Text>
             <Text>Select how you would like to continue</Text>
@@ -158,7 +160,7 @@ const CustomProvidersScreen: React.FC<Props> = ({ navigation }) => {
               {isSmall ? 'View more options' : 'View less options'}
             </Button>
           </Flex>
-        </View>
+        </Animated.View>
       </ScrollView>
     </SafeAreaView>
   );
