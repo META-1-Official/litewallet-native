@@ -3,13 +3,13 @@ const providersList = [
   'facebook',
   'twitter',
   'discord',
-  'line',
-  'reddit',
+  // 'line',
+  // 'reddit',
   'apple',
   'github',
-  'twitch',
+  // 'twitch',
   'linkedin',
-  'weibo',
+  // 'weibo',
 ];
 
 export default providersList;
