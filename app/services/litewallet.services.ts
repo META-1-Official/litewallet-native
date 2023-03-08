@@ -65,6 +65,11 @@ class LiteWalletServices {
     const { data } = await this.api.post('/getHistory', { accountName, skip_size: skipSize, from });
     return data;
   };
+
+  signUp = async (accountName: string) => {
+    const { data } = await this.api.post('/signUp', { accountName });
+    return data;
+  };
 }
 
 export default new LiteWalletServices();
