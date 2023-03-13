@@ -50,5 +50,8 @@ allprojects {
         }
         google()
         maven { url 'https://www.jitpack.io' }
+        maven {
+            url "https://zendesk.jfrog.io/artifactory/repo"
+        }
     }
 }

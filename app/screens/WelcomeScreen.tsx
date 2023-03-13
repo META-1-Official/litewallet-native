@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import ContentSlider, { Backdrop } from '../components/ContentSlider';
 import RoundedButton from '../components/RoundedButton';
 import { useAppDispatch } from '../hooks';
+import useZenDesk from '../hooks/useZenDesk';
 import { clearESignatureState } from '../store/eSignature/eSignature.reducer';
 import { clearFaceKI } from '../store/faceKI/faceKI.reducer';
 import { clearSignInInfo } from '../store/signIn/signIn.reducer';
@@ -21,6 +22,8 @@ const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
   const CreateWalletPress = () => navigation.navigate('Legal');
   const LinkWalletPress = () => navigation.navigate('LinkWallet');
   const scrollX = useRef(new Animated.Value(0)).current;
+
+  useZenDesk();
 
   useFocusEffect(() => {
     console.log('Wiping store...');

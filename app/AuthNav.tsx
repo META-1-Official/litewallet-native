@@ -3,6 +3,7 @@ import React from 'react';
 import AppHeader from './components/AppHeader';
 import { CountryPicker, CountryPickerParams } from './components/CountryPicker';
 import { LoaderModalContent } from './components/LoaderModal';
+import ZenDeskButton from './components/ZenDeskButton';
 import LinkWalletScreen from './screens/LinkWalletScreen';
 import { PrivacyPolicy, TOSScreen } from './screens/PrivacyPolicy';
 // import AdditionalFormScreen from './screens/SignUp/AdditionalFormScreen';
@@ -43,50 +44,53 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 const AuthNav = () => {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerMode: 'screen',
-        header: AppHeader,
-      }}
-    >
-      <Stack.Screen
-        name="Home"
-        options={{
-          headerShown: false,
+    <>
+      <Stack.Navigator
+        screenOptions={{
+          headerMode: 'screen',
+          header: AppHeader,
         }}
-        component={WelcomeScreen}
-      />
-      <Stack.Screen name="Legal" component={Legal} />
-      <Stack.Screen name="Privacy" component={PrivacyPolicy} />
-      <Stack.Screen name="TOS" component={TOSScreen} />
-      <Stack.Screen name="CreateWallet" component={CreateWalletScreen} />
-      <Stack.Screen
-        name="FaceKI"
-        options={{
-          title: 'Create Wallet',
-        }}
-        component={FaceKIScreen}
-      />
-      <Stack.Screen name="FaceKISuccess" component={FaceKISuccessScreen} />
-      {/*<Stack.Screen name="AdditionalForm" component={AdditionalFormScreen} />*/}
-      <Stack.Screen name="ESignature" component={ESignatureScreen} />
-      <Stack.Screen name="ESignatureForm" component={ESignatureFormScreen} />
-      <Stack.Screen name="Passkey" component={PasskeyScreen} />
-      <Stack.Screen name="PaymentSuccess" component={PaymentSuccess} />
-      <Stack.Screen name="LinkWallet" component={LinkWalletScreen} />
-      <Stack.Screen name="CustomProviders" component={CustomProvidersScreen} />
-      <Stack.Screen name="ImportWallet" component={ImportWalletScreen} />
-      <Stack.Screen
-        name="Loader"
-        options={{ presentation: 'transparentModal', headerShown: false }}
-        component={LoaderModalContent}
-      />
-      <Stack.Screen
-        name="CountryPickerModal"
-        component={CountryPicker}
-        options={{ presentation: 'modal' }}
-      />
-    </Stack.Navigator>
+      >
+        <Stack.Screen
+          name="Home"
+          options={{
+            headerShown: false,
+          }}
+          component={WelcomeScreen}
+        />
+        <Stack.Screen name="Legal" component={Legal} />
+        <Stack.Screen name="Privacy" component={PrivacyPolicy} />
+        <Stack.Screen name="TOS" component={TOSScreen} />
+        <Stack.Screen name="CreateWallet" component={CreateWalletScreen} />
+        <Stack.Screen
+          name="FaceKI"
+          options={{
+            title: 'Create Wallet',
+          }}
+          component={FaceKIScreen}
+        />
+        <Stack.Screen name="FaceKISuccess" component={FaceKISuccessScreen} />
+        {/*<Stack.Screen name="AdditionalForm" component={AdditionalFormScreen} />*/}
+        <Stack.Screen name="ESignature" component={ESignatureScreen} />
+        <Stack.Screen name="ESignatureForm" component={ESignatureFormScreen} />
+        <Stack.Screen name="Passkey" component={PasskeyScreen} />
+        <Stack.Screen name="PaymentSuccess" component={PaymentSuccess} />
+        <Stack.Screen name="LinkWallet" component={LinkWalletScreen} />
+        <Stack.Screen name="CustomProviders" component={CustomProvidersScreen} />
+        <Stack.Screen name="ImportWallet" component={ImportWalletScreen} />
+        <Stack.Screen
+          name="Loader"
+          options={{ presentation: 'transparentModal', headerShown: false }}
+          component={LoaderModalContent}
+        />
+        <Stack.Screen
+          name="CountryPickerModal"
+          component={CountryPicker}
+          options={{ presentation: 'modal' }}
+        />
+      </Stack.Navigator>
+      <ZenDeskButton />
+    </>
   );
 };
 

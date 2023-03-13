@@ -1,6 +1,6 @@
 import { NETWORK, TORUS_CLIENT_ID } from '@env';
 
-enum URLs {
+enum Constants {
   META1_CONNECTION_URL = 'META1_CONNECTION_URL',
   FAUCET_URL = 'FAUCET_URL',
   LITE_WALLET_API_URL = 'LITE_WALLET_API_URL',
@@ -10,9 +10,11 @@ enum URLs {
   FACE_KI_API_URL = 'FACE_KI_API_URL',
   E_SIGNATURE_API_URL = 'E_SIGNATURE_API_URL',
   APP_KEY_PREFIX = 'APP_KEY_PREFIX',
+  CHANNEL_KEY_ANDROID = 'CHANNEL_KEY_ANDROID',
+  CHANNEL_KEY_IOS = 'CHANNEL_KEY_IOS',
 }
 
-type NetworkConfig = Record<URLs, string>;
+type NetworkConfig = Record<Constants, string>;
 
 export enum Network {
   META1 = 'META1',
@@ -34,6 +36,8 @@ const config: Config = {
     FACE_KI_API_URL: 'https://litewallet.cryptomailsvc.io',
     E_SIGNATURE_API_URL: 'https://e-sign.cryptomailsvc.io',
     APP_KEY_PREFIX: 'META1',
+    CHANNEL_KEY_ANDROID: '',
+    CHANNEL_KEY_IOS: '',
   },
   META1DEV: {
     META1_CONNECTION_URL: 'wss://api.dev.meta-exchange.vision/ws',
@@ -46,6 +50,8 @@ const config: Config = {
     FACE_KI_API_URL: 'https://litewallet.dev.cryptomailsvc.io',
     E_SIGNATURE_API_URL: 'https://e-sign.dev.cryptomailsvc.io',
     APP_KEY_PREFIX: 'DEV11',
+    CHANNEL_KEY_ANDROID: '',
+    CHANNEL_KEY_IOS: '',
   },
   META1DEV2: {
     META1_CONNECTION_URL: 'wss://api.dev2.meta-exchange.vision/ws',
@@ -58,6 +64,8 @@ const config: Config = {
     FACE_KI_API_URL: 'https://litewallet.dev2.cryptomailsvc.io',
     E_SIGNATURE_API_URL: 'https://e-sign.dev.cryptomailsvc.io',
     APP_KEY_PREFIX: 'DEV11',
+    CHANNEL_KEY_ANDROID: '',
+    CHANNEL_KEY_IOS: '',
   },
   META1TEST: {
     META1_CONNECTION_URL: 'wss://api.test.meta-exchange.vision/ws',
@@ -70,6 +78,8 @@ const config: Config = {
     FACE_KI_API_URL: 'https://litewallet.test.cryptomailsvc.io',
     E_SIGNATURE_API_URL: 'https://e-sign.test.cryptomailsvc.io',
     APP_KEY_PREFIX: 'TEST0',
+    CHANNEL_KEY_ANDROID: '',
+    CHANNEL_KEY_IOS: '',
   },
 };
 
