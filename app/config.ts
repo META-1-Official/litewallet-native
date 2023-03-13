@@ -1,4 +1,9 @@
-import { NETWORK, TORUS_CLIENT_ID } from '@env';
+import {
+  NETWORK,
+  TORUS_CLIENT_ID,
+  ZENDESK_CHANNEL_KEY_ANDROID,
+  ZENDESK_CHANNEL_KEY_IOS,
+} from '@env';
 
 enum Constants {
   META1_CONNECTION_URL = 'META1_CONNECTION_URL',
@@ -36,8 +41,8 @@ const config: Config = {
     FACE_KI_API_URL: 'https://litewallet.cryptomailsvc.io',
     E_SIGNATURE_API_URL: 'https://e-sign.cryptomailsvc.io',
     APP_KEY_PREFIX: 'META1',
-    CHANNEL_KEY_ANDROID: '',
-    CHANNEL_KEY_IOS: '',
+    CHANNEL_KEY_ANDROID: ZENDESK_CHANNEL_KEY_ANDROID,
+    CHANNEL_KEY_IOS: ZENDESK_CHANNEL_KEY_IOS,
   },
   META1DEV: {
     META1_CONNECTION_URL: 'wss://api.dev.meta-exchange.vision/ws',
@@ -64,8 +69,8 @@ const config: Config = {
     FACE_KI_API_URL: 'https://litewallet.dev2.cryptomailsvc.io',
     E_SIGNATURE_API_URL: 'https://e-sign.dev.cryptomailsvc.io',
     APP_KEY_PREFIX: 'DEV11',
-    CHANNEL_KEY_ANDROID: '',
-    CHANNEL_KEY_IOS: '',
+    CHANNEL_KEY_ANDROID: ZENDESK_CHANNEL_KEY_ANDROID,
+    CHANNEL_KEY_IOS: ZENDESK_CHANNEL_KEY_IOS,
   },
   META1TEST: {
     META1_CONNECTION_URL: 'wss://api.test.meta-exchange.vision/ws',
