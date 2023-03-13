@@ -43,6 +43,8 @@ jobs:
           DIAWI_TOKEN: ${{ secrets.DIAWI_TOKEN }}
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          ZENDESK_CHANNEL_KEY_ANDROID: ${{secrets.ZENDESK_CHANNEL_KEY_ANDROID}}
+          ZENDESK_CHANNEL_KEY_IOS: ${{secrets.ZENDESK_CHANNEL_KEY_IOS}}
       - name: Get Diawi URL and QR Code
         run: |
           echo ============================
