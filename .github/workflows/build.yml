@@ -28,6 +28,8 @@ jobs:
           NETWORK: ${{ secrets.NETWORK }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          ZENDESK_CHANNEL_KEY_ANDROID: ${{secrets.ZENDESK_CHANNEL_KEY_ANDROID}}
+          ZENDESK_CHANNEL_KEY_IOS: ${{secrets.ZENDESK_CHANNEL_KEY_IOS}}
         run: |
           cd android && ./gradlew assembleRelease
       - name: Upload Artifact
