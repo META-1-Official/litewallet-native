@@ -254,7 +254,15 @@ export const MyOrders: React.FC<AssetViewTSP> = () => {
       const { canceled, filled } = v;
       const order = v.order.limit_order_create_operation;
       if (!reject(canceled, filled, order)) {
-        n++;
+        // checking for open orders
+        if (
+          (order.min_to_receive.asset.symbol === assetB &&
+            order.amount_to_sell.asset.symbol === assetA) ||
+          (order.min_to_receive.asset.symbol === assetA &&
+            order.amount_to_sell.asset.symbol === assetB)
+        ) {
+          n++;
+        }
       }
     });
     return n;
