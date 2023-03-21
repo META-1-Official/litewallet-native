@@ -5,6 +5,7 @@ import config from '../../config';
 import { createUser, getToken, getUser } from '../../services/eSignature.services';
 import migrationService from '../../services/migration.service';
 import liteWalletServices from '../../services/litewallet.services';
+import sendXServices from '../../services/sendX.services';
 import createAccountWithPassword from '../../utils/accountCreate';
 import { setToken } from '../eSignature/eSignature.reducer';
 
@@ -22,6 +23,7 @@ interface ESignatureProceedProps extends AccountData {
 
 interface RegisterAccountProps extends AccountData {
   passKey: string;
+  emailSubscription: boolean;
 }
 
 // todo: move it to eSignature actions
@@ -80,9 +82,29 @@ export const getAccountPaymentStatus = createAsyncThunk(
 
 export const registerAccount = createAsyncThunk(
   'signUp/registerAccount',
-  async ({ accountName, passKey, mobile, email, firstName, lastName }: RegisterAccountProps) => {
+  async ({
+    accountName,
+    passKey,
+    mobile,
+    email,
+    firstName,
+    lastName,
+    emailSubscription,
+  }: RegisterAccountProps) => {
     console.log('CreateAccountWithPassword service started!');
-
+    if (emailSubscription) {
+      sendXServices
+        .subscribe({
+          email,
+          first_name: firstName,
+          last_name: lastName,
+          phone: mobile,
+          tags: ['nativeapp'],
+        })
+        .then(() => {
+          console.log('Subscription completed!');
+        });
+    }
     await liteWalletServices.signUp(accountName);
     return createAccountWithPassword(
       accountName,
