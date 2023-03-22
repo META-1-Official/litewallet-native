@@ -48,6 +48,7 @@ export const PasskeyScreen = ({ navigation }: Props) => {
 
   const [isCopied, setIsCopied] = useState(false);
   const [checkboxesState, setCheckBoxesState] = useState([false, false, false, false, false]);
+  const [emailSubscription, setEmailSubscription] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -61,6 +62,10 @@ export const PasskeyScreen = ({ navigation }: Props) => {
         }
       });
   }, []);
+
+  const handleEmailSubscription = () => {
+    setEmailSubscription(prevState => !prevState);
+  };
 
   const handleRegistrationIssue = (message: string) => {
     // dispatch(clearESignature());
@@ -114,6 +119,7 @@ export const PasskeyScreen = ({ navigation }: Props) => {
           email,
           firstName,
           lastName,
+          emailSubscription,
         }),
       )
         .unwrap()
@@ -295,6 +301,14 @@ export const PasskeyScreen = ({ navigation }: Props) => {
               />
             )}
             <Text style={styles.checkboxText}>Sign META Association Membership Agreement</Text>
+          </View>
+          <View style={styles.checkboxRow}>
+            <CheckBox
+              boxType="square"
+              value={emailSubscription}
+              onValueChange={handleEmailSubscription}
+            />
+            <Text style={styles.checkboxText}>Subscribe for exclusive news and offers</Text>
           </View>
         </View>
 

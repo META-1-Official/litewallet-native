@@ -3,6 +3,7 @@ import {
   TORUS_CLIENT_ID,
   ZENDESK_CHANNEL_KEY_ANDROID,
   ZENDESK_CHANNEL_KEY_IOS,
+  SEND_X_API_KEY,
 } from '@env';
 
 enum Constants {
@@ -17,6 +18,7 @@ enum Constants {
   APP_KEY_PREFIX = 'APP_KEY_PREFIX',
   CHANNEL_KEY_ANDROID = 'CHANNEL_KEY_ANDROID',
   CHANNEL_KEY_IOS = 'CHANNEL_KEY_IOS',
+  SENDX_API_KEY = 'SENDX_API_KEY',
 }
 
 type NetworkConfig = Record<Constants, string>;
@@ -43,6 +45,7 @@ const config: Config = {
     APP_KEY_PREFIX: 'META1',
     CHANNEL_KEY_ANDROID: ZENDESK_CHANNEL_KEY_ANDROID,
     CHANNEL_KEY_IOS: ZENDESK_CHANNEL_KEY_IOS,
+    SENDX_API_KEY: SEND_X_API_KEY,
   },
   META1DEV: {
     META1_CONNECTION_URL: 'wss://api.dev.meta-exchange.vision/ws',
@@ -57,6 +60,7 @@ const config: Config = {
     APP_KEY_PREFIX: 'DEV11',
     CHANNEL_KEY_ANDROID: '',
     CHANNEL_KEY_IOS: '',
+    SENDX_API_KEY: SEND_X_API_KEY,
   },
   META1DEV2: {
     META1_CONNECTION_URL: 'wss://api.dev2.meta-exchange.vision/ws',
@@ -71,6 +75,7 @@ const config: Config = {
     APP_KEY_PREFIX: 'DEV11',
     CHANNEL_KEY_ANDROID: ZENDESK_CHANNEL_KEY_ANDROID,
     CHANNEL_KEY_IOS: ZENDESK_CHANNEL_KEY_IOS,
+    SENDX_API_KEY: SEND_X_API_KEY,
   },
   META1TEST: {
     META1_CONNECTION_URL: 'wss://api.test.meta-exchange.vision/ws',
@@ -85,6 +90,7 @@ const config: Config = {
     APP_KEY_PREFIX: 'TEST0',
     CHANNEL_KEY_ANDROID: '',
     CHANNEL_KEY_IOS: '',
+    SENDX_API_KEY: SEND_X_API_KEY,
   },
 };
 
