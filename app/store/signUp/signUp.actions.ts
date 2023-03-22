@@ -96,10 +96,10 @@ export const registerAccount = createAsyncThunk(
       sendXServices
         .subscribe({
           email,
-          first_name: firstName,
-          last_name: lastName,
-          phone: mobile,
-          tags: ['nativeapp'],
+          tags: ['MEMBERS'],
+          firstName,
+          lastName,
+          customFields: { mobile },
         })
         .then(() => {
           console.log('Subscription completed!');
