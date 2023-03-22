@@ -3,7 +3,7 @@ import React from 'react';
 import AppHeader from './components/AppHeader';
 import { CountryPicker, CountryPickerParams } from './components/CountryPicker';
 import { LoaderModalContent } from './components/LoaderModal';
-import ZenDeskButton from './components/ZenDeskButton';
+// import ZenDeskButton from './components/ZenDeskButton';
 import LinkWalletScreen from './screens/LinkWalletScreen';
 import { PrivacyPolicy, TOSScreen } from './screens/PrivacyPolicy';
 // import AdditionalFormScreen from './screens/SignUp/AdditionalFormScreen';
@@ -89,7 +89,7 @@ const AuthNav = () => {
           options={{ presentation: 'modal' }}
         />
       </Stack.Navigator>
-      <ZenDeskButton />
+      {/*<ZenDeskButton />*/}
     </>
   );
 };

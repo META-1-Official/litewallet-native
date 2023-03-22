@@ -11,7 +11,7 @@ import { SvgIcons } from '../assets';
 import { DexStackHeader } from './components/DexHeader';
 import Loader from './components/Loader';
 import { OverlayContent } from './components/SideMenuOverlay';
-import ZenDeskButton from './components/ZenDeskButton';
+// import ZenDeskButton from './components/ZenDeskButton';
 import useAppDispatch from './hooks/useAppDispatch';
 import { DexStack } from './screens/dex';
 import ExploreAssets from './screens/ExploreAssets';
@@ -186,7 +186,7 @@ export const DexNav: React.FC = () => {
           component={ExploreAssets}
         />
       </Drawer.Navigator>
-      <ZenDeskButton />
+      {/*<ZenDeskButton />*/}
     </View>
   );
 
