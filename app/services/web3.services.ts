@@ -1,5 +1,5 @@
 import * as WebBrowser from '@toruslabs/react-native-web-browser';
-import Web3Auth, { OPENLOGIN_NETWORK, State } from '@web3auth/react-native-sdk';
+import Web3Auth, { OPENLOGIN_NETWORK_TYPE, State } from '@web3auth/react-native-sdk';
 import { SdkLoginParams } from '@web3auth/react-native-sdk/src/types/sdk';
 import config from '../config';
 
@@ -7,7 +7,7 @@ const resolvedRedirectUrl = 'io.meta1.appbeta://auth';
 
 const web3auth = new Web3Auth(WebBrowser, {
   clientId: config.WEB3_CLIENT_ID,
-  network: OPENLOGIN_NETWORK.TESTNET,
+  network: config.WEB3_NETWORK as OPENLOGIN_NETWORK_TYPE,
   whiteLabel: {
     name: 'META1',
   },
