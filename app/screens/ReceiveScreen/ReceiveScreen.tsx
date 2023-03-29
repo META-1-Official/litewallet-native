@@ -1,3 +1,4 @@
+import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Animated,
@@ -8,6 +9,7 @@ import {
   TouchableOpacity,
   View,
   Platform,
+  BackHandler,
 } from 'react-native';
 import { useAssetPicker } from '../../components/AssetSelectModal';
 import useAppSelector from '../../hooks/useAppSelector';
