@@ -9,7 +9,7 @@ import sendXServices from '../../services/sendX.services';
 import createAccountWithPassword from '../../utils/accountCreate';
 import { setToken } from '../eSignature/eSignature.reducer';
 
-const SENDX_TAG = config.APP_KEY_PREFIX === 'META1' ? 'MEMBERS' : 'DEV';
+const SENDX_TAG = config.APP_KEY_PREFIX === 'META1' ? 'MEMBERS' : 'DEV2';
 
 interface AccountData {
   email: string;

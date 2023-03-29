@@ -68,7 +68,7 @@ const config: Config = {
     CHANNEL_KEY_ANDROID: '',
     CHANNEL_KEY_IOS: '',
     SENDX_API_KEY: SEND_X_API_KEY,
-    SENDX_TEAM_ID: '',
+    SENDX_TEAM_ID: SEND_X_TEAM_ID,
   },
   META1DEV2: {
     META1_CONNECTION_URL: 'wss://api.dev2.meta-exchange.vision/ws',
@@ -85,7 +85,7 @@ const config: Config = {
     CHANNEL_KEY_ANDROID: ZENDESK_CHANNEL_KEY_ANDROID,
     CHANNEL_KEY_IOS: ZENDESK_CHANNEL_KEY_IOS,
     SENDX_API_KEY: SEND_X_API_KEY,
-    SENDX_TEAM_ID: '',
+    SENDX_TEAM_ID: SEND_X_TEAM_ID,
   },
   META1TEST: {
     META1_CONNECTION_URL: 'wss://api.test.meta-exchange.vision/ws',
@@ -102,7 +102,7 @@ const config: Config = {
     CHANNEL_KEY_ANDROID: '',
     CHANNEL_KEY_IOS: '',
     SENDX_API_KEY: SEND_X_API_KEY,
-    SENDX_TEAM_ID: '',
+    SENDX_TEAM_ID: SEND_X_TEAM_ID,
   },
 };
 
