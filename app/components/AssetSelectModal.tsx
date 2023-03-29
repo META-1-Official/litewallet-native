@@ -16,6 +16,7 @@ import {
   View,
 } from 'react-native';
 import { X } from 'react-native-feather';
+import { WalletNavigationProp } from '../screens/WalletScreen';
 import { tid, useScroll } from '../utils';
 import { AssetBalanceT, useAssets, useAssetsStore } from '../services/meta1Api';
 import { RootStackNP } from '../WalletNav';
@@ -142,12 +143,15 @@ const PickerContent = ({ onSelect, exclude }: Props) => {
   );
 };
 const AssetPicker: React.FC<AssetPickerProps> = ({ title, onClose, onSelect, exclude }) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<WalletNavigationProp>();
   const { current } = useCardAnimation();
 
   useFocusEffect(
     React.useCallback(() => {
-      const onBackPress = () => true;
+      const onBackPress = () => {
+        navigation.navigate('Wallet__Main');
+        return true;
+      };
       BackHandler.addEventListener('hardwareBackPress', onBackPress);
       return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
     }, []),
