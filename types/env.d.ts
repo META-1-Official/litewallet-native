@@ -6,4 +6,5 @@ declare module '@env' {
   export const ZENDESK_CHANNEL_KEY_IOS: string;
   export const SEND_X_API_KEY: string;
   export const SEND_X_TEAM_ID: string;
+  export const ONRAMPER_API_KEY: string;
 }
