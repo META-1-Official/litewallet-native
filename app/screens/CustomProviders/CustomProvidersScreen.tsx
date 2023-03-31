@@ -4,14 +4,9 @@ import { LOGIN_PROVIDER } from '@web3auth/react-native-sdk';
 // import { SdkLoginParams } from '@web3auth/react-native-sdk/src/types/sdk';
 import React, { useState } from 'react';
 import { Animated, Text, View, SafeAreaView, ScrollView } from 'react-native';
-import Toast from 'react-native-toast-message';
 import { RootStackParamList } from '../../AuthNav';
-import { browserstackTestAccounts } from '../../constants/browserstackTestAccounts';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useAppDispatch } from '../../hooks';
 import useAnimatedKeyboard from '../../hooks/useAnimatedKeyboard';
-import { useStore } from '../../store';
-import { login } from '../../store/signIn/signIn.actions';
-import { authorize } from '../../store/wallet/wallet.reducers';
 import { getWeb3User } from '../../store/web3/web3.actions';
 // import CountryNumber from './CountryNumber';
 import styles from './CustomProvidersScreen.styles';
@@ -25,14 +20,12 @@ type Props = NativeStackScreenProps<RootStackParamList, 'CustomProviders'>;
 
 const CustomProvidersScreen: React.FC<Props> = ({ navigation }) => {
   const dispatch = useAppDispatch();
-  const auth = useStore(state => state.authorize);
   // const { mobile } = useAppSelector(state => state.signUp);
   // const rawMobile = mobile?.split(/\s+/).join('').replace('+', '');
   const [providers, setProviders] = useState(providersListSmall);
   const isSmall = providers.length === providersListSmall.length;
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
-  const { accountName } = useAppSelector(state => state.signIn);
   // const [phone, setPhone] = useState(rawMobile?.slice(-10) || '');
   // const [countryCode, setCountryCode] = useState(rawMobile?.slice(0, -10) || '1');
   // const [phone, setPhone] = useState('');
@@ -52,24 +45,6 @@ const CustomProvidersScreen: React.FC<Props> = ({ navigation }) => {
   //   setPhone(String(parseInt(text, 10) || ''));
   // };
 
-  const loginToAppHandler = () => {
-    dispatch(login({ accountName, email }))
-      .unwrap()
-      .then(loginDetails => {
-        console.log('Logged in successfully! loginDetails: ', loginDetails);
-        dispatch(authorize({ accountName, email, token: loginDetails.token }));
-        auth();
-      })
-      .catch(error => {
-        Toast.show({
-          type: 'error',
-          text1: 'Something went wrong!',
-          text2: 'Try to login again.',
-        });
-        console.error(error);
-      });
-  };
-
   const handleLogin = (loginProvider: string, login = '') => {
     dispatch(
       getWeb3User({
@@ -84,11 +59,7 @@ const CustomProvidersScreen: React.FC<Props> = ({ navigation }) => {
       .unwrap()
       .then(web3AuthData => {
         if (web3AuthData.privateKey) {
-          if (browserstackTestAccounts.includes(accountName)) {
-            loginToAppHandler();
-          } else {
-            navigation.navigate('FaceKI');
-          }
+          navigation.navigate('FaceKI');
         }
       })
       .catch(error => console.error(error));
