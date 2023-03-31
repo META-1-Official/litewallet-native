@@ -11,13 +11,19 @@ import {
   TextInputProps,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import Toast from 'react-native-toast-message';
 import { personAsset, personIconAsset } from '../../assets';
 import { RootStackParamList } from '../AuthNav';
 import RoundedButton from '../components/RoundedButton';
 import { Heading, TextSecondary } from '../components/typography';
+import config from '../config';
+import { browserstackTestAccounts } from '../constants/browserstackTestAccounts';
 import { useAppDispatch } from '../hooks';
 import useAnimatedKeyboard from '../hooks/useAnimatedKeyboard';
+import { useStore } from '../store';
+import { login } from '../store/signIn/signIn.actions';
 import { loginStep1 } from '../store/signIn/signIn.reducer';
+import { authorize } from '../store/wallet/wallet.reducers';
 import { tid, useScroll } from '../utils';
 import { getAccount } from '../services/meta1Api';
 import { required, RuleFn } from '../utils/useFormHelper/rules';
@@ -33,6 +39,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'LinkWallet'>;
 
 const LinkWalletScreen: React.FC<Props> = ({ navigation }) => {
   const dispatch = useAppDispatch();
+  const auth = useStore(state => state.authorize);
   const { control, handleSubmit } = useForm({
     mode: 'onChange',
     defaultValues: {
@@ -41,8 +48,35 @@ const LinkWalletScreen: React.FC<Props> = ({ navigation }) => {
     },
   });
 
+  const browserStackAccountsLogin = (accountName: string) => {
+    dispatch(login({ accountName, email: `${accountName}@yopmail.com` }))
+      .unwrap()
+      .then(loginDetails => {
+        console.log('Logged in successfully! loginDetails: ', loginDetails);
+        dispatch(authorize({ accountName, email: `${accountName}@yopmail.com`, token: '' }));
+        auth();
+      })
+      .catch(error => {
+        Toast.show({
+          type: 'error',
+          text1: 'Something went wrong!',
+          text2: 'Try to login again.',
+        });
+        console.error(error);
+      });
+  };
+
   const handleLogin = handleSubmit(formState => {
     const { account_name } = formState;
+
+    // Check account name on including to browserstackTestAccounts for simple login
+    if (config.APP_KEY_PREFIX !== 'META1') {
+      if (browserstackTestAccounts.includes(account_name)) {
+        browserStackAccountsLogin(account_name);
+        return false;
+      }
+    }
+
     dispatch(loginStep1(account_name));
     navigation.navigate('CustomProviders');
   });
