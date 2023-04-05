@@ -15,7 +15,7 @@ import { migrateAccount } from '../store/signUp/signUp.actions';
 import { colors } from '../styles/colors';
 import Loader from '../components/Loader';
 import AppHeader from '../components/AppHeader';
-import TradeScreen from './TradeScreen';
+import TradeScreen from './TradeScreen/TradeScreen';
 import ReceiveScreen from './ReceiveScreen/ReceiveScreen';
 import SendScreen from './SendScreen';
 import useAssetsOnFocus from '../hooks/useAssetsOnFocus';
