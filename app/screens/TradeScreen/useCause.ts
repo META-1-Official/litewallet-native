@@ -1,7 +1,7 @@
-import { useState, useRef } from 'React';
+import { useState, useRef } from 'react';
 import { editing } from './helpers';
 
-// Basically do not update if meself is editing
+// Basically do not update if myself is editing
 const useCause = () => {
   const [isCause, setCause] = useState(false);
   const timerRef = useRef<NodeJS.Timeout>();
