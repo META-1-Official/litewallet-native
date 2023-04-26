@@ -31,7 +31,7 @@ const UsernameDepositView = ({ accountName }: { accountName: string }) => {
           {accountName[0]}
         </Text>
       </View>
-      <Text style={{ fontSize: 28, marginBottom: 16 }}>@{accountName}</Text>
+      <Text style={{ fontSize: 28, marginBottom: 16 }}>{accountName}</Text>
       <Text style={{ textAlign: 'center', fontSize: 16 }}>
         Accept From Other META1 Wallet Users
       </Text>
