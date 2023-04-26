@@ -17,7 +17,7 @@ const MockCard = ({ text, username, address }: MockProps) => {
       <View>
         <View style={styles.line}>
           <Text style={styles.text}>{text}</Text>
-          <Text style={[styles.text, styles.username]}> @{username}</Text>
+          <Text style={[styles.text, styles.username]}> {username}</Text>
         </View>
         <Text style={styles.address}>0x{addressRedacted}</Text>
       </View>
