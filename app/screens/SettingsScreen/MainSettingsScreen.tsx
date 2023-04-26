@@ -34,7 +34,7 @@ const MainSettingsScreen = () => {
               fontWeight: '700',
             }}
           >
-            @{accountName}
+            {accountName}
           </Text>
           <Text style={{ fontSize: 16, color: '#aaa' }}>Current Wallet</Text>
         </View>
