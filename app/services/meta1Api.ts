@@ -224,9 +224,16 @@ type swapWPassSig = (
  * @param from        Symbol for asset you want to get rid of
  * @param to          Symbol for asset you want to get in the end
  * @param amount      Amount of the  asset you want to get in the end
+ * @param tradePrice  Price of the asset you want to get in the end
  * @returns Idk i think tx?
  */
-export const swapWithPassword: swapWPassSig = async (accountInfo, from, to, amount) => {
+export const swapWithPassword: swapWPassSig = async (
+  accountInfo,
+  from,
+  to,
+  amount,
+  tradePrice,
+) => {
   const pair = await Meta1.db.get_ticker(from, to);
 
   if (!pair) {
@@ -250,7 +257,7 @@ export const swapWithPassword: swapWPassSig = async (accountInfo, from, to, amou
     to,
     from,
     amount,
-    pair.lowest_ask,
+    tradePrice, //pair.lowest_ask, // tradePrice (marketPrice) or lowest_ask
     false, // whatever
     new Date(new Date().getTime() + YY), // idk
   );

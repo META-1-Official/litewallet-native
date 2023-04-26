@@ -89,6 +89,8 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
     accountName,
   );
 
+  // console.log('!!!!!!!!Pair: ', pair);
+
   const DarkMode: React.FC = ({ children }) => <>{darkMode ? children : null}</>;
 
   const darkStyle = optStyleFactory(darkMode);

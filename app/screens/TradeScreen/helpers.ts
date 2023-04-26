@@ -81,6 +81,7 @@ export const mkPerformSwap = (
       assets.A.asset.symbol,
       assets.B.asset.symbol,
       Number(assets.B.amount),
+      0.002919, //assets.A.toUsdt(assets.A.asset.amount), //tradePrice
     );
 
     onAfterSwap();
