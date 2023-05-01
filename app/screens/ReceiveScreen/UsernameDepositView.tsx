@@ -17,7 +17,6 @@ const UsernameDepositView = ({ accountName }: { accountName: string }) => {
           height: 100,
           borderRadius: 100,
           backgroundColor: '#fff',
-          padding: 8,
           margin: 32,
         }}
       >
@@ -26,6 +25,7 @@ const UsernameDepositView = ({ accountName }: { accountName: string }) => {
             fontSize: 72,
             textAlign: 'center',
             color: colors.BrandYellow,
+            textTransform: 'capitalize',
           }}
         >
           {accountName[0]}
