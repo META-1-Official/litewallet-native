@@ -308,7 +308,10 @@ export const PasskeyScreen = ({ navigation }: Props) => {
               value={emailSubscription}
               onValueChange={handleEmailSubscription}
             />
-            <Text style={styles.checkboxText}>Subscribe for exclusive news and offers</Text>
+            <Text style={styles.checkboxText}>
+              I consent to receive emails about member events, platform news and other information
+              from META Membership Association
+            </Text>
           </View>
         </View>
 
