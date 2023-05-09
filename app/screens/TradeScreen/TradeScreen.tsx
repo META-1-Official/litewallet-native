@@ -32,6 +32,7 @@ import {
   useAssets,
   useAssetsStore,
 } from '../../services/meta1Api';
+import calculateMarketPrice from '../../utils/marketOrder/calculateMarketPrice';
 import meta1dex from '../../utils/meta1dexTypes';
 import { createPair, theAsset, useAsset } from '../../utils/useAsset';
 import AmountsInput from './AmountsInput';
@@ -133,20 +134,16 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
             </View>
           </List>
           <Text style={{ textAlign: 'right', alignSelf: 'center', color: '#888' }}>
-            Current Price:{' '}
-            {Number(assets.A.ticker?.lowest_ask).toFixed(assets.A.asset._asset.precision)}{' '}
-            {assets.A.asset.symbol}/{assets.B.asset.symbol} {'\n'}(
+            {`Current Price: ${calculateMarketPrice(assets.A, assets.B)} `}
+            {`${assets.A.asset.symbol}/${assets.B.asset.symbol} \n`}
             {
               // Math bs
               (() => {
-                const la = Number(assets.A.ticker?.lowest_ask);
-                if (!la) {
-                  return 0;
-                }
-                return assets.B.toUsdt(1 / la);
+                const marketPrice = calculateMarketPrice(assets.A, assets.B);
+                return !marketPrice ? 0 : assets.B.toUsdt(1 / marketPrice);
               })().toFixed(2)
-            }{' '}
-            USDT/{assets.A.asset.symbol})
+            }
+            {` USD/${assets.A.asset.symbol}`}
           </Text>
         </View>
         <LightMode>

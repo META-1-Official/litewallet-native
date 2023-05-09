@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { tid } from '../../utils';
+import calculateMarketPrice from '../../utils/marketOrder/calculateMarketPrice';
 import { DM, AssetProp } from './types';
 import { optStyleFactory, validateNumber } from './helpers';
 import useCause from './useCause';
@@ -30,8 +31,10 @@ const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
         if (valid) {
           asset.setAmount(txt);
           const opponent = asset.opponent();
-          const ticker = asset.ticker;
-          opponent.formUsdt(asset.toUsdt(txt));
+          // const ticker = asset.ticker;
+          const marketPrice = calculateMarketPrice(asset, asset);
+          const price = !marketPrice ? 0 : 1 / marketPrice;
+          opponent.formUsdt(Number(txt) * price);
           // if (ticker && ticker.lowest_ask !== '0') {
           //   const bAmt = Number(txt) / Number(ticker.lowest_ask);
           //   opponent.setAmount(bAmt.toFixed(opponent.asset._asset.precision));
