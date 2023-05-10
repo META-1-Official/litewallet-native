@@ -53,7 +53,7 @@ const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanc
 
   return {
     assets: { A, B },
-    marketPrice: (marketPrice + marketPrice * factor).toFixed(precision),
+    marketPrice: (marketPrice - marketPrice * factor).toFixed(precision),
   };
 };
 

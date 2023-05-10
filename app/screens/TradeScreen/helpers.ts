@@ -54,6 +54,7 @@ export const mkPerformSwap = (
   onAfterSwap: () => void,
   onFail: () => void,
   accountName: string,
+  marketPrice?: string,
 ) => {
   const update = useAssetsStore.getState().fetchUserAssets;
 
@@ -76,12 +77,14 @@ export const mkPerformSwap = (
       // Noop
     }
 
+    const tradePrice = marketPrice ? Number(marketPrice) : assets.A.toUsdt(assets.A.asset.amount);
+
     await swapWithPassword(
       accountInfo,
       assets.A.asset.symbol,
       assets.B.asset.symbol,
       Number(assets.B.amount),
-      0.002919, //assets.A.toUsdt(assets.A.asset.amount), //tradePrice
+      tradePrice, //assets.A.toUsdt(assets.A.asset.amount), //tradePrice
     );
 
     onAfterSwap();

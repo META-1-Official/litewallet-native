@@ -89,6 +89,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
     },
     () => loader.close(),
     accountName,
+    marketPrice,
   );
 
   // console.log('!!!!!!!!Pair: ', pair);
