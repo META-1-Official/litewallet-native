@@ -32,7 +32,6 @@ import {
   useAssets,
   useAssetsStore,
 } from '../../services/meta1Api';
-import calculateMarketPrice from '../../utils/marketOrder/calculateMarketPrice';
 import meta1dex from '../../utils/meta1dexTypes';
 import { createPair, theAsset, useAsset } from '../../utils/useAsset';
 import AmountsInput from './AmountsInput';
@@ -56,7 +55,8 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
     () => allAssets?.assetsWithBalance.sort((a, b) => a.symbol.localeCompare(b.symbol)),
     [allAssets],
   );
-  const pair = useAssetPair(availableAssets.at(0), availableAssets.at(3));
+  const pair = useAssetPair(availableAssets.at(6), availableAssets.at(9));
+  const { marketPrice } = pair;
 
   const open = useShowModal();
 
@@ -69,6 +69,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
   const [errors, setErrors] = useState([]);
 
   useEffect(() => setDisabled(errors.length !== 0), [errors]);
+
   if (!allAssets || !availableAssets || !pair) {
     refresh();
     return <Loader />;
@@ -122,24 +123,28 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
               </View>
               <View style={styles.rowJustifyBetween}>
                 <AssetDisplay darkMode={darkMode} asset={assets.A} />
-                <AmountsInput darkMode={darkMode} asset={assets.A} />
+                <AmountsInput darkMode={darkMode} asset={assets.A} marketPrice={1 / marketPrice} />
               </View>
             </View>
             <View style={{ padding: 16 }}>
               <Text style={darkStyle({ color: colors.BrandYellow }, styles.listHeading)}>To</Text>
               <View style={styles.rowJustifyBetween}>
                 <AssetDisplay darkMode={darkMode} asset={assets.B} />
-                <AmountsInput darkMode={darkMode} asset={assets.B} slave />
+                <AmountsInput
+                  darkMode={darkMode}
+                  asset={assets.B}
+                  marketPrice={marketPrice}
+                  slave
+                />
               </View>
             </View>
           </List>
           <Text style={{ textAlign: 'right', alignSelf: 'center', color: '#888' }}>
-            {`Current Price: ${calculateMarketPrice(assets.A, assets.B)} `}
+            {`Current Price: ${marketPrice} `}
             {`${assets.A.asset.symbol}/${assets.B.asset.symbol} \n`}
             {
               // Math bs
               (() => {
-                const marketPrice = calculateMarketPrice(assets.A, assets.B);
                 return !marketPrice ? 0 : assets.B.toUsdt(1 / marketPrice);
               })().toFixed(2)
             }

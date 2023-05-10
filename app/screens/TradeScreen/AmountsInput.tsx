@@ -7,15 +7,15 @@ import styles from './TradeScreen.styles';
 import { AssetProp, DM } from './types';
 import UsdInput from './UsdInput';
 
-const AmountsInput = ({ asset, darkMode, slave }: DM<AssetProp>) => {
+const AmountsInput = ({ asset, darkMode, slave, marketPrice }: DM<AssetProp>) => {
   const darkStyle = optStyleFactory(darkMode);
 
   return (
     <View style={{ width: 120 }}>
-      <AmountInput asset={asset} darkMode={darkMode} />
+      <AmountInput asset={asset} darkMode={darkMode} marketPrice={marketPrice} />
       <View style={styles.rowEnd}>
         <TextSecondary style={darkStyle({ color: '#fff' }, styles.usdtLabel)}>US$</TextSecondary>
-        <UsdInput asset={asset} darkMode={darkMode} slave={slave} />
+        <UsdInput asset={asset} darkMode={darkMode} slave={slave} marketPrice={marketPrice} />
       </View>
     </View>
   );

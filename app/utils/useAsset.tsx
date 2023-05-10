@@ -13,7 +13,7 @@ export type theAsset = {
   /**
    * @param {updateAmount} updateAmount - true by default
    */
-  formUsdt: (usdtAmount: string | number, updateAmount?: boolean) => number;
+  fromUsdt: (usdtAmount: string | number, updateAmount?: boolean) => number;
   toUsdt: (amt?: string | number | undefined) => number;
   getMax: () => number;
   setMax: () => void;
@@ -64,7 +64,7 @@ export const useAsset = ({
     return null;
   }
 
-  const formUsdt = (usdtAmount: string | number, updateAmount = true) => {
+  const fromUsdt = (usdtAmount: string | number, updateAmount = true) => {
     const n = Number(usdtAmount);
     if (!n && n !== 0) {
       console.error('Invalid amount');
@@ -147,7 +147,7 @@ export const useAsset = ({
     open,
     amount,
     setAmount,
-    formUsdt,
+    fromUsdt,
     toUsdt,
     getMax,
     setMax,

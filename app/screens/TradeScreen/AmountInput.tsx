@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { tid } from '../../utils';
-import calculateMarketPrice from '../../utils/marketOrder/calculateMarketPrice';
 import { DM, AssetProp } from './types';
 import { optStyleFactory, validateNumber } from './helpers';
 import useCause from './useCause';
@@ -8,7 +7,7 @@ import Input from './Input';
 
 import styles from './TradeScreen.styles';
 
-const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
+const AmountInput = ({ asset, darkMode, marketPrice }: DM<AssetProp>) => {
   const [amount, setAmount] = useState(asset.amount);
   const { isCause, cause } = useCause();
   useEffect(() => {
@@ -32,14 +31,12 @@ const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
           asset.setAmount(txt);
           const opponent = asset.opponent();
           // const ticker = asset.ticker;
-          const marketPrice = calculateMarketPrice(asset, asset);
-          const price = !marketPrice ? 0 : 1 / marketPrice;
-          opponent.formUsdt(Number(txt) * price);
+          opponent.fromUsdt(Number(txt) * marketPrice);
           // if (ticker && ticker.lowest_ask !== '0') {
           //   const bAmt = Number(txt) / Number(ticker.lowest_ask);
           //   opponent.setAmount(bAmt.toFixed(opponent.asset._asset.precision));
           // } else {
-          //   opponent.formUsdt(asset.toUsdt(txt));
+          //   opponent.fromUsdt(asset.toUsdt(txt));
           // }
         }
       }}

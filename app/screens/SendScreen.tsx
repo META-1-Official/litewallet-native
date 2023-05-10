@@ -290,7 +290,7 @@ const amountReducer =
         asset.setAmount(action.payload);
         return { ...state, amt: action.payload, usd: asset.toUsdt(action.payload).toFixed(2) };
       case UpdateType.USD:
-        const amt = asset.formUsdt(action.payload, true);
+        const amt = asset.fromUsdt(action.payload, true);
         return { ...state, amt: amt.toFixed(8), usd: action.payload };
       case UpdateType.RESET:
         asset.setAmount('0.00');

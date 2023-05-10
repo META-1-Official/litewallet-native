@@ -34,7 +34,6 @@ const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanc
         .get_ticker(B.asset.symbol, A.asset.symbol)
         .catch(console.log);
       console.log({ tickerB });
-
       B.setTicker(tickerB || undefined);
     }
 
@@ -44,9 +43,17 @@ const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanc
   if (!A || !B) {
     return null;
   }
+  const lowestAsk = Number(A.ticker?.lowest_ask);
+  const highestBid = Number(A.ticker?.highest_bid);
+  const divider = Number(!!lowestAsk) + Number(!!highestBid);
+  const marketPrice = (lowestAsk + highestBid) / divider;
+
+  const factor = 0.005;
+  const precision = A.asset._asset.precision;
 
   return {
     assets: { A, B },
+    marketPrice: (marketPrice + marketPrice * factor).toFixed(precision),
   };
 };
 

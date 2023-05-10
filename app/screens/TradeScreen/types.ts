@@ -15,6 +15,7 @@ export type DM<T> = { darkMode?: boolean } & T;
 
 export interface AssetProp {
   asset: theAsset;
+  marketPrice?: number;
   slave?: boolean;
 }
 
