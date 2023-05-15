@@ -1,7 +1,6 @@
-import { Apis } from 'meta1-vision-ws';
-import Meta1, { iLimitOrder } from '../../utils/meta1dexTypes';
+import Meta1 from '../../utils/meta1dexTypes';
 import { theAsset } from '../useAsset';
-import { ceilFloat, floorFloat } from './math';
+import calculateBackingAssetValue from './calculateBackingAssetValue';
 
 const calculateMarketPrice = async (base: theAsset, quote: theAsset, selectedFromBalance) => {
   // console.log('The Asset: ', JSON.stringify(base));
@@ -14,36 +13,7 @@ const calculateMarketPrice = async (base: theAsset, quote: theAsset, selectedFro
   const _limitOrders = await Meta1.db.get_limit_orders(base.asset.symbol, quote.asset.symbol, 300);
   // console.log('Limit Orders: ', JSON.stringify(_limitOrders));
 
-  //-- Calculate backing asset value
-  // const pairTicker = await Meta1.db.get_ticker(base.asset.symbol, quote.asset.symbol);
-  // console.log('Ticker: ', JSON.stringify(pairTicker));
-
-  const basePublishedPrice =
-    base.asset.symbol !== 'META1'
-      ? await Meta1.db.get_published_asset_price(base.asset.symbol)
-      : null;
-  const quotePublishedPrice =
-    quote.asset.symbol !== 'META1'
-      ? await Meta1.db.get_published_asset_price(quote.asset.symbol)
-      : null;
-
-  const assetLimitation = await Meta1.db.get_asset_limitation_value('META1');
-
-  const meta1_usdt = ceilFloat(assetLimitation / 1000000000, 2);
-
-  const baseAssetPrice = basePublishedPrice
-    ? basePublishedPrice.numerator / basePublishedPrice.denominator
-    : meta1_usdt;
-  const quoteAssetPrice = quotePublishedPrice
-    ? quotePublishedPrice.numerator / quotePublishedPrice.denominator
-    : meta1_usdt;
-
-  const asset_usdt = isQuoting ? baseAssetPrice : quoteAssetPrice;
-  const ratio = isQuoting ? meta1_usdt / asset_usdt : asset_usdt / meta1_usdt;
-  const backingAssetValue = isQuoting
-    ? ceilFloat(ratio, quote.asset._asset.precision)
-    : floorFloat(ratio, quote.asset._asset.precision);
-  //--
+  const backingAssetValue = await calculateBackingAssetValue(base, quote);
 
   for (let limitOrder of _limitOrders) {
     if (limitOrder.sell_price.quote.asset_id === base.asset._asset.id) {

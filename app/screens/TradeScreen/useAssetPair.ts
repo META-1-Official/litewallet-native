@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { AssetBalanceT } from '../../services/meta1Api';
+import calculateMarketLiquidity from '../../utils/marketOrder/calculateMarketLiquidity';
 import calculateMarketPrice from '../../utils/marketOrder/calculateMarketPrice';
 import meta1dex from '../../utils/meta1dexTypes';
 import { createPair, useAsset } from '../../utils/useAsset';
 
 const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanceT) => {
   const [marketPrice, setMarketPrice] = useState(0);
+  const [marketLiquidity, setMarketLiquidity] = useState(0);
   const [A, B] = createPair(
     useAsset({ defaultValue: defaultAssetA, title: 'Trade' }),
     useAsset({ defaultValue: defaultAssetB, title: 'Trade' }),
@@ -14,6 +16,11 @@ const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanc
   const setAsyncMarketPrice = async (A, B) => {
     const price = await calculateMarketPrice(A, B);
     setMarketPrice(price);
+  };
+
+  const setAsyncMarketLiquidity = async (A, B) => {
+    const liquidity = await calculateMarketLiquidity(A, B);
+    setMarketLiquidity(liquidity);
   };
 
   useEffect(() => {
@@ -54,7 +61,8 @@ const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanc
 
   return {
     assets: { A, B },
-    marketPrice: marketPrice,
+    marketPrice,
+    marketLiquidity,
   };
 };
 

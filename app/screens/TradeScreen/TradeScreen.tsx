@@ -1,39 +1,16 @@
 import { useNavigation } from '@react-navigation/core';
-import throttle from 'lodash.throttle';
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import {
-  Alert,
-  Dimensions,
-  Image,
-  ImageStyle,
-  StyleSheet,
-  Text,
-  TextInput,
-  TextInputProps,
-  TextStyle,
-  View,
-  ViewStyle,
-} from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { SvgIcons } from '../../../assets';
 import { DKSAV } from '../../components/DismissKeyboard';
 import { List } from '../../components/List';
 import Loader from '../../components/Loader';
 import { useNewLoaderModal } from '../../components/LoaderModal';
 import { useShowModal } from '../../components/SuccessModal';
-import { Heading, TextSecondary } from '../../components/typography';
 import useAppSelector from '../../hooks/useAppSelector';
 import { colors } from '../../styles/colors';
-import { catchError, ensure, getPassword, shadow, style, tid } from '../../utils';
-import {
-  AssetBalanceT,
-  refreshAssets,
-  swapWithPassword,
-  useAssets,
-  useAssetsStore,
-} from '../../services/meta1Api';
-import meta1dex from '../../utils/meta1dexTypes';
-import { createPair, theAsset, useAsset } from '../../utils/useAsset';
+import { tid } from '../../utils';
+import { useAssets } from '../../services/meta1Api';
 import AmountsInput from './AmountsInput';
 import AssetDisplay from './AssetDisplay';
 import Backdrop from './Backdrop';
@@ -56,7 +33,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
     [allAssets],
   );
   const pair = useAssetPair(availableAssets.at(6), availableAssets.at(9));
-  const { marketPrice } = pair;
+  const { marketPrice, marketLiquidity } = pair;
 
   const open = useShowModal();
 
