@@ -1,13 +1,20 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { AssetBalanceT } from '../../services/meta1Api';
+import calculateMarketPrice from '../../utils/marketOrder/calculateMarketPrice';
 import meta1dex from '../../utils/meta1dexTypes';
 import { createPair, useAsset } from '../../utils/useAsset';
 
 const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanceT) => {
+  const [marketPrice, setMarketPrice] = useState(0);
   const [A, B] = createPair(
     useAsset({ defaultValue: defaultAssetA, title: 'Trade' }),
     useAsset({ defaultValue: defaultAssetB, title: 'Trade' }),
   );
+
+  const setAsyncMarketPrice = async (A, B) => {
+    const price = await calculateMarketPrice(A, B);
+    setMarketPrice(price);
+  };
 
   useEffect(() => {
     console.log('One of Assets symbol Changed');
@@ -38,22 +45,16 @@ const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanc
     }
 
     load();
+    setAsyncMarketPrice(A, B);
   }, [A?.asset.symbol, B?.asset.symbol]);
 
   if (!A || !B) {
     return null;
   }
-  const lowestAsk = Number(A.ticker?.lowest_ask);
-  const highestBid = Number(A.ticker?.highest_bid);
-  const divider = Number(!!lowestAsk) + Number(!!highestBid);
-  const marketPrice = (lowestAsk + highestBid) / divider;
-
-  const factor = 0.005;
-  const precision = A.asset._asset.precision;
 
   return {
     assets: { A, B },
-    marketPrice: (marketPrice - marketPrice * factor).toFixed(precision),
+    marketPrice: marketPrice,
   };
 };
 

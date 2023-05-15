@@ -11,7 +11,7 @@ import { WalletNavigationProp } from '../screens/WalletScreen';
 const { width, height } = Dimensions.get('screen');
 
 interface Props {
-  protfolioAssets: AccountBalanceT | null;
+  portfolioAssets: AccountBalanceT | null;
 }
 
 interface ProfitIndicatorProps {
@@ -79,15 +79,15 @@ const ButtonGroup = () => {
     </View>
   );
 };
-const PortfolioHeader: React.FC<Props> = ({ protfolioAssets }) => {
+const PortfolioHeader: React.FC<Props> = ({ portfolioAssets }) => {
   const accountName = useAppSelector(state => state.wallet.accountName);
 
-  console.log('protfolioAssets:', protfolioAssets);
+  // console.log('portfolioAssets:', portfolioAssets);
   return (
     <View style={styles.container}>
       <Text style={styles.accountName}>{accountName}</Text>
-      <Text style={styles.accountTotal}>${protfolioAssets!.accountTotal.toFixed(2)}</Text>
-      <ProfitIndicator change={protfolioAssets!.changePercent || 0} />
+      <Text style={styles.accountTotal}>${portfolioAssets!.accountTotal.toFixed(2)}</Text>
+      <ProfitIndicator change={portfolioAssets!.changePercent || 0} />
       <ButtonGroup />
     </View>
   );

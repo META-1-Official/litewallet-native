@@ -65,7 +65,7 @@ const WalletScreen = () => {
         flexGrow: 1,
       }}
     >
-      <PortfolioHeader protfolioAssets={allAssets} />
+      <PortfolioHeader portfolioAssets={allAssets} />
       <View
         style={{
           flexDirection: 'row',
