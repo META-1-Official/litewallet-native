@@ -7,7 +7,7 @@ import Input from './Input';
 
 import styles from './TradeScreen.styles';
 
-const AmountInput = ({ asset, darkMode, marketPrice }: DM<AssetProp>) => {
+const AmountInput = ({ asset, darkMode, slave, marketPrice }: DM<AssetProp>) => {
   const [amount, setAmount] = useState(asset.amount);
   const { isCause, cause } = useCause();
   useEffect(() => {
@@ -31,7 +31,11 @@ const AmountInput = ({ asset, darkMode, marketPrice }: DM<AssetProp>) => {
           asset.setAmount(txt);
           const opponent = asset.opponent();
           // const ticker = asset.ticker;
-          opponent.fromUsdt(Number(txt) * marketPrice);
+          if (slave) {
+            opponent.fromUsdt((Number(txt) * 1) / asset.basePrice);
+          } else {
+            opponent.fromUsdt(Number(txt) * asset.basePrice);
+          }
           // if (ticker && ticker.lowest_ask !== '0') {
           //   const bAmt = Number(txt) / Number(ticker.lowest_ask);
           //   opponent.setAmount(bAmt.toFixed(opponent.asset._asset.precision));

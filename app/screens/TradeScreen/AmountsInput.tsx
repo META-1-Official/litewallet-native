@@ -12,7 +12,7 @@ const AmountsInput = ({ asset, darkMode, slave, marketPrice }: DM<AssetProp>) =>
 
   return (
     <View style={{ width: 120 }}>
-      <AmountInput asset={asset} darkMode={darkMode} marketPrice={marketPrice} />
+      <AmountInput asset={asset} darkMode={darkMode} marketPrice={marketPrice} slave={slave} />
       <View style={styles.rowEnd}>
         <TextSecondary style={darkStyle({ color: '#fff' }, styles.usdtLabel)}>US$</TextSecondary>
         <UsdInput asset={asset} darkMode={darkMode} slave={slave} marketPrice={marketPrice} />
