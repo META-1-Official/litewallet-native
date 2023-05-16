@@ -2,7 +2,7 @@ import Meta1 from '../../utils/meta1dexTypes';
 import { theAsset } from '../useAsset';
 import calculateBackingAssetValue from './calculateBackingAssetValue';
 
-const calculateMarketPrice = async (base: theAsset, quote: theAsset, selectedFromBalance) => {
+const calculateMarketPrice = async (base: theAsset, quote: theAsset, selectedFromBalance = 0) => {
   // console.log('The Asset: ', JSON.stringify(base));
   let _marketPrice = 0;
   let amount = 0;
@@ -13,7 +13,10 @@ const calculateMarketPrice = async (base: theAsset, quote: theAsset, selectedFro
   const _limitOrders = await Meta1.db.get_limit_orders(base.asset.symbol, quote.asset.symbol, 300);
   // console.log('Limit Orders: ', JSON.stringify(_limitOrders));
 
-  const { backingAssetValue } = await calculateBackingAssetValue(base, quote);
+  const { baseAssetPrice, quoteAssetPrice, backingAssetValue } = await calculateBackingAssetValue(
+    base,
+    quote,
+  );
 
   for (let limitOrder of _limitOrders) {
     if (limitOrder.sell_price.quote.asset_id === base.asset._asset.id) {
@@ -96,7 +99,8 @@ const calculateMarketPrice = async (base: theAsset, quote: theAsset, selectedFro
     console.log('marketPrice:', base.asset._asset.symbol, quote.asset._asset.symbol, _marketPrice);
   }
 
-  return _marketPrice;
+  // return _marketPrice;
+  return { marketPrice: _marketPrice, baseAssetPrice, quoteAssetPrice, backingAssetValue };
 };
 
 export default calculateMarketPrice;

@@ -23,6 +23,8 @@ export type theAsset = {
   opponent: () => theAsset;
   ticker?: Ticker;
   setTicker: (t?: Ticker) => void;
+  basePrice: number;
+  setBasePrice: (price: number) => void;
 };
 
 export type StandaloneAsset = Omit<theAsset, 'opponent'>;
@@ -48,6 +50,8 @@ export const useAsset = ({
   onClose?: () => void;
 }): StandaloneAsset | null => {
   const [amount, _setAmount] = useState('0.00');
+  const [basePrice, setBasePrice] = useState(0);
+
   const [asset, open] = useAssetPicker({
     defaultValue,
     title,
@@ -142,6 +146,7 @@ export const useAsset = ({
   };
 
   const setAmount = (s: string) => setTimeout(() => _setAmount(s), 0);
+
   return {
     asset,
     open,
@@ -156,5 +161,7 @@ export const useAsset = ({
     isAffordableForSend,
     ticker,
     setTicker,
+    basePrice,
+    setBasePrice,
   };
 };

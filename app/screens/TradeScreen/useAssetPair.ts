@@ -3,22 +3,31 @@ import { AssetBalanceT } from '../../services/meta1Api';
 import calculateMarketLiquidity from '../../utils/marketOrder/calculateMarketLiquidity';
 import calculateMarketPrice from '../../utils/marketOrder/calculateMarketPrice';
 import meta1dex from '../../utils/meta1dexTypes';
-import { createPair, useAsset } from '../../utils/useAsset';
+import { createPair, theAsset, useAsset } from '../../utils/useAsset';
 
 const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanceT) => {
   const [marketPrice, setMarketPrice] = useState(0);
   const [marketLiquidity, setMarketLiquidity] = useState(0);
+  const [backingAssetValue, setBackingAssetValue] = useState(0);
   const [A, B] = createPair(
     useAsset({ defaultValue: defaultAssetA, title: 'Trade' }),
     useAsset({ defaultValue: defaultAssetB, title: 'Trade' }),
   );
 
-  const setAsyncMarketPrice = async (A, B) => {
-    const price = await calculateMarketPrice(A, B);
+  const setAsyncMarketPrice = async (A: theAsset, B: theAsset) => {
+    const {
+      marketPrice: price,
+      baseAssetPrice,
+      quoteAssetPrice,
+      backingAssetValue: backingValue,
+    } = await calculateMarketPrice(A, B);
     setMarketPrice(price);
+    setBackingAssetValue(backingValue);
+    A.setBasePrice(baseAssetPrice);
+    B.setBasePrice(quoteAssetPrice);
   };
 
-  const setAsyncMarketLiquidity = async (A, B) => {
+  const setAsyncMarketLiquidity = async (A: theAsset, B: theAsset) => {
     const liquidity = await calculateMarketLiquidity(A, B);
     setMarketLiquidity(liquidity);
   };
@@ -64,6 +73,7 @@ const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanc
     assets: { A, B },
     marketPrice,
     marketLiquidity,
+    backingAssetValue,
   };
 };
 
