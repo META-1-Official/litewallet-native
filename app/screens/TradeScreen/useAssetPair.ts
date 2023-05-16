@@ -53,6 +53,7 @@ const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanc
 
     load();
     setAsyncMarketPrice(A, B);
+    setAsyncMarketLiquidity(A, B);
   }, [A?.asset.symbol, B?.asset.symbol]);
 
   if (!A || !B) {

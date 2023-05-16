@@ -13,7 +13,7 @@ const calculateMarketPrice = async (base: theAsset, quote: theAsset, selectedFro
   const _limitOrders = await Meta1.db.get_limit_orders(base.asset.symbol, quote.asset.symbol, 300);
   // console.log('Limit Orders: ', JSON.stringify(_limitOrders));
 
-  const backingAssetValue = await calculateBackingAssetValue(base, quote);
+  const { backingAssetValue } = await calculateBackingAssetValue(base, quote);
 
   for (let limitOrder of _limitOrders) {
     if (limitOrder.sell_price.quote.asset_id === base.asset._asset.id) {

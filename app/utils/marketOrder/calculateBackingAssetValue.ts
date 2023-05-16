@@ -28,9 +28,11 @@ const calculateBackingAssetValue = async (base: theAsset, quote: theAsset) => {
   const asset_usdt = isQuoting ? baseAssetPrice : quoteAssetPrice;
   const ratio = isQuoting ? meta1_usdt / asset_usdt : asset_usdt / meta1_usdt;
 
-  return isQuoting
+  const backingAssetValue = isQuoting
     ? ceilFloat(ratio, quote.asset._asset.precision)
     : floorFloat(ratio, quote.asset._asset.precision);
+
+  return { backingAssetValue, baseAssetPrice, quoteAssetPrice };
 };
 
 export default calculateBackingAssetValue;

@@ -118,7 +118,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
             </View>
           </List>
           <Text style={{ textAlign: 'right', alignSelf: 'center', color: '#888' }}>
-            {`Current Price: ${marketPrice} `}
+            {`Current Price: ${marketPrice.toFixed(assets.A.asset._asset.precision)} `}
             {`${assets.A.asset.symbol}/${assets.B.asset.symbol} \n`}
             {
               // Math bs
