@@ -1,0 +1,52 @@
+diff --git a/node_modules/meta1-vision-ws/lib/ChainConfig.js b/node_modules/meta1-vision-ws/lib/ChainConfig.js
+index 94e4341..2b34a87 100644
+--- a/node_modules/meta1-vision-ws/lib/ChainConfig.js
++++ b/node_modules/meta1-vision-ws/lib/ChainConfig.js
+@@ -1 +1,45 @@
+-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var config={core_asset:"CORE",address_prefix:"GPH",expire_in_secs:15,expire_in_secs_proposal:86400,review_in_secs_committee:86400,networks:{META1:{core_asset:"META1",address_prefix:"META1",chain_id:"9e40bec4c6a1d89e9b1f6f1e539498f33050d66e647de82d2f5e4dfc1ea4fde3"},META1DEV:{core_asset:"META1",address_prefix:"DEV11",chain_id:"22a8d817ab2085b16d329e48e39f776a15755d77d34d9a88dfbf67f6464e362a"},META1TEST:{core_asset:"META1",address_prefix:"TEST0",chain_id:"e75f9445142dd56cb0e1fd619a95c75de6bd60cca342a21f71ffa88f65c572c3"}},setChainId:function(a){var b=Object.entries(config.networks).find(function(b){var c=b[0],d=b[1];if(d.chain_id===a)return config.network_name=c,d.address_prefix&&(config.address_prefix=d.address_prefix),!0});return b?{network_name:b[0],network:b[1]}:void console.log("Unknown chain id (this may be a testnet)",a)},reset:function(){config.core_asset="CORE",config.address_prefix="GPH",config.expire_in_secs=15,config.expire_in_secs_proposal=86400,console.log("Chain config reset")},setPrefix:function(a){return void 0===a&&(a="GPH"),config.address_prefix=a}};exports.default=config;
+\ No newline at end of file
++'use strict';
++Object.defineProperty(exports, '__esModule', { value: !0 });
++var config = {
++  core_asset: 'CORE',
++  address_prefix: 'GPH',
++  expire_in_secs: 15,
++  expire_in_secs_proposal: 86400,
++  review_in_secs_committee: 86400,
++  networks: {
++    META1: {
++      core_asset: 'META1',
++      address_prefix: 'META1',
++      chain_id: '70838c5f7135578c00a8186dc7492fb55e691408a01b6dbb6e6626f6be3119af',
++    },
++    META1DEV: {
++      core_asset: 'META1',
++      address_prefix: 'DEV11',
++      chain_id: '22a8d817ab2085b16d329e48e39f776a15755d77d34d9a88dfbf67f6464e362a',
++    },
++    META1DEV2: {
++      core_asset: 'META1',
++      address_prefix: 'DEV11',
++      chain_id: '1e265722cb8d0f5e3b5a48c524f4ccdb517f52a12cd17cdda9ea3749e9434b44',
++    },
++    META1TEST: {
++      core_asset: 'META1',
++      address_prefix: 'TEST0',
++      chain_id: 'e75f9445142dd56cb0e1fd619a95c75de6bd60cca342a21f71ffa88f65c572c3',
++    },
++  },
++  setChainId: function(a) {
++    var b = Object.entries(config.networks).find(function(b) {
++      var c = b[0], d = b[1];
++      if (d.chain_id === a) return config.network_name = c, d.address_prefix && (config.address_prefix = d.address_prefix), !0;
++    });
++    return b ? { network_name: b[0], network: b[1] } : void console.log('Unknown chain id (this may be a testnet)', a);
++  },
++  reset: function() {
++    config.core_asset = 'CORE', config.address_prefix = 'GPH', config.expire_in_secs = 15, config.expire_in_secs_proposal = 86400, console.log('Chain config reset');
++  },
++  setPrefix: function(a) {
++    return void 0 === a && (a = 'GPH'), config.address_prefix = a;
++  },
++};
++exports.default = config;
