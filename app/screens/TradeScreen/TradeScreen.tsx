@@ -49,8 +49,8 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
   useEffect(() => setDisabled(errors.length !== 0), [errors]);
 
   useEffect(() => {
-    console.log('! Base Asset A Amount: ', assets.A.amount);
-    console.log('! Base Asset B Amount: ', assets.B.amount);
+    console.log('! Base Asset A Amount: ', assets.A.basePrice);
+    console.log('! Base Asset B Amount: ', assets.B.basePrice);
     console.log('! Market liquidity:', marketLiquidity, 'trade volume: ', assets.B.amount);
     if (+assets.A.amount > assets.A.asset.amount) {
       setError("You don't have enough balance!");
@@ -134,7 +134,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
             </View>
           </List>
           <Text style={{ textAlign: 'right', alignSelf: 'center', color: '#888' }}>
-            {`Current Price: ${(1 / assets.A.basePrice).toFixed(
+            {`Current Price: ${(assets.B.basePrice / assets.A.basePrice).toFixed(
               assets.A.asset._asset.precision,
             )} `}
             {`${assets.A.asset.symbol}/${assets.B.asset.symbol} \n`}
