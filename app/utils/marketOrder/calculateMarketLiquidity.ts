@@ -8,7 +8,7 @@ const calculateMarketLiquidity = async (base: theAsset, quote: theAsset) => {
   const _limitOrders = await Meta1.db.get_limit_orders(base.asset.symbol, quote.asset.symbol, 300);
 
   if (_limitOrders && _limitOrders.length > 0) {
-    const backingAssetValue = await calculateBackingAssetValue(base, quote);
+    const { backingAssetValue } = await calculateBackingAssetValue(base, quote);
 
     for (let limitOrder of _limitOrders) {
       if (limitOrder.sell_price.quote.asset_id === base.asset._asset.id) {
@@ -32,9 +32,9 @@ const calculateMarketLiquidity = async (base: theAsset, quote: theAsset) => {
           }
 
           // Consider backing asset level
-          if (!isQuoting && backingAssetValue > price) {
+          if (!isQuoting && +backingAssetValue > price) {
             _liquidity += Number(limitOrder.for_sale) / Math.pow(10, quote.asset._asset.precision);
-          } else if (isQuoting && backingAssetValue < price) {
+          } else if (isQuoting && +backingAssetValue < price) {
             _liquidity += Number(limitOrder.for_sale) / Math.pow(10, quote.asset._asset.precision);
           }
         } else {
@@ -43,7 +43,7 @@ const calculateMarketLiquidity = async (base: theAsset, quote: theAsset) => {
       }
     }
   }
-
+  console.log('Market Liquidity : ', parseFloat(_liquidity.toFixed(6)));
   return parseFloat(_liquidity.toFixed(6));
 };
 

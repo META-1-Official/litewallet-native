@@ -27,13 +27,14 @@ interface Props {
 
 const TradeScreen: React.FC<Props> = ({ darkMode }) => {
   const nav = useNavigation();
+  const [error, setError] = useState('');
   const allAssets = useAssets();
   const availableAssets = useMemo(
     () => allAssets?.assetsWithBalance.sort((a, b) => a.symbol.localeCompare(b.symbol)),
     [allAssets],
   );
   const pair = useAssetPair(availableAssets.at(6), availableAssets.at(9));
-  const { marketPrice, marketLiquidity } = pair;
+  const { assets, marketPrice, marketLiquidity } = pair;
 
   const open = useShowModal();
 
@@ -47,12 +48,27 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
 
   useEffect(() => setDisabled(errors.length !== 0), [errors]);
 
+  useEffect(() => {
+    console.log('! Base Asset A Amount: ', assets.A.amount);
+    console.log('! Base Asset B Amount: ', assets.B.amount);
+    console.log('! Market liquidity:', marketLiquidity, 'trade volume: ', assets.B.amount);
+    if (+assets.A.amount > assets.A.asset.amount) {
+      setError("You don't have enough balance!");
+      setDisabled(true);
+    } else if (+assets.B.amount > marketLiquidity) {
+      setError(`Market doesn't have enough liquidity. Market liquidity: ${marketLiquidity} `);
+      setDisabled(true);
+    } else {
+      setError('');
+      setDisabled(false);
+    }
+  }, [assets.A.amount, assets.B.amount]);
+
   if (!allAssets || !availableAssets || !pair) {
     refresh();
     return <Loader />;
   }
 
-  const { assets } = pair;
   const fn = mkPerformSwap(
     assets,
     () => loader.open(),
@@ -125,6 +141,9 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
             {assets.A.basePrice.toFixed(2)}
             {` USD/${assets.A.asset.symbol}`}
           </Text>
+          {error && (
+            <Text style={{ textAlign: 'right', alignSelf: 'center', color: 'red' }}>{error}</Text>
+          )}
         </View>
         <LightMode>
           <View style={styles.buttonContainer}>
