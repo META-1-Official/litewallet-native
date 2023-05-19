@@ -7,9 +7,10 @@ import Input from './Input';
 
 import styles from './TradeScreen.styles';
 
-const AmountInput = ({ asset, darkMode, slave, marketPrice }: DM<AssetProp>) => {
+const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
   const [amount, setAmount] = useState(asset.amount);
   const { isCause, cause } = useCause();
+
   useEffect(() => {
     if (!isCause) {
       setAmount(asset.amount);
@@ -17,6 +18,7 @@ const AmountInput = ({ asset, darkMode, slave, marketPrice }: DM<AssetProp>) => 
   }, [asset.amount, isCause]);
 
   const darkStyle = optStyleFactory(darkMode);
+
   return (
     <Input
       {...tid('TradeScreen/AmountInput/amount')}
@@ -30,18 +32,9 @@ const AmountInput = ({ asset, darkMode, slave, marketPrice }: DM<AssetProp>) => 
         if (valid) {
           asset.setAmount(txt);
           const opponent = asset.opponent();
-          // const ticker = asset.ticker;
-          if (slave) {
-            opponent.fromUsdt((Number(txt) * 1) / asset.basePrice);
-          } else {
-            opponent.fromUsdt(Number(txt) * asset.basePrice);
-          }
-          // if (ticker && ticker.lowest_ask !== '0') {
-          //   const bAmt = Number(txt) / Number(ticker.lowest_ask);
-          //   opponent.setAmount(bAmt.toFixed(opponent.asset._asset.precision));
-          // } else {
-          //   opponent.fromUsdt(asset.toUsdt(txt));
-          // }
+          opponent.setAmount(
+            (+txt * opponent.marketPrice).toFixed(opponent.asset._asset.precision),
+          );
         }
       }}
     />

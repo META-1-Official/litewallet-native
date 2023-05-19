@@ -216,6 +216,7 @@ type swapWPassSig = (
   from: string,
   to: string,
   amount: number,
+  tradePrice: number,
 ) => Promise<any>;
 
 /**

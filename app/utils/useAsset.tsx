@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAssetPicker } from '../components/AssetSelectModal';
-import { AssetBalanceT, useAssetsStore } from '../services/meta1Api';
+import { AssetBalanceT } from '../services/meta1Api';
 import * as Sentry from '@sentry/react-native';
 import { Ticker } from './meta1dexTypes';
 import useAssetsOnFocus from '../hooks/useAssetsOnFocus';
@@ -25,6 +25,10 @@ export type theAsset = {
   setTicker: (t?: Ticker) => void;
   basePrice: number;
   setBasePrice: (price: number) => void;
+  marketPrice: number;
+  setMarketPrice: (price: number) => void;
+  marketLiquidity: number;
+  setMarketLiquidity: (liquidity: number) => void;
 };
 
 export type StandaloneAsset = Omit<theAsset, 'opponent'>;
@@ -51,6 +55,8 @@ export const useAsset = ({
 }): StandaloneAsset | null => {
   const [amount, _setAmount] = useState('0.00');
   const [basePrice, setBasePrice] = useState(0);
+  const [marketPrice, setMarketPrice] = useState(0);
+  const [marketLiquidity, setMarketLiquidity] = useState(0);
 
   const [asset, open] = useAssetPicker({
     defaultValue,
@@ -163,5 +169,9 @@ export const useAsset = ({
     setTicker,
     basePrice,
     setBasePrice,
+    marketPrice,
+    setMarketPrice,
+    marketLiquidity,
+    setMarketLiquidity,
   };
 };

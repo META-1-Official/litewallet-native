@@ -5,31 +5,34 @@ import calculateMarketPrice from '../../utils/marketOrder/calculateMarketPrice';
 import meta1dex from '../../utils/meta1dexTypes';
 import { createPair, theAsset, useAsset } from '../../utils/useAsset';
 
-const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanceT) => {
-  const [marketPrice, setMarketPrice] = useState(1);
-  const [marketLiquidity, setMarketLiquidity] = useState(0);
+const useAssetPair = (
+  defaultAssetA?: AssetBalanceT,
+  defaultAssetB?: AssetBalanceT,
+): null | { assets: { A: theAsset; B: theAsset }; backingAssetValue: number } => {
   const [backingAssetValue, setBackingAssetValue] = useState(0);
   const [A, B] = createPair(
     useAsset({ defaultValue: defaultAssetA, title: 'Trade' }),
     useAsset({ defaultValue: defaultAssetB, title: 'Trade' }),
   );
 
-  const setAsyncMarketPrice = async (A: theAsset, B: theAsset) => {
+  const setAsyncMarketPrice = async (base: theAsset, quote: theAsset) => {
     const {
-      marketPrice: price,
+      marketPrice,
       baseAssetPrice,
       quoteAssetPrice,
       backingAssetValue: backingValue,
-    } = await calculateMarketPrice(A, B);
-    setMarketPrice(price);
+    } = await calculateMarketPrice(base, quote);
+    base.setMarketPrice(marketPrice);
+    quote.setMarketPrice(1 / marketPrice);
     setBackingAssetValue(backingValue);
-    A.setBasePrice(baseAssetPrice);
-    B.setBasePrice(quoteAssetPrice);
+    base.setBasePrice(baseAssetPrice);
+    quote.setBasePrice(quoteAssetPrice);
   };
 
-  const setAsyncMarketLiquidity = async (A: theAsset, B: theAsset) => {
-    const liquidity = await calculateMarketLiquidity(A, B);
-    setMarketLiquidity(liquidity);
+  const setAsyncMarketLiquidity = async (base: theAsset, quote: theAsset) => {
+    const liquidity = await calculateMarketLiquidity(base, quote);
+    base.setMarketLiquidity(liquidity * base.marketPrice);
+    quote.setMarketLiquidity(liquidity);
   };
 
   useEffect(() => {
@@ -42,27 +45,29 @@ const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanc
   }, [A?.asset.symbol, B?.asset.symbol]);
 
   useEffect(() => {
-    async function load() {
-      if (!A || !B) {
-        return;
+    if (A && B) {
+      async function load() {
+        if (!A || !B) {
+          return;
+        }
+        console.log('Update ticker');
+        const tickerA = await meta1dex.db
+          .get_ticker(A.asset.symbol, B.asset.symbol)
+          .catch(console.log);
+        console.log({ tickerA });
+        A.setTicker(tickerA || undefined);
+
+        const tickerB = await meta1dex.db
+          .get_ticker(B.asset.symbol, A.asset.symbol)
+          .catch(console.log);
+        console.log({ tickerB });
+        B.setTicker(tickerB || undefined);
       }
-      console.log('Update ticker');
-      const tickerA = await meta1dex.db
-        .get_ticker(A.asset.symbol, B.asset.symbol)
-        .catch(console.log);
-      console.log({ tickerA });
-      A.setTicker(tickerA || undefined);
 
-      const tickerB = await meta1dex.db
-        .get_ticker(B.asset.symbol, A.asset.symbol)
-        .catch(console.log);
-      console.log({ tickerB });
-      B.setTicker(tickerB || undefined);
+      load();
+      setAsyncMarketPrice(A, B);
+      setAsyncMarketLiquidity(A, B);
     }
-
-    load();
-    setAsyncMarketPrice(A, B);
-    setAsyncMarketLiquidity(A, B);
   }, [A?.asset.symbol, B?.asset.symbol]);
 
   if (!A || !B) {
@@ -71,8 +76,6 @@ const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanc
 
   return {
     assets: { A, B },
-    marketPrice,
-    marketLiquidity,
     backingAssetValue,
   };
 };

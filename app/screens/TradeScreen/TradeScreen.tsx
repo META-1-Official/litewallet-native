@@ -34,7 +34,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
     [allAssets],
   );
   const pair = useAssetPair(availableAssets.at(6), availableAssets.at(9));
-  const { assets, marketPrice, marketLiquidity } = pair;
+  const assets = pair?.assets;
 
   const open = useShowModal();
 
@@ -49,22 +49,29 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
   useEffect(() => setDisabled(errors.length !== 0), [errors]);
 
   useEffect(() => {
-    console.log('! Base Asset A Amount: ', assets.A.basePrice);
-    console.log('! Base Asset B Amount: ', assets.B.basePrice);
-    console.log('! Market liquidity:', marketLiquidity, 'trade volume: ', assets.B.amount);
-    if (+assets.A.amount > assets.A.asset.amount) {
-      setError("You don't have enough balance!");
-      setDisabled(true);
-    } else if (+assets.B.amount > marketLiquidity) {
-      setError(`Market doesn't have enough liquidity. Market liquidity: ${marketLiquidity} `);
-      setDisabled(true);
-    } else {
-      setError('');
-      setDisabled(false);
+    if (assets) {
+      console.log('! Asset A Amount: ', assets.A.amount);
+      console.log('! Asset A Market Price: ', assets.A.marketPrice);
+      console.log('! Asset A Market Liquidity: ', assets.A.marketLiquidity);
+      console.log('! Asset B Amount: ', assets.B.amount);
+      console.log('! Asset B Market Price: ', assets.B.marketPrice);
+      console.log('! Asset B Market Liquidity: ', assets.B.marketLiquidity);
+      if (+assets.A.amount > assets.A.asset.amount) {
+        setError("You don't have enough balance!");
+        setDisabled(true);
+      } else if (+assets.B.amount > assets.B.marketLiquidity) {
+        setError(
+          `Market doesn't have enough liquidity. Market liquidity: ${assets.B.marketLiquidity} `,
+        );
+        setDisabled(true);
+      } else {
+        setError('');
+        setDisabled(false);
+      }
     }
-  }, [assets.A.amount, assets.B.amount]);
+  }, [assets?.A.amount, assets?.B.amount, assets?.A.asset.symbol, assets?.B.asset.symbol]);
 
-  if (!allAssets || !availableAssets || !pair) {
+  if (!allAssets || !availableAssets || !assets) {
     refresh();
     return <Loader />;
   }
@@ -82,16 +89,12 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
     },
     () => loader.close(),
     accountName,
-    marketPrice,
   );
 
-  // console.log('!!!!!!!!Pair: ', pair);
-
   const DarkMode: React.FC = ({ children }) => <>{darkMode ? children : null}</>;
-
   const darkStyle = optStyleFactory(darkMode);
-
   const LightMode: React.FC = ({ children }) => <>{darkMode ? null : children}</>;
+
   return (
     <DKSAV style={darkStyle(styles.darkRoot)}>
       <ErrorContext.Provider value={{ errors, setErrors }}>
@@ -117,26 +120,23 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
               </View>
               <View style={styles.rowJustifyBetween}>
                 <AssetDisplay darkMode={darkMode} asset={assets.A} />
-                <AmountsInput darkMode={darkMode} asset={assets.A} marketPrice={1 / marketPrice} />
+                <AmountsInput darkMode={darkMode} asset={assets.A} />
               </View>
             </View>
             <View style={{ padding: 16 }}>
-              <Text style={darkStyle({ color: colors.BrandYellow }, styles.listHeading)}>To</Text>
+              <View style={[styles.rowJustifyBetween, styles.center]}>
+                <Text style={darkStyle({ color: colors.BrandYellow }, styles.listHeading)}>
+                  To
+                </Text>
+              </View>
               <View style={styles.rowJustifyBetween}>
                 <AssetDisplay darkMode={darkMode} asset={assets.B} />
-                <AmountsInput
-                  darkMode={darkMode}
-                  asset={assets.B}
-                  marketPrice={marketPrice}
-                  slave
-                />
+                <AmountsInput darkMode={darkMode} asset={assets.B} slave />
               </View>
             </View>
           </List>
           <Text style={{ textAlign: 'right', alignSelf: 'center', color: '#888' }}>
-            {`Current Price: ${(assets.B.basePrice / assets.A.basePrice).toFixed(
-              assets.A.asset._asset.precision,
-            )} `}
+            {`Current Price: ${assets?.A.marketPrice.toFixed(assets.A.asset._asset.precision)} `}
             {`${assets.A.asset.symbol}/${assets.B.asset.symbol} \n`}
             {assets.A.basePrice.toFixed(2)}
             {` USD/${assets.A.asset.symbol}`}

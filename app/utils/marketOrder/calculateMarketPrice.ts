@@ -96,7 +96,7 @@ const calculateMarketPrice = async (base: theAsset, quote: theAsset, selectedFro
       _marketPrice = percentDiff;
     }
 
-    console.log('marketPrice:', base.asset._asset.symbol, quote.asset._asset.symbol, _marketPrice);
+    console.log('MarketPrice:', base.asset._asset.symbol, quote.asset._asset.symbol, _marketPrice);
   }
 
   // return _marketPrice;
