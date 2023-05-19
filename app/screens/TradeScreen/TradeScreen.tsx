@@ -148,7 +148,12 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
         <LightMode>
           <View style={styles.buttonContainer}>
             <TouchableOpacity {...tid('TradeScreen/Trade')} onPress={fn} disabled={disabled}>
-              <View style={styles.button}>
+              <View
+                style={{
+                  ...styles.button,
+                  backgroundColor: disabled ? colors.dotGray : colors.BrandYellow,
+                }}
+              >
                 <Text style={styles.buttonText}>Exchange</Text>
               </View>
             </TouchableOpacity>
