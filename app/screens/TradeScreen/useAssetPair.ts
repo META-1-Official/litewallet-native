@@ -6,7 +6,7 @@ import meta1dex from '../../utils/meta1dexTypes';
 import { createPair, theAsset, useAsset } from '../../utils/useAsset';
 
 const useAssetPair = (defaultAssetA?: AssetBalanceT, defaultAssetB?: AssetBalanceT) => {
-  const [marketPrice, setMarketPrice] = useState(0);
+  const [marketPrice, setMarketPrice] = useState(1);
   const [marketLiquidity, setMarketLiquidity] = useState(0);
   const [backingAssetValue, setBackingAssetValue] = useState(0);
   const [A, B] = createPair(
