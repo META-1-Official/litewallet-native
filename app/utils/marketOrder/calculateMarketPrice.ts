@@ -100,7 +100,12 @@ const calculateMarketPrice = async (base: theAsset, quote: theAsset, selectedFro
   }
 
   // return _marketPrice;
-  return { marketPrice: _marketPrice, baseAssetPrice, quoteAssetPrice, backingAssetValue };
+  return {
+    marketPrice: _marketPrice !== 0 ? _marketPrice : backingAssetValue,
+    baseAssetPrice,
+    quoteAssetPrice,
+    backingAssetValue,
+  };
 };
 
 export default calculateMarketPrice;

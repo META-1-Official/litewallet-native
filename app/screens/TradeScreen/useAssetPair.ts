@@ -68,7 +68,7 @@ const useAssetPair = (
       setAsyncMarketPrice(A, B);
       setAsyncMarketLiquidity(A, B);
     }
-  }, [A?.asset.symbol, B?.asset.symbol]);
+  }, [A?.asset.symbol, B?.asset.symbol, A?.amount, B?.amount]);
 
   if (!A || !B) {
     return null;

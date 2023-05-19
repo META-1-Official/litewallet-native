@@ -44,6 +44,7 @@ export const createPair = (
   const B: theAsset = { ...b, opponent: () => A };
   return [A, B];
 };
+
 export const useAsset = ({
   defaultValue,
   title,
@@ -66,6 +67,7 @@ export const useAsset = ({
   const assets = useAssetsOnFocus();
   const meta1 = assets.find('META1');
   const [ticker, setTicker] = useState<Ticker | undefined>(undefined);
+
   if (!asset) {
     console.log('== DV', defaultValue);
     console.log('==========');
