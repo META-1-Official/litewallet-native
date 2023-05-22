@@ -61,7 +61,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
         setDisabled(true);
       } else if (+assets.B.amount > assets.B.marketLiquidity) {
         setError(
-          `Market doesn't have enough liquidity. Market liquidity: ${assets.B.marketLiquidity} `,
+          `Market doesn't have enough liquidity. \n Market liquidity: ${assets.B.marketLiquidity} ${assets.B.asset.symbol}`,
         );
         setDisabled(true);
       } else {
