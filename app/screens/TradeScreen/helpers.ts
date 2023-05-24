@@ -79,7 +79,7 @@ export const mkPerformSwap = (
 
     if (
       +assets.A.amount > assets.A.asset.amount ||
-      +assets.A.amount * marketPrice > marketLiquidity
+      +assets.A.amount / marketPrice > marketLiquidity
     ) {
       throw new Error(
         `Marked order failed. Not enough liquidity of ${assets.B.asset._asset.symbol}`,
