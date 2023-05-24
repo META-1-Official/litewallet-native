@@ -2,6 +2,8 @@ import throttle from 'lodash.throttle';
 import { Alert } from 'react-native';
 import { refreshAssets, swapWithPassword, useAssetsStore } from '../../services/meta1Api';
 import { catchError, ensure, getPassword } from '../../utils';
+import calculateMarketLiquidity from '../../utils/marketOrder/calculateMarketLiquidity';
+import calculateMarketPrice from '../../utils/marketOrder/calculateMarketPrice';
 import meta1dex from '../../utils/meta1dexTypes';
 import { ScreenAssets, kindaStyle } from './types';
 
@@ -55,6 +57,7 @@ export const mkPerformSwap = (
   onFail: () => void,
   accountName: string,
 ) => {
+  console.log('PerformSwap');
   const update = useAssetsStore.getState().fetchUserAssets;
 
   const getAccountInfo = async () => ({
@@ -68,6 +71,21 @@ export const mkPerformSwap = (
 
     onBeforeSwap();
     assets.A.isAffordableForSwap();
+
+    const { marketPrice } = await calculateMarketPrice(assets.A, assets.B);
+    const marketLiquidity = await calculateMarketLiquidity(assets.A, assets.B);
+    assets.A.setMarketPrice(marketPrice);
+    assets.B.setMarketLiquidity(marketLiquidity);
+
+    if (
+      +assets.A.amount > assets.A.asset.amount ||
+      +assets.A.amount * marketPrice > marketLiquidity
+    ) {
+      throw new Error(
+        `Marked order failed. Not enough liquidity of ${assets.B.asset._asset.symbol}`,
+      );
+    }
+
     if (assets.A.asset.symbol === assets.B.asset.symbol) {
       throw new Error("Can't swap the same assets");
     }
@@ -76,9 +94,7 @@ export const mkPerformSwap = (
       // Noop
     }
 
-    const tradePrice = assets.A.marketPrice
-      ? assets.A.marketPrice
-      : assets.A.toUsdt(assets.A.asset.amount);
+    const tradePrice = marketPrice ? marketPrice : assets.A.toUsdt(assets.A.asset.amount);
 
     await swapWithPassword(
       accountInfo,

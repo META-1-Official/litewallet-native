@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { DKSAV } from '../../components/DismissKeyboard';
@@ -87,7 +87,10 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
         darkMode && nav.goBack();
       });
     },
-    () => loader.close(),
+    () => {
+      loader.close();
+      assets.B.setAmount((+assets.A.amount * +assets.B.marketPrice).toString());
+    },
     accountName,
   );
 
@@ -136,8 +139,12 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
             </View>
           </List>
           <Text style={{ textAlign: 'right', alignSelf: 'center', color: '#888' }}>
-            {`Current Price: ${assets?.A.marketPrice.toFixed(assets.A.asset._asset.precision)} `}
-            {`${assets.A.asset.symbol}/${assets.B.asset.symbol} \n`}
+            {`Current Price: ${Number(assets.A.ticker?.lowest_ask).toFixed(
+              assets.A.asset._asset.precision,
+            )} `}
+            {`${assets.A.asset.symbol}/${assets.B.asset.symbol}\n`}
+            {`Market Price: ${assets?.A.marketPrice.toFixed(assets.A.asset._asset.precision)} `}
+            {`${assets.A.asset.symbol}/${assets.B.asset.symbol}\n`}
             {assets.A.basePrice.toFixed(2)}
             {` USD/${assets.A.asset.symbol}`}
           </Text>
