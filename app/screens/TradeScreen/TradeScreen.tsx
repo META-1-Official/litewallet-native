@@ -69,30 +69,51 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
         setDisabled(false);
       }
     }
-  }, [assets?.A.amount, assets?.B.amount, assets?.A.asset.symbol, assets?.B.asset.symbol]);
+  }, [
+    assets?.A.amount,
+    assets?.B.amount,
+    assets?.A.asset.symbol,
+    assets?.B.asset.symbol,
+    assets?.A.marketPrice,
+    assets?.B.marketPrice,
+    assets?.A.marketLiquidity,
+    assets?.B.marketLiquidity,
+  ]);
+
+  const fn = useCallback(
+    mkPerformSwap(
+      assets!,
+      () => loader.open(),
+      () => {
+        console.log('Should hide');
+        loader.close();
+        open(makeMessage(assets!), () => {
+          nav.goBack();
+          darkMode && nav.goBack();
+        });
+      },
+      () => {
+        loader.close();
+        assets!.B.setAmount((+assets!.A.amount * +assets!.B.marketPrice).toString());
+      },
+      accountName,
+    ),
+    [
+      assets?.A.amount,
+      assets?.B.amount,
+      assets?.A.asset.symbol,
+      assets?.B.asset.symbol,
+      assets?.A.marketPrice,
+      assets?.B.marketPrice,
+      assets?.A.marketLiquidity,
+      assets?.B.marketLiquidity,
+    ],
+  );
 
   if (!allAssets || !availableAssets || !assets) {
     refresh();
     return <Loader />;
   }
-
-  const fn = mkPerformSwap(
-    assets,
-    () => loader.open(),
-    () => {
-      console.log('Should hide');
-      loader.close();
-      open(makeMessage(assets), () => {
-        nav.goBack();
-        darkMode && nav.goBack();
-      });
-    },
-    () => {
-      loader.close();
-      assets.B.setAmount((+assets.A.amount * +assets.B.marketPrice).toString());
-    },
-    accountName,
-  );
 
   const DarkMode: React.FC = ({ children }) => <>{darkMode ? children : null}</>;
   const darkStyle = optStyleFactory(darkMode);
