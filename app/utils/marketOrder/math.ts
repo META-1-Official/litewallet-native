@@ -43,21 +43,8 @@ export const calculateDivideBy = (basePrecision: number, quotePrecision: number)
   return Math.pow(10, basePrecision - quotePrecision);
 };
 
-export const calculatePrice = (
-  limitOrder: iLimitOrder,
-  divideBy: number,
-  isQuoting: boolean,
-): number => {
-  let price: number;
-
-  if (!isQuoting) {
-    price = limitOrder.sell_price.quote.amount / limitOrder.sell_price.base.amount / divideBy;
-  } else {
-    price =
-      1 / (limitOrder.sell_price.base.amount / limitOrder.sell_price.quote.amount / divideBy);
-  }
-
-  return price;
+export const calculatePrice = (limitOrder: iLimitOrder, divideBy: number): number => {
+  return limitOrder.sell_price.quote.amount / limitOrder.sell_price.base.amount / divideBy;
 };
 
 export const calculateAmount = (limitOrder: iLimitOrder, quotePrecision: number): number => {
