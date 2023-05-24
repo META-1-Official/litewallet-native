@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { DKSAV } from '../../components/DismissKeyboard';
@@ -80,40 +80,28 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
     assets?.B.marketLiquidity,
   ]);
 
-  const fn = useCallback(
-    mkPerformSwap(
-      assets!,
-      () => loader.open(),
-      () => {
-        console.log('Should hide');
-        loader.close();
-        open(makeMessage(assets!), () => {
-          nav.goBack();
-          darkMode && nav.goBack();
-        });
-      },
-      () => {
-        loader.close();
-        assets!.B.setAmount((+assets!.A.amount * +assets!.B.marketPrice).toString());
-      },
-      accountName,
-    ),
-    [
-      assets?.A.amount,
-      assets?.B.amount,
-      assets?.A.asset.symbol,
-      assets?.B.asset.symbol,
-      assets?.A.marketPrice,
-      assets?.B.marketPrice,
-      assets?.A.marketLiquidity,
-      assets?.B.marketLiquidity,
-    ],
-  );
-
   if (!allAssets || !availableAssets || !assets) {
     refresh();
     return <Loader />;
   }
+
+  const fn = mkPerformSwap(
+    assets,
+    () => loader.open(),
+    () => {
+      console.log('Should hide');
+      loader.close();
+      open(makeMessage(assets), () => {
+        nav.goBack();
+        darkMode && nav.goBack();
+      });
+    },
+    () => {
+      loader.close();
+      assets.B.setAmount((+assets.A.amount * +assets.B.marketPrice).toString());
+    },
+    accountName,
+  );
 
   const DarkMode: React.FC = ({ children }) => <>{darkMode ? children : null}</>;
   const darkStyle = optStyleFactory(darkMode);
