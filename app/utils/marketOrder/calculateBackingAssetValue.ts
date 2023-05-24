@@ -16,17 +16,17 @@ const calculateBackingAssetValue = async (base: theAsset, quote: theAsset) => {
 
   const assetLimitation = await Meta1.db.get_asset_limitation_value('META1');
 
-  const meta1_usdt = ceilFloat(assetLimitation / 1000000000, 2);
+  const meta1Usdt = ceilFloat(assetLimitation / 1000000000, 2);
 
   const baseAssetPrice = basePublishedPrice
     ? basePublishedPrice.numerator / basePublishedPrice.denominator
-    : meta1_usdt;
+    : meta1Usdt;
   const quoteAssetPrice = quotePublishedPrice
     ? quotePublishedPrice.numerator / quotePublishedPrice.denominator
-    : meta1_usdt;
+    : meta1Usdt;
 
-  const asset_usdt = isQuoting ? baseAssetPrice : quoteAssetPrice;
-  const ratio = isQuoting ? meta1_usdt / asset_usdt : asset_usdt / meta1_usdt;
+  const assetUsdt = isQuoting ? baseAssetPrice : quoteAssetPrice;
+  const ratio = isQuoting ? meta1Usdt / assetUsdt : assetUsdt / meta1Usdt;
 
   const backingAssetValue = isQuoting
     ? ceilFloat(ratio, quote.asset._asset.precision)
