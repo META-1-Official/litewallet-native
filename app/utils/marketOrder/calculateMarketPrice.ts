@@ -19,6 +19,8 @@ const calculateMarketPrice = async (
   const isTradingMETA1 = base.asset.symbol === 'META1' || isQuoting;
 
   const limitOrders = await Meta1.db.get_limit_orders(base.asset.symbol, quote.asset.symbol, 300);
+
+  const divideBy = calculateDivideBy(base.asset._asset.precision, quote.asset._asset.precision);
   const { baseAssetPrice, quoteAssetPrice, backingAssetValue } = await calculateBackingAssetValue(
     base,
     quote,
@@ -26,10 +28,6 @@ const calculateMarketPrice = async (
 
   for (let limitOrder of limitOrders) {
     if (limitOrder.sell_price.quote.asset_id === base.asset._asset.id) {
-      const divideBy = calculateDivideBy(
-        base.asset._asset.precision,
-        quote.asset._asset.precision,
-      );
       let price = calculatePrice(limitOrder, divideBy);
 
       if (isTradingMETA1 && backingAssetValue) {
@@ -48,7 +46,7 @@ const calculateMarketPrice = async (
       }
 
       if (selectedFromBalance) {
-        const amount = calculateAmount(limitOrder, quote.asset._asset.precision);
+        const amount = calculateAmount(limitOrder.for_sale, quote.asset._asset.precision);
         estSellAmount += marketPrice * amount;
         if (estSellAmount > selectedFromBalance) {
           break;

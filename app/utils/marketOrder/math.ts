@@ -47,6 +47,6 @@ export const calculatePrice = (limitOrder: iLimitOrder, divideBy: number): numbe
   return limitOrder.sell_price.quote.amount / limitOrder.sell_price.base.amount / divideBy;
 };
 
-export const calculateAmount = (limitOrder: iLimitOrder, quotePrecision: number): number => {
-  return Number(limitOrder.for_sale) / Math.pow(10, quotePrecision);
+export const calculateAmount = (amount: number, quotePrecision: number): number => {
+  return Number(amount) / Math.pow(10, quotePrecision);
 };

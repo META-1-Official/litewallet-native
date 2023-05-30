@@ -4,6 +4,7 @@ import { refreshAssets, swapWithPassword, useAssetsStore } from '../../services/
 import { catchError, ensure, getPassword } from '../../utils';
 import calculateMarketLiquidity from '../../utils/marketOrder/calculateMarketLiquidity';
 import calculateMarketPrice from '../../utils/marketOrder/calculateMarketPrice';
+import { getMaxOrderPrice } from '../../utils/marketOrder/getMaxOrderPrice';
 import meta1dex from '../../utils/meta1dexTypes';
 import { ScreenAssets, kindaStyle } from './types';
 
@@ -73,6 +74,13 @@ export const mkPerformSwap = (
     assets.A.isAffordableForSwap();
 
     const { marketPrice } = await calculateMarketPrice(assets.A, assets.B);
+    const maxOrderPrice = await getMaxOrderPrice(
+      assets.A,
+      assets.B,
+      +assets.A.amount / marketPrice,
+    );
+    console.log('Amount of Quote: ', +assets.A.amount / marketPrice);
+    console.log('!!!!!!!!!!!!!!!!!!!!!!!! Max order price: ', maxOrderPrice);
     const marketLiquidity = await calculateMarketLiquidity(assets.A, assets.B);
     assets.A.setMarketPrice(marketPrice);
     assets.B.setMarketLiquidity(marketLiquidity);
@@ -94,7 +102,7 @@ export const mkPerformSwap = (
       // Noop
     }
 
-    const tradePrice = marketPrice ? marketPrice : assets.A.toUsdt(assets.A.asset.amount);
+    const tradePrice = maxOrderPrice > marketPrice ? maxOrderPrice : marketPrice;
 
     await swapWithPassword(
       accountInfo,
