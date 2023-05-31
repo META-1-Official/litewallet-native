@@ -48,7 +48,7 @@ export const PasskeyScreen = ({ navigation }: Props) => {
 
   const [isCopied, setIsCopied] = useState(false);
   const [checkboxesState, setCheckBoxesState] = useState([false, false, false, false, false]);
-  const [emailSubscription, setEmailSubscription] = useState(false);
+  const [emailSubscription, setEmailSubscription] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {

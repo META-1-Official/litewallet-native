@@ -7,7 +7,7 @@ export interface VerifyParams {
 }
 
 export interface RemoveUserParams {
-  name: string;
+  email: string;
 }
 
 export interface EnrollUserParams extends VerifyParams, RemoveUserParams {}
@@ -61,7 +61,7 @@ class FaceKIServices {
     return response.data;
   };
 
-  enrollUser = async ({ image, name }: EnrollUserParams) => {
+  enrollUser = async ({ image, email }: EnrollUserParams) => {
     console.log('EnrollUser service start');
     const formData = new FormData();
     formData.append('image', {
@@ -69,8 +69,9 @@ class FaceKIServices {
       name: image.split('/').reverse()[0],
       type: 'image/jpeg',
     });
-    formData.append('name', name);
-    const response = await this.api.post('/enroll_user', formData, {
+    formData.append('email', email);
+    formData.append('privKey', 'web3authprivatekey');
+    const response = await this.api.post('/face_enroll', formData, {
       headers: { 'content-type': 'multipart/form-data' },
     });
     console.log('EnrollUser service start', response.data);
@@ -97,9 +98,9 @@ class FaceKIServices {
     return response.data;
   };
 
-  removeUser = async ({ name }: RemoveUserParams) => {
+  removeUser = async ({ email }: RemoveUserParams) => {
     console.log('RemoveUser service start');
-    const response = await this.api.post('/remove_user', { name });
+    const response = await this.api.post('/remove_user', { email: email });
     console.log('RemoveUser service end', response.data);
     return response.data;
   };
