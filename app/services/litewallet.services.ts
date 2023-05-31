@@ -27,7 +27,11 @@ class LiteWalletServices {
   };
 
   login = async (accountName: string, email: string) => {
-    const { data } = await this.api.post('/login', { accountName, email });
+    const { data } = await this.api.post('/login', {
+      accountName,
+      email,
+      privateKey: 'testkey',
+    });
     this.api.defaults.headers.common.Authorization = `Bearer ${data.token}`;
     return data;
   };
@@ -62,7 +66,11 @@ class LiteWalletServices {
   };
 
   getHistory = async (accountName: string, skipSize: number, from: string) => {
-    const { data } = await this.api.post('/getHistory', { accountName, skip_size: skipSize, from });
+    const { data } = await this.api.post('/getHistory', {
+      accountName,
+      skip_size: skipSize,
+      from,
+    });
     return data;
   };
 
