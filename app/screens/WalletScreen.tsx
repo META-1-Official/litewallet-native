@@ -102,7 +102,7 @@ const WalletScreen = () => {
           <MaterialToggle onChange={v => setShowZeroBalance(v)} />
         </View>
       </View>
-      <PortfolioListing showZeroBallance={showZeroBalance} />
+      <PortfolioListing showZeroBalance={showZeroBalance} />
     </SafeAreaView>
   );
 };

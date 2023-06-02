@@ -88,6 +88,10 @@ export async function fetchAssetWithIcon(asset_name: string) {
       meta1: 'https://i.imgur.com/1Qliy5v.png',
       usdt: 'https://i.imgur.com/d1wY468.png',
       xlm: 'https://i.imgur.com/1ukgaqb.png',
+      doge: 'https://dogecoin.com/doge-logo.png',
+      sol: 'https://s2.coinmarketcap.com/static/img/coins/128x128/5426.png',
+      trx: 'https://s3.coinmarketcap.com/static/img/portraits/62837c68ab0e763d5f77e9a6.png',
+      xrp: 'https://s2.coinmarketcap.com/static/img/coins/128x128/52.png',
     }),
   );
 

@@ -195,7 +195,7 @@ const DexFund: React.FC<DexTSP> = ({ navigation }) => {
         </View>
       </View>
       <PortfolioListing
-        showZeroBallance={showZeroBalance}
+        showZeroBalance={showZeroBalance}
         colors={{
           background: '#000',
           textPrimary: '#fff',
