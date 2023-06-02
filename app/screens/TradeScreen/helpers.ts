@@ -73,6 +73,10 @@ export const mkPerformSwap = (
     onBeforeSwap();
     assets.A.isAffordableForSwap();
 
+    if (assets.A.asset.symbol === assets.B.asset.symbol) {
+      throw new Error("Can't swap the same assets");
+    }
+
     const { marketPrice } = await calculateMarketPrice(assets.A, assets.B);
     const maxOrderPrice = await getMaxOrderPrice(
       assets.A,
@@ -92,10 +96,6 @@ export const mkPerformSwap = (
       throw new Error(
         `Marked order failed. Not enough liquidity of ${assets.B.asset._asset.symbol}`,
       );
-    }
-
-    if (assets.A.asset.symbol === assets.B.asset.symbol) {
-      throw new Error("Can't swap the same assets");
     }
 
     if (!(await crossCheckPrice(assets))) {
