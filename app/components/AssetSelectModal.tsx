@@ -104,7 +104,7 @@ const PickerContent = ({ onSelect, exclude }: Props) => {
   return (
     <>
       <Search onSelect={onSelect} exclude={exclude} />
-      <ScrollView {...scroll}>
+      <ScrollView {...scroll} scrollEnabled={true}>
         <TextSecondary style={{ fontSize: 14 }}> Suggested </TextSecondary>
         {suggested &&
           suggested.map(e => (
