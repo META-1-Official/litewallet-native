@@ -26,11 +26,12 @@ class LiteWalletServices {
     return data;
   };
 
-  login = async (accountName: string, email: string) => {
+  login = async (accountName: string, email: string, idToken: string, appPubKey: string) => {
     const { data } = await this.api.post('/login', {
       accountName,
       email,
-      privateKey: 'testkey',
+      idToken,
+      appPubKey,
     });
     this.api.defaults.headers.common.Authorization = `Bearer ${data.token}`;
     return data;

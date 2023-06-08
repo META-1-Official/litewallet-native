@@ -10,7 +10,8 @@ export const getAccountData = createAsyncThunk<any, undefined>(
     const rootState = thunkAPI.getState() as RootState;
     const accountName = rootState.wallet.accountName;
     const email = rootState.wallet.email;
-    await thunkAPI.dispatch(login({ accountName, email }));
+    const { idToken, appPubKey } = rootState.web3;
+    await thunkAPI.dispatch(login({ accountName, email, idToken, appPubKey }));
     return await liteWalletServices.getUserData(accountName);
   },
 );
@@ -21,7 +22,8 @@ export const uploadAvatar = createAsyncThunk<any, { image: Asset }>(
     const rootState = thunkAPI.getState() as RootState;
     const accountName = rootState.wallet.accountName;
     const email = rootState.wallet.email;
-    await thunkAPI.dispatch(login({ accountName, email }));
+    const { idToken, appPubKey } = rootState.web3;
+    await thunkAPI.dispatch(login({ accountName, email, idToken, appPubKey }));
 
     return await liteWalletServices.saveAvatar(accountName, image);
   },
@@ -33,7 +35,8 @@ export const deleteAvatar = createAsyncThunk<any, undefined>(
     const rootState = thunkAPI.getState() as RootState;
     const accountName = rootState.wallet.accountName;
     const email = rootState.wallet.email;
-    await thunkAPI.dispatch(login({ accountName, email }));
+    const { idToken, appPubKey } = rootState.web3;
+    await thunkAPI.dispatch(login({ accountName, email, idToken, appPubKey }));
     return await liteWalletServices.deleteAvatar(accountName);
   },
 );
@@ -44,18 +47,20 @@ export const getNotifications = createAsyncThunk<any, undefined>(
     const rootState = thunkAPI.getState() as RootState;
     const accountName = rootState.wallet.accountName;
     const email = rootState.wallet.email;
-    await thunkAPI.dispatch(login({ accountName, email }));
+    const { idToken, appPubKey } = rootState.web3;
+    await thunkAPI.dispatch(login({ accountName, email, idToken, appPubKey }));
     return await liteWalletServices.getNotifications(accountName);
   },
 );
 
-export const getHistory = createAsyncThunk<any, { accountName: string, skipSize: number, from: string }>(
-  'wallet/getHistory',
-  async ({ accountName, skipSize, from }, thunkAPI) => {
-    const rootState = thunkAPI.getState() as RootState;
-    const currentAccountName = rootState.wallet.accountName;
-    const email = rootState.wallet.email;
-    await thunkAPI.dispatch(login({ accountName: currentAccountName, email }));
-    return await liteWalletServices.getHistory(accountName, skipSize, from);
-  },
-);
+export const getHistory = createAsyncThunk<
+  any,
+  { accountName: string; skipSize: number; from: string }
+>('wallet/getHistory', async ({ accountName, skipSize, from }, thunkAPI) => {
+  const rootState = thunkAPI.getState() as RootState;
+  const currentAccountName = rootState.wallet.accountName;
+  const email = rootState.wallet.email;
+  const { idToken, appPubKey } = rootState.web3;
+  await thunkAPI.dispatch(login({ accountName: currentAccountName, email, idToken, appPubKey }));
+  return await liteWalletServices.getHistory(accountName, skipSize, from);
+});
