@@ -38,7 +38,7 @@ export const PasskeyScreen = ({ navigation }: Props) => {
   const {
     firstName,
     lastName,
-    mobile,
+    mobile = '',
     accountName,
     eSignatureStatus,
     eSignaturePending,

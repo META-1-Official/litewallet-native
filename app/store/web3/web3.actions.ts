@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { SdkLoginParams } from '@web3auth/react-native-sdk/src/types/sdk';
+import { Buffer } from 'buffer';
 
 import { web3Login } from '../../services/web3.services';
 import { getPublicCompressed } from '../../utils/getPublicCompressed';

@@ -1,3 +1,4 @@
+import { Buffer } from 'buffer';
 // @ts-ignore
 import { ec as EC } from 'elliptic';
 
