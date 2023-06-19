@@ -10,4 +10,6 @@ export const browserstackTestAccounts = [
   'bond-02',
   'antman-kok357',
   'user-x01',
+  'user-x01-1',
+  'user-x02',
 ];
