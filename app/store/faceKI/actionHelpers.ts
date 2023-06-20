@@ -83,6 +83,7 @@ export const handleEnrollError = () => {
   Toast.show({
     type: 'error',
     text1: 'You have not been enrolled!',
+    text2: 'Please try again!',
   });
 };
 

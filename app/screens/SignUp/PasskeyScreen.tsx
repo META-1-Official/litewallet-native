@@ -73,6 +73,7 @@ export const PasskeyScreen = ({ navigation }: Props) => {
     Toast.show({
       type: 'error',
       text1: message,
+      text2: 'Please try again later!',
     });
   };
 
