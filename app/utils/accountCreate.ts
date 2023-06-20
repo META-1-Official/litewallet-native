@@ -3,6 +3,8 @@ import { ChainValidation, FetchChain, PrivateKey, TransactionBuilder } from 'met
 import { NETWORK } from '@env';
 import config, { Network } from '../config';
 
+// todo: refactor the whole file
+
 export function generateKeyFromPassword(
   accountName: any,
   role: string,
@@ -61,6 +63,7 @@ async function createAccFunc(
     },
   });
 }
+
 export default async function createAccountWithPassword(
   account_name: any,
   password: any,
@@ -131,7 +134,7 @@ export default async function createAccountWithPassword(
     const faucetRes = await milkFaucet();
     console.log(faucetRes);
     if (faucetRes.error) {
-      console.error(faucetRes.error);
+      console.error('Registration error: ', faucetRes.error);
       throw new Error('Registration error');
     }
     return faucetRes;
