@@ -8,6 +8,8 @@ interface Web3State {
   privateKey: string;
   passKey: string;
   verifierId: string;
+  idToken: string;
+  appPubKey: string;
   pending: boolean;
 }
 
@@ -16,15 +18,10 @@ const initialState: Web3State = {
   privateKey: '',
   passKey: '',
   verifierId: '',
+  idToken: '',
+  appPubKey: '',
   pending: false,
 };
-// todo: remove this and uncomment previous
-// const initialState: Web3State = {
-//   email: 'user-x23@yopmail.com',
-//   privateKey: '0a1abe5a5e7cd5ce1a2b61cab954530a46f23581103a5525bb3a8389d29d5a16',
-//   passKey: 'P5K3iw2CNLfsY5tpYZJLxWop6YcCTan7wAe4tdZtAxZ7UmqJqtpk',
-//   pending: false,
-// };
 
 const web3Slice = createSlice({
   name: 'web3',
@@ -41,6 +38,8 @@ const web3Slice = createSlice({
       state.privateKey = '';
       state.passKey = '';
       state.verifierId = '';
+      state.idToken = '';
+      state.appPubKey = '';
       state.pending = true;
     });
     builder.addCase(getWeb3User.fulfilled, (state, action) => {
@@ -50,6 +49,8 @@ const web3Slice = createSlice({
         key.normalize_brainKey(`${action.payload.email}${Date.now()}${action.payload.privateKey}`),
       ).toWif()}`;
       state.verifierId = action.payload.verifierId;
+      state.idToken = action.payload.idToken;
+      state.appPubKey = action.payload.appPubKey;
       state.pending = false;
       console.log('PassKey: ', state.passKey);
     });

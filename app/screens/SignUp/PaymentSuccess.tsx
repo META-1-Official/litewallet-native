@@ -23,7 +23,7 @@ export const PaymentSuccess = ({}: Props) => {
   const dispatch = useAppDispatch();
   const auth = useStore(state => state.authorize);
   const { accountName } = useAppSelector(state => state.signUp);
-  const { passKey, email } = useAppSelector(state => state.web3);
+  const { passKey, email, idToken, appPubKey } = useAppSelector(state => state.web3);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -75,7 +75,7 @@ export const PaymentSuccess = ({}: Props) => {
   };
 
   const handleCreateWallet = () => {
-    dispatch(login({ accountName, email }))
+    dispatch(login({ accountName, email, idToken, appPubKey }))
       .unwrap()
       .then(loginDetails => {
         dispatch(authorize({ accountName, email, token: loginDetails.token }));

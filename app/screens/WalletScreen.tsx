@@ -65,7 +65,7 @@ const WalletScreen = () => {
         flexGrow: 1,
       }}
     >
-      <PortfolioHeader protfolioAssets={allAssets} />
+      <PortfolioHeader portfolioAssets={allAssets} />
       <View
         style={{
           flexDirection: 'row',
@@ -102,7 +102,7 @@ const WalletScreen = () => {
           <MaterialToggle onChange={v => setShowZeroBalance(v)} />
         </View>
       </View>
-      <PortfolioListing showZeroBallance={showZeroBalance} />
+      <PortfolioListing showZeroBalance={showZeroBalance} />
     </SafeAreaView>
   );
 };

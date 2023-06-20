@@ -439,6 +439,8 @@ export interface Meta1Module {
     ) => Promise<iTradeHistorical[]>;
     get_order_book: (assetA: string, assetB: string, limit: number) => Promise<OrderBook>;
     get_limit_orders: (assetA: string, assetB: string, limit: number) => Promise<iLimitOrder[]>;
+    get_published_asset_price: (symbol: string) => Promise<any>;
+    get_asset_limitation_value: (symbol: string) => Promise<any>;
   };
   history: {
     get_account_history: (account: string, bleh: string, limit: number, blah: string) => any;

@@ -13,13 +13,13 @@ import {
 import { grey200, grey600 } from 'react-native-paper/src/styles/colors';
 import { BrandYellow } from '../styles/colors';
 import { tid } from '../utils';
-import { AssetBalanceT, refreshAssets, useAssets } from '../services/meta1Api';
+import { AssetBalanceT, refreshAssets } from '../services/meta1Api';
 import useAssetsOnFocus from '../hooks/useAssetsOnFocus';
 
 const { width } = Dimensions.get('screen');
 
 interface Props {
-  showZeroBallance: boolean;
+  showZeroBalance: boolean;
   colors?: {
     background?: string;
     stripe?: string;
@@ -53,7 +53,7 @@ const Refresher = () => {
   );
 };
 
-const PortfolioListing: React.FC<Props> = ({ showZeroBallance, colors, usdPrimary, onPress }) => {
+const PortfolioListing: React.FC<Props> = ({ showZeroBalance, colors, usdPrimary, onPress }) => {
   const defaultColors: typeof colors = {
     background: '#fff',
     stripe: grey200,
@@ -63,7 +63,7 @@ const PortfolioListing: React.FC<Props> = ({ showZeroBallance, colors, usdPrimar
   const curColor = colors || defaultColors;
   const accountBallance = useAssetsOnFocus();
   const portfolioAssets = accountBallance!.assetsWithBalance;
-  const assets = showZeroBallance ? portfolioAssets : portfolioAssets.filter(e => e.amount > 0);
+  const assets = showZeroBalance ? portfolioAssets : portfolioAssets.filter(e => e.amount > 0);
   const sorted = assets.sort((a, b) => b.total_value - a.total_value);
   useEffect(() => {
     const timer = setInterval(() => refreshAssets(), 5000);

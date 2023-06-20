@@ -49,7 +49,9 @@ const LinkWalletScreen: React.FC<Props> = ({ navigation }) => {
   });
 
   const browserStackAccountsLogin = (accountName: string) => {
-    dispatch(login({ accountName, email: `${accountName}@yopmail.com` }))
+    dispatch(
+      login({ accountName, email: `${accountName}@yopmail.com`, idToken: '', appPubKey: '' }),
+    )
       .unwrap()
       .then(loginDetails => {
         console.log('Logged in successfully! loginDetails: ', loginDetails);

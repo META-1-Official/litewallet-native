@@ -47,6 +47,7 @@ const FaceKiCameraView = ({ email, privateKey }: Props) => {
   const camera = useRef<Camera>(null);
   const { accountName: signUpAccountName } = useAppSelector(state => state.signUp);
   const { accountName: signInAccountName } = useAppSelector(state => state.signIn);
+  const { idToken, appPubKey } = useAppSelector(state => state.web3);
   const isSigning = !!signInAccountName;
   const accountName = signInAccountName || signUpAccountName;
 
@@ -63,7 +64,7 @@ const FaceKiCameraView = ({ email, privateKey }: Props) => {
   }, []);
 
   const loginHandler = () => {
-    dispatch(login({ accountName, email }))
+    dispatch(login({ accountName, email, idToken, appPubKey }))
       .unwrap()
       .then(loginDetails => {
         console.log('Logged in successfully! loginDetails: ', loginDetails);

@@ -4,7 +4,6 @@ import Toast from 'react-native-toast-message';
 import config from '../../config';
 import { createUser, getToken, getUser } from '../../services/eSignature.services';
 import migrationService from '../../services/migration.service';
-import liteWalletServices from '../../services/litewallet.services';
 import sendXServices from '../../services/sendX.services';
 import createAccountWithPassword from '../../utils/accountCreate';
 import { setToken } from '../eSignature/eSignature.reducer';
@@ -107,7 +106,6 @@ export const registerAccount = createAsyncThunk(
           console.log('Subscription completed!');
         });
     }
-    await liteWalletServices.signUp(accountName);
     return createAccountWithPassword(
       accountName,
       passKey,

@@ -97,7 +97,7 @@ const Sandbox = () => {
             title="Login"
             onPress={() =>
               liteWalletServices
-                .login(accountName, email)
+                .login(accountName, email, '', '')
                 .then(e => console.log(e))
                 .catch(e => console.log(e))
             }
@@ -106,7 +106,7 @@ const Sandbox = () => {
             title="SignuUp"
             onPress={() =>
               liteWalletServices
-                .login(accountName, email)
+                .login(accountName, email, '', '')
                 .then(e => console.log(e))
                 .catch(e => console.log(e))
             }

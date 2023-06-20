@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAssetPicker } from '../components/AssetSelectModal';
-import { AssetBalanceT, useAssetsStore } from '../services/meta1Api';
+import { AssetBalanceT } from '../services/meta1Api';
 import * as Sentry from '@sentry/react-native';
 import { Ticker } from './meta1dexTypes';
 import useAssetsOnFocus from '../hooks/useAssetsOnFocus';
@@ -13,7 +13,7 @@ export type theAsset = {
   /**
    * @param {updateAmount} updateAmount - true by default
    */
-  formUsdt: (usdtAmount: string | number, updateAmount?: boolean) => number;
+  fromUsdt: (usdtAmount: string | number, updateAmount?: boolean) => number;
   toUsdt: (amt?: string | number | undefined) => number;
   getMax: () => number;
   setMax: () => void;
@@ -38,6 +38,7 @@ export const createPair = (
   const B: theAsset = { ...b, opponent: () => A };
   return [A, B];
 };
+
 export const useAsset = ({
   defaultValue,
   title,
@@ -56,6 +57,7 @@ export const useAsset = ({
   const assets = useAssetsOnFocus();
   const meta1 = assets.find('META1');
   const [ticker, setTicker] = useState<Ticker | undefined>(undefined);
+
   if (!asset) {
     console.log('== DV', defaultValue);
     console.log('==========');
@@ -64,7 +66,7 @@ export const useAsset = ({
     return null;
   }
 
-  const formUsdt = (usdtAmount: string | number, updateAmount = true) => {
+  const fromUsdt = (usdtAmount: string | number, updateAmount = true) => {
     const n = Number(usdtAmount);
     if (!n && n !== 0) {
       console.error('Invalid amount');
@@ -142,12 +144,13 @@ export const useAsset = ({
   };
 
   const setAmount = (s: string) => setTimeout(() => _setAmount(s), 0);
+
   return {
     asset,
     open,
     amount,
     setAmount,
-    formUsdt,
+    fromUsdt,
     toUsdt,
     getMax,
     setMax,

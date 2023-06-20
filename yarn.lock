@@ -8745,20 +8745,20 @@ merge2@^1.3.0, merge2@^1.4.1:
   resolved "https://registry.yarnpkg.com/merge2/-/merge2-1.4.1.tgz#4368892f885e907455a6fd7dc55c0c9d404990ae"
   integrity sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==
 
-meta1-vision-dex@^0.7.3:
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/meta1-vision-dex/-/meta1-vision-dex-0.7.3.tgz#9a063590e75925533f5f54db137b55ec9e2c0184"
-  integrity sha512-mtlC/7c1uVNkDoBYZYWrIf75ndXlbgMATT9ilS+uF/OnGaIrPI7dNh571nlYtt+Yn3eeeR3KCImCqNJP8wjh4w==
+meta1-vision-dex@^0.7.9:
+  version "0.7.9"
+  resolved "https://registry.yarnpkg.com/meta1-vision-dex/-/meta1-vision-dex-0.7.9.tgz#bc7ace13e3d4014d9251350ea0f78ed21985c61e"
+  integrity sha512-eqTNorjZW+l7Twgd3CUpjNEKG2ZRtr6W2NsUfeLmz8CfkYc+9tpbfzhlSoWGAQTltuqDhQ72LUlPQXIuXkXMPw==
   dependencies:
     "@babel/runtime" "^7.1.2"
     bignumber.js "^7.2.1"
     lzma "^2.3.2"
-    meta1-vision-js "3.4.2"
+    meta1-vision-js "3.4.6"
 
-meta1-vision-js@3.4.2:
-  version "3.4.2"
-  resolved "https://registry.yarnpkg.com/meta1-vision-js/-/meta1-vision-js-3.4.2.tgz#2d6a891edce2df5f615181d0347aefa86cd7b1ba"
-  integrity sha512-oskh4YFPHw4XycXLVTj7/mS9HJQVaBHDVARNHaNzf3WYDRlexjUmC/wQr9p9kaY1zXBYQChbbvEUlriwO7yN/A==
+meta1-vision-js@3.4.6:
+  version "3.4.6"
+  resolved "https://registry.yarnpkg.com/meta1-vision-js/-/meta1-vision-js-3.4.6.tgz#608602f25fb9ff04f229807af67c6e283db0308f"
+  integrity sha512-+33/02BL2B+PEdyU5NLs3DW/QXGn2EiAPxzSyxN0XGCXmfn3p5Co9LcHl/9BFhwaFdPnV924IHsKY8705INyIg==
   dependencies:
     bigi "1.4.2"
     bs58 "4.0.1"
@@ -8770,14 +8770,14 @@ meta1-vision-js@3.4.2:
     ecurve "1.0.6"
     event-emitter "0.3.5"
     immutable "3.8.2"
-    meta1-vision-ws "3.2.3"
+    meta1-vision-ws "3.3.1"
     safe-buffer "^5.1.2"
     secure-random "1.1.1"
 
-meta1-vision-ws@3.2.3:
-  version "3.2.3"
-  resolved "https://registry.yarnpkg.com/meta1-vision-ws/-/meta1-vision-ws-3.2.3.tgz#59c16522b44fbcab0fc63bdcc5dd98e1d634256e"
-  integrity sha512-4Ki0esy8AbLh6+3ssKS6OnvtRVPw4WgCxrscxA5Pc0XN5ThR56kiqNLUAwJHAi9YXX5FDVNtJDF8vD8M0NIYqQ==
+meta1-vision-ws@3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/meta1-vision-ws/-/meta1-vision-ws-3.3.1.tgz#f734677d243229db16da803d804c665976b30862"
+  integrity sha512-AB/EL/UXY1bo4dHrFyooTZwu+nIERGXST6EK/9IC0Y0KrlpWvJU3FNYFDKNIxG8osFEI1Bjelomx0/5lBI57bw==
   dependencies:
     esmify "^2.1.1"
     isomorphic-ws "^5.0.0"
