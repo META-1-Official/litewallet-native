@@ -308,6 +308,9 @@ PODS:
     - React-Core
   - react-native-webview (11.23.1):
     - React-Core
+  - react-native-zendesk-messaging (0.1.0):
+    - React-Core
+    - ZendeskSDKMessaging
   - React-perflogger (0.70.5)
   - React-RCTActionSheet (0.70.5):
     - React-Core/RCTActionSheetHeaders (= 0.70.5)
@@ -435,6 +438,31 @@ PODS:
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
+  - Zendesk (1.12.0):
+    - ZendeskSDKConversationKit (~> 1.9.0)
+    - ZendeskSDKCoreUtilities (~> 1.3.0)
+  - ZendeskSDKConversationKit (1.9.0):
+    - ZendeskSDKCoreUtilities (~> 1.3.0)
+    - ZendeskSDKFayeClient (~> 1.4.0)
+    - ZendeskSDKHTTPClient (~> 0.12.0)
+    - ZendeskSDKStorage (~> 0.7.0)
+  - ZendeskSDKCoreUtilities (1.3.0)
+  - ZendeskSDKFayeClient (1.4.0):
+    - ZendeskSDKLogger (~> 0.7.0)
+    - ZendeskSDKSocketClient (~> 1.4.0)
+  - ZendeskSDKHTTPClient (0.12.0):
+    - ZendeskSDKLogger (~> 0.7.0)
+  - ZendeskSDKLogger (0.7.0)
+  - ZendeskSDKMessaging (2.12.0):
+    - Zendesk (~> 1.12.0)
+    - ZendeskSDKConversationKit (~> 1.9.0)
+    - ZendeskSDKCoreUtilities (~> 1.3.0)
+    - ZendeskSDKUIComponents (~> 2.7.0)
+  - ZendeskSDKSocketClient (1.4.0):
+    - ZendeskSDKLogger (~> 0.7.0)
+  - ZendeskSDKStorage (0.7.0):
+    - ZendeskSDKLogger (~> 0.7.0)
+  - ZendeskSDKUIComponents (2.7.0)
 
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
@@ -490,6 +518,7 @@ DEPENDENCIES:
   - react-native-text-input-mask (from `../node_modules/react-native-text-input-mask`)
   - "react-native-web-browser (from `../node_modules/@toruslabs/react-native-web-browser`)"
   - react-native-webview (from `../node_modules/react-native-webview`)
+  - react-native-zendesk-messaging (from `../node_modules/react-native-zendesk-messaging`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -536,6 +565,16 @@ SPEC REPOS:
     - Sentry
     - SocketRocket
     - YogaKit
+    - Zendesk
+    - ZendeskSDKConversationKit
+    - ZendeskSDKCoreUtilities
+    - ZendeskSDKFayeClient
+    - ZendeskSDKHTTPClient
+    - ZendeskSDKLogger
+    - ZendeskSDKMessaging
+    - ZendeskSDKSocketClient
+    - ZendeskSDKStorage
+    - ZendeskSDKUIComponents
 
 EXTERNAL SOURCES:
   boost:
@@ -596,6 +635,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@toruslabs/react-native-web-browser"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
+  react-native-zendesk-messaging:
+    :path: "../node_modules/react-native-zendesk-messaging"
   React-perflogger:
     :path: "../node_modules/react-native/ReactCommon/reactperflogger"
   React-RCTActionSheet:
@@ -692,6 +733,7 @@ SPEC CHECKSUMS:
   react-native-text-input-mask: 36a546b378fadd2efe1b7484a859d34bc2c80395
   react-native-web-browser: 087b454e1e94b58b40ba73f54251d77486144d19
   react-native-webview: d33e2db8925d090871ffeb232dfa50cb3a727581
+  react-native-zendesk-messaging: 53c14d4210e6888c73dfeced322e51ddf1a4b805
   React-perflogger: e68d3795cf5d247a0379735cbac7309adf2fb931
   React-RCTActionSheet: 05452c3b281edb27850253db13ecd4c5a65bc247
   React-RCTAnimation: 578eebac706428e68466118e84aeacf3a282b4da
@@ -720,7 +762,17 @@ SPEC CHECKSUMS:
   VisionCamera: 4cfd685b1e671fea4aa0400905ab397f0e972210
   Yoga: eca980a5771bf114c41a754098cd85e6e0d90ed7
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
+  Zendesk: 0505ba8fc49ea3029329cb466568ea6ada4bef62
+  ZendeskSDKConversationKit: 6d8ab0e04955144a4eeb1e59ff3e8bc01f7fafbd
+  ZendeskSDKCoreUtilities: e53e321eeccf21f6ee21d3d985a923b85ae6dffe
+  ZendeskSDKFayeClient: 5de94ef6a7ac09fa0ec6ee51ba843c47d2e9bec5
+  ZendeskSDKHTTPClient: f9193f3b2c7003960894f666f2b2cbbd1d10fcd5
+  ZendeskSDKLogger: 30e5c41600d0cec61727bbe7c096264d18ada50d
+  ZendeskSDKMessaging: e9a29dd8d8856f64e3a18f9e079a8d7520b69aff
+  ZendeskSDKSocketClient: ca7f145a32a4229acdbfd1abe1205b950c51972a
+  ZendeskSDKStorage: cf73fa8079c768d449a951484bd69c0880192635
+  ZendeskSDKUIComponents: 48a48b6ea89feeca2704c1657e32eca2487acf06
 
 PODFILE CHECKSUM: 23771324b5e870a875e57e5e61da2ab90d81c68b
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1
