@@ -92,6 +92,9 @@ export async function fetchAssetWithIcon(asset_name: string) {
       sol: 'https://s2.coinmarketcap.com/static/img/coins/128x128/5426.png',
       trx: 'https://s3.coinmarketcap.com/static/img/portraits/62837c68ab0e763d5f77e9a6.png',
       xrp: 'https://s2.coinmarketcap.com/static/img/coins/128x128/52.png',
+      ada: 'https://s2.coinmarketcap.com/static/img/coins/128x128/2010.png',
+      busd: 'https://s2.coinmarketcap.com/static/img/coins/128x128/4687.png',
+      xmr: 'https://s2.coinmarketcap.com/static/img/coins/128x128/328.png',
     }),
   );
 
