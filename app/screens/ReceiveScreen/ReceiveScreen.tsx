@@ -1,4 +1,3 @@
-import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Animated,
@@ -9,7 +8,6 @@ import {
   TouchableOpacity,
   View,
   Platform,
-  BackHandler,
 } from 'react-native';
 import { useAssetPicker } from '../../components/AssetSelectModal';
 import useAppSelector from '../../hooks/useAppSelector';
@@ -45,7 +43,7 @@ const ReceiveScreen: React.FC<{}> = () => {
   const [selected, open] = useAssetPicker({
     title: 'Receive',
     onClose: () => nav.goBack(),
-    exclude: ['BNB', 'XLM', 'META1', 'EOS', 'DOGE', 'SOL', 'TRX', 'XRP'],
+    exclude: ['BNB', 'XLM', 'META1', 'EOS', 'DOGE', 'SOL', 'TRX', 'XRP', 'ADA', 'BUSD', 'XMR'],
   });
   const [realAddress, setRealAddress] = useState<AddrT | null>(null);
 
