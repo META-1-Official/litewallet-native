@@ -82,8 +82,8 @@ export const handleEnrollError = () => {
   console.error('You have not been enrolled!');
   Toast.show({
     type: 'error',
-    text1: 'You have not been enrolled!',
-    text2: 'Please try again!',
+    text1: 'Please try again!',
+    text2: 'You have not been enrolled!',
   });
 };
 

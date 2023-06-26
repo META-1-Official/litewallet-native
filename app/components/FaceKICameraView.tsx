@@ -10,7 +10,7 @@ import { faceKIVerifyOnSignup, faceKIVerifyOnSignIn } from '../store/faceKI/face
 import { login } from '../store/signIn/signIn.actions';
 import { authorize } from '../store/wallet/wallet.reducers';
 import styles from './FaceKICameraView.styles';
-import Loader from './Loader';
+// import Loader from './Loader';
 import RoundedButton from './RoundedButton';
 import { faceFrameAsset } from '../../assets/';
 
@@ -127,7 +127,7 @@ const FaceKiCameraView = ({ email, privateKey }: Props) => {
 
   return (
     <View style={styles.container}>
-      {!photo && (
+      {
         <>
           <Camera
             style={styles.camera}
@@ -172,12 +172,16 @@ const FaceKiCameraView = ({ email, privateKey }: Props) => {
             </Text>
             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
               <RoundedButton styles={{ flex: 1 }} title="Cancel" onPress={() => nav.goBack()} />
-              <RoundedButton styles={{ flex: 1 }} title="Verify" onPress={verifyHandler} />
+              <RoundedButton
+                styles={{ flex: 1 }}
+                title="Verify"
+                onPress={verifyHandler}
+                disabled={!!photo}
+              />
             </View>
           </View>
         </>
-      )}
-      {photo && <Loader />}
+      }
     </View>
   );
 };
