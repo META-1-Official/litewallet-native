@@ -6,7 +6,7 @@ import {
   StackScreenProps,
 } from '@react-navigation/stack';
 import React, { useEffect } from 'react';
-import { Platform, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { SvgIcons } from '../assets';
 import { DexStackHeader } from './components/DexHeader';
 import Loader from './components/Loader';

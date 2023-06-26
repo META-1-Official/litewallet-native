@@ -1,7 +1,8 @@
 import Clipboard from '@react-native-clipboard/clipboard';
+import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
-import { Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
+import { BackHandler, Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { SvgIcons } from '../../../assets';
 import { RootStackParamList } from '../../AuthNav';
@@ -40,6 +41,16 @@ export const PaymentSuccess = ({}: Props) => {
   const [keys, setKeys] = useState<KeysT | undefined>(undefined);
   const [document, setDocument] = useState('');
   const [readyToLogin, setReadToLogin] = useState(false);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        return false;
+      };
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, []),
+  );
 
   useEffect(() => {
     if (document) {

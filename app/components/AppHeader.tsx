@@ -19,6 +19,9 @@ export default function AppHeader({ navigation, route, options, back }: StackHea
   );
   const isWalletRoute = route.name.startsWith('Wallet__');
   const title = isWalletRoute ? getHeaderTitle(options, route.name).replace(/\w+__/, '') : null;
+
+  const isShow = !['PaymentSuccess'].includes(route.name);
+
   return (
     <SafeAreaView
       style={{
@@ -30,7 +33,7 @@ export default function AppHeader({ navigation, route, options, back }: StackHea
         justifyContent: 'space-between',
       }}
     >
-      {back ? <BackButton color={isWalletRoute ? '#fff' : '#000'} /> : null}
+      {back && isShow ? <BackButton color={isWalletRoute ? '#fff' : '#000'} /> : null}
       <Text
         style={{
           fontSize: 20,
@@ -43,7 +46,7 @@ export default function AppHeader({ navigation, route, options, back }: StackHea
 
       {/* Empty view for space between alignment, mimics back button sizing*/}
 
-      {back ? <View style={{ width: 32, height: 32, marginHorizontal: 12 }} /> : null}
+      {back && isShow ? <View style={{ width: 32, height: 32, marginHorizontal: 12 }} /> : null}
     </SafeAreaView>
   );
 }
