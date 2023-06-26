@@ -95,14 +95,30 @@ export const PasskeyScreen = ({ navigation }: Props) => {
       });
   };
 
+  const handleEsignature = () => {
+    dispatch(eSignatureProceed({ firstName, lastName, mobile, email, accountName, privateKey }))
+      .unwrap()
+      .then(promiseResult => {
+        if (Platform.OS === 'ios') {
+          console.log('Handle Sign PromiseResult: ', promiseResult);
+          getPaymentDetails();
+        }
+      });
+  };
+
   const handleSign = () => {
     if (!checkboxesState[4]) {
-      dispatch(eSignatureProceed({ firstName, lastName, mobile, email, accountName, privateKey }))
+      dispatch(getAccountPaymentStatus(email))
         .unwrap()
-        .then(promiseResult => {
-          if (Platform.OS === 'ios') {
-            console.log('Handle Sign PromiseResult: ', promiseResult);
-            getPaymentDetails();
+        .then(user => {
+          if (user && user.status?.isSign) {
+            if (user.status?.isPayed || user.status?.isPaidByCrypto) {
+              handleCheckBox(4, true);
+            } else {
+              handleEsignature();
+            }
+          } else {
+            handleEsignature();
           }
         });
     }
