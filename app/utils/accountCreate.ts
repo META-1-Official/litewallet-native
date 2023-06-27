@@ -132,10 +132,14 @@ export default async function createAccountWithPassword(
     return await create_account();
   } else {
     const faucetRes = await milkFaucet();
-    console.log(faucetRes);
+    console.log('Faucet response: ', faucetRes);
     if (faucetRes.error) {
-      console.error('Registration error: ', faucetRes.error);
-      throw new Error('Registration error');
+      console.error('Faucet error: ', faucetRes.error);
+      if (faucetRes.error.base.includes('Account exists')) {
+        throw new Error('Account exists');
+      } else {
+        throw new Error('Registration error');
+      }
     }
     return faucetRes;
   }

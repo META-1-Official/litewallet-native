@@ -152,8 +152,13 @@ export const PasskeyScreen = ({ navigation }: Props) => {
         })
         .catch(error => {
           console.error(error);
-          handleRegistrationIssue("Wallet hasn't been created!");
-          setIsLoading(false);
+          if (error.message === 'Account exists') {
+            setIsLoading(false);
+            navigation.navigate('PaymentSuccess');
+          } else {
+            // handleRegistrationIssue("Wallet hasn't been created!");
+            setIsLoading(false);
+          }
         });
     } else {
       Toast.show({
