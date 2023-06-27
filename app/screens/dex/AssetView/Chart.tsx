@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import WebView from 'react-native-webview';
-import html from '../../../../bruhchart/dist';
-import { Buffer } from 'buffer';
+import html from '../../../../bruhchart/dist/index';
+// import { Buffer } from 'buffer';
 import { useAVStore } from './AssetViewStore';
 import { useTicker } from '../../../services/meta1Api';
 import Loader from '../../../components/Loader';
@@ -51,16 +51,16 @@ const Candle: React.FC<{}> = () => {
           </TouchableOpacity>
         ))}
       </View>
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, borderColor: 'red', borderWidth: 1, borderStyle: 'solid' }}>
         <WebView
           ref={wwRef}
           source={{
             //uri: 'http://localhost:1234/',
-            html: Buffer.from(html, 'base64').toString(),
+            html: html, //Buffer.from(html, 'base64').toString(),
           }}
           scrollEnabled={false}
           onMessage={event => {
-            console.log(event.nativeEvent.data);
+            console.log('webview: ', event.nativeEvent.data);
           }}
           injectedJavaScript={mkInject(ticks)}
         />
