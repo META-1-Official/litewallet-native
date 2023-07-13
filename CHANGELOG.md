@@ -12,6 +12,8 @@ All notable changes to this project will be documented in this file. Dates are d
   - Fixed behaviour of increment/decrement amount buttons
 - Send Screen
   - Fix error of number input for ios keyboard
+- Trade Screen
+  - Swap currencies button has been added
 
 > 4 Dec 2022
 - New signIn and signUp flows

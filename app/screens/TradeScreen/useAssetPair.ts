@@ -8,12 +8,24 @@ import { createPair, theAsset, useAsset } from '../../utils/useAsset';
 const useAssetPair = (
   defaultAssetA?: AssetBalanceT,
   defaultAssetB?: AssetBalanceT,
-): null | { assets: { A: theAsset; B: theAsset }; backingAssetValue: number } => {
+): null | {
+  assets: { A: theAsset; B: theAsset };
+  backingAssetValue: number;
+  swapAssets?: () => void;
+  isButtonDisabled: boolean;
+} => {
+  const [swapAssetFlag, setSwapAssetFlag] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [backingAssetValue, setBackingAssetValue] = useState(0);
   const [A, B] = createPair(
     useAsset({ defaultValue: defaultAssetA, title: 'Trade' }),
     useAsset({ defaultValue: defaultAssetB, title: 'Trade' }),
   );
+
+  const swapAssets = () => {
+    setSwapAssetFlag(prevState => !prevState);
+    setIsButtonDisabled(true);
+  };
 
   const setAsyncMarketPrice = async (base: theAsset, quote: theAsset) => {
     const {
@@ -62,21 +74,30 @@ const useAssetPair = (
           .catch(console.log);
         console.log({ tickerB });
         B.setTicker(tickerB || undefined);
+        setIsButtonDisabled(false);
       }
 
       load();
-      setAsyncMarketPrice(A, B);
-      setAsyncMarketLiquidity(A, B);
+
+      if (swapAssetFlag) {
+        setAsyncMarketPrice(B, A);
+        setAsyncMarketLiquidity(B, A);
+      } else {
+        setAsyncMarketPrice(A, B);
+        setAsyncMarketLiquidity(A, B);
+      }
     }
-  }, [A?.asset.symbol, B?.asset.symbol, A?.amount, B?.amount]);
+  }, [A?.asset.symbol, B?.asset.symbol, A?.amount, B?.amount, isButtonDisabled]);
 
   if (!A || !B) {
     return null;
   }
 
   return {
-    assets: { A, B },
-    backingAssetValue,
+    assets: swapAssetFlag ? { A, B } : { A: B, B: A },
+    backingAssetValue: swapAssetFlag ? 1 / backingAssetValue : backingAssetValue,
+    swapAssets,
+    isButtonDisabled,
   };
 };
 

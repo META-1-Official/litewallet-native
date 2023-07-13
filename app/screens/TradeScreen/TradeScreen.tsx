@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { DKSAV } from '../../components/DismissKeyboard';
+import IconButton from '../../components/IconButton';
 import { List } from '../../components/List';
 import Loader from '../../components/Loader';
 import { useNewLoaderModal } from '../../components/LoaderModal';
@@ -33,7 +34,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
     () => allAssets?.assetsWithBalance.sort((a, b) => a.symbol.localeCompare(b.symbol)),
     [allAssets],
   );
-  const pair = useAssetPair(availableAssets.at(6), availableAssets.at(9));
+  const pair = useAssetPair(availableAssets.at(8), availableAssets.at(11));
   const assets = pair?.assets;
 
   const open = useShowModal();
@@ -146,6 +147,24 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
                 <AmountsInput darkMode={darkMode} asset={assets.B} slave />
               </View>
             </View>
+            <IconButton
+              style={{
+                alignSelf: 'flex-end',
+                position: 'absolute',
+                right: 30,
+                top: 115,
+                zIndex: 1000,
+                backgroundColor: '#330000',
+                borderRadius: 5,
+                padding: 5,
+                paddingHorizontal: 10,
+              }}
+              iconName={'loop'}
+              iconSize={20}
+              iconColor="white"
+              onClick={pair?.swapAssets}
+              isDisabled={pair?.isButtonDisabled}
+            />
           </List>
           <Text style={{ textAlign: 'right', alignSelf: 'center', color: '#888' }}>
             {`Current Price: ${Number(assets.A.ticker?.lowest_ask).toFixed(
