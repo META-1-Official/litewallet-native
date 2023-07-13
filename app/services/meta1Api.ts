@@ -404,13 +404,13 @@ export interface AddrT {
 export async function getAddressForAccountAsset(accountName: string, symbol: string) {
   try {
     const asset = symbol.toLowerCase() === 'usdt' ? 'eth' : symbol.toLowerCase();
-    const isAvailable = await checkAvailabilityOfAddress(asset);
-    if (isAvailable) {
-      const addr = await depositAddress(accountName, asset);
-      const qr = await QRCode.toString(addr);
-      return { qr, addr };
-    }
-    return null;
+    // const isAvailable = await checkAvailabilityOfAddress(asset);
+    // if (isAvailable) {
+    const addr = await depositAddress(accountName, asset);
+    const qr = await QRCode.toString(addr);
+    return { qr, addr };
+    // }
+    // return null;
   } catch (e) {
     console.log('-ERROR-', e);
     return null;
