@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. Dates are d
 
 #### [INDEV](https://github.com/META-1-Official/litewallet-native/)
 
+> 14 Jul 2023
+- Trade Screen
+  - Balance updating has been fixed
+  - Max button behaviour has been fixed
+  - Amount Input length has set to 20 
+
 > 13 Jul 2023
 - Deposit address fix.
   - Remove unused CheckAvailabilityOfAddress

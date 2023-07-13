@@ -29,7 +29,7 @@ const Input = (props: InputProps) => {
   inputProps.style = [inputProps.style || {}, errorHighlight];
 
   return (
-    <TextInput maxLength={11} {...inputProps} onChangeText={t => _onChange(t, validate(t))} />
+    <TextInput maxLength={20} {...inputProps} onChangeText={t => _onChange(t, validate(t))} />
   );
 };
 

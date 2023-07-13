@@ -27,9 +27,9 @@ const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
       validate={validateNumber}
       keyboardType="numeric"
       onChange={(txt, valid) => {
+        cause();
+        setAmount(txt);
         if (valid) {
-          cause();
-          setAmount(txt);
           asset.setAmount(txt);
           const opponent = asset.opponent();
           opponent.setAmount(

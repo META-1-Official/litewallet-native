@@ -33,7 +33,7 @@ export const optStyleFactory =
     return [defaults];
   };
 
-export const validateNumber = (t: string) => /^(\d+([.,]\d*)?)$/m.test(t);
+export const validateNumber = (t: string) => /^(\d*([.,]\d*)?)$/m.test(t);
 
 export const crossCheckPrice = async ({ A, B }: ScreenAssets) => {
   try {

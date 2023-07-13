@@ -9,9 +9,9 @@ import Loader from '../../components/Loader';
 import { useNewLoaderModal } from '../../components/LoaderModal';
 import { useShowModal } from '../../components/SuccessModal';
 import useAppSelector from '../../hooks/useAppSelector';
+import useAssetsOnFocus from '../../hooks/useAssetsOnFocus';
 import { colors } from '../../styles/colors';
 import { tid } from '../../utils';
-import { useAssets } from '../../services/meta1Api';
 import AmountsInput from './AmountsInput';
 import AssetDisplay from './AssetDisplay';
 import Backdrop from './Backdrop';
@@ -29,7 +29,7 @@ interface Props {
 const TradeScreen: React.FC<Props> = ({ darkMode }) => {
   const nav = useNavigation();
   const [error, setError] = useState('');
-  const allAssets = useAssets();
+  const allAssets = useAssetsOnFocus();
   const availableAssets = useMemo(
     () => allAssets?.assetsWithBalance.sort((a, b) => a.symbol.localeCompare(b.symbol)),
     [allAssets],
