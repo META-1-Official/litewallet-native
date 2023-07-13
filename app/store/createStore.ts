@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import createDebugger from 'redux-flipper';
 import { persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import { configureStore, ThunkAction, Action, combineReducers } from '@reduxjs/toolkit';
 import faceKIReducer from './faceKI/faceKI.reducer';
@@ -24,16 +25,24 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, reducers);
 
-// todo: remove debugger dependency from production build
+const otherMiddlewares: Array<any> = [];
+
+if (__DEV__) {
+  otherMiddlewares.push(createDebugger());
+}
+
 export const createStore = configureStore({
   reducer: persistedReducer,
   devTools: true,
-  middleware: getDefaultMiddleware =>
-    getDefaultMiddleware({
+  middleware: getDefaultMiddleware => {
+    const middlewares = getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }),
+    });
+
+    return middlewares.concat(otherMiddlewares);
+  },
 });
 
 export type AppDispatch = typeof createStore.dispatch;
