@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file. Dates are d
 
 #### [INDEV](https://github.com/META-1-Official/litewallet-native/)
 
+> 13 Jul 2023
+- Deposit address fix.
+  - Remove unused CheckAvailabilityOfAddress
+
 > 4 Dec 2022
 - New signIn and signUp flows
   - Update react-native to version 0.70
