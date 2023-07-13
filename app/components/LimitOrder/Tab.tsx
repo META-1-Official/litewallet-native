@@ -4,16 +4,13 @@ import { colors } from '../../styles/colors';
 import { tid } from '../../utils';
 import meta1dex from '../../utils/meta1dexTypes';
 import { DismissKeyboardView } from '../DismissKeyboard';
-import {
-  useCreateOrder,
-  InputRow,
-  TotalRow,
-  OrderType,
-  usePair,
-  asAsset,
-  useOrderState,
-  Update,
-} from './misc';
+import asAsset from './asAsset';
+import { OrderType, Update } from './types';
+import InputRow from './InputRow';
+import TotalRow from './TotalRow';
+import useCreateOrder from './useCreateOrder';
+import useOrderState from './useOrderState';
+import usePair from './usePair';
 
 interface Props {
   type: OrderType;
