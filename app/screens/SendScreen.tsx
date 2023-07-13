@@ -275,6 +275,7 @@ const amountReducer =
     // Sanitize input
     if (action.payload !== '') {
       const clean = action.payload
+        .replace(/,/gm, '.')
         .replace(/[^(\d+(\.?\d+))]/gm, '')
         .match(/^\d+(\.)?(\d+)?$/)
         ?.at(0);

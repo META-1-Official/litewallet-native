@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file. Dates are d
   - Handling error of failing request
 - Dex Trade
   - Fixed behaviour of increment/decrement amount buttons
+- Send Screen
+  - Fix error of number input for ios keyboard
 
 > 4 Dec 2022
 - New signIn and signUp flows
