@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file. Dates are d
 > 13 Jul 2023
 - Deposit address fix.
   - Remove unused CheckAvailabilityOfAddress
+  - Handling error of failing request
 
 > 4 Dec 2022
 - New signIn and signUp flows

@@ -413,7 +413,7 @@ export async function getAddressForAccountAsset(accountName: string, symbol: str
     // return null;
   } catch (e) {
     console.log('-ERROR-', e);
-    return null;
+    return { addr: '', qr: '' };
   }
 }
 
