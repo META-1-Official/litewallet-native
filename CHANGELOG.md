@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file. Dates are d
 - Deposit address fix.
   - Remove unused CheckAvailabilityOfAddress
   - Handling error of failing request
+- Dex Trade
+  - Fixed behaviour of increment/decrement amount buttons
 
 > 4 Dec 2022
 - New signIn and signUp flows

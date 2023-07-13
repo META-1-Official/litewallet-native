@@ -1,4 +1,5 @@
 import { useReducer } from 'react';
+import { decrementFloatNumber, incrementFloatNumber } from './helpers';
 import { OrderType, Update, State, Action } from './types';
 import asAsset from './asAsset';
 
@@ -35,22 +36,30 @@ const useOrderState = (assetA: string, assetB: string, oType: OrderType) => {
           return produce({ price: payload });
 
         case Update.INC_AMOUNT:
-          return produce({ amount: aStr(Num(state.amount) + 1) });
+          return produce({ amount: aStr(incrementFloatNumber(state.price, state.amount, oType)) });
 
         case Update.INC_PRICE:
-          return produce({ price: bStr(Num(state.price) + 1) });
+          return produce({
+            price: bStr(
+              Num(state.price) % 1 !== 0
+                ? incrementFloatNumber(state.price)
+                : Num(state.price) + 1,
+            ),
+          });
 
         case Update.DEC_AMOUNT:
-          if (Num(state.amount) - 1 < 0) {
-            break;
-          }
-          return produce({ amount: aStr(Num(state.amount) - 1) });
+          return produce({ amount: aStr(decrementFloatNumber(state.price, state.amount, oType)) });
 
         case Update.DEC_PRICE:
-          if (Num(state.price) - 1 < 0) {
-            break;
-          }
-          return produce({ price: bStr(Num(state.price) - 1) });
+          return produce({
+            price: bStr(
+              Num(state.price) === 0
+                ? 0
+                : Num(state.price) % 1 !== 0
+                ? decrementFloatNumber(state.price)
+                : Num(state.price) - 1,
+            ),
+          });
 
         case Update.TOTAL:
           const amt = Num(state.price) === 0 ? 0 : Num(payload!) / price(Num(state.price));
