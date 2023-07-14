@@ -24,7 +24,7 @@ export const Orders: React.FC<AssetViewTSP> = () => {
       setOrders(newOrders);
     };
     fn();
-  }, [refreshing, assetA, assetB]);
+  }, [refreshing, assetA, assetB, orders]);
 
   return (
     <SafeAreaView style={{ height: '100%', backgroundColor: '#000', padding: 12 }}>

@@ -8,7 +8,8 @@ All notable changes to this project will be documented in this file. Dates are d
 - Trade Screen
   - Balance updating has been fixed
   - Max button behaviour has been fixed
-  - Amount Input length has set to 20 
+  - Amount Input length has set to 20
+  - Fix immediate update orders list while trading
 
 > 13 Jul 2023
 - Deposit address fix.
