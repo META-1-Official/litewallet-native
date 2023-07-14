@@ -4,11 +4,9 @@ yarn
 yarn parcel build index.html
 
 cd dist
-ENC=$(base64 index.html)
 
-echo "export default \`" > index.ts
-echo "$ENC" >> index.ts
-echo "\`;" >> index.ts
+echo "export default \`$(cat index.html)\`;" > index.js
+
 rm -r ./.parcel-cache
 
 echo "Build chart lib"
