@@ -6,7 +6,7 @@ import { calculateAmount, calculateDivideBy, calculatePrice } from './math';
 const calculateMarketPrice = async (
   base: theAsset,
   quote: theAsset,
-  selectedFromBalance = 0,
+  selectedFromBalance = +base.amount,
 ): Promise<{
   marketPrice: number;
   baseAssetPrice: number;
@@ -29,6 +29,7 @@ const calculateMarketPrice = async (
   for (let limitOrder of limitOrders) {
     if (limitOrder.sell_price.quote.asset_id === base.asset._asset.id) {
       let price = calculatePrice(limitOrder, divideBy);
+      console.log('!Price: ', price);
 
       if (isTradingMETA1 && backingAssetValue) {
         if (
@@ -37,8 +38,10 @@ const calculateMarketPrice = async (
         ) {
           marketPrice = marketPrice
             ? isQuoting
-              ? Math.min(marketPrice, price)
-              : Math.max(marketPrice, price)
+              ? selectedFromBalance
+                ? Math.max(marketPrice, price)
+                : marketPrice
+              : Math.min(marketPrice, price)
             : price;
         }
       } else {
@@ -47,7 +50,8 @@ const calculateMarketPrice = async (
 
       if (selectedFromBalance) {
         const amount = calculateAmount(limitOrder.for_sale, quote.asset._asset.precision);
-        estSellAmount += marketPrice * amount;
+        estSellAmount += amount;
+        console.log('!_!_!_!_!: ', estSellAmount, selectedFromBalance);
         if (estSellAmount > selectedFromBalance) {
           break;
         }
@@ -55,20 +59,30 @@ const calculateMarketPrice = async (
     }
   }
 
-  if (marketPrice > 0) {
-    const percentDiff = marketPrice + marketPrice / Math.pow(10, 3);
-    const diff = Math.abs(marketPrice - backingAssetValue) / 2;
+  // if (marketPrice > 0) {
+  //   const percentDiff = marketPrice + marketPrice / Math.pow(10, 3);
+  //   const diff = Math.abs(marketPrice - backingAssetValue) / 2;
+  //
+  //   if (isTradingMETA1 && backingAssetValue) {
+  //     marketPrice =
+  //       !isQuoting && percentDiff >= backingAssetValue ? marketPrice + diff : percentDiff;
+  //   } else {
+  //     marketPrice = percentDiff;
+  //   }
+  // }
 
-    if (isTradingMETA1 && backingAssetValue) {
-      marketPrice =
-        !isQuoting && percentDiff >= backingAssetValue ? marketPrice + diff : percentDiff;
-    } else {
-      marketPrice = percentDiff;
-    }
-  }
+  console.log(
+    'MarketPrice:',
+    base.asset._asset.symbol,
+    quote.asset._asset.symbol,
+    marketPrice,
+    backingAssetValue,
+    divideBy,
+    baseAssetPrice,
+    quoteAssetPrice,
+  );
 
-  console.log('MarketPrice:', base.asset._asset.symbol, quote.asset._asset.symbol, marketPrice);
-
+  //todo: implement bigNumbers here https://github.com/MikeMcl/bignumber.js
   return {
     marketPrice: marketPrice !== 0 ? marketPrice : backingAssetValue,
     baseAssetPrice,

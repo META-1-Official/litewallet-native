@@ -269,7 +269,9 @@ export const swapWithPassword: swapWPassSig = async (
     false, // whatever
     new Date(new Date().getTime() + YY), // idk
   );
-  console.log(buyResult);
+  console.log(
+    `Buy result: ${buyResult}, from: ${from}}, to: ${to}, amount: ${amount}, tradePrice: ${tradePrice}`,
+  );
   return buyResult;
 };
 

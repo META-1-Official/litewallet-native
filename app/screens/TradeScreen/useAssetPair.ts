@@ -80,11 +80,11 @@ const useAssetPair = (
       load();
 
       if (swapAssetFlag) {
-        setAsyncMarketPrice(B, A);
-        setAsyncMarketLiquidity(B, A);
-      } else {
         setAsyncMarketPrice(A, B);
         setAsyncMarketLiquidity(A, B);
+      } else {
+        setAsyncMarketPrice(B, A);
+        setAsyncMarketLiquidity(B, A);
       }
     }
   }, [A?.asset.symbol, B?.asset.symbol, A?.amount, B?.amount, isButtonDisabled]);

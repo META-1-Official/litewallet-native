@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file. Dates are d
   - Max button behaviour has been fixed
   - Amount Input length has set to 20
   - Fix immediate update orders list while trading
+  - Market price calculation has fixed
+  - Tiny amount issue has been fixed
 - Bruhchart
   - Chart building has fixed
 

@@ -58,7 +58,7 @@ export const mkPerformSwap = (
   onFail: () => void,
   accountName: string,
 ) => {
-  console.log('PerformSwap');
+  // console.log('PerformSwap');
   const update = useAssetsStore.getState().fetchUserAssets;
 
   const getAccountInfo = async () => ({
@@ -102,7 +102,9 @@ export const mkPerformSwap = (
       // Noop
     }
 
-    const tradePrice = maxOrderPrice > marketPrice ? maxOrderPrice : marketPrice;
+    //todo: implement bigNumbers here https://github.com/MikeMcl/bignumber.js
+    const diff = 1.005;
+    const tradePrice = (maxOrderPrice > marketPrice ? maxOrderPrice : marketPrice) * diff;
 
     await swapWithPassword(
       accountInfo,
