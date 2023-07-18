@@ -11,9 +11,6 @@ const FloatingButton = ({ assets }: AssetsProp) => {
     <View
       style={{
         alignSelf: 'flex-end',
-        position: 'relative',
-        left: -48,
-        top: 32,
         zIndex: 1000,
         elevation: 3,
         backgroundColor: '#330000',

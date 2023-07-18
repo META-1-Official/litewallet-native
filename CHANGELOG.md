@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file. Dates are d
 
 #### [INDEV](https://github.com/META-1-Official/litewallet-native/)
 
+> 18 Jul 2023
+- Trade Screen
+  - Buttons swap and max have been aligned
+
 > 14 Jul 2023
 - Trade Screen
   - Balance updating has been fixed

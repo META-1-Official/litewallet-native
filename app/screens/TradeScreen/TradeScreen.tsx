@@ -116,7 +116,33 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
         </LightMode>
         <View>
           <LightMode>
-            <FloatingButton assets={assets} />
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                top: 32,
+                paddingRight: 48,
+                justifyContent: 'flex-end',
+              }}
+            >
+              <IconButton
+                style={{
+                  alignSelf: 'flex-end',
+                  zIndex: 1000,
+                  backgroundColor: '#330000',
+                  borderRadius: 5,
+                  padding: 6,
+                  paddingHorizontal: 10,
+                  marginRight: 10,
+                }}
+                iconName={'loop'}
+                iconSize={23}
+                iconColor="#ffc000"
+                onClick={pair?.swapAssets}
+                isDisabled={pair?.isButtonDisabled}
+              />
+              <FloatingButton assets={assets} />
+            </View>
           </LightMode>
           <DarkMode>
             <View style={{ margin: 18 }} />
@@ -147,24 +173,6 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
                 <AmountsInput darkMode={darkMode} asset={assets.B} slave />
               </View>
             </View>
-            <IconButton
-              style={{
-                alignSelf: 'flex-end',
-                position: 'absolute',
-                right: 30,
-                top: 115,
-                zIndex: 1000,
-                backgroundColor: '#330000',
-                borderRadius: 5,
-                padding: 5,
-                paddingHorizontal: 10,
-              }}
-              iconName={'loop'}
-              iconSize={20}
-              iconColor="white"
-              onClick={pair?.swapAssets}
-              isDisabled={pair?.isButtonDisabled}
-            />
           </List>
           <Text style={{ textAlign: 'right', alignSelf: 'center', color: '#888' }}>
             {`Current Price: ${Number(assets.A.ticker?.lowest_ask).toFixed(
