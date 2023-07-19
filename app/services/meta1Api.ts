@@ -266,7 +266,7 @@ export const swapWithPassword: swapWPassSig = async (
     from,
     amount,
     tradePrice, //pair.lowest_ask, // tradePrice (marketPrice) or lowest_ask
-    false, // whatever
+    true, // kill order if it is not filled immediately
     new Date(new Date().getTime() + YY), // idk
   );
   console.log(

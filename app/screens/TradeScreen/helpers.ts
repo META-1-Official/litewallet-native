@@ -103,8 +103,7 @@ export const mkPerformSwap = (
     }
 
     //todo: implement bigNumbers here https://github.com/MikeMcl/bignumber.js
-    const diff = 1.005;
-    const tradePrice = (maxOrderPrice > marketPrice ? maxOrderPrice : marketPrice) * diff;
+    const tradePrice = maxOrderPrice > marketPrice ? maxOrderPrice : marketPrice;
 
     await swapWithPassword(
       accountInfo,
