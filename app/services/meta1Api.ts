@@ -21,6 +21,7 @@ import {
   TypeIdPrefixed,
 } from '../utils/meta1dexTypes';
 import { setupOnStatusCallbackHook } from '../utils/meta1wsHook';
+import dayjs from 'dayjs';
 
 // Number of milliseconds in one year
 const YY = 3.154e10;
@@ -267,7 +268,7 @@ export const swapWithPassword: swapWPassSig = async (
     amount,
     tradePrice, //pair.lowest_ask, // tradePrice (marketPrice) or lowest_ask
     true, // kill order if it is not filled immediately
-    new Date(new Date().getTime() + YY), // idk
+    dayjs(new Date()).add(1, 'year').toDate(),
   );
   console.log(
     `Buy result: ${buyResult}, from: ${from}}, to: ${to}, amount: ${amount}, tradePrice: ${tradePrice}`,
@@ -314,7 +315,7 @@ export const placeLimitOrder = async (accountInfo: AccountWithPassword, orderInf
     orderInfo.amount,
     orderInfo.totalPrice,
     false, // whatever
-    new Date(new Date().getTime() + YY), // idk
+    dayjs(new Date()).add(1, 'year').toDate(),
   );
   return sellResult;
 };

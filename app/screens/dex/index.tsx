@@ -24,7 +24,7 @@ import DexSwapScreen from './SwapScreen';
 import Send from './SendScreen';
 import AssetViewStack from './AssetView/AssetView';
 import { DexDrawerParamList } from '../../WalletNav';
-import { OpenOrdersPage } from './AssetView/MyOrders';
+import MyOrders from './AssetView/MyOrders';
 import Notifications from '../Notifications';
 import { tid } from '../../utils';
 
@@ -154,7 +154,7 @@ const DexTabs = ({ navigation }: DexSSP) => {
           tabBarAccessibilityLabel: 'Tab/DexOrders',
         }}
         name="DEX__Orders"
-        component={OpenOrdersPage}
+        component={() => <MyOrders isAllOrders={true} />}
       />
       <Tab.Screen
         options={{

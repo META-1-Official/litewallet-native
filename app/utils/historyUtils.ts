@@ -27,10 +27,11 @@ export const preprocessOrder = (order: any, userAssets: AccountBalanceT | null):
   } as HistoryRetT;
 };
 
-export type RejectFn = (canceled: any, filled: FilledRetT[], order: limitOrderObjExt) => boolean;
-export const isOpen: RejectFn = (canceled, filled, order) => {
+export type OrderType = (canceled: any, filled: FilledRetT[], order: limitOrderObjExt) => boolean;
+
+export const isOpen: OrderType = (canceled, filled, order) => {
   return !(!canceled && !filled.length && inFuture(order.expiration));
 };
-export const isResolved: RejectFn = (canceled, filled, order) => {
+export const isResolved: OrderType = (canceled, filled, order) => {
   return !(canceled || filled.length || !inFuture(order.expiration));
 };

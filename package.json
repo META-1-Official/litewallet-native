@@ -10,7 +10,9 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios --device",
-    "ios:simulator": "react-native run-ios --simulator=\"iPhone 14 Pro\"",
+    "ios:simulator": "react-native run-ios --simulator=\"iPhone 14 Pro Max\"",
+    "ios:plus": "react-native run-ios --simulator=\"iPhone 14 Plus\"",
+    "ios:SE": "react-native run-ios --simulator=\"iPhone SE (2nd generation)\"",
     "ios:clean": "yarn clean; yarn ios",
     "start": "react-native start",
     "xcode": "xed -b ios",
