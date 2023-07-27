@@ -1,4 +1,5 @@
 // Function to round up a float to a certain precision
+import BigNumber from 'bignumber.js';
 import { iLimitOrder } from '../meta1dexTypes';
 
 export const ceilFloat = (floatVal: number, precision: number): number => {
@@ -44,9 +45,16 @@ export const calculateDivideBy = (basePrecision: number, quotePrecision: number)
 };
 
 export const calculatePrice = (limitOrder: iLimitOrder, divideBy: number): number => {
-  return limitOrder.sell_price.quote.amount / limitOrder.sell_price.base.amount / divideBy;
+  const baseAmount = new BigNumber(limitOrder.sell_price.base.amount);
+  const quoteAmount = new BigNumber(limitOrder.sell_price.quote.amount);
+  const price = quoteAmount.dividedBy(baseAmount).dividedBy(divideBy);
+
+  return +price;
 };
 
 export const calculateAmount = (amount: number, quotePrecision: number): number => {
-  return Number(amount) / Math.pow(10, quotePrecision);
+  const bigAmount = new BigNumber(amount);
+  const result = bigAmount.dividedBy(Math.pow(10, quotePrecision));
+
+  return +result;
 };

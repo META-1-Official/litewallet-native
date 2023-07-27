@@ -6,13 +6,15 @@ import { calculateAmount, calculateDivideBy, calculatePrice } from './math';
 const calculateMarketPrice = async (
   base: theAsset,
   quote: theAsset,
-  selectedFromBalance = +base.amount,
+  selectedFromBalance = +quote.amount, // Calculate price based on quote
 ): Promise<{
   marketPrice: number;
   baseAssetPrice: number;
   quoteAssetPrice: number;
   backingAssetValue: number;
 }> => {
+  console.log('!!!!!!!!Start calculate price: ', base, quote, selectedFromBalance);
+
   let marketPrice = 0;
   let estSellAmount = 0;
   const isQuoting = quote.asset.symbol === 'META1';
@@ -29,7 +31,7 @@ const calculateMarketPrice = async (
   for (let limitOrder of limitOrders) {
     if (limitOrder.sell_price.quote.asset_id === base.asset._asset.id) {
       let price = calculatePrice(limitOrder, divideBy);
-      console.log('!Price: ', price);
+      // console.log('!!!!! CalculatedPrice: ', price);
 
       if (isTradingMETA1 && backingAssetValue) {
         if (
@@ -51,7 +53,7 @@ const calculateMarketPrice = async (
       if (selectedFromBalance) {
         const amount = calculateAmount(limitOrder.for_sale, quote.asset._asset.precision);
         estSellAmount += amount;
-        console.log('!_!_!_!_!: ', estSellAmount, selectedFromBalance);
+        console.log(`Orders capacity: ${estSellAmount}, wantedAmount: ${selectedFromBalance}`);
         if (estSellAmount > selectedFromBalance) {
           break;
         }

@@ -255,6 +255,7 @@ export const swapWithPassword: swapWPassSig = async (
     to,
     from,
     amount,
+    tradePrice,
     lowest_ask: pair.lowest_ask,
   });
 
