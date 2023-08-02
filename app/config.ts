@@ -53,7 +53,8 @@ const config: Config = {
     SENDX_TEAM_ID: SEND_X_TEAM_ID,
   },
   META1DEV: {
-    META1_CONNECTION_URL: 'wss://api.dev2.meta-exchange.vision/ws',
+    // META1_CONNECTION_URL: 'wss://api.dev2.meta-exchange.vision/ws',
+    META1_CONNECTION_URL: 'wss://maia.dev2.meta-exchange.vision/ws',
     FAUCET_URL: 'https://faucet.dev2.meta-exchange.vision/faucet',
     LITE_WALLET_API_URL: 'https://litewallet.dev2.cryptomailsvc.io',
     GATEWAY_URL: 'https://gateway.dev2.meta-exchange.vision',
