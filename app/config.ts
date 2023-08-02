@@ -30,7 +30,6 @@ type NetworkConfig = Record<Constants, string>;
 export enum Network {
   META1 = 'META1',
   META1DEV = 'META1DEV',
-  META1DEV2 = 'META1DEV2',
   META1TEST = 'META1TEST',
 }
 
@@ -54,24 +53,8 @@ const config: Config = {
     SENDX_TEAM_ID: SEND_X_TEAM_ID,
   },
   META1DEV: {
-    META1_CONNECTION_URL: 'wss://api.dev.meta-exchange.vision/ws',
-    FAUCET_URL: 'https://faucet.dev.meta-exchange.vision/faucet',
-    LITE_WALLET_API_URL: 'https://litewallet.dev.cryptomailsvc.io',
-    GATEWAY_URL: 'https://gateway.dev.meta-exchange.vision',
-    API_URL: 'https://api.dev.meta-exchange.vision',
-    WEB3_CLIENT_ID:
-      'BFL8Z_Awr3p_ZVGiNUp1CIK8C28p0CC9WJRxw_GWEMWLJvOgJmpTJ8Xl8jbxYvzKhabmENF0GRbxE9EadEJ5T6g',
-    WEB3_NETWORK: OPENLOGIN_NETWORK.TESTNET,
-    FACE_KI_API_URL: 'https://litewallet.dev.cryptomailsvc.io',
-    E_SIGNATURE_API_URL: 'https://e-sign.dev.cryptomailsvc.io',
-    APP_KEY_PREFIX: 'DEV11',
-    CHANNEL_KEY_ANDROID: '',
-    CHANNEL_KEY_IOS: '',
-    SENDX_API_KEY: SEND_X_API_KEY,
-    SENDX_TEAM_ID: SEND_X_TEAM_ID,
-  },
-  META1DEV2: {
-    META1_CONNECTION_URL: 'wss://api.dev2.meta-exchange.vision/ws',
+    // META1_CONNECTION_URL: 'wss://api.dev2.meta-exchange.vision/ws',
+    META1_CONNECTION_URL: 'wss://maia.dev2.meta-exchange.vision/ws',
     FAUCET_URL: 'https://faucet.dev2.meta-exchange.vision/faucet',
     LITE_WALLET_API_URL: 'https://litewallet.dev2.cryptomailsvc.io',
     GATEWAY_URL: 'https://gateway.dev2.meta-exchange.vision',
