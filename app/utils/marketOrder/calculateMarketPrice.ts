@@ -12,6 +12,7 @@ const calculateMarketPrice = async (
   baseAssetPrice: number;
   quoteAssetPrice: number;
   backingAssetValue: number;
+  highestPrice: number;
 }> => {
   console.log('!!!!!!!!Start calculate price: ', base, quote, selectedFromBalance);
 
@@ -28,34 +29,47 @@ const calculateMarketPrice = async (
     quote,
   );
 
+  const precisionFactor = 3 / Math.pow(10, quote.asset._asset.precision);
+
+  let finishCycle = 0;
+  let highestPrice = 0;
+
   for (let limitOrder of limitOrders) {
     if (limitOrder.sell_price.quote.asset_id === base.asset._asset.id) {
       let price = calculatePrice(limitOrder, divideBy);
       // console.log('!!!!! CalculatedPrice: ', price);
 
-      if (isTradingMETA1 && backingAssetValue) {
-        if (
-          (!isQuoting && backingAssetValue > price) ||
-          (isQuoting && backingAssetValue < price)
-        ) {
-          marketPrice = marketPrice
-            ? isQuoting
-              ? selectedFromBalance
-                ? Math.max(marketPrice, price)
-                : marketPrice
-              : Math.min(marketPrice, price)
-            : price;
+      if (finishCycle > 0) {
+        if (isTradingMETA1 && backingAssetValue) {
+          if (
+            (!isQuoting && backingAssetValue > price) ||
+            (isQuoting && backingAssetValue < price)
+          ) {
+            marketPrice = marketPrice
+              ? isQuoting
+                ? selectedFromBalance
+                  ? Math.max(marketPrice, price)
+                  : marketPrice
+                : Math.min(marketPrice, price)
+              : price;
+          }
+        } else {
+          marketPrice = Math.max(marketPrice, price);
         }
-      } else {
-        marketPrice = Math.max(marketPrice, price);
       }
+
+      highestPrice = Math.max(marketPrice, price);
 
       if (selectedFromBalance) {
         const amount = calculateAmount(limitOrder.for_sale, quote.asset._asset.precision);
         estSellAmount += amount;
         console.log(`Orders capacity: ${estSellAmount}, wantedAmount: ${selectedFromBalance}`);
-        if (estSellAmount > selectedFromBalance) {
-          break;
+        if (estSellAmount > selectedFromBalance + precisionFactor) {
+          if (finishCycle >= 2) {
+            break;
+          } else {
+            finishCycle++;
+          }
         }
       }
     }
@@ -90,6 +104,7 @@ const calculateMarketPrice = async (
     baseAssetPrice,
     quoteAssetPrice,
     backingAssetValue,
+    highestPrice,
   };
 };
 

@@ -77,14 +77,11 @@ export const mkPerformSwap = (
       throw new Error("Can't swap the same assets");
     }
 
-    const { marketPrice } = await calculateMarketPrice(assets.A, assets.B);
-    const maxOrderPrice = await getMaxOrderPrice(
-      assets.A,
-      assets.B,
-      +assets.A.amount / marketPrice,
-    );
+    const { marketPrice, highestPrice } = await calculateMarketPrice(assets.A, assets.B);
+
     console.log('Amount of Quote: ', +assets.A.amount / marketPrice);
-    console.log('!!!!!!!!!!!!!!!!!!!!!!!! Max order price: ', maxOrderPrice);
+    console.log('!!!!!!!!!!!!!!!!!!!!!!!! HighestPrice: ', highestPrice);
+
     const marketLiquidity = await calculateMarketLiquidity(assets.A, assets.B);
     assets.A.setMarketPrice(marketPrice);
     assets.B.setMarketLiquidity(marketLiquidity);
@@ -98,20 +95,28 @@ export const mkPerformSwap = (
       );
     }
 
-    if (!(await crossCheckPrice(assets))) {
-      // Noop
+    const precisionFactor = 3 / Math.pow(10, assets.B.asset._asset.precision);
+    const tradePrice = marketPrice + precisionFactor;
+
+    try {
+      console.log('!!!!!!!!!!!!!!!!!!!!!!!!!! My TRY', tradePrice);
+      await swapWithPassword(
+        accountInfo,
+        assets.A.asset.symbol,
+        assets.B.asset.symbol,
+        Number(assets.B.amount),
+        tradePrice, //assets.A.toUsdt(assets.A.asset.amount), //marketPrice
+      );
+    } catch (error) {
+      console.log('!!!!!!!!!!!!!!!!!!!!!!!!!! My CATCH', highestPrice + precisionFactor);
+      await swapWithPassword(
+        accountInfo,
+        assets.A.asset.symbol,
+        assets.B.asset.symbol,
+        Number(assets.B.amount),
+        highestPrice + precisionFactor,
+      );
     }
-
-    //todo: implement bigNumbers here https://github.com/MikeMcl/bignumber.js
-    const tradePrice = maxOrderPrice > marketPrice ? maxOrderPrice : marketPrice;
-
-    await swapWithPassword(
-      accountInfo,
-      assets.A.asset.symbol,
-      assets.B.asset.symbol,
-      Number(assets.B.amount),
-      tradePrice, //assets.A.toUsdt(assets.A.asset.amount), //tradePrice
-    );
 
     onAfterSwap();
   };
