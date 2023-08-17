@@ -8,12 +8,12 @@ const calculateMarketLiquidity = async (base: theAsset, quote: theAsset) => {
   if (limitOrders && limitOrders.length > 0) {
     for (let limitOrder of limitOrders) {
       if (limitOrder.sell_price.quote.asset_id === base.asset._asset.id) {
-        liquidity += limitOrder.for_sale / Math.pow(10, quote.asset._asset.precision);
+        liquidity += limitOrder.for_sale;
       }
     }
   }
 
-  liquidity = parseFloat(liquidity.toFixed(6));
+  liquidity = liquidity / Math.pow(10, quote.asset._asset.precision);
   console.log('Market Liquidity: ', liquidity);
 
   return liquidity;

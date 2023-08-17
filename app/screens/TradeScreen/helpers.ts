@@ -105,17 +105,35 @@ export const mkPerformSwap = (
         assets.A.asset.symbol,
         assets.B.asset.symbol,
         Number(assets.B.amount),
-        tradePrice, //assets.A.toUsdt(assets.A.asset.amount), //marketPrice
+        0.014706, //tradePrice, //assets.A.toUsdt(assets.A.asset.amount), //marketPrice
+        true,
       );
     } catch (error) {
-      console.log('!!!!!!!!!!!!!!!!!!!!!!!!!! My CATCH', highestPrice + precisionFactor);
-      await swapWithPassword(
-        accountInfo,
-        assets.A.asset.symbol,
-        assets.B.asset.symbol,
-        Number(assets.B.amount),
-        highestPrice + precisionFactor,
-      );
+      try {
+        console.log('!!!!!!!!!!!!!!!!!!!!!!!!!! My CATCH', highestPrice + precisionFactor);
+        await swapWithPassword(
+          accountInfo,
+          assets.A.asset.symbol,
+          assets.B.asset.symbol,
+          Number(assets.B.amount),
+          highestPrice + precisionFactor,
+          true,
+        );
+      } catch (error2) {
+        try {
+          console.log('!!!!!!!!!!!!!!!!!!!!!!!!!! My CATCH 3');
+          await swapWithPassword(
+            accountInfo,
+            assets.A.asset.symbol,
+            assets.B.asset.symbol,
+            Number(assets.B.amount),
+            999999999999999, // dirty hack to place market price order
+            true,
+          );
+        } catch (error3) {
+          throw new Error("The order can't be filled immediately! Please try to change amounts.");
+        }
+      }
     }
 
     onAfterSwap();

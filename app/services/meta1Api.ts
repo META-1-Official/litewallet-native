@@ -225,6 +225,7 @@ type swapWPassSig = (
   to: string,
   amount: number,
   tradePrice: number,
+  fillOrKill: boolean,
 ) => Promise<any>;
 
 /**
@@ -242,6 +243,7 @@ export const swapWithPassword: swapWPassSig = async (
   to,
   amount,
   tradePrice,
+  fillOrKill = false,
 ) => {
   const pair = await Meta1.db.get_ticker(from, to);
 
@@ -268,7 +270,7 @@ export const swapWithPassword: swapWPassSig = async (
     from,
     amount,
     tradePrice, //pair.lowest_ask, // tradePrice (marketPrice) or lowest_ask
-    true, // kill order if it is not filled immediately
+    fillOrKill, // kill order if it is not filled immediately
     dayjs(new Date()).add(1, 'year').toDate(),
   );
   console.log(

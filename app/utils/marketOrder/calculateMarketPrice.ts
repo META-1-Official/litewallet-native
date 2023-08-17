@@ -39,12 +39,13 @@ const calculateMarketPrice = async (
       let price = calculatePrice(limitOrder, divideBy);
       // console.log('!!!!! CalculatedPrice: ', price);
 
-      if (finishCycle > 0) {
+      if (finishCycle === 0) {
         if (isTradingMETA1 && backingAssetValue) {
           if (
             (!isQuoting && backingAssetValue > price) ||
             (isQuoting && backingAssetValue < price)
           ) {
+            console.log('123: ', marketPrice);
             marketPrice = marketPrice
               ? isQuoting
                 ? selectedFromBalance
@@ -52,6 +53,7 @@ const calculateMarketPrice = async (
                   : marketPrice
                 : Math.min(marketPrice, price)
               : price;
+            console.log('456: ', marketPrice);
           }
         } else {
           marketPrice = Math.max(marketPrice, price);
@@ -75,17 +77,7 @@ const calculateMarketPrice = async (
     }
   }
 
-  // if (marketPrice > 0) {
-  //   const percentDiff = marketPrice + marketPrice / Math.pow(10, 3);
-  //   const diff = Math.abs(marketPrice - backingAssetValue) / 2;
-  //
-  //   if (isTradingMETA1 && backingAssetValue) {
-  //     marketPrice =
-  //       !isQuoting && percentDiff >= backingAssetValue ? marketPrice + diff : percentDiff;
-  //   } else {
-  //     marketPrice = percentDiff;
-  //   }
-  // }
+  console.log('Highest price: ', highestPrice);
 
   console.log(
     'MarketPrice:',
