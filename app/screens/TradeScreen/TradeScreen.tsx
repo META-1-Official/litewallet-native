@@ -106,6 +106,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
 
   const DarkMode: React.FC = ({ children }) => <>{darkMode ? children : null}</>;
   const darkStyle = optStyleFactory(darkMode);
+
   const LightMode: React.FC = ({ children }) => <>{darkMode ? null : children}</>;
 
   return (
@@ -120,6 +121,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
               style={{
                 display: 'flex',
                 flexDirection: 'row',
+                zIndex: 10,
                 top: 32,
                 paddingRight: 48,
                 justifyContent: 'flex-end',
@@ -128,7 +130,7 @@ const TradeScreen: React.FC<Props> = ({ darkMode }) => {
               <IconButton
                 style={{
                   alignSelf: 'flex-end',
-                  zIndex: 1000,
+                  zIndex: 20,
                   backgroundColor: '#330000',
                   borderRadius: 5,
                   padding: 6,

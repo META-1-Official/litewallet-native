@@ -1,8 +1,8 @@
-import { useAVStore } from '../../screens/dex/AssetView/AssetViewStore';
+import useAppSelector from '../../hooks/useAppSelector';
 import { OrderType } from './types';
 
 const usePair = (type: OrderType) => {
-  const { assetA, assetB } = useAVStore();
+  const { assetA, assetB } = useAppSelector(state => state.dex.tradingPair);
   const pair = [assetA, assetB];
   switch (type) {
     case OrderType.Buy:

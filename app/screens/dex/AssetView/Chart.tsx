@@ -3,12 +3,12 @@ import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import WebView from 'react-native-webview';
 import html from '../../../../bruhchart/dist/index';
 // import { Buffer } from 'buffer';
-import { useAVStore } from './AssetViewStore';
 import { useTicker } from '../../../services/meta1Api';
 import Loader from '../../../components/Loader';
 import { ALL_BUCKETS } from '../../../utils/meta1dexTypes';
 import { colors } from '../../../styles/colors';
 import { tid } from '../../../utils';
+import useAppSelector from '../../../hooks/useAppSelector';
 
 const mkInject = (s: any) =>
   `window.candleSeries.setData(JSON.parse('${JSON.stringify(s)}'));
@@ -16,7 +16,7 @@ const mkInject = (s: any) =>
    true;`;
 
 const Candle: React.FC<{}> = () => {
-  const { assetA, assetB } = useAVStore();
+  const { assetA, assetB } = useAppSelector(state => state.dex.tradingPair);
   const [bucket, setBucket] = useState(ALL_BUCKETS['1D']);
   const wwRef = useRef<WebView | null>(null);
   const ticks = useTicker(assetA, assetB, bucket);

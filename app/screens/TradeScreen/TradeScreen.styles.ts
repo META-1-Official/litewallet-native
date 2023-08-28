@@ -9,8 +9,10 @@ export default StyleSheet.create({
   },
   assetIcon: { width: 42, height: 42, resizeMode: 'contain', marginRight: 8 },
   font18x500: { fontSize: 18, fontWeight: '500' },
+  font12x500: { fontSize: 12, fontWeight: '500' },
   whiteText: { color: '#fff' },
   font14: { fontSize: 14 },
+  font10: { fontSize: 10 },
   amountInput: {
     fontSize: 18,
     padding: 0,
@@ -28,6 +30,8 @@ export default StyleSheet.create({
   listView: { padding: 16, borderBottomWidth: 2, borderBottomColor: '#eceef0' },
   rowJustifyBetween: {
     flexDirection: 'row',
+    paddingLeft: 10,
+    paddingRight: 10,
     justifyContent: 'space-around',
   },
   listHeading: {
@@ -36,8 +40,8 @@ export default StyleSheet.create({
     marginBottom: 8,
   },
   buttonContainer: {
-    margin: 32,
-    marginTop: 128,
+    margin: 12,
+    // marginTop: 128,
     alignItems: 'center',
   },
   button: {

@@ -5,10 +5,10 @@ import { colors } from '../../../styles/colors';
 import { getOrderBook } from '../../../services/meta1Api';
 import { OrderBook } from '../../../utils/meta1dexTypes';
 import { AssetViewTSP } from './AssetView';
-import { useAVStore } from './AssetViewStore';
+import useAppSelector from '../../../hooks/useAppSelector';
 
 export const Orders: React.FC<AssetViewTSP> = () => {
-  const { assetA, assetB } = useAVStore(x => x);
+  const { assetA, assetB } = useAppSelector(state => state.dex.tradingPair);
 
   const [refreshing, setRefreshing] = React.useState(false);
 

@@ -4,11 +4,11 @@ import { Text } from 'react-native-paper';
 import { colors } from '../../../styles/colors';
 import { getTradesForAssetPair } from '../../../services/meta1Api';
 import { AssetViewTSP } from './AssetView';
-import { useAVStore } from './AssetViewStore';
+import useAppSelector from '../../../hooks/useAppSelector';
 type TradesT = ReturnType<typeof getTradesForAssetPair> extends Promise<infer T> ? T : never;
 
 export const Trades: React.FC<AssetViewTSP> = () => {
-  const { assetA, assetB } = useAVStore(x => x);
+  const { assetA, assetB } = useAppSelector(state => state.dex.tradingPair);
 
   const [refreshing, setRefreshing] = React.useState(false);
 

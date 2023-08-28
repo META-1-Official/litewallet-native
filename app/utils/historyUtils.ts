@@ -1,5 +1,5 @@
 import { inFuture } from '.';
-import { AccountBalanceT, FilledRetT, HistoryRetT, limitOrderObjExt } from '../services/meta1Api';
+import { AccountBalanceT, CanceledRetT, HistoryRetT } from '../services/meta1Api';
 
 export const preprocessOrder = (order: any, userAssets: AccountBalanceT | null): HistoryRetT => {
   return {
@@ -27,11 +27,12 @@ export const preprocessOrder = (order: any, userAssets: AccountBalanceT | null):
   } as HistoryRetT;
 };
 
-export type OrderType = (canceled: any, filled: FilledRetT[], order: limitOrderObjExt) => boolean;
+export type OrderType = (
+  canceled: CanceledRetT | undefined,
+  orderExpiration: string,
+  fulfilled: number,
+) => boolean;
 
-export const isOpen: OrderType = (canceled, filled, order) => {
-  return !(!canceled && !filled.length && inFuture(order.expiration));
-};
-export const isResolved: OrderType = (canceled, filled, order) => {
-  return !(canceled || filled.length || !inFuture(order.expiration));
+export const isOpen: OrderType = (canceled, orderExpiration, fulfilled) => {
+  return !canceled && inFuture(orderExpiration) && fulfilled < 1;
 };

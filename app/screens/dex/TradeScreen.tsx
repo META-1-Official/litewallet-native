@@ -1,52 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Image,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React, { useState } from 'react';
+import { SafeAreaView, ScrollView, TextInput, View } from 'react-native';
 import { Search } from 'react-native-feather';
-import { Grid, LineChart } from 'react-native-svg-charts';
-import { DexTSP } from '.';
+
+import { DexSSP } from '.';
 import Loader from '../../components/Loader';
 import { tid } from '../../utils';
-import { getHistoryForAsset, useAssets } from '../../services/meta1Api';
-import { dexAssetView } from './AssetView/AssetViewStore';
+import { useAssets } from '../../services/meta1Api';
+import { useAppDispatch } from '../../hooks';
+import { RenderAssetRow } from './RenderAssetRow';
+import useRedirectToAsset from '../../hooks/useRedirectToAsset';
 
-const Chart: React.FC<{ symbol: string; color: string }> = ({ symbol, color }) => {
-  const [data, setData] = useState<number[]>([1, 1]);
-  useEffect(() => {
-    async function fn() {
-      await getHistoryForAsset(symbol).then(d => setData(d));
-    }
-    fn();
-  }, [symbol]);
-
-  return (
-    <LineChart
-      style={{ width: 80 }}
-      data={data}
-      svg={{ stroke: color }}
-      contentInset={{ top: 20, bottom: 20 }}
-    >
-      <Grid />
-    </LineChart>
-  );
-};
-
-const DexTrade: React.FC<DexTSP> = ({ navigation }) => {
+const DexTrade: React.FC<DexSSP> = ({ navigation }) => {
   const accountAssets = useAssets();
+  const dispatch = useAppDispatch();
   const [searchText, setSearchText] = useState('');
+  const showDexAsset = useRedirectToAsset(dispatch, navigation);
 
   if (!accountAssets) {
     return <Loader bgc="#000" />;
   }
 
   const assets = accountAssets!.assetsWithBalance.filter(
-    e => !searchText || e.symbol.includes(searchText.toLocaleUpperCase()),
+    asset => !searchText || asset.symbol.includes(searchText.toLocaleUpperCase()),
   );
 
   return (
@@ -83,54 +58,12 @@ const DexTrade: React.FC<DexTSP> = ({ navigation }) => {
         <View
           style={{
             marginTop: 18,
-            padding: 18,
+            padding: '3%',
           }}
         >
-          {assets.map(e => {
-            return e.symbol === 'USDT' ? null : (
-              <TouchableOpacity
-                {...tid(`DexTrade/Asset_${e.symbol}`)}
-                onPress={() => dexAssetView(navigation, e.symbol)}
-                key={`Asset_${e.symbol}`}
-              >
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    // padding: 8,
-                    marginVertical: 12,
-                  }}
-                >
-                  <View style={{ flexDirection: 'row', width: 144 }}>
-                    <Image
-                      source={e._asset.icon}
-                      style={{
-                        width: 48,
-                        height: 48,
-                        resizeMode: 'contain',
-                      }}
-                    />
-                    <View style={{ marginLeft: 8 }}>
-                      <Text style={{ color: '#fff', fontSize: 16 }}>{e.symbol}</Text>
-                      <Text style={{ color: '#fff', fontSize: 12 }}>{e.symbol}</Text>
-                    </View>
-                  </View>
-                  <Chart symbol={e.symbol} color={e.delta >= 0 ? '#419e7f' : '#b02a27'} />
-                  <View
-                    style={{
-                      width: 80,
-                      marginLeft: 18,
-                      alignItems: 'flex-end',
-                    }}
-                  >
-                    <Text style={{ color: '#fff', fontSize: 15 }}>${e.usdt_value.toFixed(2)}</Text>
-                    <Text style={{ color: e.delta >= 0 ? '#419e7f' : '#b02a27' }}>
-                      {e.delta >= 0 ? '+ ' : '- '}
-                      {Math.abs(e.delta)}%
-                    </Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
+          {assets.map(asset => {
+            return (
+              asset.symbol !== 'USDT' && RenderAssetRow(asset, () => showDexAsset(asset.symbol))
             );
           })}
         </View>

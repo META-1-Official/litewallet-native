@@ -24,3 +24,8 @@ export interface Action {
   type: Update;
   payload?: string;
 }
+
+export interface TradingPair {
+  assetA: string;
+  assetB: string;
+}

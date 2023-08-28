@@ -27,6 +27,10 @@ import { DexDrawerParamList } from '../../WalletNav';
 import MyOrders from './AssetView/MyOrders';
 import Notifications from '../Notifications';
 import { tid } from '../../utils';
+import { useFocusEffect } from '@react-navigation/native';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { clearDexData } from '../../store/dex/dex.reducer';
+import { getDexData } from '../../store/dex/dex.actions';
 
 const Black = () => <Loader bgc="#000" />;
 
@@ -49,6 +53,7 @@ export type DexModalStackParamList = {
   DEX__AssetViewStack: undefined;
   DEX__Notifications: undefined;
 };
+
 export type DexModalStackNavigationProp = StackNavigationProp<DexModalStackParamList, '__Tabs'>;
 
 const Tab = createBottomTabNavigator<DexTabParamList>();
@@ -61,6 +66,7 @@ const Name2Icon: Record<keyof DexTabParamList, any> = {
   DEX__Orders: SvgIcons.Orders,
   DEX__Fund: SvgIcons.Wallet,
 };
+
 export const DexStack = () => {
   return (
     <Stack.Navigator
@@ -89,7 +95,16 @@ export const DexStack = () => {
 
 export type DexSSP = StackScreenProps<DexModalStackParamList>;
 export type DexTSP = BottomTabScreenProps<DexTabParamList>;
+
 const DexTabs = ({ navigation }: DexSSP) => {
+  const dispatch = useAppDispatch();
+  const { accountName } = useAppSelector(state => state.wallet);
+
+  useFocusEffect(() => {
+    dispatch(clearDexData());
+    dispatch(getDexData({ accountName }));
+  });
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -111,11 +126,11 @@ const DexTabs = ({ navigation }: DexSSP) => {
         tabBarInactiveTintColor: '#500404',
         tabBarActiveTintColor: '#b77409',
         tabBarItemStyle: {
-          marginTop: route.name === 'DEX__Modal' ? 24 : undefined,
+          marginTop: route.name === 'DEX__Modal' ? 16 : undefined,
         },
         tabBarIcon: ({ color, size }) => {
           const Icon = Name2Icon[route.name];
-          const newSize = route.name === 'DEX__Modal' ? size + 24 : size;
+          const newSize = route.name === 'DEX__Modal' ? size + 20 : size;
           return <Icon width={newSize} height={newSize} fill={color} color={color} />;
         },
       })}
@@ -154,7 +169,7 @@ const DexTabs = ({ navigation }: DexSSP) => {
           tabBarAccessibilityLabel: 'Tab/DexOrders',
         }}
         name="DEX__Orders"
-        component={() => <MyOrders isAllOrders={true} />}
+        component={MyOrders}
       />
       <Tab.Screen
         options={{

@@ -5,7 +5,7 @@ import {
   StackScreenProps,
 } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
-import { Image, Platform, Pressable, SafeAreaView, Text, View } from 'react-native';
+import { Dimensions, Image, Platform, Pressable, SafeAreaView, Text, View } from 'react-native';
 import { ArrowLeft } from 'react-native-feather';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { DexSSP } from '..';
@@ -15,12 +15,14 @@ import { ProfitIndicator } from '../../../components/PortfolioHeader';
 import { colors } from '../../../styles/colors';
 import { tid } from '../../../utils';
 import meta1dex, { Ticker } from '../../../utils/meta1dexTypes';
-import { useAVStore } from './AssetViewStore';
 import Candle from './Chart';
 import AssetViewModal from './Modal';
 import MyOrders from './MyOrders';
 import Orders from './Orders';
 import Trades from './Trades';
+import useAppSelector from '../../../hooks/useAppSelector';
+import { useAppDispatch } from '../../../hooks';
+import { getDexData } from '../../../store/dex/dex.actions';
 
 export type AssetViewTabParamList = {
   ASSET__Chart: undefined;
@@ -82,8 +84,11 @@ const screenWithHeader = (Child: any) => (props: AssetViewTSP) =>
   );
 
 const AssetViewHeader: React.FC<AssetViewTSP> = ({ navigation }) => {
-  const { assetA, assetB } = useAVStore(x => x);
+  const { width } = Dimensions.get('window');
+  const { assetA, assetB } = useAppSelector(state => state.dex.tradingPair);
+  const { accountName } = useAppSelector(state => state.wallet);
   const [ticker, setTicker] = useState<Ticker | null>(null);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     let canceled = false;
@@ -104,6 +109,12 @@ const AssetViewHeader: React.FC<AssetViewTSP> = ({ navigation }) => {
     };
   }, [assetA, assetB, navigation]);
 
+  useEffect(() => {
+    dispatch(getDexData({ accountName, assetA, assetB })).catch(error =>
+      console.error('Dispatch error:', error),
+    );
+  }, []);
+
   return (
     <SafeAreaView
       style={{
@@ -120,19 +131,19 @@ const AssetViewHeader: React.FC<AssetViewTSP> = ({ navigation }) => {
       </TouchableOpacity>
       <Text
         style={{
-          fontSize: 20,
+          fontSize: width < 340 ? 16 : 20,
           color: '#fff',
           fontWeight: '500',
         }}
       >
         {assetA} / {assetB}
       </Text>
-      <SvgIcons.FavoriteStar width={22} height={22} fill={colors.BrandYellow} />
+      <SvgIcons.FavoriteStar marginLeft={5} width={18} height={18} fill={colors.BrandYellow} />
       <View style={{ flexDirection: 'row', marginLeft: 'auto' }}>
         <Text
           style={{
-            fontSize: 20,
-            color: (ticker?.percent_change || 0) > 0 ? '#00aa09' : '#c00f00',
+            fontSize: width < 340 ? 16 : 20,
+            color: Number(ticker?.percent_change) > 0 ? '#00aa09' : '#c00f00',
             fontWeight: '500',
             marginHorizontal: 8,
           }}

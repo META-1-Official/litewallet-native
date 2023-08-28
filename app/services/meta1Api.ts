@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
 import create from 'zustand';
 import useAppSelector from '../hooks/useAppSelector';
-import { excludeIndex } from '../utils';
+import { excludeIndex, inFuture } from '../utils';
 import config from '../config';
 import { useStore } from '../store';
 import {
@@ -561,6 +561,17 @@ export type fillOrderObjBase<amtT> = {
 };
 export type fillOrderObj = fillOrderObjBase<AmountT>;
 
+export type cancelOrderObjBase<amtT> = {
+  fee: amtT;
+  fee_paying_account: string;
+  order: string;
+  extensions: [];
+  result: {
+    void_result: {};
+  };
+};
+export type cancelOrderObj = cancelOrderObjBase<AmountT>;
+
 export const parseHistoryEntry = (
   rawOp: TypeIdPrefixed<limitOrderObj>,
   rawResult: TypeIdPrefixed<string>,
@@ -602,6 +613,13 @@ export interface HistoryRetT extends Record<keyof typeof OP_TYPE, limitOrderObjE
 
 export interface FilledRetT extends Record<keyof typeof OP_TYPE, fillOrderObj> {
   raw: any;
+  progress: number;
+}
+export interface HistoryRetT extends Record<keyof typeof OP_TYPE, limitOrderObjExt> {
+  raw: any;
+}
+export interface CanceledRetT extends Record<keyof typeof OP_TYPE, cancelOrderObj> {
+  raw: any;
 }
 
 export const getAccountHistory = async (accountName: string) => {
@@ -615,41 +633,102 @@ export const getAccountHistory = async (accountName: string) => {
   return hist.map((e: any) => ({
     raw: e,
     ...parseHistoryEntry(e.op, e.result),
-  })) as HistoryRetT[];
+  }));
 };
-export type FullHistoryOrder = Map<
-  string,
-  {
-    order: HistoryRetT;
-    canceled: any;
-    filled: any[];
-  }
->;
 
-export const getHistoricalOrders = async (accountName: string) => {
-  const history = await getAccountHistory(accountName);
+export enum Statuses {
+  open = 'Open',
+  canceled = 'Canceled',
+  expired = 'Expired',
+  completed = 'Completed',
+  partially = 'Partially',
+}
 
-  const createdOrders = history.filter(e =>
-    Object.keys(e).includes('limit_order_create_operation'),
+// export type HistoryOrderStatus = {
+//   opened: HistoryRetT;
+//   historical: HistoryRetT;
+// };
+
+export type FullHistoryOrder = {
+  order_id: string;
+  order: HistoryRetT;
+  canceled: CanceledRetT | undefined;
+  filled: FilledRetT[] | undefined;
+  fulfilled: number;
+  status: Statuses;
+};
+
+export const getHistoricalOrders = async (accountName: string): Promise<FullHistoryOrder[]> => {
+  const history: (HistoryRetT | FilledRetT | CanceledRetT)[] = await getAccountHistory(
+    accountName,
   );
 
-  const canceledOrders = history.filter(e =>
-    Object.keys(e).includes('limit_order_cancel_operation'),
+  const createdOrders: HistoryRetT[] = history.filter((order): order is HistoryRetT =>
+    Object.keys(order).includes('limit_order_create_operation'),
   );
 
-  const filledOrders = history.filter(e => Object.keys(e).includes('fill_order_operation'));
+  const canceledOrders = history.filter((order): order is CanceledRetT =>
+    Object.keys(order).includes('limit_order_cancel_operation'),
+  );
+
+  const filledOrders: FilledRetT[] = history.filter((order): order is FilledRetT =>
+    Object.keys(order).includes('fill_order_operation'),
+  );
 
   const orderIds: string[] = createdOrders.map(
-    e => e.limit_order_create_operation.result.object_id_type,
+    order => order.limit_order_create_operation.result.object_id_type,
   );
 
-  const orderStatuses = orderIds.map((id, i) => ({
-    order: createdOrders[i],
-    canceled: canceledOrders.find(e => (e.limit_order_cancel_operation as any).order === id),
-    filled: filledOrders.filter(e => (e.fill_order_operation as any).order_id === id),
-  }));
+  return orderIds.map((id, i) => {
+    const filled = filledOrders
+      .filter(filledAnyOrder => filledAnyOrder.fill_order_operation.order_id === id)
+      .map(filledOrder => {
+        if (filledOrder.fill_order_operation.is_maker) {
+          return {
+            progress:
+              filledOrder.fill_order_operation.pays.amount /
+              filledOrder.fill_order_operation.fill_price.base.amount,
+            fill_order_operation: filledOrder.fill_order_operation,
+            raw: filledOrder.raw,
+          } as FilledRetT;
+        }
+        return {
+          progress:
+            filledOrder.fill_order_operation.receives.amount /
+            createdOrders[i].limit_order_create_operation.min_to_receive.amount,
+          fill_order_operation: filledOrder.fill_order_operation,
+          raw: filledOrder.raw,
+        } as FilledRetT;
+      });
 
-  return new Map(zip(orderIds, orderStatuses)) as FullHistoryOrder;
+    const canceled = canceledOrders.find(
+      order => (order.limit_order_cancel_operation as any).order === id,
+    );
+
+    const fulfilled = filled.reduce((sum, fill) => sum + fill.progress, 0) || 0;
+    var status = Statuses.open;
+    if (canceled) {
+      status = Statuses.canceled;
+    }
+    if (fulfilled > 0 && canceled) {
+      status = Statuses.partially;
+    }
+    if (fulfilled >= 1) {
+      status = Statuses.completed;
+    }
+    if (!inFuture(createdOrders[i].limit_order_create_operation.expiration)) {
+      status = Statuses.expired;
+    }
+
+    return {
+      order_id: createdOrders[i].limit_order_create_operation.result.object_id_type,
+      order: createdOrders[i],
+      canceled,
+      filled,
+      fulfilled,
+      status,
+    };
+  });
 };
 
 export type OHLC = {

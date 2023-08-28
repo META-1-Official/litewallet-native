@@ -8,6 +8,7 @@ import signUpReducer from './signUp/signUp.reducer';
 import web3Reducer from './web3/web3.reducer';
 import eSignatureReducer from './eSignature/eSignature.reducer';
 import walletReducer from './wallet/wallet.reducers';
+import dexReducer from './dex/dex.reducer';
 
 const reducers = combineReducers({
   signIn: signInReducer,
@@ -16,11 +17,15 @@ const reducers = combineReducers({
   faceKI: faceKIReducer,
   eSignature: eSignatureReducer,
   wallet: walletReducer,
+  dex: dexReducer,
 });
+
+const reducersToPersist = ['signIn', 'signUp', 'web3', 'faceKI', 'wallet', 'eSignature'];
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
+  whitelist: reducersToPersist,
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);

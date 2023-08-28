@@ -12,8 +12,9 @@ import useAppSelector from '../../hooks/useAppSelector';
 import { colors } from '../../styles/colors';
 import { tid } from '../../utils';
 import { getHistory } from '../../store/wallet/wallet.actions';
-import { dexAssetView } from './AssetView/AssetViewStore';
 import useAssetsOnFocus from '../../hooks/useAssetsOnFocus';
+import { setTradingPair } from '../../store/dex/dex.reducer';
+import useRedirectToAsset from '../../hooks/useRedirectToAsset';
 
 const GRAPH_INTERVAL = {
   '1D': 3600,
@@ -58,7 +59,7 @@ const Chart = ({ data }: { data: number[] }) => {
         <Text style={{ color: '#fff' }}>${data.slice(-1)[0].toFixed(2)}</Text>
       </View>
       <LineChart
-        style={{ width: width, height: height / 4 }}
+        style={{ width: width, height: height / 10 }}
         data={data}
         svg={{ stroke: colors.BrandYellow, strokeWidth: 2 }}
         contentInset={{ top: 20, bottom: 20, left: 10, right: 45 }}
@@ -73,7 +74,9 @@ const Chart = ({ data }: { data: number[] }) => {
     </View>
   );
 };
+
 const MAX_SAMPLES = 500;
+
 const DexFund: React.FC<DexTSP> = ({ navigation }) => {
   const dispatch = useAppDispatch();
   const [curInterval, setCurInterval] = useState<GRAPH_INTERVAL_KEYS>('1D');
@@ -82,6 +85,8 @@ const DexFund: React.FC<DexTSP> = ({ navigation }) => {
   const accountName = useAppSelector(state => state.wallet.accountName);
   const accountAssets = useAssetsOnFocus();
   const accountTotal = accountAssets?.accountTotal || 0;
+  const showDexAsset = useRedirectToAsset(dispatch, navigation);
+
   useEffect(() => {
     var fromDate = new Date();
     fromDate.setTime(fromDate.getTime() - GRAPH_TIMESTAMP_BEFORE[curInterval]);
@@ -201,7 +206,7 @@ const DexFund: React.FC<DexTSP> = ({ navigation }) => {
           textPrimary: '#fff',
           textSecondary: '#fff',
         }}
-        onPress={s => (s === 'USDT' ? null : dexAssetView(navigation, s))}
+        onPress={assetSymbol => assetSymbol !== 'USDT' && showDexAsset(assetSymbol)}
         usdPrimary
       />
     </SafeAreaView>
