@@ -290,9 +290,9 @@ PODS:
     - React-Core
   - react-native-encrypted-storage (4.0.3):
     - React-Core
-  - react-native-image-picker (4.10.0):
+  - react-native-image-picker (4.10.3):
     - React-Core
-  - react-native-pdf (6.6.2):
+  - react-native-pdf (6.7.1):
     - React-Core
   - react-native-restart (0.0.24):
     - React-Core
@@ -306,11 +306,11 @@ PODS:
     - React-RCTText
   - react-native-web-browser (1.1.0):
     - React-Core
-  - react-native-webview (11.23.1):
+  - react-native-webview (11.26.1):
     - React-Core
-  - react-native-zendesk-messaging (0.1.0):
+  - react-native-zendesk-messaging (0.1.1):
     - React-Core
-    - ZendeskSDKMessaging
+    - ZendeskSDKMessaging (= 2.8.0)
   - React-perflogger (0.70.5)
   - React-RCTActionSheet (0.70.5):
     - React-Core/RCTActionSheetHeaders (= 0.70.5)
@@ -379,18 +379,18 @@ PODS:
     - React-perflogger (= 0.70.5)
   - ReactNativeExceptionHandler (2.10.10):
     - React-Core
-  - RNCAsyncStorage (1.17.11):
+  - RNCAsyncStorage (1.19.3):
     - React-Core
-  - RNCCheckbox (0.5.14):
+  - RNCCheckbox (0.5.16):
     - BEMCheckBox (~> 1.4)
     - React-Core
-  - RNCClipboard (1.11.1):
+  - RNCClipboard (1.12.1):
     - React-Core
-  - RNCMaskedView (0.2.8):
+  - RNCMaskedView (0.2.9):
     - React-Core
-  - RNGestureHandler (2.8.0):
+  - RNGestureHandler (2.13.1):
     - React-Core
-  - RNReanimated (2.12.0):
+  - RNReanimated (2.17.0):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -417,7 +417,7 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.18.2):
+  - RNScreens (3.25.0):
     - React-Core
     - React-RCTImage
   - RNSentry (3.4.3):
@@ -431,38 +431,34 @@ PODS:
     - Sentry/Core (= 7.11.0)
   - Sentry/Core (7.11.0)
   - SocketRocket (0.6.0)
-  - VisionCamera (2.15.2):
+  - VisionCamera (2.16.1):
     - React
     - React-callinvoker
     - React-Core
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
-  - Zendesk (1.12.0):
-    - ZendeskSDKConversationKit (~> 1.9.0)
-    - ZendeskSDKCoreUtilities (~> 1.3.0)
-  - ZendeskSDKConversationKit (1.9.0):
-    - ZendeskSDKCoreUtilities (~> 1.3.0)
-    - ZendeskSDKFayeClient (~> 1.4.0)
-    - ZendeskSDKHTTPClient (~> 0.12.0)
-    - ZendeskSDKStorage (~> 0.7.0)
-  - ZendeskSDKCoreUtilities (1.3.0)
-  - ZendeskSDKFayeClient (1.4.0):
-    - ZendeskSDKLogger (~> 0.7.0)
-    - ZendeskSDKSocketClient (~> 1.4.0)
-  - ZendeskSDKHTTPClient (0.12.0):
-    - ZendeskSDKLogger (~> 0.7.0)
-  - ZendeskSDKLogger (0.7.0)
-  - ZendeskSDKMessaging (2.12.0):
-    - Zendesk (~> 1.12.0)
-    - ZendeskSDKConversationKit (~> 1.9.0)
-    - ZendeskSDKCoreUtilities (~> 1.3.0)
-    - ZendeskSDKUIComponents (~> 2.7.0)
-  - ZendeskSDKSocketClient (1.4.0):
-    - ZendeskSDKLogger (~> 0.7.0)
-  - ZendeskSDKStorage (0.7.0):
-    - ZendeskSDKLogger (~> 0.7.0)
-  - ZendeskSDKUIComponents (2.7.0)
+  - Zendesk (1.8.0):
+    - ZendeskSDKConversationKit (~> 1.6.0)
+  - ZendeskSDKConversationKit (1.6.0):
+    - ZendeskSDKFayeClient (~> 1.2.0)
+    - ZendeskSDKHTTPClient (~> 0.9.0)
+    - ZendeskSDKStorage (~> 0.5.0)
+  - ZendeskSDKFayeClient (1.2.0):
+    - ZendeskSDKLogger (~> 0.5.0)
+    - ZendeskSDKSocketClient (~> 1.2.0)
+  - ZendeskSDKHTTPClient (0.9.0):
+    - ZendeskSDKLogger (~> 0.5.0)
+  - ZendeskSDKLogger (0.5.0)
+  - ZendeskSDKMessaging (2.8.0):
+    - Zendesk (~> 1.8.0)
+    - ZendeskSDKConversationKit (~> 1.6.0)
+    - ZendeskSDKUIComponents (~> 2.3.0)
+  - ZendeskSDKSocketClient (1.2.0):
+    - ZendeskSDKLogger (~> 0.5.0)
+  - ZendeskSDKStorage (0.5.0):
+    - ZendeskSDKLogger (~> 0.5.0)
+  - ZendeskSDKUIComponents (2.3.0)
 
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
@@ -567,7 +563,6 @@ SPEC REPOS:
     - YogaKit
     - Zendesk
     - ZendeskSDKConversationKit
-    - ZendeskSDKCoreUtilities
     - ZendeskSDKFayeClient
     - ZendeskSDKHTTPClient
     - ZendeskSDKLogger
@@ -725,15 +720,15 @@ SPEC CHECKSUMS:
   React-logger: fdda34dd285bdb0232e059b19d9606fa0ec3bb9c
   react-native-blob-util: 60453b777610c87a22b3524032c0214e8db555db
   react-native-encrypted-storage: db300a3f2f0aba1e818417c1c0a6be549038deb7
-  react-native-image-picker: 4bc9ed38c8be255b515d8c88babbaf74973f91a8
-  react-native-pdf: 33c622cbdf776a649929e8b9d1ce2d313347c4fa
+  react-native-image-picker: 60f4246eb5bb7187fc15638a8c1f13abd3820695
+  react-native-pdf: 7c0e91ada997bac8bac3bb5bea5b6b81f5a3caae
   react-native-restart: 45c8dca02491980f2958595333cbccd6877cb57e
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   react-native-text-input-mask: 36a546b378fadd2efe1b7484a859d34bc2c80395
   react-native-web-browser: 087b454e1e94b58b40ba73f54251d77486144d19
-  react-native-webview: d33e2db8925d090871ffeb232dfa50cb3a727581
-  react-native-zendesk-messaging: 53c14d4210e6888c73dfeced322e51ddf1a4b805
+  react-native-webview: 9f111dfbcfc826084d6c507f569e5e03342ee1c1
+  react-native-zendesk-messaging: ba2a722c7a8475320f4fcdfbc6e144bc7ba40c37
   React-perflogger: e68d3795cf5d247a0379735cbac7309adf2fb931
   React-RCTActionSheet: 05452c3b281edb27850253db13ecd4c5a65bc247
   React-RCTAnimation: 578eebac706428e68466118e84aeacf3a282b4da
@@ -747,31 +742,30 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 7401c4a40f8728fd89df4a56104541b760876117
   ReactCommon: c9246996e73bf75a2c6c3ff15f1e16707cdc2da9
   ReactNativeExceptionHandler: b11ff67c78802b2f62eed0e10e75cb1ef7947c60
-  RNCAsyncStorage: 8616bd5a58af409453ea4e1b246521bb76578d60
-  RNCCheckbox: 38989bbd3d7d536adf24ba26c6b3e6cefe0bea6f
-  RNCClipboard: 2834e1c4af68697089cdd455ee4a4cdd198fa7dd
-  RNCMaskedView: bc0170f389056201c82a55e242e5d90070e18e5a
-  RNGestureHandler: 62232ba8f562f7dea5ba1b3383494eb5bf97a4d3
-  RNReanimated: 2a91e85fcd343f8af3c58d3425b99fdd285590a5
-  RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
+  RNCAsyncStorage: c913ede1fa163a71cea118ed4670bbaaa4b511bb
+  RNCCheckbox: 75255b03e604bbcc26411eb31c4cbe3e3865f538
+  RNCClipboard: d77213bfa269013bf4b857b7a9ca37ee062d8ef1
+  RNCMaskedView: 949696f25ec596bfc697fc88e6f95cf0c79669b6
+  RNGestureHandler: 38aa38413896620338948fbb5c90579a7b1c3fde
+  RNReanimated: bec7736122a268883bdede07f1bf9cf4b40158db
+  RNScreens: 85d3880b52d34db7b8eeebe2f1a0e807c05e69fa
   RNSentry: 85f6525b5fe8d2ada065858026b338605b3c09da
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   Sentry: 0c5cd63d714187b4a39c331c1f0eb04ba7868341
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
-  VisionCamera: 4cfd685b1e671fea4aa0400905ab397f0e972210
+  VisionCamera: 038cba190635523eedb2ae8a67bb226d7ef2f054
   Yoga: eca980a5771bf114c41a754098cd85e6e0d90ed7
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
-  Zendesk: 0505ba8fc49ea3029329cb466568ea6ada4bef62
-  ZendeskSDKConversationKit: 6d8ab0e04955144a4eeb1e59ff3e8bc01f7fafbd
-  ZendeskSDKCoreUtilities: e53e321eeccf21f6ee21d3d985a923b85ae6dffe
-  ZendeskSDKFayeClient: 5de94ef6a7ac09fa0ec6ee51ba843c47d2e9bec5
-  ZendeskSDKHTTPClient: f9193f3b2c7003960894f666f2b2cbbd1d10fcd5
-  ZendeskSDKLogger: 30e5c41600d0cec61727bbe7c096264d18ada50d
-  ZendeskSDKMessaging: e9a29dd8d8856f64e3a18f9e079a8d7520b69aff
-  ZendeskSDKSocketClient: ca7f145a32a4229acdbfd1abe1205b950c51972a
-  ZendeskSDKStorage: cf73fa8079c768d449a951484bd69c0880192635
-  ZendeskSDKUIComponents: 48a48b6ea89feeca2704c1657e32eca2487acf06
+  Zendesk: bc72c7a3c0284c717f3220c27dc7308876d1b353
+  ZendeskSDKConversationKit: d4c9f11cdc6dac0488fb79a04d3a4bad7fc58bce
+  ZendeskSDKFayeClient: c1d4b9973cdf999c7a717c981c4cd4c6e1186f93
+  ZendeskSDKHTTPClient: 3d4b59eb72555d5cf84fd9761712762890e1d12b
+  ZendeskSDKLogger: 9d80689480792be806f3c777124c87bbaed9394f
+  ZendeskSDKMessaging: d087596e699cf076c2bda39dea55498c399d4e4d
+  ZendeskSDKSocketClient: 4c11b499acc0c4abe55c5574a74ff8135b7b7624
+  ZendeskSDKStorage: be97db5c9418cecbd15e1b24b732cc0e8e10a991
+  ZendeskSDKUIComponents: b9a3a6d3036ebd093229a2c7e7c598afc870fb47
 
 PODFILE CHECKSUM: 27e859aead89e2a50de419fa096c8b862a434139
 
