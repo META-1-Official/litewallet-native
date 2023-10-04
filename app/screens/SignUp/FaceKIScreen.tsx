@@ -41,6 +41,8 @@ const FaceKIScreen: React.FC<Props> = () => {
       });
   }, []);
 
+  const isReady = isCameraAvailable && email && token;
+
   return (
     <View
       style={{
@@ -53,8 +55,8 @@ const FaceKIScreen: React.FC<Props> = () => {
         paddingBottom: 40,
       }}
     >
-      {!isCameraAvailable && <Loader />}
-      {isCameraAvailable && (
+      {!isReady && <Loader />}
+      {isReady && (
         <FaceKiCameraView privateKey={privateKey} email={email} task={task} token={token} />
       )}
     </View>

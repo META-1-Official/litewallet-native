@@ -23,12 +23,13 @@ import CircleProgressBar from '../modules/biometric-auth/CircleProgressBar';
 import calculateCompletionPercentage from '../modules/biometric-auth/helpers/calculateTasksProgress';
 import parseTurnServer from '../modules/biometric-auth/helpers/parseTurnServer';
 import { useStore } from '../store';
-import { faceKIVerifyOnSignup, faceKIVerifyOnSignIn } from '../store/faceKI/faceKI.actions';
+// import { faceKIVerifyOnSignup, faceKIVerifyOnSignIn } from '../store/faceKI/faceKI.actions';
 import { login } from '../store/signIn/signIn.actions';
 import { authorize } from '../store/wallet/wallet.reducers';
 import styles from './FaceKICameraView.styles';
 import Loader from './Loader';
 import RoundedButton from './RoundedButton';
+// import ProcessingCanvasComponent from '../modules/biometric-auth/ProcessingCanvasComponent';
 
 import { faceFrameAsset } from '../../assets/';
 
@@ -48,21 +49,21 @@ interface Props {
   onFailure?: Function;
 }
 
-const takePhoto = async (camera: Camera) => {
-  if (Platform.OS === 'android') {
-    const capture: PhotoFile = await camera.takeSnapshot({
-      quality: 50,
-      skipMetadata: true,
-    });
-    if (capture) {
-      return capture;
-    }
-  }
-  return await camera.takePhoto({
-    qualityPrioritization: 'speed',
-    skipMetadata: true,
-  });
-};
+// const takePhoto = async (camera: Camera) => {
+//   if (Platform.OS === 'android') {
+//     const capture: PhotoFile = await camera.takeSnapshot({
+//       quality: 50,
+//       skipMetadata: true,
+//     });
+//     if (capture) {
+//       return capture;
+//     }
+//   }
+//   return await camera.takePhoto({
+//     qualityPrioritization: 'speed',
+//     skipMetadata: true,
+//   });
+// };
 
 const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailure }: Props) => {
   const nav = useNavigation<RootNavigationProp>();
@@ -85,10 +86,11 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
   const ws = useRef(null);
   const pc = useRef(null);
   const dc = useRef(null);
-  const hudUserGuidanceAlertRef = useRef();
-  const hudFacemagnetRef = useRef();
+  // const hudUserGuidanceAlertRef = useRef();
+  // const hudFacemagnetRef = useRef();
+
+  // const processingCanvasComponentref = useRef(null);
   const emptyStreamRef = useRef(null);
-  let jwtTokenRef = useRef(token);
 
   const { accountName: signUpAccountName } = useAppSelector(state => state.signUp);
   const { accountName: signInAccountName } = useAppSelector(state => state.signIn);
@@ -98,6 +100,8 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
 
   const screenWidth = Dimensions.get('window').width;
   const screenHeight = Dimensions.get('window').height;
+
+  let jwtTokenRef = useRef(token);
 
   const checkAndAddDir = description => {
     return description;
@@ -162,7 +166,7 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
   };
 
   const handleFASData = msg => {
-    console.log('MSG: ', msg);
+    console.log('handleFASData() msg:', msg);
     if (
       typeof msg.type !== 'undefined' &&
       ['success', 'error', 'info', 'warning'].indexOf(String(msg.type)) !== -1
@@ -180,13 +184,13 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
           type: 'success',
           text1: msg.message,
         });
-        hudUserGuidanceAlertRef.current.clear();
+        // hudUserGuidanceAlertRef.current.clear();
         onComplete(msg.token);
       } else if (
         (msg.type === 'error' && msg.message === 'Registration failure') ||
         (msg.type === 'warning' && msg.message === 'Liveliness check failed!!!')
       ) {
-        hudUserGuidanceAlertRef.current.clear();
+        // hudUserGuidanceAlertRef.current.clear();
         Toast.show({
           type: 'error',
           text1: msg.message,
@@ -195,17 +199,17 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
       }
     } else if (typeof msg.type !== 'undefined' && msg.type === 'data') {
       console.log('log', msg);
-      hudUserGuidanceAlertRef.current.updateData(msg.message);
+      // hudUserGuidanceAlertRef.current.updateData(msg.message);
 
       if (cameraRef.current && cameraRef.current.video) {
         const video = cameraRef.current.video;
         if (video.videoWidth && video.videoHeight) {
-          hudFacemagnetRef.current.setOriginalWidth(video.videoWidth);
-          hudFacemagnetRef.current.setOriginalHeight(video.videoHeight);
+          // hudFacemagnetRef.current.setOriginalWidth(video.videoWidth);
+          // hudFacemagnetRef.current.setOriginalHeight(video.videoHeight);
         }
       }
 
-      hudFacemagnetRef.current.setData(msg.message);
+      // hudFacemagnetRef.current.setData(msg.message);
       setLogs(prevLogs => [...prevLogs, { msg, timestamp: new Date() }]);
     }
 
@@ -214,8 +218,8 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
       msg.type === 'info' &&
       msg.message === 'Session completed!!!'
     ) {
-      // forceCleanUp();
-      hudUserGuidanceAlertRef.current.clear();
+      forceCleanUp();
+      // hudUserGuidanceAlertRef.current.clear();
       setConnected(false);
     }
   };
@@ -312,7 +316,7 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
   };
 
   const addOrReplaceTrack = async (track, stream) => {
-    console.log('replace track');
+    console.log('addOrReplaceTrack()', track);
     const senders = pc.current.getSenders();
 
     const videoSender = senders.find(sender => sender.track && sender.track.kind === 'video');
@@ -331,51 +335,6 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
     }
   };
 
-  const disconnect = () => {
-    console.log('disconnect()');
-    // Close ws connection
-    if (ws.current !== null) {
-      ws.current.close();
-      ws.current = null;
-    }
-
-    if (dc.current !== null) {
-      dc.current.close();
-      dc.current = null;
-    }
-
-    // Close RTC
-    if (pc.current !== null) {
-      pc.current.getSenders().forEach(sender => {
-        if (sender.track) {
-          sender.track.stop();
-        }
-      });
-      pc.current.getReceivers().forEach(receiver => {
-        if (receiver.track) {
-          receiver.track.stop();
-        }
-      });
-
-      // Close all transceivers
-      pc.current.getTransceivers().forEach(transceiver => {
-        if (transceiver.stop) {
-          transceiver.stop();
-        }
-      });
-
-      // Close the peer connection (including ICE)
-      pc.current.close();
-      pc.current = null;
-
-      setLoading(false);
-    }
-
-    if (jwtTokenRef.current !== null) {
-      jwtTokenRef.current = null;
-    }
-  };
-
   const stop = () => {
     console.log('stop()');
     setLoading(false);
@@ -390,15 +349,15 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
         currentTrack = currentSender.track;
       }
 
-      // if (shouldCloseCamera) {
-      //   addOrReplaceTrack(emptyStreamRef.current.getTracks()[0], emptyStreamRef.current);
-      // }
+      if (shouldCloseCamera) {
+        addOrReplaceTrack(emptyStreamRef.current.getTracks()[0], emptyStreamRef.current);
+      }
 
       if (currentTrack) {
         // Close current webcam video track
-        // if (shouldCloseCamera) {
-        //   currentTrack.stop();
-        // }
+        if (shouldCloseCamera) {
+          currentTrack.stop();
+        }
       }
     }
   };
@@ -428,6 +387,7 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
   };
 
   const sendMessageToServer = message => {
+    console.log('sendMessageToServer()');
     message = JSON.stringify(message);
     if (dc.current && dc.current.readyState === 'open') {
       dc.current.send(message);
@@ -437,6 +397,12 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
       console.log(`Couldn't send message, no channel open: ${message}`);
     }
   };
+
+  function forceCleanUp() {
+    console.log('forceCleanUp()');
+    // disconnect();
+    // message.info('Disconnected forcefully, Please reload!!!');
+  }
 
   const toggleConnected = () => {
     console.log('toggleConnected()');
@@ -448,13 +414,12 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
     connect();
 
     setTimeout(() => {
-      // forceCleanUp();
+      forceCleanUp();
     }, 30000); // 5 Mins
   };
 
   const __start = () => {
     console.log('__start()');
-    console.log('Connecting');
 
     if (!device) {
       Toast.show({
@@ -490,10 +455,10 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
     stop();
   };
 
-  const beginSession = () => {
-    console.log('beginSession()');
-    addOrReplaceTrack(emptyStreamRef.current.getTracks()[0], emptyStreamRef.current).then(() => {
-      console.log('here!!!');
+  const onProcessingTrackReady = (track, stream) => {
+    console.log('onProcessingTrackReady');
+    console.log('FASC', 'processing track is ready');
+    addOrReplaceTrack(track, stream).then(() => {
       setCurrentStream('empty');
 
       const sender = pc.current.getSenders().find(s => s.track.kind === 'video');
@@ -523,43 +488,10 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
     });
   };
 
-  useFocusEffect(() => {
-    console.log('on focus');
-    __load();
-    return () => {
-      console.log('on blur');
-      __stop();
-    };
-  });
-
-  useEffect(() => {
-    if (connected) {
-      console.log('if connected then __start()');
-      __start();
-    } else {
-      console.log('if connected then __stop()');
-      __stop();
-    }
-  }, [connected]);
-
-  useEffect(() => {
-    console.log('if device changed');
-    if (device) {
-      console.log('if device exists');
-      setCurrentStream('altcam');
-    }
-  }, [device]);
-
-  useEffect(() => {
-    const data = logs[logs.length - 1]?.msg;
-    if (data && data?.type === 'data') {
-      const tasks = data?.message;
-      const _progress = calculateCompletionPercentage(tasks);
-      console.log('SCORE: ', _progress);
-      console.log('!!!!!!!!!!!!!!', tasks);
-      setProgress(_progress);
-    }
-  }, [logs]);
+  const beginSession = () => {
+    // processingCanvasComponentref.current.setOriginalStream(emptyStreamRef.current);
+    // hudBirateMonitorRef.current.setPc(pc.current);
+  };
 
   useEffect(() => {
     if (Platform.OS === 'android') {
@@ -573,63 +505,97 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
     }
   }, []);
 
-  const loginHandler = () => {
-    dispatch(login({ accountName, email, idToken, appPubKey }))
-      .unwrap()
-      .then(loginDetails => {
-        console.log('Logged in successfully! loginDetails: ', loginDetails);
-        dispatch(authorize({ accountName, email, token: loginDetails.token }));
-        auth();
-      })
-      .catch(error => {
-        Toast.show({
-          type: 'error',
-          text1: 'Something went wrong!',
-          text2: 'Try to login again.',
-        });
-        console.error(error);
-      });
-  };
+  useEffect(() => {
+    __load();
+  }, []);
 
-  const verifyHandler = async () => {
-    if (cameraRef?.current) {
-      const capture = await takePhoto(cameraRef.current);
-      setPhoto(capture);
-      try {
-        const params = {
-          image: capture.path,
-          email,
-          privateKey,
-          accountName,
-        };
-        const actionVerify = isSigning ? faceKIVerifyOnSignIn : faceKIVerifyOnSignup;
-        dispatch(actionVerify(params))
-          .unwrap()
-          .then(promiseResolvedValue => {
-            if (promiseResolvedValue.status === 'error') {
-              setPhoto(undefined);
-              console.log('Photo has been removed!');
-            } else {
-              if (isSigning) {
-                loginHandler();
-              } else {
-                nav.navigate('FaceKISuccess');
-                setTimeout(() => setPhoto(undefined), 200);
-              }
-            }
-          })
-          .catch(promiseRejectedValue => {
-            console.log('Something went wrong!', promiseRejectedValue);
-            setPhoto(undefined);
-            console.log('Photo has been removed!');
-          });
-      } catch (err) {
-        console.error('!ERROR: ', err);
-      }
+  useEffect(() => {
+    if (connected) {
+      console.log('useEffect if connected then __start()');
+      __start();
     } else {
-      console.warn('Camera is not available');
+      console.log('useEffect if connected then __stop()');
+      __stop();
     }
-  };
+  }, [connected]);
+
+  useEffect(() => {
+    console.log('useEffect if device changed');
+    if (device) {
+      setCurrentStream('altcam');
+      beginSession();
+    }
+  }, [device]);
+
+  useEffect(() => {
+    console.log('useEffect on logs');
+    const data = logs[logs.length - 1]?.msg;
+    if (data && data?.type === 'data') {
+      const tasks = data?.message;
+      const _progress = calculateCompletionPercentage(tasks);
+      console.log('SCORE: ', _progress);
+      console.log('!!!!!!!!!!!!!!', tasks);
+      setProgress(_progress);
+    }
+  }, [logs]);
+
+  // const loginHandler = () => {
+  //   dispatch(login({ accountName, email, idToken, appPubKey }))
+  //     .unwrap()
+  //     .then(loginDetails => {
+  //       console.log('Logged in successfully! loginDetails: ', loginDetails);
+  //       dispatch(authorize({ accountName, email, token: loginDetails.token }));
+  //       auth();
+  //     })
+  //     .catch(error => {
+  //       Toast.show({
+  //         type: 'error',
+  //         text1: 'Something went wrong!',
+  //         text2: 'Try to login again.',
+  //       });
+  //       console.error(error);
+  //     });
+  // };
+
+  // const verifyHandler = async () => {
+  //   if (cameraRef?.current) {
+  //     const capture = await takePhoto(cameraRef.current);
+  //     setPhoto(capture);
+  //     try {
+  //       const params = {
+  //         image: capture.path,
+  //         email,
+  //         privateKey,
+  //         accountName,
+  //       };
+  //       const actionVerify = isSigning ? faceKIVerifyOnSignIn : faceKIVerifyOnSignup;
+  //       dispatch(actionVerify(params))
+  //         .unwrap()
+  //         .then(promiseResolvedValue => {
+  //           if (promiseResolvedValue.status === 'error') {
+  //             setPhoto(undefined);
+  //             console.log('Photo has been removed!');
+  //           } else {
+  //             if (isSigning) {
+  //               loginHandler();
+  //             } else {
+  //               nav.navigate('FaceKISuccess');
+  //               setTimeout(() => setPhoto(undefined), 200);
+  //             }
+  //           }
+  //         })
+  //         .catch(promiseRejectedValue => {
+  //           console.log('Something went wrong!', promiseRejectedValue);
+  //           setPhoto(undefined);
+  //           console.log('Photo has been removed!');
+  //         });
+  //     } catch (err) {
+  //       console.error('!ERROR: ', err);
+  //     }
+  //   } else {
+  //     console.warn('Camera is not available');
+  //   }
+  // };
 
   if (device == null) {
     return <Text>Camera is not ready. Loading...</Text>;
@@ -646,7 +612,33 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
             isActive={true}
             photo={true}
             preset={Platform.OS === 'android' ? 'medium' : 'high'}
+            onInitialized={() => {
+              const videoConstraints = cameraRef.current.videoConstraints;
+              const videoTrack = cameraRef.current.video.srcObject.getVideoTracks()[0];
+              const currentSettings = videoTrack.getSettings();
+
+              console.log('Video Constraints:', videoConstraints);
+              console.log('Current Video Settings:', currentSettings);
+
+              emptyStreamRef.current = cameraRef.current.video.srcObject;
+
+              // hudFacemagnetRef.current.setCanvasWidth(getCanvasWidth());
+              // hudFacemagnetRef.current.setCanvasHeight(getCanvasHeight());
+
+              if (typeof ws.current.readyState !== 'undefined' && ws.current.readyState === 1) {
+                beginSession();
+              } else {
+                ws.current.onopen = () => {
+                  beginSession();
+                };
+              }
+            }}
           />
+          {/*<CircleProgressBar*/}
+          {/*  width={screenWidth}*/}
+          {/*  height={screenHeight}*/}
+          {/*  style={{ width: '100%', height: '100%' }}*/}
+          {/*/>*/}
           <ImageBackground source={faceFrameAsset} resizeMode="cover" style={styles.faceFrame} />
           <View style={{ position: 'absolute', top: 20 }}>
             <Text style={{ color: '#fff', fontSize: 22, textAlign: 'center', lineHeight: 30 }}>
@@ -655,12 +647,6 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
             <Text style={{ color: '#fff', fontSize: 16, textAlign: 'center', lineHeight: 30 }}>
               Position your face in the oval
             </Text>
-          </View>
-          <View style={styles.frame}>
-            <View style={styles.leftTop} />
-            <View style={styles.rightTop} />
-            <View style={styles.leftBottom} />
-            <View style={styles.rightBottom} />
           </View>
 
           <View
@@ -672,7 +658,7 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
             <Text
               style={{
                 color: '#FFC000',
-                fontSize: 16,
+                fontSize: 14,
                 textAlign: 'center',
                 lineHeight: 22,
                 paddingBottom: 20,
@@ -683,10 +669,10 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
               <RoundedButton styles={{ flex: 1 }} title="Cancel" onPress={() => nav.goBack()} />
               <RoundedButton
-                styles={{ flex: 1 }}
-                title="Verify"
-                onPress={verifyHandler}
-                disabled={!!photo}
+                styles={{ flex: 1, textTransform: 'capitalize' }}
+                title={task}
+                onPress={toggleConnected}
+                // disabled={!!photo}
               />
             </View>
           </View>
