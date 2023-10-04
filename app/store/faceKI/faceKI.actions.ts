@@ -3,6 +3,13 @@ import { Platform } from 'react-native';
 import { getUser } from '../../services/eSignature.services';
 import FaceKIService, { FaceKIVerifyParams } from '../../services/faceKI/faceKI.service';
 import { Liveness, Verify } from '../../services/faceKI/types';
+import LitewalletServices, {
+  FASEnrollProps,
+  FASEnrollResponse,
+  FASMigrationResponse,
+  FASTokenProps,
+  FASTokenResponse,
+} from '../../services/litewallet.services';
 import {
   handleParamsError,
   handleSpoof,
@@ -19,6 +26,30 @@ const successState = (image: string) => ({
   status: 'success',
   image: Platform.OS === 'android' ? `file://${image}` : image,
 });
+
+export const getFASMigrationStatus = createAsyncThunk<FASMigrationResponse, string>(
+  'FAS/getMigrationStatus',
+  async (email: string) => {
+    console.log('FAS/getMigrationStatus');
+    return await LitewalletServices.getFasMigrationStatus(email);
+  },
+);
+
+export const getFASToken = createAsyncThunk<FASTokenResponse, FASTokenProps>(
+  'FAS/getToken',
+  async props => {
+    console.log('FAS/getToken');
+    return await LitewalletServices.getFASToken(props);
+  },
+);
+
+export const fasEnroll = createAsyncThunk<FASEnrollResponse, FASEnrollProps>(
+  'FAS/Enroll',
+  async ({ email, privKey, fasToken }) => {
+    console.log('FAS/Enroll');
+    return await LitewalletServices.fasEnroll(email, privKey, fasToken);
+  },
+);
 
 export const faceKIVerifyOnSignup = createAsyncThunk(
   'faceKI/Verify/signUp',

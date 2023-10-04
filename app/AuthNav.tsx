@@ -24,7 +24,7 @@ export type RootStackParamList = {
   Legal: undefined;
   Privacy: undefined;
   CreateWallet: undefined;
-  // AdditionalForm: undefined;
+  AdditionalForm: undefined;
   FaceKI: undefined;
   FaceKISuccess: undefined;
   Passkey: undefined;
@@ -93,7 +93,7 @@ const AuthNav = () => {
           options={{ presentation: 'modal' }}
         />
       </Stack.Navigator>
-      <ZenDeskButton />
+      {/*<ZenDeskButton />*/}
     </>
   );
 };

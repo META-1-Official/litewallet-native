@@ -23,9 +23,11 @@ enum Constants {
   CHANNEL_KEY_IOS = 'CHANNEL_KEY_IOS',
   SENDX_API_KEY = 'SENDX_API_KEY',
   SENDX_TEAM_ID = 'SENDX_TEAM_ID',
+  SIGNALIG_SERVER = 'SIGNALIG_SERVER',
+  TURN_SERVERS = 'TURN_SERVERS',
 }
 
-type NetworkConfig = Record<Constants, string>;
+type NetworkConfig = Record<Constants, string | string>;
 
 export enum Network {
   META1 = 'META1',
@@ -51,6 +53,8 @@ const config: Config = {
     CHANNEL_KEY_IOS: ZENDESK_CHANNEL_KEY_IOS,
     SENDX_API_KEY: SEND_X_API_KEY,
     SENDX_TEAM_ID: SEND_X_TEAM_ID,
+    SIGNALIG_SERVER: '',
+    TURN_SERVERS: '',
   },
   META1DEV: {
     // META1_CONNECTION_URL: 'wss://api.dev2.meta-exchange.vision/ws',
@@ -69,6 +73,8 @@ const config: Config = {
     CHANNEL_KEY_IOS: ZENDESK_CHANNEL_KEY_IOS,
     SENDX_API_KEY: SEND_X_API_KEY,
     SENDX_TEAM_ID: SEND_X_TEAM_ID,
+    SIGNALIG_SERVER: 'wss://bio-int.dev.cryptomailsvc.io/websocket',
+    TURN_SERVERS: '["developer:META1DEV@turn:bio-int.dev.cryptomailsvc.io:3478?transport=udp"]',
   },
   META1TEST: {
     META1_CONNECTION_URL: 'wss://api.test.meta-exchange.vision/ws',
@@ -86,6 +92,8 @@ const config: Config = {
     CHANNEL_KEY_IOS: '',
     SENDX_API_KEY: SEND_X_API_KEY,
     SENDX_TEAM_ID: SEND_X_TEAM_ID,
+    SIGNALIG_SERVER: '',
+    TURN_SERVERS: '',
   },
 };
 
