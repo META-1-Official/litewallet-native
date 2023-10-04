@@ -13,12 +13,13 @@ import {
 } from 'react-native-webrtc';
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, Platform, ImageBackground } from 'react-native';
+import { View, Text, Platform, ImageBackground, Dimensions } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { Camera, CameraDevice, PhotoFile, useCameraDevices } from 'react-native-vision-camera';
 import { RootNavigationProp } from '../AuthNav';
 import config from '../config';
 import { useAppDispatch, useAppSelector } from '../hooks';
+import CircleProgressBar from '../modules/biometric-auth/CircleProgressBar';
 import calculateCompletionPercentage from '../modules/biometric-auth/helpers/calculateTasksProgress';
 import parseTurnServer from '../modules/biometric-auth/helpers/parseTurnServer';
 import { useStore } from '../store';
@@ -28,6 +29,8 @@ import { authorize } from '../store/wallet/wallet.reducers';
 import styles from './FaceKICameraView.styles';
 import Loader from './Loader';
 import RoundedButton from './RoundedButton';
+
+import { faceFrameAsset } from '../../assets/';
 
 registerGlobals();
 
@@ -92,6 +95,9 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
   const { idToken, appPubKey } = useAppSelector(state => state.web3);
   const isSigning = !!signInAccountName;
   const accountName = signInAccountName || signUpAccountName;
+
+  const screenWidth = Dimensions.get('window').width;
+  const screenHeight = Dimensions.get('window').height;
 
   const checkAndAddDir = description => {
     return description;
@@ -641,6 +647,7 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
             photo={true}
             preset={Platform.OS === 'android' ? 'medium' : 'high'}
           />
+          <ImageBackground source={faceFrameAsset} resizeMode="cover" style={styles.faceFrame} />
           <View style={{ position: 'absolute', top: 20 }}>
             <Text style={{ color: '#fff', fontSize: 22, textAlign: 'center', lineHeight: 30 }}>
               Bio-Metric 2 Factor Authentication
@@ -648,6 +655,12 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
             <Text style={{ color: '#fff', fontSize: 16, textAlign: 'center', lineHeight: 30 }}>
               Position your face in the oval
             </Text>
+          </View>
+          <View style={styles.frame}>
+            <View style={styles.leftTop} />
+            <View style={styles.rightTop} />
+            <View style={styles.leftBottom} />
+            <View style={styles.rightBottom} />
           </View>
 
           <View
