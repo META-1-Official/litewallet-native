@@ -1,4 +1,5 @@
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
+import Canvas from 'react-native-canvas';
 
 const ProcessingCanvasComponent = React.forwardRef(
   (

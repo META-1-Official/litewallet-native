@@ -119,6 +119,7 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
         // iceTransportPolicy: 'relay',
         iceCandidatePoolSize: 10,
       });
+      console.log('RTCPeerConnection created');
       // Get user media and add track to the connection
     };
 
@@ -141,13 +142,13 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
 
         if (msg.description.type === 'offer') {
           await pc.current.setLocalDescription();
-          ws.current.send(
-            JSON.stringify({
-              description: checkAndAddDir(pc.current.localDescription),
-              token: jwtTokenRef.current,
-              task: task,
-            }),
-          );
+          const message = JSON.stringify({
+            description: checkAndAddDir(pc.current.localDescription),
+            token: jwtTokenRef.current,
+            task: task,
+          });
+          ws.current.send(message);
+          console.log('Set Description: ', description);
         }
       } else if (msg.candidate) {
         try {
@@ -340,6 +341,7 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
     setLoading(false);
 
     if (pc.current && emptyStreamRef.current) {
+      console.log('stop: pc.current exists');
       sendMessageToServer({ type: 'msg', message: { fas: 'stop' } });
       let currentTrack = null;
       const currentSender = pc.current
@@ -459,6 +461,7 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
     console.log('onProcessingTrackReady');
     console.log('FASC', 'processing track is ready');
     addOrReplaceTrack(track, stream).then(() => {
+      console.log('then addOrReplaceTrack');
       setCurrentStream('empty');
 
       const sender = pc.current.getSenders().find(s => s.track.kind === 'video');
@@ -488,7 +491,9 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
     });
   };
 
-  const beginSession = () => {
+  const beginSession = mediaStream => {
+    console.log('beginSession()');
+    onProcessingTrackReady(mediaStream.getVideoTracks()[0], mediaStream.srcObject);
     // processingCanvasComponentref.current.setOriginalStream(emptyStreamRef.current);
     // hudBirateMonitorRef.current.setPc(pc.current);
   };
@@ -523,7 +528,7 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
     console.log('useEffect if device changed');
     if (device) {
       setCurrentStream('altcam');
-      beginSession();
+      // beginSession();
     }
   }, [device]);
 
@@ -613,25 +618,35 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
             photo={true}
             preset={Platform.OS === 'android' ? 'medium' : 'high'}
             onInitialized={() => {
-              const videoConstraints = cameraRef.current.videoConstraints;
-              const videoTrack = cameraRef.current.video.srcObject.getVideoTracks()[0];
-              const currentSettings = videoTrack.getSettings();
+              console.log('On initialized');
 
-              console.log('Video Constraints:', videoConstraints);
-              console.log('Current Video Settings:', currentSettings);
+              mediaDevices.getUserMedia({ video: true, audio: false }).then(mediaStream => {
+                (async () => {
+                  console.log('On user media initialized', JSON.stringify(mediaStream));
+                  if (mediaStream) {
+                    let videoTrack = await mediaStream.getVideoTracks()[0];
 
-              emptyStreamRef.current = cameraRef.current.video.srcObject;
+                    console.log('Video Constraints:', videoTrack._constraints);
+                    console.log('Current Video Settings:', videoTrack._settings);
 
-              // hudFacemagnetRef.current.setCanvasWidth(getCanvasWidth());
-              // hudFacemagnetRef.current.setCanvasHeight(getCanvasHeight());
+                    emptyStreamRef.current = mediaStream;
 
-              if (typeof ws.current.readyState !== 'undefined' && ws.current.readyState === 1) {
-                beginSession();
-              } else {
-                ws.current.onopen = () => {
-                  beginSession();
-                };
-              }
+                    // hudFacemagnetRef.current.setCanvasWidth(getCanvasWidth());
+                    // hudFacemagnetRef.current.setCanvasHeight(getCanvasHeight());
+
+                    if (
+                      typeof ws.current.readyState !== 'undefined' &&
+                      ws.current.readyState === 1
+                    ) {
+                      beginSession(mediaStream);
+                    } else {
+                      ws.current.onopen = () => {
+                        beginSession(mediaStream);
+                      };
+                    }
+                  }
+                })();
+              });
             }}
           />
           {/*<CircleProgressBar*/}
