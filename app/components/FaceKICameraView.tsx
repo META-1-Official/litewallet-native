@@ -309,15 +309,19 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
     };
   };
 
-  const connect = () => {
+  const connect = async () => {
     console.log('Connect()');
     setLoading(true);
-    ws.current = new WebSocket(WSSignalingServer);
-    bindWSEvents();
+    try {
+      ws.current = new WebSocket(WSSignalingServer);
+      bindWSEvents();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const addOrReplaceTrack = async (track, stream) => {
-    console.log('addOrReplaceTrack()', track);
+    console.log('addOrReplaceTrack()', track, 'pc: ', pc.current);
     const senders = pc.current.getSenders();
 
     const videoSender = senders.find(sender => sender.track && sender.track.kind === 'video');
@@ -514,35 +518,35 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
     __load();
   }, []);
 
-  useEffect(() => {
-    if (connected) {
-      console.log('useEffect if connected then __start()');
-      __start();
-    } else {
-      console.log('useEffect if connected then __stop()');
-      __stop();
-    }
-  }, [connected]);
-
-  useEffect(() => {
-    console.log('useEffect if device changed');
-    if (device) {
-      setCurrentStream('altcam');
-      // beginSession();
-    }
-  }, [device]);
-
-  useEffect(() => {
-    console.log('useEffect on logs');
-    const data = logs[logs.length - 1]?.msg;
-    if (data && data?.type === 'data') {
-      const tasks = data?.message;
-      const _progress = calculateCompletionPercentage(tasks);
-      console.log('SCORE: ', _progress);
-      console.log('!!!!!!!!!!!!!!', tasks);
-      setProgress(_progress);
-    }
-  }, [logs]);
+  // useEffect(() => {
+  //   if (connected) {
+  //     console.log('useEffect if connected then __start()');
+  //     __start();
+  //   } else {
+  //     console.log('useEffect if connected then __stop()');
+  //     __stop();
+  //   }
+  // }, [connected]);
+  //
+  // useEffect(() => {
+  //   console.log('useEffect if device changed');
+  //   if (device) {
+  //     setCurrentStream('altcam');
+  //     // beginSession();
+  //   }
+  // }, [device]);
+  //
+  // useEffect(() => {
+  //   console.log('useEffect on logs');
+  //   const data = logs[logs.length - 1]?.msg;
+  //   if (data && data?.type === 'data') {
+  //     const tasks = data?.message;
+  //     const _progress = calculateCompletionPercentage(tasks);
+  //     console.log('SCORE: ', _progress);
+  //     console.log('!!!!!!!!!!!!!!', tasks);
+  //     setProgress(_progress);
+  //   }
+  // }, [logs]);
 
   // const loginHandler = () => {
   //   dispatch(login({ accountName, email, idToken, appPubKey }))
@@ -622,7 +626,7 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
 
               mediaDevices.getUserMedia({ video: true, audio: false }).then(mediaStream => {
                 (async () => {
-                  console.log('On user media initialized', JSON.stringify(mediaStream));
+                  console.log('On user media initialized');
                   if (mediaStream) {
                     let videoTrack = await mediaStream.getVideoTracks()[0];
 
@@ -638,12 +642,84 @@ const FaceKiCameraView = ({ email, privateKey, task, token, onComplete, onFailur
                       typeof ws.current.readyState !== 'undefined' &&
                       ws.current.readyState === 1
                     ) {
+                      console.log('case ws.current.readyState === 1');
                       beginSession(mediaStream);
                     } else {
                       ws.current.onopen = () => {
+                        console.log('case ws.current.readyState !== 1');
                         beginSession(mediaStream);
                       };
                     }
+
+                    // ---------------------------------------------------------
+                    // let peerConstraints = {
+                    //   iceServers: IceServer,
+                    //   iceCandidatePoolSize: 10,
+                    // };
+                    //
+                    // let peerConnection = new RTCPeerConnection(peerConstraints);
+                    //
+                    // peerConnection.addEventListener('connectionstatechange', event => {
+                    //   switch (peerConnection.connectionState) {
+                    //     case 'closed':
+                    //       // You can handle the call being disconnected here.
+                    //
+                    //       break;
+                    //   }
+                    // });
+                    //
+                    // peerConnection.addEventListener('icecandidate', event => {
+                    //   // When you find a null candidate then there are no more candidates.
+                    //   // Gathering of candidates has finished.
+                    //   if (!event.candidate) {
+                    //     return;
+                    //   }
+                    //
+                    //   // Send the event.candidate onto the person you're calling.
+                    //   // Keeping to Trickle ICE Standards, you should send the candidates immediately.
+                    // });
+                    //
+                    // peerConnection.addEventListener('icecandidateerror', event => {
+                    //   // You can ignore some candidate errors.
+                    //   // Connections can still be made even when errors occur.
+                    // });
+                    //
+                    // peerConnection.addEventListener('iceconnectionstatechange', event => {
+                    //   switch (peerConnection.iceConnectionState) {
+                    //     case 'connected':
+                    //     case 'completed':
+                    //       // You can handle the call being connected here.
+                    //       // Like setting the video streams to visible.
+                    //
+                    //       break;
+                    //   }
+                    // });
+                    //
+                    // peerConnection.addEventListener('negotiationneeded', event => {
+                    //   // You can start the offer stages here.
+                    //   // Be careful as this event can be called multiple times.
+                    // });
+                    //
+                    // peerConnection.addEventListener('signalingstatechange', event => {
+                    //   switch (peerConnection.signalingState) {
+                    //     case 'closed':
+                    //       // You can handle the call being disconnected here.
+                    //
+                    //       break;
+                    //   }
+                    // });
+                    //
+                    // peerConnection.addEventListener('track', event => {
+                    //   // Grab the remote track from the connected participant.
+                    //   remoteMediaStream = remoteMediaStream || new MediaStream();
+                    //   remoteMediaStream.addTrack(event.track, remoteMediaStream);
+                    // });
+                    //
+                    // // Add our stream to the peer connection.
+                    // localMediaStream
+                    //   .getTracks()
+                    //   .forEach(track => peerConnection.addTrack(track, localMediaStream));
+                    // ---------------------------------------------------------
                   }
                 })();
               });
