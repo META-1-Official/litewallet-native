@@ -37,7 +37,7 @@ type Config = Record<Network, NetworkConfig>;
 
 const config: Config = {
   META1: {
-    META1_CONNECTION_URL: 'wss://maia.meta-exchange.vision/ws',
+    META1_CONNECTION_URL: 'wss://maia.dev2.meta-exchange.vision/ws',
     FAUCET_URL: 'https://faucet.meta-exchange.vision/faucet',
     LITE_WALLET_API_URL: 'https://litewallet.cryptomailsvc.io',
     GATEWAY_URL: 'https://gateway.api.meta-exchange.vision',

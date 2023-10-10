@@ -93,7 +93,7 @@ const AuthNav = () => {
           options={{ presentation: 'modal' }}
         />
       </Stack.Navigator>
-      <ZenDeskButton />
+      {/*<ZenDeskButton />*/}
     </>
   );
 };

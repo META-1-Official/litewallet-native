@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { Platform } from 'react-native';
 import { Asset } from 'react-native-image-picker';
 import config from '../config';
@@ -10,6 +10,36 @@ export interface Notification {
   userId: number | null;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface FASTokenProps {
+  email: string;
+  task: 'verify' | 'register';
+  account?: string | null;
+  publicKey?: string | null;
+  signature?: string | null;
+  signatureContent?: string | null;
+}
+
+export interface FASTokenResponse {
+  message: string;
+  token?: string;
+}
+
+export interface FASMigrationResponse {
+  doesUserExistsInFAS: boolean;
+  message: string;
+  wasUserEnrolledInOldBiometric: boolean;
+}
+
+export interface FASEnrollProps {
+  email: string;
+  privKey: string;
+  fasToken: string;
+}
+
+export interface FASEnrollResponse {
+  message: string;
 }
 
 class LiteWalletServices {
@@ -78,6 +108,55 @@ class LiteWalletServices {
   signUp = async (accountName: string) => {
     const { data } = await this.api.post('/signUp', { accountName });
     return data;
+  };
+
+  getFasMigrationStatus = async (email: string): Promise<FASMigrationResponse> => {
+    try {
+      const { data } = await this.api.post('/getFASMigrationStatus', { email });
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  getFASToken = async ({
+    account = null,
+    email,
+    task,
+    publicKey = null,
+    signature = null,
+    signatureContent = null,
+  }: FASTokenProps): Promise<FASTokenResponse> => {
+    try {
+      const { data } = await this.api.post('/getFASToken', {
+        account,
+        email,
+        task,
+        publicKey,
+        signature,
+        signatureContent,
+      });
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  fasEnroll = async (
+    email: string,
+    privKey: string,
+    fasToken: string,
+  ): Promise<FASEnrollResponse> => {
+    try {
+      const { data } = await this.api.post('/fasEnroll', {
+        email,
+        privKey,
+        fasToken,
+      });
+      return data;
+    } catch (error) {
+      throw error;
+    }
   };
 }
 

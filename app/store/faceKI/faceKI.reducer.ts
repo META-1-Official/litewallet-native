@@ -1,16 +1,28 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { faceKIVerifyOnSignup, faceKIVerifyOnSignIn } from './faceKI.actions';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { AxiosResponse } from 'axios';
+import { FASTokenResponse } from '../../services/litewallet.services';
+import {
+  faceKIVerifyOnSignup,
+  faceKIVerifyOnSignIn,
+  getFASToken,
+  getFASMigrationStatus,
+  fasEnroll,
+} from './faceKI.actions';
 
 interface FaceKIState {
   faceKIStatus: string;
   image: string;
   pending: boolean;
+  message: string;
+  token: string;
 }
 
 const initialState: FaceKIState = {
   faceKIStatus: '',
   image: '',
   pending: false,
+  message: '',
+  token: '',
 };
 // todo: remove this and uncomment previous
 // const initialState: FaceKIState = {
@@ -29,6 +41,35 @@ const faceKISlice = createSlice({
     },
   },
   extraReducers: builder => {
+    builder.addCase(getFASMigrationStatus.pending, state => {
+      state.pending = true;
+    });
+    builder.addCase(getFASMigrationStatus.rejected, state => {
+      state.pending = false;
+    });
+    builder.addCase(getFASToken.pending, state => {
+      state.pending = true;
+    });
+    builder.addCase(getFASToken.fulfilled, (state, action) => {
+      state.pending = false;
+      state.message = action.payload.message;
+      if (action.payload.token) {
+        state.token = action.payload.token;
+      }
+    });
+    builder.addCase(getFASToken.rejected, state => {
+      state.pending = true;
+    });
+    builder.addCase(fasEnroll.pending, state => {
+      state.pending = true;
+    });
+    builder.addCase(fasEnroll.fulfilled, state => {
+      state.pending = false;
+    });
+    builder.addCase(fasEnroll.rejected, state => {
+      state.pending = false;
+    });
+    //---------------------------------------------------------------------------------------
     builder.addCase(faceKIVerifyOnSignup.pending, state => {
       state.pending = true;
     });
