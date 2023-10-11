@@ -9,7 +9,7 @@ interface SignInState {
 }
 
 const initialState: SignInState = {
-  accountName: 'alex-30',
+  accountName: '',
   token: '',
   isAuthorized: false,
   pending: false,

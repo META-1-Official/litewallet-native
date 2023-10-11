@@ -18,7 +18,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
   const dispatch = useAppDispatch();
-  const CreateWalletPress = () => navigation.navigate('FaceKI');
+  const CreateWalletPress = () => navigation.navigate('Legal');
   const LinkWalletPress = () => navigation.navigate('LinkWallet');
   const scrollX = useRef(new Animated.Value(0)).current;
 

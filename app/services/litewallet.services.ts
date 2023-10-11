@@ -3,6 +3,11 @@ import { Platform } from 'react-native';
 import { Asset } from 'react-native-image-picker';
 import config from '../config';
 
+export enum TASK {
+  VERIFY = 'verify',
+  REGISTER = 'register',
+}
+
 export interface Notification {
   id: number;
   content: string;
@@ -14,7 +19,7 @@ export interface Notification {
 
 export interface FASTokenProps {
   email: string;
-  task: 'verify' | 'register';
+  task: TASK;
   account?: string | null;
   publicKey?: string | null;
   signature?: string | null;
@@ -56,12 +61,19 @@ class LiteWalletServices {
     return data;
   };
 
-  login = async (accountName: string, email: string, idToken: string, appPubKey: string) => {
+  login = async (
+    accountName: string,
+    email: string,
+    idToken: string,
+    appPubKey: string,
+    fasToken: string,
+  ) => {
     const { data } = await this.api.post('/login', {
       accountName,
       email,
       idToken,
       appPubKey,
+      fasToken,
     });
     this.api.defaults.headers.common.Authorization = `Bearer ${data.token}`;
     return data;

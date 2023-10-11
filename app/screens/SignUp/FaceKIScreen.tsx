@@ -1,47 +1,69 @@
+import { useNavigation } from '@react-navigation/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
+import Toast from 'react-native-toast-message';
 import WebView from 'react-native-webview';
-import { RootStackParamList } from '../../AuthNav';
-import FaceKiCameraView from '../../components/FaceKICameraView';
+import { RootNavigationProp, RootStackParamList } from '../../AuthNav';
 import Loader from '../../components/Loader';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import useCameraPermission from '../../hooks/useCameraPermission';
-import { getFASToken, getFASMigrationStatus } from '../../store/faceKI/faceKI.actions';
+import { TASK } from '../../services/litewallet.services';
+import { useStore } from '../../store';
+import { getFASMigrationStatus, getFASToken } from '../../store/faceKI/faceKI.actions';
 import { clearFaceKI } from '../../store/faceKI/faceKI.reducer';
+import { login } from '../../store/signIn/signIn.actions';
+import { authorize } from '../../store/wallet/wallet.reducers';
 
 const CAMERA_PERMISSION_STATUS_AUTHORIZED = 'authorized';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'FaceKI'>;
 
 const FaceKIScreen: React.FC<Props> = () => {
+  const nav = useNavigation<RootNavigationProp>();
   const dispatch = useAppDispatch();
+  const auth = useStore(state => state.authorize);
   const wvRef = useRef<WebView | null>(null);
-  const { privateKey, email } = useAppSelector(state => state.web3);
+  const { email, idToken, appPubKey } = useAppSelector(state => state.web3);
   const { token } = useAppSelector(state => state.faceKI);
   const { accountName: signUpAccountName } = useAppSelector(state => state.signUp);
   const { accountName: signInAccountName } = useAppSelector(state => state.signIn);
   const isSigning = !!signInAccountName;
-  const [task, setTask] = useState<'verify' | 'register'>(isSigning ? 'verify' : 'register');
-  const account = signInAccountName || signUpAccountName;
+  const accountName = signInAccountName || signUpAccountName;
+  const [task, setTask] = useState<TASK>(isSigning ? TASK.VERIFY : TASK.REGISTER);
 
   const cameraPermission = useCameraPermission();
   const isCameraAvailable = cameraPermission === CAMERA_PERMISSION_STATUS_AUTHORIZED;
 
-  const INJECTED_JAVASCRIPT = `(function() {
-    window.ReactNativeWebView.postMessage(JSON.stringify({key : "value"}));
-})();`;
+  const loginHandler = (fasToken: string) => {
+    dispatch(login({ accountName, email, idToken, appPubKey, fasToken }))
+      .unwrap()
+      .then(loginDetails => {
+        console.log('Logged in successfully! loginDetails: ', loginDetails);
+        dispatch(authorize({ accountName, email, token: loginDetails.token }));
+        auth();
+      })
+      .catch(error => {
+        Toast.show({
+          type: 'error',
+          text1: 'Something went wrong!',
+          text2: 'Try to login again.',
+        });
+        console.error(error);
+      });
+  };
 
   useEffect(() => {
     dispatch(clearFaceKI());
-    dispatch(getFASMigrationStatus('alex-30@yopmail.com'))
+    dispatch(getFASMigrationStatus(email))
       .unwrap()
       .then(({ doesUserExistsInFAS, wasUserEnrolledInOldBiometric }) => {
         // case of migration
         if (!doesUserExistsInFAS && wasUserEnrolledInOldBiometric) {
-          dispatch(getFASToken({ account, email, task }));
-        } else {
-          dispatch(getFASToken({ account, email, task }));
+          dispatch(getFASToken({ account: accountName, email, task }));
+        } else if (doesUserExistsInFAS && wasUserEnrolledInOldBiometric) {
+          setTask(TASK.VERIFY);
+          dispatch(getFASToken({ account: accountName, email, task: TASK.VERIFY }));
         }
       });
   }, []);
@@ -76,10 +98,19 @@ const FaceKIScreen: React.FC<Props> = () => {
           allowsInlineMediaPlayback={true}
           domStorageEnabled={true}
           javaScriptEnabled={true}
-          injectedJavaScript={''} // INJECTED_JAVASCRIPT}
+          injectedJavaScript={''}
           onMessage={event => {
             console.log('on Message');
-            console.log('NATIVEAPP >>>>', JSON.parse(event.nativeEvent.data));
+            const { data } = JSON.parse(event.nativeEvent.data);
+            console.log('>>>>', data);
+            if (data.message === 'success' && data.token) {
+              if (isSigning) {
+                console.log('login');
+                loginHandler(data.token);
+              } else {
+                nav.navigate('Passkey');
+              }
+            }
           }}
           onError={() => {
             console.log('on Error');
