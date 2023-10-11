@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   AppState,
+  AppStateStatus,
   Linking,
   Platform,
   Pressable,
@@ -50,18 +51,6 @@ export const PasskeyScreen = ({ navigation }: Props) => {
   const [checkboxesState, setCheckBoxesState] = useState([false, false, false, false, false]);
   const [emailSubscription, setEmailSubscription] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    dispatch(getAccountPaymentStatus(email))
-      .unwrap()
-      .then(user => {
-        if (user && user.status?.isSign) {
-          if (user.status?.isPayed || user.status?.isPaidByCrypto) {
-            handleCheckBox(4, true);
-          }
-        }
-      });
-  }, []);
 
   const handleEmailSubscription = () => {
     setEmailSubscription(prevState => !prevState);
@@ -171,8 +160,7 @@ export const PasskeyScreen = ({ navigation }: Props) => {
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
-  // todo: fix type of appState
-  const handleAppStateChange = (nextAppState: any) => {
+  const handleAppStateChange = (nextAppState: AppStateStatus) => {
     console.log('AppState change action');
     if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
       console.log('App has come to the foreground!', appState.current);
@@ -181,6 +169,18 @@ export const PasskeyScreen = ({ navigation }: Props) => {
     setAppStateVisible(appState.current);
     console.log('AppState current: ', appState.current);
   };
+
+  useEffect(() => {
+    dispatch(getAccountPaymentStatus(email))
+      .unwrap()
+      .then(user => {
+        if (user && user.status?.isSign) {
+          if (user.status?.isPayed || user.status?.isPaidByCrypto) {
+            handleCheckBox(4, true);
+          }
+        }
+      });
+  }, []);
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', handleAppStateChange);
@@ -199,7 +199,8 @@ export const PasskeyScreen = ({ navigation }: Props) => {
       Platform.OS === 'android' &&
       appStateVisible === 'active' &&
       E_SIGNATURE_STATUSES.includes(eSignatureStatus) &&
-      !eSignaturePending
+      !eSignaturePending &&
+      !checkboxesState[4]
     ) {
       console.log('Action onVisible');
       getPaymentDetails();
