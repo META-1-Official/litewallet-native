@@ -28,6 +28,10 @@ const FaceKIScreen: React.FC<Props> = () => {
   const cameraPermission = useCameraPermission();
   const isCameraAvailable = cameraPermission === CAMERA_PERMISSION_STATUS_AUTHORIZED;
 
+  const INJECTED_JAVASCRIPT = `(function() {
+    window.ReactNativeWebView.postMessage(JSON.stringify({key : "value"}));
+})();`;
+
   useEffect(() => {
     dispatch(clearFaceKI());
     dispatch(getFASMigrationStatus('alex-30@yopmail.com'))
@@ -67,11 +71,19 @@ const FaceKIScreen: React.FC<Props> = () => {
           source={{
             uri: `https://bio-int.dev.cryptomailsvc.io?task=${task}&email=${email}&token=${token}`,
           }}
-          injectedJavaScript={''}
+          originWhitelist={['*']}
+          mediaPlaybackRequiresUserAction={false}
+          allowsInlineMediaPlayback={true}
+          domStorageEnabled={true}
+          javaScriptEnabled={true}
+          injectedJavaScript={''} // INJECTED_JAVASCRIPT}
           onMessage={event => {
-            console.log('NATIVEAPP >>>>', event.nativeEvent.data);
+            console.log('on Message');
+            console.log('NATIVEAPP >>>>', JSON.parse(event.nativeEvent.data));
           }}
-          onError={() => {}}
+          onError={() => {
+            console.log('on Error');
+          }}
           onRenderProcessGone={() => {}}
         />
       )}
