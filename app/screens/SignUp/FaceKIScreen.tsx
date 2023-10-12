@@ -72,7 +72,19 @@ const FaceKIScreen: React.FC<Props> = () => {
             }
           } else {
             // if user exists in new biometric
-            dispatch(getFASToken({ account: accountName, email, task }));
+            dispatch(getFASToken({ account: accountName, email, task }))
+              .unwrap()
+              .then(({ message }) => {
+                if (message !== 'success') {
+                  Toast.show({ type: 'error', text1: message });
+                  nav.goBack();
+                }
+              })
+              .catch(error => {
+                console.error(error);
+                Toast.show({ type: 'error', text1: error.message });
+                nav.goBack();
+              });
           }
         } else {
           // case of register
