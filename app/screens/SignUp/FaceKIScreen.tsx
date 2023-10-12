@@ -89,10 +89,15 @@ const FaceKIScreen: React.FC<Props> = ({ route }) => {
                 });
             }
           } else {
-            // case of register
+            // in case of register
             if (!doesUserExistsInFAS) {
-              // if user doesn't exist in new biometric | usual registration
-              dispatch(getFASToken({ account: accountName, email, task: TASK.REGISTER }));
+              if (wasUserEnrolledInOldBiometric) {
+                // if user doesn't exist in new biometric but exists in old biometric | migration
+                nav.navigate('ImportBiometric');
+              } else {
+                Toast.show({ type: 'error', text1: 'Something went wrong!' });
+                nav.goBack();
+              }
             } else {
               // if user exists in new biometric | verify instead of register
               setTask(TASK.VERIFY);
@@ -147,22 +152,27 @@ const FaceKIScreen: React.FC<Props> = ({ route }) => {
               } else {
                 // case of registration
                 if (task === TASK.REGISTER) {
-                  // case of registration new account for new email
-                  dispatch(fasEnroll({ email, privKey, fasToken: data.token }))
-                    .unwrap()
-                    .then(({ message }) => {
-                      if (message === 'Successfully Enrolled') {
-                        Toast.show({ type: 'success', text1: message });
-                        nav.navigate('Passkey');
-                      } else {
-                        console.error(message);
-                        Toast.show({ type: 'error', text1: message });
-                      }
-                    })
-                    .catch(error => {
-                      console.error(error);
-                      Toast.show({ type: 'error', text1: 'Biometric Server Error' });
-                    });
+                  if (!upgradeBiometric) {
+                    // case of registration new account for new email
+                    dispatch(fasEnroll({ email, privKey, fasToken: data.token }))
+                      .unwrap()
+                      .then(({ message }) => {
+                        if (message === 'Successfully Enrolled') {
+                          Toast.show({ type: 'success', text1: message });
+                          nav.navigate('Passkey');
+                        } else {
+                          console.error(message);
+                          Toast.show({ type: 'error', text1: message });
+                        }
+                      })
+                      .catch(error => {
+                        console.error(error);
+                        Toast.show({ type: 'error', text1: 'Biometric Server Error' });
+                      });
+                  } else {
+                    // case when register new account for the same email but not migrated
+                    nav.navigate('Passkey');
+                  }
                 } else {
                   // case when register new account for the same email
                   nav.navigate('Passkey');

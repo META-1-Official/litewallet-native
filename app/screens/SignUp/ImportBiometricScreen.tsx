@@ -25,7 +25,10 @@ type Props = NativeStackScreenProps<RootStackParamList, 'ImportBiometric'>;
 
 const ImportBiometricScreen: React.FC<Props> = ({ navigation }) => {
   const dispatch = useAppDispatch();
-  const { accountName } = useAppSelector(state => state.signIn);
+  const { accountName: signUpAccountName } = useAppSelector(state => state.signUp);
+  const { accountName: signInAccountName } = useAppSelector(state => state.signIn);
+  const isSigning = !!signInAccountName;
+  const account = signInAccountName || signUpAccountName;
   const { email } = useAppSelector(state => state.web3);
 
   const {
@@ -35,7 +38,7 @@ const ImportBiometricScreen: React.FC<Props> = ({ navigation }) => {
   } = useForm({
     mode: 'onChange',
     defaultValues: {
-      accountName: '',
+      accountName: account,
       password: '',
     },
   });
@@ -44,9 +47,9 @@ const ImportBiometricScreen: React.FC<Props> = ({ navigation }) => {
   const scroll = useScroll(true);
 
   const handleImportWallet = handleSubmit(async formState => {
-    const { password } = formState;
+    const { password, accountName } = formState;
     const { publicKey, signature, signatureContent } = await buildSignature4Fas(
-      accountName || '',
+      accountName,
       password,
       email,
     );
@@ -104,6 +107,16 @@ const ImportBiometricScreen: React.FC<Props> = ({ navigation }) => {
             To complete the one time biometrics upgrade, please enter your passkey to migrate your
             2 Factor Biometric Authentication.
           </TextSecondary>
+          <Input
+            control={control}
+            rules={{ required }}
+            name="accountName"
+            label="Existing wallet name"
+            style={{
+              display: isSigning ? 'none' : 'flex',
+              paddingHorizontal: 32,
+            }}
+          />
           <Input
             control={control}
             rules={{ required }}
