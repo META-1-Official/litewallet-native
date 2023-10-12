@@ -134,7 +134,7 @@ const FaceKIScreen: React.FC<Props> = () => {
           onMessage={event => {
             const { data } = JSON.parse(event.nativeEvent.data);
             console.log('>>>>', data);
-            if (data.message === 'success' && data.token) {
+            if (data.type === 'success' && data.token) {
               console.log('asd!!!');
               dispatch(setFasToken(data.token));
               if (isSigning) {
@@ -165,6 +165,10 @@ const FaceKIScreen: React.FC<Props> = () => {
                   nav.navigate('Passkey');
                 }
               }
+            } else if (data.type === 'cancel') {
+              nav.goBack();
+            } else {
+              Toast.show({ type: 'error', text1: data.message });
             }
           }}
           onError={() => {
