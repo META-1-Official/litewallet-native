@@ -70,7 +70,14 @@ const FaceKIScreen: React.FC<Props> = ({ route }) => {
               } else {
                 // if user doesn't exist in new and old biometric
                 // TODO: Account Migration from old blockchain
-                dispatch(getFASToken({ account: accountName, email, task }));
+                dispatch(getFASToken({ account: accountName, email, task }))
+                  .unwrap()
+                  .then(() => {})
+                  .catch(error => {
+                    console.error(error);
+                    Toast.show({ type: 'error', text1: error.message });
+                    nav.goBack();
+                  });
               }
             } else {
               // if user exists in new biometric

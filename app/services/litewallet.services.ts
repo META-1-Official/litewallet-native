@@ -149,8 +149,12 @@ class LiteWalletServices {
         signatureContent,
       });
       return data;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      if (error.response?.data?.message) {
+        throw error.response?.data?.message;
+      } else {
+        throw error;
+      }
     }
   };
 
