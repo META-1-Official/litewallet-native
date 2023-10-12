@@ -95,8 +95,8 @@ const FaceKIScreen: React.FC<Props> = ({ route }) => {
                 // if user doesn't exist in new biometric but exists in old biometric | migration
                 nav.navigate('ImportBiometric');
               } else {
-                Toast.show({ type: 'error', text1: 'Something went wrong!' });
-                nav.goBack();
+                // if user exists in new biometric | verify instead of register
+                dispatch(getFASToken({ account: accountName, email, task }));
               }
             } else {
               // if user exists in new biometric | verify instead of register
