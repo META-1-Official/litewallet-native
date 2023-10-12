@@ -11,7 +11,7 @@ import useCameraPermission from '../../hooks/useCameraPermission';
 import { TASK } from '../../services/litewallet.services';
 import { useStore } from '../../store';
 import { fasEnroll, getFASMigrationStatus, getFASToken } from '../../store/faceKI/faceKI.actions';
-import { clearFaceKI } from '../../store/faceKI/faceKI.reducer';
+import { clearFaceKI, setFasToken } from '../../store/faceKI/faceKI.reducer';
 import { login } from '../../store/signIn/signIn.actions';
 import { authorize } from '../../store/wallet/wallet.reducers';
 
@@ -123,6 +123,8 @@ const FaceKIScreen: React.FC<Props> = () => {
             const { data } = JSON.parse(event.nativeEvent.data);
             console.log('>>>>', data);
             if (data.message === 'success' && data.token) {
+              console.log('asd!!!');
+              dispatch(setFasToken(data.token));
               if (isSigning) {
                 // case of login
                 console.log('login');

@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AxiosResponse } from 'axios';
-import { FASTokenResponse } from '../../services/litewallet.services';
+
 import {
   faceKIVerifyOnSignup,
   faceKIVerifyOnSignIn,
@@ -15,6 +14,7 @@ interface FaceKIState {
   pending: boolean;
   message: string;
   token: string;
+  fasToken: string;
 }
 
 const initialState: FaceKIState = {
@@ -23,13 +23,8 @@ const initialState: FaceKIState = {
   pending: false,
   message: '',
   token: '',
+  fasToken: '',
 };
-// todo: remove this and uncomment previous
-// const initialState: FaceKIState = {
-//   faceKIStatus: 'Enroll OK',
-//   image: '',
-//   pending: false,
-// };
 
 const faceKISlice = createSlice({
   name: 'faceKI',
@@ -38,6 +33,9 @@ const faceKISlice = createSlice({
     clearFaceKI: () => {
       console.log('Clear faceKIState');
       return { ...initialState };
+    },
+    setFasToken: (state, action: PayloadAction<string>) => {
+      state.fasToken = action.payload;
     },
   },
   extraReducers: builder => {
@@ -95,5 +93,5 @@ const faceKISlice = createSlice({
   },
 });
 
-export const { clearFaceKI } = faceKISlice.actions;
+export const { clearFaceKI, setFasToken } = faceKISlice.actions;
 export default faceKISlice.reducer;

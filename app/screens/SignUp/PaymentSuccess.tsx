@@ -24,7 +24,7 @@ export const PaymentSuccess = ({}: Props) => {
   const dispatch = useAppDispatch();
   const auth = useStore(state => state.authorize);
   const { accountName } = useAppSelector(state => state.signUp);
-  const { token: fasToken } = useAppSelector(state => state.faceKI);
+  const { fasToken } = useAppSelector(state => state.faceKI);
   const { passKey, email, idToken, appPubKey } = useAppSelector(state => state.web3);
 
   const [isLoading, setIsLoading] = useState(false);
