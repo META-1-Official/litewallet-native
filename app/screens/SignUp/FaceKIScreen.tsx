@@ -19,7 +19,8 @@ const CAMERA_PERMISSION_STATUS_AUTHORIZED = 'authorized';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'FaceKI'>;
 
-const FaceKIScreen: React.FC<Props> = () => {
+const FaceKIScreen: React.FC<Props> = ({ route }) => {
+  const { upgradeBiometric } = route.params;
   const nav = useNavigation<RootNavigationProp>();
   const dispatch = useAppDispatch();
   const auth = useStore(state => state.authorize);
@@ -54,50 +55,52 @@ const FaceKIScreen: React.FC<Props> = () => {
   };
 
   useEffect(() => {
-    dispatch(clearFaceKI());
-    dispatch(getFASMigrationStatus(email))
-      .unwrap()
-      .then(({ doesUserExistsInFAS, wasUserEnrolledInOldBiometric }) => {
-        // in case of verify
-        if (task === TASK.VERIFY) {
-          if (!doesUserExistsInFAS) {
-            if (wasUserEnrolledInOldBiometric) {
-              // if user doesn't exist in new biometric and exists in old biometric
-              // TODO: FAS Migration
-              dispatch(getFASToken({ account: accountName, email, task }));
+    if (!upgradeBiometric) {
+      dispatch(clearFaceKI());
+      dispatch(getFASMigrationStatus(email))
+        .unwrap()
+        .then(({ doesUserExistsInFAS, wasUserEnrolledInOldBiometric }) => {
+          // in case of verify
+          if (task === TASK.VERIFY) {
+            if (!doesUserExistsInFAS) {
+              if (wasUserEnrolledInOldBiometric) {
+                // if user doesn't exist in new biometric and exists in old biometric | do migration
+                setTask(TASK.REGISTER);
+                nav.navigate('ImportBiometric');
+              } else {
+                // if user doesn't exist in new and old biometric
+                // TODO: Account Migration from old blockchain
+                dispatch(getFASToken({ account: accountName, email, task }));
+              }
             } else {
-              // if user doesn't exist in new and old biometric
-              // TODO: Account Migration from old blockchain
-              dispatch(getFASToken({ account: accountName, email, task }));
+              // if user exists in new biometric
+              dispatch(getFASToken({ account: accountName, email, task }))
+                .unwrap()
+                .then(({ message }) => {
+                  if (message !== 'success') {
+                    Toast.show({ type: 'error', text1: message });
+                    nav.goBack();
+                  }
+                })
+                .catch(error => {
+                  console.error(error);
+                  Toast.show({ type: 'error', text1: error.message });
+                  nav.goBack();
+                });
             }
           } else {
-            // if user exists in new biometric
-            dispatch(getFASToken({ account: accountName, email, task }))
-              .unwrap()
-              .then(({ message }) => {
-                if (message !== 'success') {
-                  Toast.show({ type: 'error', text1: message });
-                  nav.goBack();
-                }
-              })
-              .catch(error => {
-                console.error(error);
-                Toast.show({ type: 'error', text1: error.message });
-                nav.goBack();
-              });
+            // case of register
+            if (!doesUserExistsInFAS) {
+              // if user doesn't exist in new biometric | usual registration
+              dispatch(getFASToken({ account: accountName, email, task: TASK.REGISTER }));
+            } else {
+              // if user exists in new biometric | verify instead of register
+              setTask(TASK.VERIFY);
+              dispatch(getFASToken({ account: accountName, email, task: TASK.VERIFY }));
+            }
           }
-        } else {
-          // case of register
-          if (!doesUserExistsInFAS) {
-            // if user doesn't exist in new biometric | usual registration
-            dispatch(getFASToken({ account: accountName, email, task: TASK.REGISTER }));
-          } else {
-            // if user exists in new biometric | verify instead of register
-            setTask(TASK.VERIFY);
-            dispatch(getFASToken({ account: accountName, email, task: TASK.VERIFY }));
-          }
-        }
-      });
+        });
+    }
   }, []);
 
   useEffect(() => {
@@ -105,6 +108,7 @@ const FaceKIScreen: React.FC<Props> = () => {
   }, [token]);
 
   const isReady = isCameraAvailable && task && email && token;
+  console.log('isReady', isReady, isCameraAvailable, task, email, token);
 
   return (
     <View
@@ -135,7 +139,6 @@ const FaceKIScreen: React.FC<Props> = () => {
             const { data } = JSON.parse(event.nativeEvent.data);
             console.log('>>>>', data);
             if (data.type === 'success' && data.token) {
-              console.log('asd!!!');
               dispatch(setFasToken(data.token));
               if (isSigning) {
                 // case of login

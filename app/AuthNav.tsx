@@ -13,6 +13,7 @@ import ESignatureScreen from './screens/SignUp/ESignatureScreen';
 import FaceKIScreen from './screens/SignUp/FaceKIScreen';
 import FaceKISuccessScreen from './screens/SignUp/FaceKISuccessScreen';
 import ImportWalletScreen from './screens/SignUp/ImportWalletScreen';
+import ImportBiometricScreen from './screens/SignUp/ImportBiometricScreen';
 import Legal from './screens/SignUp/LegalScreen';
 import PasskeyScreen from './screens/SignUp/PasskeyScreen';
 import PaymentSuccess from './screens/SignUp/PaymentSuccess';
@@ -25,13 +26,14 @@ export type RootStackParamList = {
   Privacy: undefined;
   CreateWallet: undefined;
   // AdditionalForm: undefined;
-  FaceKI: undefined;
+  FaceKI: { upgradeBiometric: boolean };
   FaceKISuccess: undefined;
   Passkey: undefined;
   ESignature: undefined;
   ESignatureForm: undefined;
   PaymentSuccess: undefined;
   ImportWallet: undefined;
+  ImportBiometric: undefined;
   LinkWallet: undefined;
   CustomProviders: undefined;
   TOS: undefined;
@@ -64,10 +66,11 @@ const AuthNav = () => {
         <Stack.Screen name="CreateWallet" component={CreateWalletScreen} />
         <Stack.Screen
           name="FaceKI"
+          component={FaceKIScreen}
           options={{
             title: 'Create Wallet',
           }}
-          component={FaceKIScreen}
+          initialParams={{ upgradeBiometric: false }}
         />
         <Stack.Screen name="FaceKISuccess" component={FaceKISuccessScreen} />
         {/*<Stack.Screen name="AdditionalForm" component={AdditionalFormScreen} />*/}
@@ -82,6 +85,7 @@ const AuthNav = () => {
         <Stack.Screen name="LinkWallet" component={LinkWalletScreen} />
         <Stack.Screen name="CustomProviders" component={CustomProvidersScreen} />
         <Stack.Screen name="ImportWallet" component={ImportWalletScreen} />
+        <Stack.Screen name="ImportBiometric" component={ImportBiometricScreen} />
         <Stack.Screen
           name="Loader"
           options={{ presentation: 'transparentModal', headerShown: false }}
