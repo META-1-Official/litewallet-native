@@ -451,7 +451,7 @@
 					"$(inherited)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.meta1.appbeta;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = META1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/nativeapp.app/nativeapp";
 			};
 			name = Debug;
@@ -476,7 +476,7 @@
 					"$(inherited)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.meta1.appbeta;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = META1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/nativeapp.app/nativeapp";
 			};
 			name = Release;
@@ -535,7 +535,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.meta1.appbeta;
-				PRODUCT_NAME = nativeapp;
+				PRODUCT_NAME = META1;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
