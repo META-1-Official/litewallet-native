@@ -349,8 +349,6 @@ PODS:
     - React-Core
   - react-native-encrypted-storage (4.0.3):
     - React-Core
-  - react-native-flipper (0.212.0):
-    - React-Core
   - react-native-get-random-values (1.9.0):
     - React-Core
   - react-native-image-picker (4.10.3):
@@ -608,7 +606,6 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-blob-util (from `../node_modules/react-native-blob-util`)
   - react-native-encrypted-storage (from `../node_modules/react-native-encrypted-storage`)
-  - react-native-flipper (from `../node_modules/react-native-flipper`)
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-pdf (from `../node_modules/react-native-pdf`)
@@ -725,8 +722,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-blob-util"
   react-native-encrypted-storage:
     :path: "../node_modules/react-native-encrypted-storage"
-  react-native-flipper:
-    :path: "../node_modules/react-native-flipper"
   react-native-get-random-values:
     :path: "../node_modules/react-native-get-random-values"
   react-native-image-picker:
@@ -845,7 +840,6 @@ SPEC CHECKSUMS:
   React-logger: 2e4aee3e11b3ec4fa6cfd8004610bbb3b8d6cca4
   react-native-blob-util: af2dc91365bfde33f61389cbd0c692af9a4a97cb
   react-native-encrypted-storage: db300a3f2f0aba1e818417c1c0a6be549038deb7
-  react-native-flipper: 9c1957af24b76493ba74f46d000a5c1d485e7731
   react-native-get-random-values: dee677497c6a740b71e5612e8dbd83e7539ed5bb
   react-native-image-picker: 60f4246eb5bb7187fc15638a8c1f13abd3820695
   react-native-pdf: 7c0e91ada997bac8bac3bb5bea5b6b81f5a3caae
@@ -900,6 +894,6 @@ SPEC CHECKSUMS:
   ZendeskSDKStorage: be97db5c9418cecbd15e1b24b732cc0e8e10a991
   ZendeskSDKUIComponents: b9a3a6d3036ebd093229a2c7e7c598afc870fb47
 
-PODFILE CHECKSUM: 27e859aead89e2a50de419fa096c8b862a434139
+PODFILE CHECKSUM: db3d762f42b65268eec37164adae3d24b8a0273e
 
 COCOAPODS: 1.13.0
