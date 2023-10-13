@@ -1,23 +1,30 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { faceKIVerifyOnSignup, faceKIVerifyOnSignIn } from './faceKI.actions';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+import {
+  faceKIVerifyOnSignup,
+  faceKIVerifyOnSignIn,
+  getFASToken,
+  getFASMigrationStatus,
+  fasEnroll,
+} from './faceKI.actions';
 
 interface FaceKIState {
   faceKIStatus: string;
   image: string;
   pending: boolean;
+  message: string;
+  token: string;
+  fasToken: string;
 }
 
 const initialState: FaceKIState = {
   faceKIStatus: '',
   image: '',
   pending: false,
+  message: '',
+  token: '',
+  fasToken: '',
 };
-// todo: remove this and uncomment previous
-// const initialState: FaceKIState = {
-//   faceKIStatus: 'Enroll OK',
-//   image: '',
-//   pending: false,
-// };
 
 const faceKISlice = createSlice({
   name: 'faceKI',
@@ -27,8 +34,40 @@ const faceKISlice = createSlice({
       console.log('Clear faceKIState');
       return { ...initialState };
     },
+    setFasToken: (state, action: PayloadAction<string>) => {
+      state.fasToken = action.payload;
+    },
   },
   extraReducers: builder => {
+    builder.addCase(getFASMigrationStatus.pending, state => {
+      state.pending = true;
+    });
+    builder.addCase(getFASMigrationStatus.rejected, state => {
+      state.pending = false;
+    });
+    builder.addCase(getFASToken.pending, state => {
+      state.pending = true;
+    });
+    builder.addCase(getFASToken.fulfilled, (state, action) => {
+      state.pending = false;
+      state.message = action.payload.message;
+      if (action.payload.token) {
+        state.token = action.payload.token;
+      }
+    });
+    builder.addCase(getFASToken.rejected, state => {
+      state.pending = true;
+    });
+    builder.addCase(fasEnroll.pending, state => {
+      state.pending = true;
+    });
+    builder.addCase(fasEnroll.fulfilled, state => {
+      state.pending = false;
+    });
+    builder.addCase(fasEnroll.rejected, state => {
+      state.pending = false;
+    });
+    //---------------------------------------------------------------------------------------
     builder.addCase(faceKIVerifyOnSignup.pending, state => {
       state.pending = true;
     });
@@ -54,5 +93,5 @@ const faceKISlice = createSlice({
   },
 });
 
-export const { clearFaceKI } = faceKISlice.actions;
+export const { clearFaceKI, setFasToken } = faceKISlice.actions;
 export default faceKISlice.reducer;

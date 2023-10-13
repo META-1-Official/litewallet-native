@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   AppState,
+  AppStateStatus,
   Linking,
   Platform,
   Pressable,
@@ -51,18 +52,6 @@ export const PasskeyScreen = ({ navigation }: Props) => {
   const [emailSubscription, setEmailSubscription] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    dispatch(getAccountPaymentStatus(email))
-      .unwrap()
-      .then(user => {
-        if (user && user.status?.isSign) {
-          if (user.status?.isPayed || user.status?.isPaidByCrypto) {
-            handleCheckBox(4, true);
-          }
-        }
-      });
-  }, []);
-
   const handleEmailSubscription = () => {
     setEmailSubscription(prevState => !prevState);
   };
@@ -96,13 +85,12 @@ export const PasskeyScreen = ({ navigation }: Props) => {
   };
 
   const handleEsignature = () => {
+    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!! Esignature proceed');
     dispatch(eSignatureProceed({ firstName, lastName, mobile, email, accountName, privateKey }))
       .unwrap()
       .then(promiseResult => {
-        if (Platform.OS === 'ios') {
-          console.log('Handle Sign PromiseResult: ', promiseResult);
-          getPaymentDetails();
-        }
+        console.log('Handle Sign PromiseResult: ', promiseResult);
+        getPaymentDetails();
       });
   };
 
@@ -168,43 +156,57 @@ export const PasskeyScreen = ({ navigation }: Props) => {
     }
   };
 
-  const appState = useRef(AppState.currentState);
-  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+  // const appState = useRef(AppState.currentState);
+  // const [appStateVisible, setAppStateVisible] = useState(appState.current);
+  // const [appStateVisible, setAppStateVisible] = useState(true);
 
-  // todo: fix type of appState
-  const handleAppStateChange = (nextAppState: any) => {
-    console.log('AppState change action');
-    if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
-      console.log('App has come to the foreground!', appState.current);
-    }
-    appState.current = nextAppState;
-    setAppStateVisible(appState.current);
-    console.log('AppState current: ', appState.current);
-  };
+  // const handleAppStateChange = (nextAppState: AppStateStatus) => {
+  //   console.log('AppState change action');
+  //   if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+  //     console.log('App has come to the foreground!', appState.current);
+  //   }
+  //   appState.current = nextAppState;
+  //   setAppStateVisible(appState.current);
+  //   console.log('AppState current: ', appState.current);
+  // };
 
   useEffect(() => {
-    const subscription = AppState.addEventListener('change', handleAppStateChange);
-    console.log('Subscription on appState change');
-    return () => {
-      console.log('Subscription on appState change removed');
-      subscription.remove();
-    };
+    dispatch(getAccountPaymentStatus(email))
+      .unwrap()
+      .then(user => {
+        if (user && user.status?.isSign) {
+          if (user.status?.isPayed || user.status?.isPaidByCrypto) {
+            handleCheckBox(4, true);
+          }
+        }
+      });
   }, []);
 
-  useEffect(() => {
-    console.log('AppState visibility:', appStateVisible);
-    console.log('ESignatureStatus: ', eSignatureStatus);
-    console.log('ESignaturePending: ', eSignaturePending);
-    if (
-      Platform.OS === 'android' &&
-      appStateVisible === 'active' &&
-      E_SIGNATURE_STATUSES.includes(eSignatureStatus) &&
-      !eSignaturePending
-    ) {
-      console.log('Action onVisible');
-      getPaymentDetails();
-    }
-  }, [appStateVisible, eSignaturePending, eSignatureStatus]);
+  // useEffect(() => {
+  //   const subscription = AppState.addEventListener('change', handleAppStateChange);
+  //   console.log('Subscription on appState change');
+  //   return () => {
+  //     console.log('Subscription on appState change removed');
+  //     subscription.remove();
+  //   };
+  // }, []);
+
+  // useEffect(() => {
+  //   // console.log('AppState visibility:', appStateVisible);
+  //   console.log('ESignatureStatus: ', eSignatureStatus);
+  //   console.log('ESignaturePending: ', eSignaturePending);
+  //   if (
+  //     // Platform.OS === 'android' &&
+  //     // appStateVisible === 'active' &&
+  //     E_SIGNATURE_STATUSES.includes(eSignatureStatus) &&
+  //     !eSignaturePending &&
+  //     !checkboxesState[4]
+  //   ) {
+  //     console.log('Action onVisible');
+  //     getPaymentDetails();
+  //   }
+  //   // }, [appStateVisible, eSignaturePending, eSignatureStatus]);
+  // }, [eSignaturePending, eSignatureStatus]);
 
   const handleCheckBox = (id: number, value: boolean = false) => {
     setCheckBoxesState(prevState => {
