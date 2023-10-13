@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { SdkLoginParams } from '@web3auth/react-native-sdk/src/types/sdk';
+import { SdkLoginParams } from '@web3auth/react-native-sdk/src/types/interface';
 import { Buffer } from 'buffer';
 
 import { web3Login } from '../../services/web3.services';
@@ -15,10 +15,10 @@ export const getWeb3User = createAsyncThunk<any, SdkLoginParams>(
     ).toString('hex');
     console.log('AppPublicKey: ', appPubKey);
     return {
-      email: response?.userInfo?.email || '',
+      email: response?.userInfo()?.email || '',
       privateKey: response.privKey || '',
-      verifierId: response?.userInfo?.verifierId || '',
-      idToken: response?.userInfo?.idToken || '',
+      verifierId: response?.userInfo()?.verifierId || '',
+      idToken: response?.userInfo()?.idToken || '',
       appPubKey,
     };
   },
