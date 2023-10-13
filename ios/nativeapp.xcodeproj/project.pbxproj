@@ -3,17 +3,17 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 55;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* nativeappTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* nativeappTests.m */; };
+		011F828881B035881CB5955B /* libPods-nativeapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B39967903D599F52E8658E2 /* libPods-nativeapp.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		9284134E19AF4F13DDE56598 /* libPods-nativeapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 485020B46692EA126DAD6BBF /* libPods-nativeapp.a */; };
-		B99370199D6AE2427C7E5D71 /* libPods-nativeapp-nativeappTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C27F5DB046638BB92C2EE6 /* libPods-nativeapp-nativeappTests.a */; };
+		F391DD201AC5026C09B23222 /* libPods-nativeapp-nativeappTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5FED0E8D689FCBBD8B4C28B /* libPods-nativeapp-nativeappTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,23 +27,23 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		00E356EE1AD99517003FC87E /* nativeappTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = nativeappTests.xctest; path = META1.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* nativeappTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = nativeappTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* nativeappTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = nativeappTests.m; sourceTree = "<group>"; };
-		01C27F5DB046638BB92C2EE6 /* libPods-nativeapp-nativeappTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-nativeapp-nativeappTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		10A6507BF70941D5F89F57D2 /* Pods-nativeapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nativeapp.release.xcconfig"; path = "Target Support Files/Pods-nativeapp/Pods-nativeapp.release.xcconfig"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* META1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = META1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* nativeapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nativeapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = nativeapp/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = nativeapp/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = nativeapp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = nativeapp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = nativeapp/main.m; sourceTree = "<group>"; };
-		485020B46692EA126DAD6BBF /* libPods-nativeapp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-nativeapp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		58792132D1DEB0B710248877 /* Pods-nativeapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nativeapp.debug.xcconfig"; path = "Target Support Files/Pods-nativeapp/Pods-nativeapp.debug.xcconfig"; sourceTree = "<group>"; };
+		5B39967903D599F52E8658E2 /* libPods-nativeapp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-nativeapp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6411E3AE1B373A98F04B8B18 /* Pods-nativeapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nativeapp.release.xcconfig"; path = "Target Support Files/Pods-nativeapp/Pods-nativeapp.release.xcconfig"; sourceTree = "<group>"; };
+		7510D15AB4B79622CDF3BBF0 /* Pods-nativeapp-nativeappTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nativeapp-nativeappTests.debug.xcconfig"; path = "Target Support Files/Pods-nativeapp-nativeappTests/Pods-nativeapp-nativeappTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = nativeapp/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		B9A71BD245ABADCC92D84ABE /* Pods-nativeapp-nativeappTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nativeapp-nativeappTests.debug.xcconfig"; path = "Target Support Files/Pods-nativeapp-nativeappTests/Pods-nativeapp-nativeappTests.debug.xcconfig"; sourceTree = "<group>"; };
-		E1465B0B8FD508DCD5BC1A64 /* Pods-nativeapp-nativeappTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nativeapp-nativeappTests.release.xcconfig"; path = "Target Support Files/Pods-nativeapp-nativeappTests/Pods-nativeapp-nativeappTests.release.xcconfig"; sourceTree = "<group>"; };
+		A37E800291AC900FF83CA519 /* Pods-nativeapp-nativeappTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nativeapp-nativeappTests.release.xcconfig"; path = "Target Support Files/Pods-nativeapp-nativeappTests/Pods-nativeapp-nativeappTests.release.xcconfig"; sourceTree = "<group>"; };
+		A5FED0E8D689FCBBD8B4C28B /* libPods-nativeapp-nativeappTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-nativeapp-nativeappTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F046584837CC1ABC8E009EB1 /* Pods-nativeapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nativeapp.debug.xcconfig"; path = "Target Support Files/Pods-nativeapp/Pods-nativeapp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,7 +51,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B99370199D6AE2427C7E5D71 /* libPods-nativeapp-nativeappTests.a in Frameworks */,
+				F391DD201AC5026C09B23222 /* libPods-nativeapp-nativeappTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,7 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9284134E19AF4F13DDE56598 /* libPods-nativeapp.a in Frameworks */,
+				011F828881B035881CB5955B /* libPods-nativeapp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,8 +100,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				485020B46692EA126DAD6BBF /* libPods-nativeapp.a */,
-				01C27F5DB046638BB92C2EE6 /* libPods-nativeapp-nativeappTests.a */,
+				5B39967903D599F52E8658E2 /* libPods-nativeapp.a */,
+				A5FED0E8D689FCBBD8B4C28B /* libPods-nativeapp-nativeappTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -131,7 +131,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* META1.app */,
+				13B07F961A680F5B00A75B9A /* nativeapp.app */,
 				00E356EE1AD99517003FC87E /* nativeappTests.xctest */,
 			);
 			name = Products;
@@ -140,10 +140,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				58792132D1DEB0B710248877 /* Pods-nativeapp.debug.xcconfig */,
-				10A6507BF70941D5F89F57D2 /* Pods-nativeapp.release.xcconfig */,
-				B9A71BD245ABADCC92D84ABE /* Pods-nativeapp-nativeappTests.debug.xcconfig */,
-				E1465B0B8FD508DCD5BC1A64 /* Pods-nativeapp-nativeappTests.release.xcconfig */,
+				F046584837CC1ABC8E009EB1 /* Pods-nativeapp.debug.xcconfig */,
+				6411E3AE1B373A98F04B8B18 /* Pods-nativeapp.release.xcconfig */,
+				7510D15AB4B79622CDF3BBF0 /* Pods-nativeapp-nativeappTests.debug.xcconfig */,
+				A37E800291AC900FF83CA519 /* Pods-nativeapp-nativeappTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -155,12 +155,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "nativeappTests" */;
 			buildPhases = (
-				2AB418DF452BDDAB9D53F5EE /* [CP] Check Pods Manifest.lock */,
+				126EF0A7A9EFBD268667F717 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				B7EBC6438505FD5F92A4B302 /* [CP] Embed Pods Frameworks */,
-				D07633F489977421AC402829 /* [CP] Copy Pods Resources */,
+				30159694C2765C39DD9A7E51 /* [CP] Embed Pods Frameworks */,
+				FCAD40698D6678219799C4A7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -176,14 +176,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "nativeapp" */;
 			buildPhases = (
-				58366B83C80EF54394FF58F3 /* [CP] Check Pods Manifest.lock */,
+				2BF1C5A48D2DA1D0CC651FE2 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				55F1710DA0E22B21E00F852A /* [CP] Embed Pods Frameworks */,
-				3D4709BC9BFF74ECEC3F08EF /* [CP] Copy Pods Resources */,
+				269CDDDBCCC72CEFD00362DC /* [CP] Embed Pods Frameworks */,
+				8B356BD8D15D1710FB9AE611 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -191,7 +191,7 @@
 			);
 			name = nativeapp;
 			productName = nativeapp;
-			productReference = 13B07F961A680F5B00A75B9A /* META1.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* nativeapp.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -212,7 +212,7 @@
 				};
 			};
 			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "nativeapp" */;
-			compatibilityVersion = "Xcode 12.0";
+			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -266,7 +266,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		2AB418DF452BDDAB9D53F5EE /* [CP] Check Pods Manifest.lock */ = {
+		126EF0A7A9EFBD268667F717 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -288,24 +288,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		3D4709BC9BFF74ECEC3F08EF /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-nativeapp/Pods-nativeapp-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-nativeapp/Pods-nativeapp-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-nativeapp/Pods-nativeapp-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		55F1710DA0E22B21E00F852A /* [CP] Embed Pods Frameworks */ = {
+		269CDDDBCCC72CEFD00362DC /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -322,7 +305,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-nativeapp/Pods-nativeapp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		58366B83C80EF54394FF58F3 /* [CP] Check Pods Manifest.lock */ = {
+		2BF1C5A48D2DA1D0CC651FE2 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -344,7 +327,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B7EBC6438505FD5F92A4B302 /* [CP] Embed Pods Frameworks */ = {
+		30159694C2765C39DD9A7E51 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -361,7 +344,24 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-nativeapp-nativeappTests/Pods-nativeapp-nativeappTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D07633F489977421AC402829 /* [CP] Copy Pods Resources */ = {
+		8B356BD8D15D1710FB9AE611 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-nativeapp/Pods-nativeapp-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-nativeapp/Pods-nativeapp-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-nativeapp/Pods-nativeapp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FCAD40698D6678219799C4A7 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -430,7 +430,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B9A71BD245ABADCC92D84ABE /* Pods-nativeapp-nativeappTests.debug.xcconfig */;
+			baseConfigurationReference = 7510D15AB4B79622CDF3BBF0 /* Pods-nativeapp-nativeappTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -438,7 +438,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = nativeappTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -449,21 +449,20 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.meta1.appbeta;
-				PRODUCT_NAME = META1;
-				PROVISIONING_PROFILE_SPECIFIER = "match Development io.meta1.appbeta";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/nativeapp.app/nativeapp";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E1465B0B8FD508DCD5BC1A64 /* Pods-nativeapp-nativeappTests.release.xcconfig */;
+			baseConfigurationReference = A37E800291AC900FF83CA519 /* Pods-nativeapp-nativeappTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = nativeappTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -474,42 +473,34 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.meta1.appbeta;
-				PRODUCT_NAME = META1;
-				PROVISIONING_PROFILE_SPECIFIER = "match Development io.meta1.appbeta";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/nativeapp.app/nativeapp";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 58792132D1DEB0B710248877 /* Pods-nativeapp.debug.xcconfig */;
+			baseConfigurationReference = F046584837CC1ABC8E009EB1 /* Pods-nativeapp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 40;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = BL96N576T8;
+				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = nativeapp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.meta1.appbeta;
-				PRODUCT_NAME = META1;
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development io.meta1.appbeta";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = nativeapp;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -518,32 +509,25 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 10A6507BF70941D5F89F57D2 /* Pods-nativeapp.release.xcconfig */;
+			baseConfigurationReference = 6411E3AE1B373A98F04B8B18 /* Pods-nativeapp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 40;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = BL96N576T8;
+				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = nativeapp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.meta1.appbeta;
-				PRODUCT_NAME = META1;
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development io.meta1.appbeta";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = nativeapp;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -590,6 +574,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
+					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -598,7 +583,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -610,11 +595,18 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "$(inherited)";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-Wl",
+					"-ld_classic",
+					"-Wl -ld_classic ",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
@@ -657,13 +649,17 @@
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
+				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -674,11 +670,18 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = "$(inherited)";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-Wl",
+					"-ld_classic",
+					"-Wl -ld_classic ",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;

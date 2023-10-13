@@ -1,5 +1,5 @@
 import EncryptedStorage from 'react-native-encrypted-storage';
-import create from 'zustand';
+import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import Omit from 'lodash.omit';
 

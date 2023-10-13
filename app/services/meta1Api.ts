@@ -3,7 +3,7 @@ import { zip, zipObject } from 'lodash';
 import QRCode from 'qrcode';
 import { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
-import create from 'zustand';
+import { create } from 'zustand';
 import useAppSelector from '../hooks/useAppSelector';
 import { excludeIndex, inFuture } from '../utils';
 import config from '../config';

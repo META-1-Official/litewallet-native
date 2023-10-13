@@ -15,7 +15,7 @@ import { clearFaceKI, setFasToken } from '../../store/faceKI/faceKI.reducer';
 import { login } from '../../store/signIn/signIn.actions';
 import { authorize } from '../../store/wallet/wallet.reducers';
 
-const CAMERA_PERMISSION_STATUS_AUTHORIZED = 'authorized';
+const CAMERA_PERMISSION_STATUS_AUTHORIZED = 'granted';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'FaceKI'>;
 

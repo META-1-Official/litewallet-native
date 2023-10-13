@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Animated,
   Dimensions,
@@ -29,6 +29,8 @@ const MyOrders: React.FC = () => {
   const { assetA, assetB } = useAppSelector(state => state.dex.tradingPair);
 
   const loader = useNewLoaderModal();
+
+  useEffect(() => {}, [openedOrders.length]);
 
   const getTradingPair = (order: HistoryRetT) => {
     const A = order?.limit_order_create_operation.min_to_receive.asset.symbol;
