@@ -11,16 +11,21 @@ async function buildSignature4Fas(accountName: string, passkey: string, email: s
     publicKey = signerPkey.toPublicKey().toString();
     signature = Signature.sign(accountName, signerPkey).toHex();
   } catch (err) {
-    const account = await Login.generateKeys(
-      accountName,
-      passkey,
-      ['owner'],
-      config.APP_KEY_PREFIX,
-    );
-    const ownerPrivateKey = account.privKeys.owner.toWif();
-    publicKey = account.pubKeys.owner;
-    const signerPkey = PrivateKey.fromWif(ownerPrivateKey);
-    signature = Signature.sign(signatureContent, signerPkey).toHex();
+    console.log('Build signature: ', err);
+    try {
+      const account = await Login.generateKeys(
+        accountName,
+        passkey,
+        ['owner'],
+        config.APP_KEY_PREFIX,
+      );
+      const ownerPrivateKey = account.privKeys.owner.toWif();
+      publicKey = account.pubKeys.owner;
+      const signerPkey = PrivateKey.fromWif(ownerPrivateKey);
+      signature = Signature.sign(signatureContent, signerPkey).toHex();
+    } catch (error) {
+      console.error('Build signature: ', error);
+    }
   }
 
   return { publicKey, signature, signatureContent };

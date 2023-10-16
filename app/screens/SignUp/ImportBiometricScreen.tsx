@@ -54,7 +54,9 @@ const ImportBiometricScreen: React.FC<Props> = ({ navigation }) => {
       email,
     );
 
-    console.log('Build Signature For FAS', publicKey, signature, signatureContent);
+    console.log('Build Signature For FAS', publicKey);
+    console.log(signature);
+    console.log(signatureContent);
 
     if (!publicKey || !signature) {
       Toast.show({ type: 'error', text1: 'Passkey is not valid!' });
@@ -121,7 +123,7 @@ const ImportBiometricScreen: React.FC<Props> = ({ navigation }) => {
             control={control}
             rules={{ required }}
             name="password"
-            label="Passkey or owner private key"
+            label="Passkey"
             style={{
               paddingHorizontal: 32,
             }}

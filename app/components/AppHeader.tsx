@@ -21,7 +21,6 @@ export default function AppHeader({ navigation, route, options, back }: StackHea
   const title = getHeaderTitle(options, route.name).replace(/\w+__/, '');
 
   const isShow = !['PaymentSuccess'].includes(route.name);
-  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!HUY');
 
   return (
     <SafeAreaView
