@@ -49,10 +49,11 @@ export const eSignatureProceed = createAsyncThunk(
     let token;
     if (response && response.headers) {
       if (response.data.result === 'done') {
-        Toast.show({
-          type: 'info',
-          text1: 'User get token of eSignature',
-        });
+        console.log('User get token of eSignature');
+        // Toast.show({
+        //   type: 'info',
+        //   text1: 'User get token of eSignature',
+        // });
       } else {
         Toast.show({
           type: 'error',
