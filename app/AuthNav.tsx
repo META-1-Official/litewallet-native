@@ -61,31 +61,81 @@ const AuthNav = () => {
           component={WelcomeScreen}
         />
         <Stack.Screen name="Legal" component={Legal} />
-        <Stack.Screen name="Privacy" component={PrivacyPolicy} />
-        <Stack.Screen name="TOS" component={TOSScreen} />
-        <Stack.Screen name="CreateWallet" component={CreateWalletScreen} />
+        <Stack.Screen
+          name="Privacy"
+          component={PrivacyPolicy}
+          options={{
+            title: 'Privacy Policy Of META1 Coin',
+          }}
+        />
+        <Stack.Screen
+          name="TOS"
+          component={TOSScreen}
+          options={{
+            title: 'Terms Of Service',
+          }}
+        />
+        <Stack.Screen
+          name="CreateWallet"
+          component={CreateWalletScreen}
+          options={{
+            title: 'Create META1 Wallet',
+          }}
+        />
         <Stack.Screen
           name="FaceKI"
           component={FaceKIScreen}
           options={{
-            title: 'Create Wallet',
+            title: 'Bio-Metric 2 Factor Authentication',
           }}
           initialParams={{ upgradeBiometric: false }}
         />
-        <Stack.Screen name="FaceKISuccess" component={FaceKISuccessScreen} />
+        <Stack.Screen
+          name="FaceKISuccess"
+          component={FaceKISuccessScreen}
+          options={{
+            title: 'Bio-Metric 2 Factor Authentication',
+          }}
+        />
         {/*<Stack.Screen name="AdditionalForm" component={AdditionalFormScreen} />*/}
         <Stack.Screen name="ESignature" component={ESignatureScreen} />
         <Stack.Screen name="ESignatureForm" component={ESignatureFormScreen} />
-        <Stack.Screen name="Passkey" component={PasskeyScreen} />
+        <Stack.Screen
+          name="Passkey"
+          component={PasskeyScreen}
+          options={{
+            title: 'Save Passkey',
+          }}
+        />
         <Stack.Screen
           name="PaymentSuccess"
           component={PaymentSuccess}
-          options={{ gestureEnabled: false }}
+          options={{ gestureEnabled: false, title: '' }}
         />
-        <Stack.Screen name="LinkWallet" component={LinkWalletScreen} />
-        <Stack.Screen name="CustomProviders" component={CustomProvidersScreen} />
-        <Stack.Screen name="ImportWallet" component={ImportWalletScreen} />
-        <Stack.Screen name="ImportBiometric" component={ImportBiometricScreen} />
+        <Stack.Screen
+          name="LinkWallet"
+          component={LinkWalletScreen}
+          options={{
+            title: 'Link Wallet',
+          }}
+        />
+        <Stack.Screen
+          name="CustomProviders"
+          component={CustomProvidersScreen}
+          options={{
+            title: 'Web3Auth',
+          }}
+        />
+        <Stack.Screen
+          name="ImportWallet"
+          component={ImportWalletScreen}
+          options={{ title: 'Import Wallet' }}
+        />
+        <Stack.Screen
+          name="ImportBiometric"
+          component={ImportBiometricScreen}
+          options={{ title: 'Upgrade Biometric' }}
+        />
         <Stack.Screen
           name="Loader"
           options={{ presentation: 'transparentModal', headerShown: false }}

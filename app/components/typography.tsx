@@ -4,6 +4,7 @@ import { colors } from '../styles/colors';
 
 interface StyleProp {
   style?: TextStyle;
+  children?: React.ReactNode;
 }
 
 export const Heading: React.FC<StyleProp> = ({ style, children }) => {

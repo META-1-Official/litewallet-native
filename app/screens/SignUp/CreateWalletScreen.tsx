@@ -122,9 +122,9 @@ const CreateWalletScreen: React.FC<Props> = ({ navigation }) => {
         }}
       >
         <View style={{ marginHorizontal: 24 }}>
-          <Heading style={{ marginBottom: 8 }}>Create META Wallet</Heading>
+          <Heading style={{ marginBottom: 8 }} />
           <TextSecondary style={{ marginBottom: 18 }}>
-            Provide access to your META Lite Wallet
+            It's Time To Setup Passwordless Authentication For Your META1 Wallet
           </TextSecondary>
 
           <View>

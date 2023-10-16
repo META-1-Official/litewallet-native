@@ -59,7 +59,10 @@ export const ListItem: ListItemT = ({ title, icon, arrow, separator, onPress }) 
   );
 };
 
-export const List: React.FC<{ style?: ViewStyle }> = ({ style, children }) => {
+export const List: React.FC<{ style?: ViewStyle; children?: React.ReactNode }> = ({
+  style,
+  children,
+}) => {
   return (
     <View style={styles.shadow}>
       <View style={[styles.shadow, style]}>{children}</View>

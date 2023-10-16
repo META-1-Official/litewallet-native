@@ -47,7 +47,7 @@ export function Spacer() {
 export function PrivacyPolicy() {
   return (
     <Page>
-      <Heading first>Privacy Policy of META 1 Coin</Heading>
+      <Heading first />
       <Paragraph>
         META 1 Coin operates the META 1 Mobile Wallet which provides access to the METANOMICS
         Eco-sphere. This page is used to inform website visitors regarding our policies with the
@@ -135,7 +135,7 @@ export function PrivacyPolicy() {
 export function TOSScreen() {
   return (
     <Page>
-      <Heading first>Terms of service</Heading>
+      <Heading first />
       <Paragraph>
         1. This Association of members hereby declares that our main objective is to maintain and
         improve the civil rights, constitutional guarantees, and political freedom of every human

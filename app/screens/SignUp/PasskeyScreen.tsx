@@ -244,7 +244,7 @@ export const PasskeyScreen = ({ navigation }: Props) => {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainerStyle}>
         <View style={styles.header}>
-          <Text style={styles.title}>Save Passkey</Text>
+          <Text style={styles.title} />
           <Text style={styles.subtitle}>
             Please keep your Passkey in a safe place. Don't share it with any third-parties or send
             it online.

@@ -18,9 +18,10 @@ export default function AppHeader({ navigation, route, options, back }: StackHea
     </TouchableOpacity>
   );
   const isWalletRoute = route.name.startsWith('Wallet__');
-  const title = isWalletRoute ? getHeaderTitle(options, route.name).replace(/\w+__/, '') : null;
+  const title = getHeaderTitle(options, route.name).replace(/\w+__/, '');
 
   const isShow = !['PaymentSuccess'].includes(route.name);
+  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!HUY');
 
   return (
     <SafeAreaView

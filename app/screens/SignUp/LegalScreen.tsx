@@ -18,7 +18,7 @@ export default function Legal() {
       }}
     >
       <View style={{ marginLeft: 24 }}>
-        <Heading style={{ marginBottom: 18 }}>Legal</Heading>
+        <Heading style={{ marginBottom: 18 }} />
         <TextSecondary>
           Please review the META Wallet Terms of Services and Privacy Policy.
         </TextSecondary>
