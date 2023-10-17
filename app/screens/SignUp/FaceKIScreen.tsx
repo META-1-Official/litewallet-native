@@ -119,11 +119,12 @@ const FaceKIScreen: React.FC<Props> = ({ route }) => {
                 // if user doesn't exist in new biometric but exists in old biometric | migration
                 nav.navigate('ImportBiometric');
               } else {
-                // if user exists in new biometric | verify instead of register
+                // if user doesn't exist in new biometric and doesn't exist in old biometric | just register
                 dispatch(getFASToken({ account: accountName, email, task }));
               }
             } else {
-              // if user exists in new biometric | verify instead of register
+              // if user exists in new biometric and exists in eSignature but doesn't exist in blockchain | verify instead of register
+              // todo: resolve case when user exists only in new biometric db and doesn't exist in eSignature and blockchain
               setTask(TASK.VERIFY);
               dispatch(getFASToken({ account: accountName, email, task: TASK.VERIFY }));
             }
