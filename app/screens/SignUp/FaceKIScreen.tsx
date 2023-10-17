@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useRef, useState } from 'react';
-import { View } from 'react-native';
+import { AppState, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 import WebView from 'react-native-webview';
 import { RootNavigationProp, RootStackParamList } from '../../AuthNav';
@@ -20,6 +20,8 @@ const CAMERA_PERMISSION_STATUS_AUTHORIZED = 'granted';
 type Props = NativeStackScreenProps<RootStackParamList, 'FaceKI'>;
 
 const FaceKIScreen: React.FC<Props> = ({ route }) => {
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
   const { upgradeBiometric } = route.params;
   const nav = useNavigation<RootNavigationProp>();
   const dispatch = useAppDispatch();
@@ -53,6 +55,21 @@ const FaceKIScreen: React.FC<Props> = ({ route }) => {
         console.error(error);
       });
   };
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+        console.log('App has come to the foreground!');
+      }
+
+      appState.current = nextAppState;
+      setAppStateVisible(appState.current);
+      console.log('AppState', appState.current);
+    });
+    return () => {
+      subscription.remove();
+    };
+  }, []);
 
   useEffect(() => {
     if (!upgradeBiometric) {
@@ -119,7 +136,7 @@ const FaceKIScreen: React.FC<Props> = ({ route }) => {
     console.log(token);
   }, [token]);
 
-  const isReady = task && email && token;
+  const isReady = task && email && token && appState;
   console.log('isReady', isReady, cameraPermission, isCameraAvailable, task, email, token);
 
   return (
