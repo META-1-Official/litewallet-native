@@ -38,7 +38,7 @@ const ImportBiometricScreen: React.FC<Props> = ({ navigation }) => {
   } = useForm({
     mode: 'onChange',
     defaultValues: {
-      accountName: account,
+      accountName: isSigning ? account : '',
       password: '',
     },
   });
