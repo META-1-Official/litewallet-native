@@ -27,43 +27,43 @@ export async function getAccountKeys({
   await _login(accountName, password);
 
   if (isPassPk(password)) {
-    let account = (await getAccount(accountName)).account;
-    let passwordKeys = {};
+    let account: any = (await getAccount(accountName))?.account;
+    let passwordKeys: any = {};
     const fromWif = PrivateKey.fromWif(password);
     const key = {
-        privKey: fromWif ? fromWif.toWif() : fromWif,
-        pubKey: fromWif.toPublicKey().toString()
+      privKey: fromWif ? fromWif.toWif() : fromWif,
+      pubKey: fromWif.toPublicKey().toString(),
     };
-     
-    ['active', 'owner', 'memo'].forEach((role) => {
+
+    ['active', 'owner', 'memo'].forEach(role => {
       if (role === 'memo') {
-        if (account['options']['memo_key'] == key.pubKey)
+        if (account.options.memo_key == key.pubKey) {
           passwordKeys[role] = key;
-        else {
+        } else {
           passwordKeys[role] = {
-            pubKey: account['options']['memo_key'],
-            privKey: ''
+            pubKey: account.options.memo_key,
+            privKey: '',
           };
         }
       } else {
-        account[role]['key_auths'].forEach((auth) => {
-          if (auth[0] == key.pubKey)
+        account[role].key_auths.forEach((auth: Array<String>) => {
+          if (auth[0] == key.pubKey) {
             passwordKeys[role] = key;
-          else {
+          } else {
             passwordKeys[role] = {
               pubKey: auth[0],
-              privKey: ''
+              privKey: '',
             };
           }
         });
       }
     });
     return {
-      ownerKeys: passwordKeys['owner'],
-      activeKeys: passwordKeys['active'],
-      memoKeys: passwordKeys['memo'],
+      ownerKeys: passwordKeys.owner || '',
+      activeKeys: passwordKeys.active || '',
+      memoKeys: passwordKeys.memo || '',
       accountName: accountName,
-    }
+    };
   } else {
     return {
       ownerKeys: generateKeyFromPassword(accountName, 'owner', password, true),
