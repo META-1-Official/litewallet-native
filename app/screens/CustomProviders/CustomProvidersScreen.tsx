@@ -59,7 +59,7 @@ const CustomProvidersScreen: React.FC<Props> = ({ navigation }) => {
       .unwrap()
       .then(web3AuthData => {
         if (web3AuthData.privateKey) {
-          navigation.navigate('FaceKI');
+          navigation.navigate('FaceKI', { upgradeBiometric: false });
         }
       })
       .catch(error => console.error(error));

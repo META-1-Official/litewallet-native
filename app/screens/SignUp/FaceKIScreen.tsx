@@ -136,7 +136,7 @@ const FaceKIScreen: React.FC<Props> = ({ route }) => {
     console.log(token);
   }, [token]);
 
-  const isReady = task && email && token && appState;
+  const isReady = task && email && token && appStateVisible;
   console.log('isReady', isReady, cameraPermission, isCameraAvailable, task, email, token);
 
   return (
