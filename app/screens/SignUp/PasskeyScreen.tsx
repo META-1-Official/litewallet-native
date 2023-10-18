@@ -236,7 +236,8 @@ export const PasskeyScreen = ({ navigation }: Props) => {
   }, [checkboxesState]);
 
   const openUrl = () => {
-    const url = 'https://support.meta1coin.vision/password-storage-tips';
+    const url =
+      'https://support.meta1coin.vision/hc/en-us/articles/11552911024027-Passkey-Storage-Tips';
     Linking.openURL(url);
   };
 
