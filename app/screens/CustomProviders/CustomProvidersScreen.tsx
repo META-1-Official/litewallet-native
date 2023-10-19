@@ -49,11 +49,11 @@ const CustomProvidersScreen: React.FC<Props> = ({ navigation }) => {
     dispatch(
       getWeb3User({
         loginProvider,
+        mfaLevel: MFA_LEVELS.NONE,
         extraLoginOptions: {
           login_hint: login,
           // isVerifierIdCaseSensitive
         },
-        mfaLevel: MFA_LEVELS.NONE,
       }),
     )
       .unwrap()
