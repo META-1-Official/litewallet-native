@@ -11,7 +11,7 @@ import PortfolioHeader from '../components/PortfolioHeader';
 import PortfolioListing from '../components/PortfolioListing';
 import { useAppSelector } from '../hooks';
 import useAppDispatch from '../hooks/useAppDispatch';
-import useNotifications from '../hooks/useNotifications';
+// import useNotifications from '../hooks/useNotifications';
 import { migrateAccount } from '../store/signUp/signUp.actions';
 import { colors } from '../styles/colors';
 import Loader from '../components/Loader';
@@ -55,7 +55,7 @@ const WalletScreen = () => {
     }
   }, []);
 
-  useNotifications();
+  // useNotifications();
 
   if (!allAssets) {
     return <Loader />;
