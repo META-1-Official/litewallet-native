@@ -73,15 +73,18 @@ const ImportBiometricScreen: React.FC<Props> = ({ navigation }) => {
       }),
     )
       .unwrap()
-      .then(({ token }) => {
+      .then(({ token, message }) => {
         if (token) {
           navigation.navigate('FaceKI', { upgradeBiometric: true });
         } else {
-          Toast.show({ type: 'error', text1: 'Passkey is not valid!' });
+          Toast.show({ type: 'error', text1: message });
         }
       })
       .catch(() => {
-        Toast.show({ type: 'error', text1: 'Passkey is not valid!' });
+        Toast.show({
+          type: 'error',
+          text1: 'The wallet name and passkey do not match.',
+        });
       });
   });
 

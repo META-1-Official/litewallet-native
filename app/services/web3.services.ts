@@ -11,6 +11,7 @@ const web3auth: Web3Auth = new Web3Auth(WebBrowser, EncryptedStorage, {
   network: config.WEB3_NETWORK as OPENLOGIN_NETWORK_TYPE,
   whiteLabel: {
     // issue in @web3auth package | it should be `name` instead of `appName` here
+    // @ts-ignore
     name: 'META1',
   },
 });
