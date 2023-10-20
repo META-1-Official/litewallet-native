@@ -89,12 +89,12 @@ export async function fetchAssetWithIcon(asset_name: string) {
       meta1: 'https://i.imgur.com/1Qliy5v.png',
       usdt: 'https://i.imgur.com/d1wY468.png',
       xlm: 'https://i.imgur.com/1ukgaqb.png',
-      doge: 'https://dogecoin.com/doge-logo.png',
+      doge: 'https://s2.coinmarketcap.com/static/img/coins/128x128/74.png',
       sol: 'https://s2.coinmarketcap.com/static/img/coins/128x128/5426.png',
-      trx: 'https://s3.coinmarketcap.com/static/img/portraits/62837c68ab0e763d5f77e9a6.png',
+      trx: 'https://s2.coinmarketcap.com/static/img/coins/128x128/1958.png',
       xrp: 'https://s2.coinmarketcap.com/static/img/coins/128x128/52.png',
       ada: 'https://s2.coinmarketcap.com/static/img/coins/128x128/2010.png',
-      busd: 'https://s2.coinmarketcap.com/static/img/coins/128x128/4687.png',
+      busd: 'https://s3.coinmarketcap.com/static/img/portraits/62da512ff192d82df80012bb.png',
       xmr: 'https://s2.coinmarketcap.com/static/img/coins/128x128/328.png',
     }),
   );
@@ -659,9 +659,8 @@ export type FullHistoryOrder = {
 };
 
 export const getHistoricalOrders = async (accountName: string): Promise<FullHistoryOrder[]> => {
-  const history: (HistoryRetT | FilledRetT | CanceledRetT)[] = await getAccountHistory(
-    accountName,
-  );
+  const history: (HistoryRetT | FilledRetT | CanceledRetT)[] =
+    await getAccountHistory(accountName);
 
   const createdOrders: HistoryRetT[] = history.filter((order): order is HistoryRetT =>
     Object.keys(order).includes('limit_order_create_operation'),
