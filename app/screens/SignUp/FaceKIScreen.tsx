@@ -126,7 +126,24 @@ const FaceKIScreen: React.FC<Props> = ({ route }) => {
               // if user exists in new biometric and exists in eSignature but doesn't exist in blockchain | verify instead of register
               // todo: resolve case when user exists only in new biometric db and doesn't exist in eSignature and blockchain
               setTask(TASK.VERIFY);
-              dispatch(getFASToken({ account: accountName, email, task: TASK.VERIFY }));
+              dispatch(getFASToken({ account: accountName, email, task: TASK.VERIFY }))
+                .unwrap()
+                .catch(error => {
+                  if (error.message === "user doesn't exist") {
+                    Toast.show({
+                      type: 'error',
+                      text1: 'Internal Server Error',
+                      text2: 'Please contact support',
+                    });
+                  } else {
+                    Toast.show({
+                      type: 'error',
+                      text1: 'Internal Server Error',
+                      text2: error.message,
+                    });
+                  }
+                  nav.navigate('CreateWallet');
+                });
             }
           }
         });
