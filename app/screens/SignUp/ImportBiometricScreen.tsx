@@ -47,7 +47,9 @@ const ImportBiometricScreen: React.FC<Props> = ({ navigation }) => {
   const scroll = useScroll(true);
 
   const handleImportWallet = handleSubmit(async formState => {
-    const { password, accountName } = formState;
+    const { password, accountName: walletName } = formState;
+    const accountName = walletName ? walletName.toLowerCase() : '';
+
     const { publicKey, signature, signatureContent } = await buildSignature4Fas(
       accountName,
       password,
@@ -113,6 +115,7 @@ const ImportBiometricScreen: React.FC<Props> = ({ navigation }) => {
             2 Factor Biometric Authentication.
           </TextSecondary>
           <Input
+            autoCapitalize="none"
             control={control}
             rules={{ required }}
             name="accountName"
