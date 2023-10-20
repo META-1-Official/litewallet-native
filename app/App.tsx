@@ -22,11 +22,15 @@ import * as Sentry from '@sentry/react-native';
 import { setJSExceptionHandler } from 'react-native-exception-handler';
 import RNRestart from 'react-native-restart';
 import { SENTRY_DSN } from '@env';
-import { Alert, LogBox } from 'react-native';
+import { Alert, LogBox, Text } from 'react-native';
 
 import AuthNav from './AuthNav';
 import { createStore } from './store/createStore';
 import theme from './theme';
+
+interface TextWithDefaultProps extends Text {
+  defaultProps?: { allowFontScaling?: boolean };
+}
 
 // Construct a new instrumentation instance. This is needed to communicate between the integration and React
 const routingInstrumentation = new Sentry.ReactNavigationInstrumentation();
@@ -87,6 +91,12 @@ const persistor = persistStore(createStore);
 
 function App() {
   LogBox.ignoreAllLogs();
+
+  (Text as unknown as TextWithDefaultProps).defaultProps = {
+    ...((Text as unknown as TextWithDefaultProps).defaultProps || {}),
+    allowFontScaling: false,
+  };
+
   const [dark, setDark] = useState(false);
 
   useEffect(() => {
