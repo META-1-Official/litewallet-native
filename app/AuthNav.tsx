@@ -86,7 +86,7 @@ const AuthNav = () => {
           name="FaceKI"
           component={FaceKIScreen}
           options={{
-            title: 'Bio-Metric 2 Factor Authentication',
+            title: 'Face auth',
           }}
           initialParams={{ upgradeBiometric: false }}
         />
@@ -94,7 +94,7 @@ const AuthNav = () => {
           name="FaceKISuccess"
           component={FaceKISuccessScreen}
           options={{
-            title: 'Bio-Metric 2 Factor Authentication',
+            title: 'Face auth',
           }}
         />
         {/*<Stack.Screen name="AdditionalForm" component={AdditionalFormScreen} />*/}
