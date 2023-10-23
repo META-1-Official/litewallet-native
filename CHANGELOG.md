@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file. Dates are d
 
 #### [INDEV](https://github.com/META-1-Official/litewallet-native/)
 
+> 23.10.2023
+- New signIn and signUp flows
+  - Upgrading of react-native lib from version 0.70 to 0.72.6
+  - Upgrading of web3Auth (torus) lib
+  - Implementing biometric verification
+  - New signUp flow
+  - New signIn flow
+
 > 24 Jul 2023
 - My Orders
   - Refactoring
