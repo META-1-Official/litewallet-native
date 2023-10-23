@@ -6,6 +6,7 @@ import Toast from 'react-native-toast-message';
 import WebView from 'react-native-webview';
 import { RootNavigationProp, RootStackParamList } from '../../AuthNav';
 import Loader from '../../components/Loader';
+import config from '../../config';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import useCameraPermission from '../../hooks/useCameraPermission';
 import { TASK } from '../../services/litewallet.services';
@@ -174,7 +175,7 @@ const FaceKIScreen: React.FC<Props> = ({ route }) => {
         <WebView
           ref={wvRef}
           source={{
-            uri: `https://bio-int.dev.cryptomailsvc.io?task=${task}&email=${email}&token=${token}`,
+            uri: `${config.BIO_INT_URL}?task=${task}&email=${email}&token=${token}`,
           }}
           originWhitelist={['*']}
           mediaPlaybackRequiresUserAction={false}

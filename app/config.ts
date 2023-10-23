@@ -14,6 +14,7 @@ enum Constants {
   LITE_WALLET_API_URL = 'LITE_WALLET_API_URL',
   GATEWAY_URL = 'GATEWAY_URL',
   API_URL = 'API_URL',
+  BIO_INT_URL = 'BIO_INT_URL',
   WEB3_CLIENT_ID = 'WEB3_CLIENT_ID',
   WEB3_NETWORK = 'WEB3_NETWORK',
   FACE_KI_API_URL = 'FACE_KI_API_URL',
@@ -42,6 +43,7 @@ const config: Config = {
     LITE_WALLET_API_URL: 'https://litewallet.cryptomailsvc.io',
     GATEWAY_URL: 'https://gateway.api.meta-exchange.vision',
     API_URL: 'https://api.meta-exchange.vision',
+    BIO_INT_URL: 'https://bio-int.cryptomailsvc.io',
     WEB3_CLIENT_ID: TORUS_CLIENT_ID,
     WEB3_NETWORK: OPENLOGIN_NETWORK.MAINNET,
     FACE_KI_API_URL: 'https://litewallet.cryptomailsvc.io',
@@ -59,6 +61,7 @@ const config: Config = {
     LITE_WALLET_API_URL: 'https://litewallet.dev2.cryptomailsvc.io',
     GATEWAY_URL: 'https://gateway.dev2.meta-exchange.vision',
     API_URL: 'https://api.dev2.meta-exchange.vision',
+    BIO_INT_URL: 'https://bio-int.dev.cryptomailsvc.io',
     WEB3_CLIENT_ID:
       'BFL8Z_Awr3p_ZVGiNUp1CIK8C28p0CC9WJRxw_GWEMWLJvOgJmpTJ8Xl8jbxYvzKhabmENF0GRbxE9EadEJ5T6g',
     WEB3_NETWORK: OPENLOGIN_NETWORK.TESTNET,
@@ -76,6 +79,7 @@ const config: Config = {
     LITE_WALLET_API_URL: 'https://litewallet.test.cryptomailsvc.io',
     GATEWAY_URL: 'https://gateway.test.meta-exchange.vision',
     API_URL: 'https://api.test.meta-exchange.vision',
+    BIO_INT_URL: 'https://bio-int.test.cryptomailsvc.io',
     WEB3_CLIENT_ID:
       'BENfRWt5wyCFCi-nKzu6gIlPABHbvgub3lhZUhUp_r4XD2xmdph0MZMaXY89xnfPVs9wMao5vlBiA6dtP-4H1i0',
     WEB3_NETWORK: OPENLOGIN_NETWORK.TESTNET,
