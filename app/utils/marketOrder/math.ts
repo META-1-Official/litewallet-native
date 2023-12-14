@@ -47,8 +47,8 @@ export const calculateDivideBy = (basePrecision: number, quotePrecision: number)
 export const calculatePrice = (limitOrder: iLimitOrder, divideBy: number): number => {
   const baseAmount = new BigNumber(limitOrder.sell_price.base.amount);
   const quoteAmount = new BigNumber(limitOrder.sell_price.quote.amount);
-  const price = quoteAmount.dividedBy(baseAmount).dividedBy(divideBy);
 
+  const price = quoteAmount.dividedBy(baseAmount).dividedBy(divideBy);
   return +price;
 };
 

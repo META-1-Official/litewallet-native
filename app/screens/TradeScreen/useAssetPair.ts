@@ -13,6 +13,7 @@ const useAssetPair = (
   backingAssetValue: number;
   swapAssets?: () => void;
   isButtonDisabled: boolean;
+  swapAssetFlag: boolean;
 } => {
   const [swapAssetFlag, setSwapAssetFlag] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -23,6 +24,8 @@ const useAssetPair = (
   );
 
   const swapAssets = () => {
+    console.log('clicked swap');
+    // setSwapAssetFlag(true);
     setSwapAssetFlag(prevState => !prevState);
     setIsButtonDisabled(true);
   };
@@ -79,12 +82,26 @@ const useAssetPair = (
 
       load();
 
-      if (swapAssetFlag) {
+      if (!swapAssetFlag) {
         setAsyncMarketPrice(A, B);
         setAsyncMarketLiquidity(A, B);
+        console.log(
+          '! Asset swapAssetFlag false',
+          A.asset.symbol,
+          B.asset.symbol,
+          A.marketPrice,
+          B.marketPrice,
+        );
       } else {
         setAsyncMarketPrice(B, A);
         setAsyncMarketLiquidity(B, A);
+        console.log(
+          '! Asset swapAssetFlag true',
+          A.asset.symbol,
+          B.asset.symbol,
+          A.marketPrice,
+          B.marketPrice,
+        );
       }
     }
   }, [A?.asset.symbol, B?.asset.symbol, A?.amount, B?.amount, isButtonDisabled]);
@@ -94,10 +111,11 @@ const useAssetPair = (
   }
 
   return {
-    assets: swapAssetFlag ? { A, B } : { A: B, B: A },
-    backingAssetValue: swapAssetFlag ? 1 / backingAssetValue : backingAssetValue,
+    assets: !swapAssetFlag ? { A, B } : { A: B, B: A },
+    backingAssetValue: !swapAssetFlag ? 1 / backingAssetValue : backingAssetValue,
     swapAssets,
     isButtonDisabled,
+    swapAssetFlag,
   };
 };
 

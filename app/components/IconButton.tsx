@@ -20,21 +20,24 @@ const IconButton: FC<Props> = ({
   iconColor,
 }) => {
   const handlePress = () => {
+    console.log('isDisabled');
     if (!isDisabled && onClick) {
       onClick();
     }
   };
 
   return (
-    <View style={[style, { opacity: isDisabled ? 0.7 : 1 }]}>
-      <TouchableOpacity
-        activeOpacity={isDisabled ? 1 : undefined}
-        onPress={handlePress}
-        disabled={isDisabled}
-      >
+    <TouchableOpacity
+      style={{ padding: 0, margin: 0 }}
+      activeOpacity={isDisabled ? 1 : undefined}
+      onPress={handlePress}
+      onMagicTap={handlePress}
+      disabled={isDisabled}
+    >
+      <View style={[style, { opacity: isDisabled ? 0.5 : 1 }]}>
         <Icon name={iconName} size={iconSize} color={iconColor} />
-      </TouchableOpacity>
-    </View>
+      </View>
+    </TouchableOpacity>
   );
 };
 

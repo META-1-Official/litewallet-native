@@ -7,6 +7,7 @@ import calculateMarketPrice from '../../utils/marketOrder/calculateMarketPrice';
 import { getMaxOrderPrice } from '../../utils/marketOrder/getMaxOrderPrice';
 import meta1dex from '../../utils/meta1dexTypes';
 import { ScreenAssets, kindaStyle } from './types';
+import Toast from 'react-native-toast-message';
 
 export function setMaxAmount(assets: ScreenAssets) {
   const { A, B } = assets;
@@ -79,8 +80,8 @@ export const mkPerformSwap = (
 
     const { marketPrice, highestPrice } = await calculateMarketPrice(assets.A, assets.B);
 
-    console.log('Amount of Quote: ', +assets.A.amount / marketPrice);
-    console.log('!!!!!!!!!!!!!!!!!!!!!!!! HighestPrice: ', highestPrice);
+    console.log('Amount of Quote, marketPrice: ', +assets.A.amount / marketPrice, marketPrice);
+    console.log('HighestPrice: ', highestPrice);
 
     const marketLiquidity = await calculateMarketLiquidity(assets.A, assets.B);
     assets.A.setMarketPrice(marketPrice);
@@ -95,11 +96,19 @@ export const mkPerformSwap = (
       );
     }
 
+    const feeFactor = 0.935;
     const precisionFactor = 3 / Math.pow(10, assets.B.asset._asset.precision);
     const tradePrice = marketPrice + precisionFactor;
 
     try {
-      console.log('!!!!!!!!!!!!!!!!!!!!!!!!!! My TRY', tradePrice);
+      console.log(
+        'My TRY',
+        assets.A.asset.symbol,
+        assets.B.asset.symbol,
+        Number((+assets.B.amount).toFixed(assets.B.asset._asset.precision)),
+        assets.A,
+        tradePrice,
+      );
       await swapWithPassword(
         accountInfo,
         assets.A.asset.symbol,
@@ -110,14 +119,14 @@ export const mkPerformSwap = (
       );
     } catch (error) {
       try {
-        console.log('!!!!!!!!!!!!!!!!!!!!!!!!!! My CATCH', highestPrice + precisionFactor);
+        console.log('My CATCH', error, highestPrice + precisionFactor);
         await swapWithPassword(
           accountInfo,
           assets.A.asset.symbol,
           assets.B.asset.symbol,
-          Number(assets.B.amount),
+          Number((+assets.B.amount).toFixed(2)),
           highestPrice + precisionFactor,
-          true,
+          false,
         );
       } catch (error2) {
         try {
@@ -128,7 +137,7 @@ export const mkPerformSwap = (
             assets.B.asset.symbol,
             Number(assets.B.amount),
             999999999999999, // dirty hack to place market price order
-            true,
+            false,
           );
         } catch (error3) {
           throw new Error("The order can't be filled immediately! Please try to change amounts.");
@@ -146,9 +155,33 @@ export const mkPerformSwap = (
         onFail();
         if ((e as Error).message === 'Expected value, got null') {
           return true; // Swallow this exception
+        } else {
+          splitToastMessage('error', (e as Error).message);
+          return false;
         }
       },
     });
+};
+
+export const splitToastMessage = (type: string, message: string) => {
+  const messageParts: Array<string> = message.split(/[.!?]/).filter(Boolean);
+  if (messageParts.length > 1) {
+    Toast.show({
+      type: type,
+      text1: messageParts[0],
+      position: 'top',
+      visibilityTime: 2000,
+      onHide: () => {
+        Toast.show({
+          type: 'error',
+          visibilityTime: 2000,
+          text1: messageParts[1],
+        });
+      },
+    });
+  } else {
+    return Toast.show({ type: type, text1: messageParts[0] });
+  }
 };
 
 export const makeMessage = (assets: ScreenAssets) =>

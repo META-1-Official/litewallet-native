@@ -9,6 +9,7 @@ export type ScreenAssets = {
 
 export interface AssetsProp {
   assets: ScreenAssets;
+  onPressMaxButton: () => void;
 }
 
 export type DM<T> = { darkMode?: boolean } & T;
@@ -16,6 +17,7 @@ export type DM<T> = { darkMode?: boolean } & T;
 export interface AssetProp {
   asset: theAsset;
   slave?: boolean;
+  swapAssetFlag?: boolean;
 }
 
 export type InputProps = {

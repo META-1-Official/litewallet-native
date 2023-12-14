@@ -3,10 +3,9 @@ import { Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { colors } from '../../styles/colors';
 import { tid } from '../../utils';
-import { editing, setMaxAmount } from './helpers';
 import { AssetsProp } from './types';
 
-const FloatingButton = ({ assets }: AssetsProp) => {
+const FloatingButton = ({ onPressMaxButton }: AssetsProp) => {
   return (
     <View
       style={{
@@ -19,13 +18,7 @@ const FloatingButton = ({ assets }: AssetsProp) => {
         paddingHorizontal: 12,
       }}
     >
-      <TouchableOpacity
-        {...tid('TradeScreen/MAX')}
-        onPress={() => {
-          editing.current?.(false);
-          setMaxAmount(assets);
-        }}
-      >
+      <TouchableOpacity {...tid('TradeScreen/MAX')} onPress={onPressMaxButton}>
         <Text style={{ textAlign: 'center', color: colors.BrandYellow, fontWeight: '700' }}>
           MAX
         </Text>

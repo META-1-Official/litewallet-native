@@ -21,10 +21,23 @@ export default StyleSheet.create({
     color: '#000',
   },
   rowEnd: {
+    paddingRight: 10,
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
 
+  rowEndNoPadding: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+
+  usSymbol: {
+    paddingLeft: 5,
+    paddingTop: 10,
+    fontSize: 18,
+    color: colors.mutedGray,
+    textAlign: 'right',
+  },
   usdtLabel: { fontSize: 14, textAlign: 'right', padding: 0 },
   listStyle: { backgroundColor: '#fff', borderRadius: 8, margin: 18 },
   listView: { padding: 16, borderBottomWidth: 2, borderBottomColor: '#eceef0' },
@@ -32,7 +45,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     paddingLeft: 10,
     paddingRight: 10,
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
   },
   listHeading: {
     fontSize: 16,
@@ -97,5 +110,9 @@ export default StyleSheet.create({
   },
   m12: {
     margin: 12,
+  },
+  secondary: {
+    fontSize: 18,
+    color: colors.mutedGray,
   },
 });

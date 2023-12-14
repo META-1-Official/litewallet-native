@@ -20,7 +20,7 @@ const useCause = () => {
       timerRef.current = setTimeout(() => {
         setCause(false);
         editing.current = null;
-      }, 5000);
+      }, 50);
     },
   };
 };

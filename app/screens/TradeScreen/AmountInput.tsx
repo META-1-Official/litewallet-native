@@ -1,43 +1,90 @@
-import React, { useEffect, useState } from 'react';
-import { tid } from '../../utils';
+import React, { useEffect, useRef, useState } from 'react';
 import { DM, AssetProp } from './types';
-import { optStyleFactory, validateNumber } from './helpers';
-import useCause from './useCause';
-import Input from './Input';
+import { optStyleFactory } from './helpers';
 
 import styles from './TradeScreen.styles';
+import { TextInput, View } from 'react-native';
 
-const AmountInput = ({ asset, darkMode }: DM<AssetProp>) => {
+// todo: fix type here
+const AmountInput = ({ asset, darkMode, swapAssetFlag }: DM<AssetProp>) => {
   const [amount, setAmount] = useState(asset.amount);
-  const { isCause, cause } = useCause();
-
-  useEffect(() => {
-    if (!isCause) {
-      setAmount(asset.amount);
-    }
-  }, [asset.amount, isCause]);
 
   const darkStyle = optStyleFactory(darkMode);
 
+  useEffect(() => {
+    const opponent = asset.opponent();
+    if (swapAssetFlag) {
+      setTimeout(() => {
+        setAmount((+opponent.amount / opponent.marketPrice).toString());
+        console.log(
+          'amount input useEffect 1 if',
+          asset.amount,
+          asset.marketPrice,
+          opponent.amount,
+          opponent.marketPrice,
+          amount,
+        );
+      }, 1000);
+    } else {
+      setAmount(asset.amount);
+    }
+    console.log(
+      'amount input useEffect 1 else',
+      asset.amount,
+      asset.marketPrice,
+      opponent.amount,
+      opponent.marketPrice,
+      amount,
+    );
+  }, [asset.amount, swapAssetFlag]);
+
+  const changeAmountHandler = (text: string): void => {
+    const correctNumber = fixInputNumber(text);
+    setAmount(correctNumber);
+    asset.setAmount(correctNumber);
+    const opponent = asset.opponent();
+    opponent.setAmount(
+      (+correctNumber * opponent.marketPrice).toFixed(opponent.asset._asset.precision),
+    );
+    console.log(
+      'changeAmountHandler',
+      asset.amount,
+      asset.marketPrice,
+      opponent.amount,
+      opponent.marketPrice,
+      amount,
+    );
+  };
+
+  const fixInputNumber = (value: string, lostFocus?: boolean) => {
+    if (lostFocus) {
+      if (value === '') {
+        value = '0';
+      }
+      return value.trim().replace(/\.$/g, '');
+    }
+    const number = value
+      .trim()
+      .replace(/,/g, '.')
+      .replace(/-/g, '')
+      .replace(/ /g, '')
+      .replace(/^0+/g, '')
+      .replace(/^\./, '0.')
+      .replace(/(^.*\.\d*)\.+/, '$1');
+    return !isNaN(+number) || number === '' ? number : '0';
+  };
+
   return (
-    <Input
-      {...tid('TradeScreen/AmountInput/amount')}
-      style={darkStyle(styles.whiteText, styles.amountInput)}
-      value={amount}
-      validate={validateNumber}
-      keyboardType="numeric"
-      onChange={(txt, valid) => {
-        cause();
-        setAmount(txt);
-        if (valid) {
-          asset.setAmount(txt);
-          const opponent = asset.opponent();
-          opponent.setAmount(
-            (+txt * opponent.marketPrice).toFixed(opponent.asset._asset.precision),
-          );
-        }
-      }}
-    />
+    <View>
+      <TextInput
+        maxLength={16}
+        style={[darkStyle(styles.whiteText, styles.amountInput)]}
+        inputMode={'numeric'}
+        keyboardType={'phone-pad'}
+        value={amount}
+        onChangeText={changeAmountHandler}
+      />
+    </View>
   );
 };
 

@@ -60,7 +60,7 @@ export const RenderOrderRow = (
         </Text>
         <Text style={{ color: '#fff', fontSize: 16 }}>
           Price:{' '}
-          {(isBuy ? buyPrice : sellPrice)
+          {(isBuy ? buyPrice : sellingAsset.symbol === 'USDT' ? buyPrice : sellPrice)
             .toFixed(Math.min(sellingAsset._asset.precision, buyingAsset._asset.precision))
             .slice(0, 10)}
         </Text>
