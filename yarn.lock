@@ -3359,10 +3359,10 @@
     socket.io-client "^4.6.1"
     unload "^2.4.1"
 
-"@toruslabs/constants@^13.0.1":
-  version "13.0.1"
-  resolved "https://registry.yarnpkg.com/@toruslabs/constants/-/constants-13.0.1.tgz#c08bbf21f4efaad37cf5311d52b9ab9964aa8b9b"
-  integrity sha512-haFppvgyHfKl2uTQKkrWOkgQmLgzbqxhIvaNvRGei4FgFNJNLr5+ju8/PwwbgKhQUi7adkeU0pjwFYITJyHEPw==
+"@toruslabs/constants@^13.0.4":
+  version "13.1.0"
+  resolved "https://registry.yarnpkg.com/@toruslabs/constants/-/constants-13.1.0.tgz#f1077a6654d98c0444fb0831f479007fb5cff79d"
+  integrity sha512-W1LyRoM5xCTyNivGnxa+mOit4yWPZjyYHfM+whYBujP1nQVnJ09nSFCBn1ePm6ONxB5mp58jsI3TJugeY2KFSg==
 
 "@toruslabs/eccrypto@^1.1.8":
   version "1.1.8"
@@ -3511,12 +3511,12 @@
   dependencies:
     base64url "^3.0.1"
 
-"@toruslabs/openlogin-utils@^5.0.2":
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/@toruslabs/openlogin-utils/-/openlogin-utils-5.2.0.tgz#56a2c2959f80c147d648bbf5cdbebf9b0aa1ff6d"
-  integrity sha512-FpnLmyp4OH2fabxGpC+7kBe85memj+Tsz5vsIpoVeznhH3LWBRFxYRdfZrBfFWui2hSN7xfwQYa0w6+yM3ij7g==
+"@toruslabs/openlogin-utils@^6.0.0":
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/@toruslabs/openlogin-utils/-/openlogin-utils-6.1.0.tgz#dee03cd905ea05be902523b1095ef6733bc6f7d6"
+  integrity sha512-X3xBui0GKiK5JZ677Q4UhLvMn1FOjL1a+1y9qPAn+b+bh41Gg1c8G/VMGRqMuu7owdQGY3B6f7XWuRSEYNk8kQ==
   dependencies:
-    "@toruslabs/constants" "^13.0.1"
+    "@toruslabs/constants" "^13.0.4"
     base64url "^3.0.1"
 
 "@toruslabs/openlogin@^2.6.1":
@@ -4342,13 +4342,13 @@
     "@web3auth/solana-provider" "^2.1.3"
     bn.js "^5.2.1"
 
-"@web3auth/react-native-sdk@^5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@web3auth/react-native-sdk/-/react-native-sdk-5.0.0.tgz#33b3d3fa8600a9e75e489867425f8f6f8cee1ef9"
-  integrity sha512-2iBEIVZG7p962/L0ykqBSTM3D7LmyOm/lvDfWRDU5SduQWSSFfw5WviH14QVMMmKilQZoRnQ/9LrjNh+nGY6HQ==
+"@web3auth/react-native-sdk@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@web3auth/react-native-sdk/-/react-native-sdk-5.1.0.tgz#abe9916a1586136dfe1ed85cbde99394da42d737"
+  integrity sha512-AuSaYJOFWncfYRJlasusgaTZdsQK5DkNOTaH3xBEdItSnPfCT496UxTxjcvViK0U3reQ3YRo8xmgb9IONWg+Mw==
   dependencies:
     "@toruslabs/openlogin-session-manager" "^3.0.0"
-    "@toruslabs/openlogin-utils" "^5.0.2"
+    "@toruslabs/openlogin-utils" "^6.0.0"
     buffer "^6.0.3"
     loglevel "^1.8.1"
     react-native-url-polyfill "^2.0.0"
