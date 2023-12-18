@@ -68,3 +68,42 @@ export const signDocument = async ({ token, payload }: any) => {
   });
   return data;
 };
+
+export interface LinkPollDTO {
+  firstName: string;
+  lastName: string;
+  email: string;
+  token: string;
+  walletName: string;
+  phoneNumber: string;
+  redirectUrl: string;
+}
+
+export async function createLinkPoll(linkPollDto: LinkPollDTO) {
+  const { email, firstName, lastName, phoneNumber, walletName, token, redirectUrl } = linkPollDto;
+  try {
+    const { data } = await axios.post(`${config.E_SIGNATURE_API_URL}/apiewallet/poling/`, {
+      email,
+      firstName,
+      lastName,
+      phoneNumber,
+      walletName,
+      token,
+      redirectUrl,
+    });
+    return data;
+  } catch (e) {
+    return { message: 'Something is wrong', error: true };
+  }
+}
+
+export async function deleteLinkPoll(token: string) {
+  try {
+    const response = await axios.delete(
+      `${config.E_SIGNATURE_API_URL}/apiewallet/poling/remove?token=${token}`,
+    );
+    return response;
+  } catch (e) {
+    return { message: 'Something is wrong', error: true };
+  }
+}

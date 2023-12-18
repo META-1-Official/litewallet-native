@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import * as WebBrowser from '@toruslabs/react-native-web-browser';
 import Toast from 'react-native-toast-message';
 import config from '../../config';
-import { createUser, getToken, getUser } from '../../services/eSignature.services';
+import { createLinkPoll, createUser, getToken, getUser } from '../../services/eSignature.services';
 import migrationService from '../../services/migration.service';
 import sendXServices from '../../services/sendX.services';
 import createAccountWithPassword from '../../utils/accountCreate';
@@ -46,7 +46,7 @@ export const eSignatureProceed = createAsyncThunk(
     console.log('GetToken service has started');
     const response = await getToken(email);
     console.log('GetToken service has finished');
-    let token;
+    let token = '';
     if (response && response.headers) {
       if (response.data.result === 'done') {
         console.log('User get token of eSignature');
@@ -66,6 +66,15 @@ export const eSignatureProceed = createAsyncThunk(
       }
     }
     const phoneNumber = mobile.replace(/\s/g, '');
+    await createLinkPoll({
+      email,
+      firstName,
+      lastName,
+      phoneNumber,
+      walletName: accountName,
+      token,
+      redirectUrl,
+    });
     const encodedEmail = encodeURIComponent(email);
     const url = `${
       config.E_SIGNATURE_API_URL

@@ -1,12 +1,12 @@
 import Clipboard from '@react-native-clipboard/clipboard';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
-  AppState,
-  AppStateStatus,
+  // AppState,
+  // AppStateStatus,
   Linking,
-  Platform,
+  // Platform,
   Pressable,
   SafeAreaView,
   Text,
@@ -29,8 +29,9 @@ import {
 import { SvgIcons } from '../../../assets';
 import styles from './PasskeyScreen.styles';
 import Toast from 'react-native-toast-message';
+import { deleteLinkPoll } from '../../services/eSignature.services';
 
-const E_SIGNATURE_STATUSES = ['dismiss', 'success'];
+// const E_SIGNATURE_STATUSES = ['dismiss', 'success'];
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Passkey'>;
 
@@ -41,12 +42,12 @@ export const PasskeyScreen = ({ navigation }: Props) => {
     lastName,
     mobile = '',
     accountName,
-    eSignatureStatus,
+    // eSignatureStatus,
     eSignaturePending,
     pending,
   } = useAppSelector(state => state.signUp);
   const { email, passKey, privateKey } = useAppSelector(state => state.web3);
-
+  const token = useAppSelector(state => state.eSignature.token);
   const [isCopied, setIsCopied] = useState(false);
   const [checkboxesState, setCheckBoxesState] = useState([false, false, false, false, false]);
   const [emailSubscription, setEmailSubscription] = useState(true);
@@ -91,7 +92,8 @@ export const PasskeyScreen = ({ navigation }: Props) => {
       .then(promiseResult => {
         console.log('Handle Sign PromiseResult: ', promiseResult);
         getPaymentDetails();
-      });
+      })
+      .finally(() => deleteLinkPoll(token));
   };
 
   const handleSign = () => {
